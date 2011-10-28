@@ -191,15 +191,14 @@ public class TeclaIME extends InputMethodService
 	private static final String CLASS_TAG = "IME: ";
 
 	//TODO: Try moving these variables to TeklaApp class
-	private int KEYCODE_VOICE;
 	private String mVoiceInputString;
 	private TeclaHighlighter mHighlighter;
-	private int mLastKeyboardMode;
-	private int mLastNonUIKeyboardMode = KeyboardSwitcher.MODE_TEXT;
-	private boolean mShieldConnected = false;
-	private PopupWindow mSwitchPopup = null;
+	private int mLastKeyboardMode, mLastNonUIKeyboardMode;
+	private boolean mShieldConnected, mRepeating;
+	private PopupWindow mSwitchPopup;
 	private View mSwitch;
-	private Handler mTeklaHandler = new Handler();
+	private Handler mTeklaHandler;
+	private int[] mKeyCodes;
 
 	@Override
 	public void onCreate() {
@@ -218,8 +217,6 @@ public class TeclaIME extends InputMethodService
 
 		// register to receive ringer mode changes for silent mode
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
-		
-		KEYCODE_VOICE = getResources().getInteger(R.integer.key_voice);
 
 		initTeclaA11y();
 
@@ -240,9 +237,13 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_INPUT_STRING));
 
 		 mHighlighter = TeclaHighlighter.getInstance();
+		 mLastNonUIKeyboardMode = KeyboardSwitcher.MODE_TEXT;
+		 mTeklaHandler = new Handler();
+		 mShieldConnected = false;
+		 mRepeating = false;
 		 
 		if (TeclaApp.persistence.isPersistentKeyboardEnabled()) {
-			if (TeclaApp.persistence.isPersistentKeyboardEnabled()) TeclaApp.getInstance().queueSplash();
+			TeclaApp.getInstance().queueSplash();
 		}
 
 	}
@@ -694,13 +695,13 @@ public class TeclaIME extends InputMethodService
 
 		// Just in case it wasn't set before:
 		if (!mShieldConnected) mShieldConnected = true;
+		if (!isSoftIMEShowing()) showSoftIME();
 		
 		SwitchEvent switchEvent = new SwitchEvent(bundle);
 
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
 				TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
 				TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
-		showSoftIME();
 		if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
 			if (TeclaApp.persistence.isInverseScanningEnabled()) {
 				resumeSelfScanning();
@@ -711,6 +712,8 @@ public class TeclaIME extends InputMethodService
 		if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
 			if (TeclaApp.persistence.isInverseScanningEnabled()) {
 				selectFocused(mIMEView);
+			} else {
+				stopRepeatingKey(mKeyCodes[0]);
 			}
 		}
 		if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
@@ -735,18 +738,55 @@ public class TeclaIME extends InputMethodService
 			Keyboard keyboard = imeView.getKeyboard();
 			List<Key> keyList = keyboard.getKeys();
 			Key key = keyList.get(mHighlighter.getCurrentKey());
-			// Process key as if it had been pressed
-			onKey(key.codes[0], key.codes);
+			mKeyCodes = key.codes;
+			if (isRepeatableWithTecla(mKeyCodes[0])) {
+				mTeklaHandler.post(mRepeatKeyRunnable);
+			} else {
+				emulateKeyPress(mKeyCodes);
+			}
+		}
+	}
+
+	private boolean isRepeatableWithTecla(int code) {
+		if (code == Keyboard.KEYCODE_DONE || code == TeclaApp.getInstance().KEYCODE_VOICE) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void stopRepeatingKey(int key_code) {
+		mTeklaHandler.removeCallbacks(mRepeatKeyRunnable);
+		mRepeating = false;
+		if (mHighlighter.getScanDepth() == TeclaHighlighter.DEPTH_ROW) {
 			// Do not delay highlighting on keyboard change
-			if (key.codes[0] == Keyboard.KEYCODE_DONE ||
-					key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE ||
-					key.codes[0] == Keyboard.KEYCODE_SHIFT) {
+			if (key_code == Keyboard.KEYCODE_DONE ||
+					key_code == Keyboard.KEYCODE_MODE_CHANGE ||
+					key_code == Keyboard.KEYCODE_SHIFT) {
 				resetScanning(false);
 			} else {
 				resetScanning(true);
 			}
 		}
 	}
+	
+	private Runnable mRepeatKeyRunnable = new Runnable() {
+		@Override
+		public void run() {
+			emulateKeyPress(mKeyCodes);
+			if (mRepeating) {
+				mTeklaHandler.postDelayed(mRepeatKeyRunnable, Math.round(0.5 * TeclaApp.persistence.getScanDelay()));
+			} else {
+				mTeklaHandler.postDelayed(mRepeatKeyRunnable, TeclaApp.persistence.getScanDelay());
+				mRepeating = true;
+			}
+		}
+	};
+
+	private void emulateKeyPress(int[] key_codes) {
+		// Process key as if it had been pressed
+		onKey(key_codes[0], key_codes);
+	}
+
 
 	private void startFullScreenSwitchMode(int delay) {
 		mTeklaHandler.removeCallbacks(mCreateSwitchRunnable);
@@ -863,9 +903,9 @@ public class TeclaIME extends InputMethodService
 		if (isSoftIMEShowing()) {
 			if (mShieldConnected || isFullScreenShowing()) {
 				if (delayed) {
-					mTeklaHandler.postDelayed(mResetScanning, 2 * getPrefScanDelay());
+					mTeklaHandler.postDelayed(mResetScanningRunnable, Math.round(1.5 * getPrefScanDelay()));
 				} else {
-					mTeklaHandler.post(mResetScanning);
+					mTeklaHandler.post(mResetScanningRunnable);
 				}
 			} else {
 				mHighlighter.clearHighlight(mIMEView);
@@ -878,7 +918,7 @@ public class TeclaIME extends InputMethodService
 	/**
 	 * Runnable used to reset scanning
 	 */
-	private Runnable mResetScanning = new Runnable () {
+	private Runnable mResetScanningRunnable = new Runnable () {
 
 		public void run() {
 			mHighlighter.initHighlighting(mIMEView);
@@ -900,7 +940,7 @@ public class TeclaIME extends InputMethodService
 
 	private void pauseSelfScanning() {
 		mTeklaHandler.removeCallbacks(mScanRunnable);
-		mTeklaHandler.removeCallbacks(mResetScanning);
+		mTeklaHandler.removeCallbacks(mResetScanningRunnable);
 	}
 	
 	private void resumeSelfScanning() {
@@ -1040,7 +1080,7 @@ public class TeclaIME extends InputMethodService
 				&& (keycode<=KeyEvent.KEYCODE_DPAD_CENTER))
 				|| (keycode == KeyEvent.KEYCODE_BACK)
 				|| (keycode == Keyboard.KEYCODE_DONE)
-				|| (keycode == KEYCODE_VOICE);
+				|| (keycode == TeclaApp.getInstance().KEYCODE_VOICE);
 	}
 
 	private void handleSpecialKey(int keyEventCode) {
@@ -1056,7 +1096,7 @@ public class TeclaIME extends InputMethodService
 				mKeyboardSwitcher.setKeyboardMode(mLastNonUIKeyboardMode, 0);
 				resetScanning(false);
 			}
-		} else if (keyEventCode == KEYCODE_VOICE) {
+		} else if (keyEventCode == TeclaApp.getInstance().KEYCODE_VOICE) {
 			if (thisKBMode == KeyboardSwitcher.MODE_NAV) {
 				TeclaApp.getInstance().broadcastVoiceCommand();
 			} else {

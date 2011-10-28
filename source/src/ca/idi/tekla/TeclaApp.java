@@ -52,6 +52,8 @@ public class TeclaApp extends Application {
 	public static final String EXTRA_INPUT_STRING = "ca.idi.tekla.sep.extra.INPUT_STRING";
 	private static final long BOOT_TIMEOUT = 60000;
 	private static final int WAKE_LOCK_TIMEOUT = 5000;
+	
+	public int KEYCODE_VOICE;
 
 	private PowerManager mPowerManager;
 	private KeyguardManager mKeyguardManager;
@@ -88,6 +90,8 @@ public class TeclaApp extends Application {
 
 		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		Log.d(TAG, "TECLA APP STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
+		
+		KEYCODE_VOICE = getResources().getInteger(R.integer.key_voice);
 
 		persistence = new Persistence(this);
 

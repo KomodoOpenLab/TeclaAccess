@@ -69,7 +69,7 @@ public class TeclaKeyboardView extends KeyboardView {
     
     /****************************  INSTRUMENTATION  *******************************/
 
-    static final boolean DEBUG_AUTO_PLAY = true;
+    static final boolean DEBUG_AUTO_PLAY = false;
     private static final int MSG_TOUCH_DOWN = 1;
     private static final int MSG_TOUCH_UP = 2;
     
