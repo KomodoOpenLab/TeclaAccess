@@ -7,13 +7,20 @@ package ca.idi.tekla.util;
 import java.util.Iterator;
 import java.util.List;
 
+import android.content.Context;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.ime.TeclaKeyboardView;
 
-public class TeclaHighlighter {
+public class Highlighter {
+
+	private static final String CLASS_TAG = "Highlighter: ";
 
 	//Scanning constants and variables
 	public static final int REDRAW_KEYBOARD = 99999; //this is a true arbitrary number.
@@ -21,74 +28,87 @@ public class TeclaHighlighter {
 	public static final int HIGHLIGHT_PREV = 0xAA;
 	public static final int DEPTH_ROW = 0x55;
 	public static final int DEPTH_KEY = 0xAA;
-	private int mScanDepth = TeclaHighlighter.DEPTH_ROW;
-	private int mScanKeyCounter = 0;
-	private int mScanRowCounter = 0;
+	
+	private int mScanDepth;
+	private int mScanKeyCounter, mScanRowCounter;
+	private TeclaKeyboardView mIMEView;
+	private Handler mHandler;
 
-	private static TeclaHighlighter tHighlighter = null;
-	private TeclaKeyboardView mImeView;
+	public Highlighter(Context context) {
 
-	/**
-	 * Create a new instance of this class or return one if it already exists
-	 * @return TeklaScanner
-	 */
-	public static TeclaHighlighter getInstance() {
-		if(tHighlighter == null) {
-			return new TeclaHighlighter();
+		mScanDepth = Highlighter.DEPTH_ROW;
+		mScanKeyCounter = 0;
+		mScanRowCounter = 0;
+		mHandler = new Handler();
+
+	}
+	
+	public void setIMEView(TeclaKeyboardView imeView) {
+		TeclaApp.getInstance().broadcastInputViewCreated();
+		mIMEView = imeView;
+		if (getRowCount(mIMEView.getKeyboard()) == 1) {
+			mScanDepth = Highlighter.DEPTH_KEY;
 		}
-		return tHighlighter;
+	}
+	
+	public boolean isSoftIMEShowing() {
+		if (mIMEView != null && mIMEView.isShown()) {
+			return true;
+		}
+		return false;
 	}
 
-	public void initHighlighting(TeclaKeyboardView imeView) {
-		if (getRowCount(imeView.getKeyboard()) != 1) {
+	public void initHighlight() {
+		// Ignore keyboards with only one row (will always scan continuously)
+		if (getRowCount(mIMEView.getKeyboard()) != 1) {
 			mScanDepth = DEPTH_ROW;
 			mScanKeyCounter = 0;
 			mScanRowCounter = 0;
 		}
-		resetFocus(imeView);
+		resetHighlight();
 	}
 
-	public void clearHighlight(TeclaKeyboardView imeView) {
-		highlightKeys(imeView, -1, -1);
+	public void clearHighlight() {
+		highlightKeys(-1, -1);
 	}
 
-	public void initRowHighlighting(TeclaKeyboardView imeView, int scanRowCount) {
-		Keyboard keyboard = imeView.getKeyboard();
+	public void initRowHighlighting(int scanRowCount) {
+		Keyboard keyboard = mIMEView.getKeyboard();
 		mScanDepth = DEPTH_KEY;
 		mScanRowCounter = scanRowCount;
 		mScanKeyCounter = getRowStart(keyboard, mScanRowCounter);
-		resetFocus(imeView);
+		resetHighlight();
 	}
 
-	public void moveHighlight(TeclaKeyboardView imeView, int direction) {
-		Keyboard keyboard = imeView.getKeyboard();
+	public void moveHighlight(int direction) {
+		Keyboard keyboard = mIMEView.getKeyboard();
 		int rowCount = getRowCount(keyboard);
 
 		if (rowCount == 1) {
 			mScanDepth = DEPTH_KEY;
 			mScanRowCounter = 0;
 		}
-		if (mScanDepth == TeclaHighlighter.DEPTH_ROW) {
-			if (direction == TeclaHighlighter.HIGHLIGHT_NEXT) mScanRowCounter++;
-			if (direction == TeclaHighlighter.HIGHLIGHT_PREV) mScanRowCounter--;
+		if (mScanDepth == Highlighter.DEPTH_ROW) {
+			if (direction == Highlighter.HIGHLIGHT_NEXT) mScanRowCounter++;
+			if (direction == Highlighter.HIGHLIGHT_PREV) mScanRowCounter--;
 			mScanRowCounter = wrapCounter(mScanRowCounter, 0, rowCount - 1);
 		}
 		int fromIndex = getRowStart(keyboard, mScanRowCounter);
 		int toIndex = getRowEnd(keyboard, mScanRowCounter);
-		if (mScanDepth == TeclaHighlighter.DEPTH_KEY) {
-			if (direction == TeclaHighlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
-			if (direction == TeclaHighlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
+		if (mScanDepth == Highlighter.DEPTH_KEY) {
+			if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
+			if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
 			mScanKeyCounter = wrapCounter(mScanKeyCounter, fromIndex, toIndex);
-			highlightKeys(imeView,mScanKeyCounter,mScanKeyCounter);
+			highlightKeys(mScanKeyCounter,mScanKeyCounter);
 		} else 
-			highlightKeys(imeView,fromIndex,toIndex);
+			highlightKeys(fromIndex,toIndex);
 	}
-
-	public void stepOut(TeclaKeyboardView imeView) {
-		Keyboard keyboard = imeView.getKeyboard();
+	
+	public void stepOut() {
+		Keyboard keyboard = mIMEView.getKeyboard();
 		if (getRowCount(keyboard) != 1) {
-			mScanDepth = TeclaHighlighter.DEPTH_ROW;		
-			highlightKeys(imeView,
+			mScanDepth = Highlighter.DEPTH_ROW;		
+			highlightKeys(
 					getRowStart(keyboard, mScanRowCounter),
 					getRowEnd(keyboard, mScanRowCounter));
 		}
@@ -105,6 +125,49 @@ public class TeclaHighlighter {
 	public int getCurrentRow() {
 		return mScanRowCounter;
 	}
+	
+	public void startSelfScanning(long delay) {
+		mHandler.postDelayed(mStartScanRunnable, delay);
+	}
+	
+	public void pauseSelfScanning() {
+		mHandler.removeCallbacks(mScanRunnable);
+		mHandler.removeCallbacks(mStartScanRunnable);
+	}
+	
+	public void resumeSelfScanning() {
+		pauseSelfScanning();
+		mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
+	}
+	
+	public void stopSelfScanning() {
+		pauseSelfScanning();
+		clearHighlight();
+	}
+	
+	/**
+	 * Runnable used to auto scan
+	 */
+	private Runnable mScanRunnable = new Runnable() {
+		public void run() {
+			final long start = SystemClock.uptimeMillis();
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
+			moveHighlight(Highlighter.HIGHLIGHT_NEXT);
+			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
+		}
+	};
+	
+	/**
+	 * Runnable used to reset auto scan
+	 */
+	private Runnable mStartScanRunnable = new Runnable () {
+
+		public void run() {
+			TeclaApp.highlighter.initHighlight();
+			if (TeclaApp.persistence.isSelfScanningEnabled())
+				resumeSelfScanning();
+		}
+	};
 
 	private Integer getRowCount(Keyboard keyboard) {
 		List<Key> keyList = keyboard.getKeys();
@@ -125,8 +188,8 @@ public class TeclaHighlighter {
 		return rowCounter;
 	}
 
-	private void highlightKeys(TeclaKeyboardView imeView, int fromIndex, int toIndex) {
-		Keyboard keyboard = imeView.getKeyboard();
+	private void highlightKeys(int fromIndex, int toIndex) {
+		Keyboard keyboard = mIMEView.getKeyboard();
 		List<Key> keyList = keyboard.getKeys();
 		int totalKeys = keyList.size();
 		Key key;
@@ -138,7 +201,7 @@ public class TeclaHighlighter {
 				key.pressed = false;
 			}
 		}
-		redrawInputView(imeView);
+		redrawInputView();
 	}
 
 	private int wrapCounter(int counter, int min, int max) {
@@ -147,18 +210,17 @@ public class TeclaHighlighter {
 		return counter;
 	}
 
-	private void resetFocus(TeclaKeyboardView imeView) {
-		moveHighlight(imeView, HIGHLIGHT_NEXT);
-		moveHighlight(imeView, HIGHLIGHT_PREV);
+	private void resetHighlight() {
+		moveHighlight(HIGHLIGHT_NEXT);
+		moveHighlight(HIGHLIGHT_PREV);
 	}
 
-	private void redrawInputView (TeclaKeyboardView imeView) {
+	private void redrawInputView () {
 		// Should't mess with GUI from within a thread,
 		// and threads call this method, so we'll use a
 		// handler to take care of it.
-		mImeView = imeView;
 		Message msg = Message.obtain();
-		msg.what = TeclaHighlighter.REDRAW_KEYBOARD;
+		msg.what = Highlighter.REDRAW_KEYBOARD;
 		redrawHandler.sendMessage(msg);  
 	}
 
@@ -166,8 +228,8 @@ public class TeclaHighlighter {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			case TeclaHighlighter.REDRAW_KEYBOARD:
-				mImeView.invalidateAllKeys(); // Redraw keyboard
+			case Highlighter.REDRAW_KEYBOARD:
+				mIMEView.invalidateAllKeys(); // Redraw keyboard
 				break;          
 			default:
 				super.handleMessage(msg);

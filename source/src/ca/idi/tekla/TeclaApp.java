@@ -4,6 +4,7 @@
 
 package ca.idi.tekla;
 
+import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import android.app.Application;
 import android.app.KeyguardManager;
@@ -71,6 +72,7 @@ public class TeclaApp extends Application {
 	
 	private static TeclaApp instance;
 	public static Persistence persistence;
+	public static Highlighter highlighter;
 
 	public TeclaApp() {
         instance = this;
@@ -94,6 +96,7 @@ public class TeclaApp extends Application {
 		KEYCODE_VOICE = getResources().getInteger(R.integer.key_voice);
 
 		persistence = new Persistence(this);
+		highlighter = new Highlighter(this);
 
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		mWakeLock = mPowerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK |
