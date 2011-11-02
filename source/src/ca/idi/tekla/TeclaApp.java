@@ -47,8 +47,6 @@ public class TeclaApp extends Application {
 	public static final String ACTION_IME_CREATED = "ca.idi.tekla.ime.action.SOFT_IME_CREATED";
 	public static final String ACTION_START_FS_SWITCH_MODE = "ca.idi.tekla.ime.action.START_FS_SWITCH_MODE";
 	public static final String ACTION_STOP_FS_SWITCH_MODE = "ca.idi.tekla.ime.action.STOP_FS_SWITCH_MODE";
-	public static final String ACTION_START_SCANNING = "ca.idi.tekla.ime.action.START_SCANNING";
-	public static final String ACTION_STOP_SCANNING = "ca.idi.tekla.ime.action.STOP_SCANNING";
 	public static final String ACTION_INPUT_STRING = "ca.idi.tekla.ime.action.INPUT_STRING";
 	public static final String EXTRA_INPUT_STRING = "ca.idi.tekla.sep.extra.INPUT_STRING";
 	private static final long BOOT_TIMEOUT = 60000;
@@ -200,12 +198,12 @@ public class TeclaApp extends Application {
 
 	public void startScanningTeclaIME() {
 		if (DEBUG) Log.d(TAG, "Broadcasting start scanning IME intent...");
-		sendBroadcast(new Intent(ACTION_START_SCANNING));
+		sendBroadcast(new Intent(Highlighter.ACTION_START_SCANNING));
 	}
 
 	public void stopScanningTeclaIME() {
 		if (DEBUG) Log.d(TAG, "Broadcasting stop scanning IME intent...");
-		sendBroadcast(new Intent(ACTION_STOP_SCANNING));
+		sendBroadcast(new Intent(Highlighter.ACTION_STOP_SCANNING));
 	}
 	
 	public void inputStringAvailable(String input_string) {
@@ -214,6 +212,26 @@ public class TeclaApp extends Application {
 		intent.putExtra(EXTRA_INPUT_STRING, input_string);
 		sendBroadcast(intent);
 	}
+	
+	public void postDelayedFullReset(long delay) {
+		cancelFullReset();
+		mHandler.postDelayed(mFullResetRunnable, delay);
+	}
+	
+	public void cancelFullReset() {
+		mHandler.removeCallbacks(mFullResetRunnable);
+	}
+	
+	private Runnable mFullResetRunnable = new Runnable () {
+
+		public void run() {
+			Intent home = new Intent(Intent.ACTION_MAIN);
+			home.addCategory(Intent.CATEGORY_HOME);
+			home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(home);
+		}
+
+	};
 
 	public void candidatesAvailable() {
 		//TODO: Sends list of candidates to IME for user selection

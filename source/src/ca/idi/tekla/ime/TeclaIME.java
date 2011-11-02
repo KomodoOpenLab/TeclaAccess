@@ -27,7 +27,6 @@ import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
-import android.inputmethodservice.Keyboard.Key;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Debug;
@@ -231,8 +230,8 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_HIDE_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_START_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_STOP_FS_SWITCH_MODE));
-		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_START_SCANNING));
-		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_STOP_SCANNING));
+		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_START_SCANNING));
+		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_STOP_SCANNING));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_INPUT_STRING));
 
 		 mLastNonUIKeyboardMode = KeyboardSwitcher.MODE_TEXT;
@@ -265,7 +264,7 @@ public class TeclaIME extends InputMethodService
 		mUserDictionary.close();
 		mContactsDictionary.close();
 		unregisterReceiver(mReceiver);
-		TeclaApp.highlighter.pauseSelfScanning();
+		TeclaApp.highlighter.stopSelfScanning();
 		SepManager.stop(this);
 	}
 
@@ -295,7 +294,7 @@ public class TeclaIME extends InputMethodService
 		mIMEView.setOnKeyboardActionListener(this);
 		mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME view created.");
-		TeclaApp.highlighter.setIMEView(mIMEView);
+		TeclaApp.highlighter.setView(mIMEView);
 		return mIMEView;
 	}
 
@@ -429,7 +428,7 @@ public class TeclaIME extends InputMethodService
 		int thisKBMode = mKeyboardSwitcher.getKeyboardMode();
 		if(mLastKeyboardMode != thisKBMode) {
 			mLastKeyboardMode = thisKBMode;
-			resetScanning();
+			evaluateStartScanning();
 		}
 	}
 
@@ -470,7 +469,10 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public void hideWindow() {
-		if (TeclaApp.highlighter.isSoftIMEShowing()) TeclaApp.highlighter.clearHighlight();
+		if (TeclaApp.highlighter.isSoftIMEShowing()) {
+			TeclaApp.highlighter.stopSelfScanning();
+			TeclaApp.highlighter.clear();
+		}
 		if (TRACE) Debug.stopMethodTracing();
 		if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
 			mOptionsDialog.dismiss();
@@ -598,7 +600,7 @@ public class TeclaIME extends InputMethodService
 			showSoftIME();
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-				resetScanning();
+				evaluateStartScanning();
 			}
 		}
 	}
@@ -625,17 +627,17 @@ public class TeclaIME extends InputMethodService
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield connected intent.");
 				if (!mShieldConnected) mShieldConnected = true;
 				showSoftIME();
-				resetScanning();
+				evaluateStartScanning();
 			}
 			if (action.equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield disconnected intent.");
 				if (mShieldConnected) mShieldConnected = false;
-				resetScanning();
+				evaluateStartScanning();
 			}
 			if (action.equals(TeclaApp.ACTION_SHOW_IME)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received show IME intent.");
 				showSoftIME();
-				resetScanning();
+				evaluateStartScanning();
 				//TODO: Assume/force persistent keyboard preference
 			}
 			if (action.equals(TeclaApp.ACTION_HIDE_IME)) {
@@ -650,13 +652,13 @@ public class TeclaIME extends InputMethodService
 				Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
 				stopFullScreenSwitchMode();
 			}
-			if (action.equals(TeclaApp.ACTION_START_SCANNING)) {
+			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start scanning IME intent.");
-				resetScanning();
+				evaluateStartScanning();
 			}
-			if (action.equals(TeclaApp.ACTION_STOP_SCANNING)) {
+			if (action.equals(Highlighter.ACTION_STOP_SCANNING)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop scanning IME intent.");
-				resetScanning();
+				evaluateStartScanning();
 			}
 			if (action.equals(TeclaApp.ACTION_INPUT_STRING)) {
 				String input_string = intent.getExtras().getString(TeclaApp.EXTRA_INPUT_STRING);
@@ -684,8 +686,8 @@ public class TeclaIME extends InputMethodService
 
 	private void handleSwitchEvent(Bundle bundle) {
 
-		// Just in case it wasn't set before:
-		if (!mShieldConnected) mShieldConnected = true;
+		TeclaApp.highlighter.pauseSelfScanning();
+
 		if (!TeclaApp.highlighter.isSoftIMEShowing()) showSoftIME();
 		
 		SwitchEvent switchEvent = new SwitchEvent(bundle);
@@ -697,45 +699,53 @@ public class TeclaIME extends InputMethodService
 			if (TeclaApp.persistence.isInverseScanningEnabled()) {
 				TeclaApp.highlighter.resumeSelfScanning();
 			} else {
-				selectHighlighted(mIMEView);
+				selectHighlighted(true);
 			}
 		}
 		if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
 			if (TeclaApp.persistence.isInverseScanningEnabled()) {
-				selectHighlighted(mIMEView);
+				if (TeclaApp.persistence.isInverseScanningChanged()) {
+					//Ignore event right after Inverse Scanning is Enabled
+					TeclaApp.persistence.unsetInverseScanningChanged();
+					Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+				} else {
+					selectHighlighted(false);
+				}
 			} else {
 				stopRepeatingKey();
-				evalScanning();
 			}
 		}
 		if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
 			TeclaApp.highlighter.stepOut();
 		}
 		if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
-			TeclaApp.highlighter.moveHighlight(Highlighter.HIGHLIGHT_PREV);
+			TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
 		}
 		if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
-			TeclaApp.highlighter.moveHighlight(Highlighter.HIGHLIGHT_NEXT);
+			TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
 		}
 		
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
 				TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
 	}
 
-	private void selectHighlighted(TeclaKeyboardView imeView) {
-		TeclaApp.highlighter.pauseSelfScanning();
-		if (TeclaApp.highlighter.getScanDepth() == Highlighter.DEPTH_ROW) {
-			resetRowScanning(imeView);
-		} else {
-			Keyboard keyboard = imeView.getKeyboard();
-			List<Key> keyList = keyboard.getKeys();
-			Key key = keyList.get(TeclaApp.highlighter.getCurrentKey());
-			mKeyCodes = key.codes;
-			if (isRepeatableWithTecla(mKeyCodes[0])) {
+	/**
+	 * Select the currently highlighted item.
+	 * @param repeat true if a key will be repeated on hold, false otherwise.
+	 */
+	private void selectHighlighted(Boolean repeat) {
+		if (TeclaApp.highlighter.getScanDepth() == Highlighter.DEPTH_KEY) {
+			//Selected item is a key
+			mKeyCodes = TeclaApp.highlighter.getCurrentKey().codes;
+			if (repeat && isRepeatableWithTecla(mKeyCodes[0])) {
 				mTeclaHandler.post(mRepeatKeyRunnable);
 			} else {
+				TeclaApp.highlighter.doSelectKey(mKeyCodes[0]);
 				emulateKeyPress(mKeyCodes);
 			}
+		} else {
+			//Selected item is a row
+			TeclaApp.highlighter.doSelectRow();
 		}
 	}
 
@@ -747,19 +757,23 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	private void stopRepeatingKey() {
-		mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
-		mRepeating = false;
+		if (mRepeating) {
+			mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
+			mRepeating = false;
+			TeclaApp.highlighter.doSelectKey(mKeyCodes[0]);
+		}
 	}
 
 	private Runnable mRepeatKeyRunnable = new Runnable() {
 		@Override
 		public void run() {
 			emulateKeyPress(mKeyCodes);
-			if (mRepeating) {
+			if (!mRepeating) {
+				// First key repeat takes a bit longer
 				mTeclaHandler.postDelayed(mRepeatKeyRunnable, Math.round(0.5 * TeclaApp.persistence.getScanDelay()));
+				mRepeating = true;
 			} else {
 				mTeclaHandler.postDelayed(mRepeatKeyRunnable, TeclaApp.persistence.getScanDelay());
-				mRepeating = true;
 			}
 		}
 	};
@@ -798,7 +812,7 @@ public class TeclaIME extends InputMethodService
 				mSwitchPopup.showAtLocation(mIMEView, Gravity.NO_GRAVITY, 0, 0);
 				TeclaApp.getInstance().showToast(R.string.fullscreen_enabled);
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch shown");
-				resetScanning();
+				evaluateStartScanning();
 			} else {
 				startFullScreenSwitchMode(1000);
 			}
@@ -813,11 +827,61 @@ public class TeclaIME extends InputMethodService
 		public boolean onLongClick(View v) {
 			if (!TeclaApp.persistence.isInverseScanningEnabled()) {
 				openIMESettings();
-				//Doing this here again because the ACTION_UP event in the onTouch listener doesn't work very well
+				//Doing this here again because the ACTION_UP event in the onTouch listener doesn't always work.
 				mSwitch.setBackgroundResource(android.R.color.transparent);
 				return true;
 			}
 			return false;
+		}
+	};
+
+	/**
+	 * Listener for full-screen switch actions
+	 */
+	private View.OnTouchListener mSwitchTouchListener = new View.OnTouchListener() {
+		
+		public boolean onTouch(View v, MotionEvent event) {
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				TeclaApp.highlighter.pauseSelfScanning();
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
+				mSwitch.setBackgroundResource(R.color.switch_pressed);
+				vibrate();
+				playKeyClick(KEYCODE_ENTER);
+				if (TeclaApp.persistence.isInverseScanningEnabled()) {
+					TeclaApp.highlighter.resumeSelfScanning();
+				} else {
+					selectHighlighted(false);
+				}
+				break;
+			case MotionEvent.ACTION_UP:
+				TeclaApp.highlighter.pauseSelfScanning();
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
+				mSwitch.setBackgroundResource(android.R.color.transparent);
+				if (TeclaApp.persistence.isInverseScanningEnabled()) {
+					if (TeclaApp.persistence.isInverseScanningChanged()) {
+						//Ignore event right after Inverse Scanning is Enabled
+						TeclaApp.persistence.unsetInverseScanningChanged();
+						Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+					} else {
+						vibrate();
+						playKeyClick(KEYCODE_ENTER);
+						selectHighlighted(false);
+					}
+				}
+				break;
+			default:
+				break;
+			}
+			return false;
+		}
+	};
+
+	private View.OnClickListener mSwitchClickListener =  new View.OnClickListener() {
+		
+		public void onClick(View v) {
+			//Doing this here again because the ACTION_UP event in the onTouch listener doesn't always work.
+			mSwitch.setBackgroundResource(android.R.color.transparent);
 		}
 	};
 
@@ -827,48 +891,11 @@ public class TeclaIME extends InputMethodService
 		startActivity(intent);
 	}
 	
-	/**
-	 * Listener for full-screen single switch highlight
-	 */
-	private View.OnTouchListener mSwitchTouchListener = new View.OnTouchListener() {
-		
-		public boolean onTouch(View v, MotionEvent event) {
-			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				mSwitch.setBackgroundResource(R.color.switch_pressed);
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					TeclaApp.highlighter.resumeSelfScanning();
-				}
-				break;
-			case MotionEvent.ACTION_UP:
-				mSwitch.setBackgroundResource(android.R.color.transparent);
-				break;
-			default:
-				break;
-			}
-			return false;
-		}
-	};
-	/**
-	 * Listener for full-screen single switch action
-	 */
-	private View.OnClickListener mSwitchClickListener =  new View.OnClickListener() {
-		
-		public void onClick(View v) {
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch Touched!");
-			selectHighlighted(mIMEView);
-			vibrate();
-			playKeyClick(KEYCODE_ENTER);
-			//Doing this here again because the ACTION_UP event in the onTouch listener doesn't work very well
-			mSwitch.setBackgroundResource(android.R.color.transparent);
-		}
-	};
-
 	private void stopFullScreenSwitchMode() {
 		if (isFullScreenShowing()) {
 			mSwitchPopup.dismiss();
 		}
-		resetScanning();
+		evaluateStartScanning();
 		TeclaApp.getInstance().showToast(R.string.fullscreen_disabled);
 	}
 	
@@ -880,52 +907,18 @@ public class TeclaIME extends InputMethodService
 		return false;
 	}
 	
-	private void resetScanning() {
-		evalScanning(0);
-	}
-	
-	private void resetScanningDelayed() {
-		evalScanning(Math.round(1.5 * TeclaApp.persistence.getScanDelay()));
-	}
-	
-	private void evalScanning(long delay) {
-		TeclaApp.highlighter.pauseSelfScanning();
+	private void evaluateStartScanning() {
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			if (mShieldConnected || isFullScreenShowing()) {
-				TeclaApp.highlighter.startSelfScanning(delay);
+				TeclaApp.highlighter.startSelfScanning(0);
 			} else {
 				TeclaApp.highlighter.stopSelfScanning();
 			}
 		} else {
 			Log.w(TeclaApp.TAG, CLASS_TAG + "Could not reset scanning, InputView is not ready!");
 		}
-		
-//		if (mHighlighter.getScanDepth() == TeclaHighlighter.DEPTH_ROW) {
-//			// Do not delay highlighting on keyboard change
-//			if (mKeyCodes[0] == Keyboard.KEYCODE_DONE ||
-//					mKeyCodes[0] == Keyboard.KEYCODE_MODE_CHANGE ||
-//					mKeyCodes[0] == Keyboard.KEYCODE_SHIFT) {
-//				resetScanning();
-//			} else {
-//				resetScanningDelayed();
-//			}
-//		}
-
-		
-
 	}
 	
-	private void resetRowScanning(TeclaKeyboardView imeView) {
-		TeclaApp.highlighter.pauseSelfScanning();
-		if (mShieldConnected || isFullScreenShowing()) {
-			TeclaApp.highlighter.initRowHighlighting(TeclaApp.highlighter.getCurrentRow());
-			if (TeclaApp.persistence.isSelfScanningEnabled())
-				TeclaApp.highlighter.resumeSelfScanning();
-		} else {
-			TeclaApp.highlighter.clearHighlight();
-		}
-	}
-
 	private void commitTyped(InputConnection inputConnection) {
 		if (mPredicting) {
 			mPredicting = false;
@@ -1072,7 +1065,7 @@ public class TeclaIME extends InputMethodService
 			else {
 				// Opening
 				mKeyboardSwitcher.setKeyboardMode(mLastNonUIKeyboardMode, 0);
-				resetScanning();
+				evaluateStartScanning();
 			}
 		} else if (keyEventCode == TeclaApp.getInstance().KEYCODE_VOICE) {
 			if (thisKBMode == KeyboardSwitcher.MODE_NAV) {

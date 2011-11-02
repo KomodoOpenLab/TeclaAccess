@@ -16,11 +16,13 @@
 			android:name=".TeclaSplash"
 			android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
 			android:launchMode="singleTop"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 			>
 		</activity>
 		<activity
 			android:name=".TeclaVoiceInput"
-			android:label="@string/voice_input">
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+			>
 			<intent-filter>
 				<action android:name="android.intent.action.VOICE_COMMAND"/>
 				<category android:name="android.intent.category.DEFAULT" />

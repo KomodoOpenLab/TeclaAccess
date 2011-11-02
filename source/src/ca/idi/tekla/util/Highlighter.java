@@ -9,29 +9,30 @@ import java.util.List;
 
 import android.content.Context;
 import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import ca.idi.tekla.TeclaApp;
-import ca.idi.tekla.ime.TeclaKeyboardView;
 
 public class Highlighter {
 
 	private static final String CLASS_TAG = "Highlighter: ";
 
 	//Scanning constants and variables
-	public static final int REDRAW_KEYBOARD = 99999; //this is a true arbitrary number.
-	public static final int HIGHLIGHT_NEXT = 0x55;
-	public static final int HIGHLIGHT_PREV = 0xAA;
-	public static final int DEPTH_ROW = 0x55;
-	public static final int DEPTH_KEY = 0xAA;
+	public static final String ACTION_START_SCANNING = "ca.idi.tekla.action.START_SCANNING";
+	public static final String ACTION_STOP_SCANNING = "ca.idi.tekla.action.STOP_SCANNING";
+	public static final int REDRAW_KEYBOARD = 0x22; // arbitrary number.
+	public static final int HIGHLIGHT_NEXT = 0x55; // arbitrary number.
+	public static final int HIGHLIGHT_PREV = 0xAA; // arbitrary number.
+	public static final int DEPTH_ROW = 0x0F; // arbitrary number.
+	public static final int DEPTH_KEY = 0xF0; // arbitrary number.
 	
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
-	private TeclaKeyboardView mIMEView;
+	private KeyboardView mIMEView;
 	private Handler mHandler;
 
 	public Highlighter(Context context) {
@@ -39,11 +40,27 @@ public class Highlighter {
 		mScanDepth = Highlighter.DEPTH_ROW;
 		mScanKeyCounter = 0;
 		mScanRowCounter = 0;
-		mHandler = new Handler();
+		mHandler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				switch (msg.what) {
+				case Highlighter.REDRAW_KEYBOARD:
+					mIMEView.invalidateAllKeys(); // Redraw keyboard
+					break;          
+				default:
+					super.handleMessage(msg);
+					break;          
+				}
+			}
+		};
 
 	}
 	
-	public void setIMEView(TeclaKeyboardView imeView) {
+	/**
+	 * Set the input method view that the highlighter will work on.
+	 * @param imeView the input method view the highlighter class will work on.
+	 */
+	public void setView(KeyboardView imeView) {
 		TeclaApp.getInstance().broadcastInputViewCreated();
 		mIMEView = imeView;
 		if (getRowCount(mIMEView.getKeyboard()) == 1) {
@@ -51,6 +68,10 @@ public class Highlighter {
 		}
 	}
 	
+	/**
+	 * Determine if the input method view is currently showing
+	 * @return true if the input method view is showing, false otherwise.
+	 */
 	public boolean isSoftIMEShowing() {
 		if (mIMEView != null && mIMEView.isShown()) {
 			return true;
@@ -58,29 +79,35 @@ public class Highlighter {
 		return false;
 	}
 
-	public void initHighlight() {
-		// Ignore keyboards with only one row (will always scan continuously)
-		if (getRowCount(mIMEView.getKeyboard()) != 1) {
-			mScanDepth = DEPTH_ROW;
-			mScanKeyCounter = 0;
-			mScanRowCounter = 0;
-		}
-		resetHighlight();
-	}
-
-	public void clearHighlight() {
+	/** 
+	 * Remove highlights from all keys in the current keyboard
+	 */
+	public void clear() {
 		highlightKeys(-1, -1);
 	}
-
-	public void initRowHighlighting(int scanRowCount) {
-		Keyboard keyboard = mIMEView.getKeyboard();
-		mScanDepth = DEPTH_KEY;
-		mScanRowCounter = scanRowCount;
-		mScanKeyCounter = getRowStart(keyboard, mScanRowCounter);
-		resetHighlight();
+	
+	/** 
+	 * Update highlighting after a key selection. Key should be obtained with {@link #getCurrentKey()}
+	 */
+	public void doSelectKey (int keyCode) {
+		if (shouldDelayKey(keyCode)) {
+			startSelfScanning(Math.round(1.5 * TeclaApp.persistence.getScanDelay()));
+		} else {
+			startSelfScanning();
+		}
 	}
 
-	public void moveHighlight(int direction) {
+	/**
+	 * Update highlighting after the selecting current row.
+	 */
+	public void doSelectRow() {
+		initRowHighlighting();
+		if (TeclaApp.persistence.isSelfScanningEnabled()) {
+			resumeSelfScanning();
+		}
+	}
+	
+	public void move(int direction) {
 		Keyboard keyboard = mIMEView.getKeyboard();
 		int rowCount = getRowCount(keyboard);
 
@@ -118,31 +145,50 @@ public class Highlighter {
 		return mScanDepth;
 	}
 
-	public int getCurrentKey() {
-		return mScanKeyCounter;
+	public Keyboard.Key getCurrentKey() {
+		Keyboard keyboard = mIMEView.getKeyboard();
+		List<Key> keyList = keyboard.getKeys();
+		return keyList.get(mScanKeyCounter);
 	}
 
-	public int getCurrentRow() {
-		return mScanRowCounter;
-	}
-	
+	/**
+	 * Start auto scan on the current keyboard. Resets scanning initiating it from the top-most depth.
+	 * @param delay the number of milliseconds to wait before the method is executed.
+	 * This allows for keys to be repeated before the highlighting is reset.
+	 */
 	public void startSelfScanning(long delay) {
+		pauseSelfScanning();
 		mHandler.postDelayed(mStartScanRunnable, delay);
 	}
 	
+	public void startSelfScanning() {
+		startSelfScanning(0);
+	}
+
+	/**
+	 * Pause auto scanning. Resume it again from where it was paused with {@link #resumeSelfScanning()}.
+	 */
 	public void pauseSelfScanning() {
 		mHandler.removeCallbacks(mScanRunnable);
 		mHandler.removeCallbacks(mStartScanRunnable);
 	}
 	
+	/**
+	 * Resume auto scanning. Call after {@link #pauseSelfScanning()} to resume scanning from where it was last paused.
+	 */
 	public void resumeSelfScanning() {
 		pauseSelfScanning();
-		mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
+		if (TeclaApp.persistence.isScanningEnabled()) {
+			mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
+		}
 	}
 	
+	/**
+	 * Stop auto scanning on the current keyboard. Resets all scanning variables and clears all highlights.
+	 */
 	public void stopSelfScanning() {
 		pauseSelfScanning();
-		clearHighlight();
+		clear();
 	}
 	
 	/**
@@ -152,22 +198,54 @@ public class Highlighter {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
-			moveHighlight(Highlighter.HIGHLIGHT_NEXT);
+			move(Highlighter.HIGHLIGHT_NEXT);
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}
 	};
 	
 	/**
-	 * Runnable used to reset auto scan
+	 * Runnable used only to start auto scan. It resets highlighting before calling the self scanning methods.
 	 */
 	private Runnable mStartScanRunnable = new Runnable () {
 
 		public void run() {
-			TeclaApp.highlighter.initHighlight();
-			if (TeclaApp.persistence.isSelfScanningEnabled())
+			init();
+			if (TeclaApp.persistence.isSelfScanningEnabled()) {
 				resumeSelfScanning();
+			}
 		}
 	};
+
+	/** 
+	 * Start highlighting the current keyboard. Automatically handles single row keyboards.
+	 */
+	private void init() {
+		if (getRowCount(mIMEView.getKeyboard()) > 1) {
+			//Keyboard has multiple rows
+			mScanDepth = DEPTH_ROW;
+			mScanKeyCounter = 0;
+			mScanRowCounter = 0;
+		} else {
+			//Keyboard has only one row so don't reset highlighting
+			mScanDepth = DEPTH_KEY;
+		}
+		resetHighlight();
+	}
+
+	private boolean shouldDelayKey(int keyCode) {
+		if (keyCode == Keyboard.KEYCODE_DONE ||
+				keyCode == Keyboard.KEYCODE_MODE_CHANGE ||
+				keyCode == Keyboard.KEYCODE_SHIFT) {
+			return false;
+		}
+		return true;
+	}
+	
+	private void initRowHighlighting() {
+		mScanDepth = DEPTH_KEY;
+		mScanKeyCounter = getRowStart(mIMEView.getKeyboard(), mScanRowCounter);
+		resetHighlight();
+	}
 
 	private Integer getRowCount(Keyboard keyboard) {
 		List<Key> keyList = keyboard.getKeys();
@@ -211,8 +289,8 @@ public class Highlighter {
 	}
 
 	private void resetHighlight() {
-		moveHighlight(HIGHLIGHT_NEXT);
-		moveHighlight(HIGHLIGHT_PREV);
+		move(HIGHLIGHT_NEXT);
+		move(HIGHLIGHT_PREV);
 	}
 
 	private void redrawInputView () {
@@ -221,22 +299,8 @@ public class Highlighter {
 		// handler to take care of it.
 		Message msg = Message.obtain();
 		msg.what = Highlighter.REDRAW_KEYBOARD;
-		redrawHandler.sendMessage(msg);  
+		mHandler.sendMessage(msg);  
 	}
-
-	private Handler redrawHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case Highlighter.REDRAW_KEYBOARD:
-				mIMEView.invalidateAllKeys(); // Redraw keyboard
-				break;          
-			default:
-				super.handleMessage(msg);
-				break;          
-			}
-		}
-	};
 
 	private Integer getRowStart(Keyboard keyboard, int rowNumber) {
 		int keyCounter = 0;

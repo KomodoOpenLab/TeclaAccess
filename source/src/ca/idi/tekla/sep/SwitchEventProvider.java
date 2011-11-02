@@ -262,7 +262,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 
 		public void run() {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Filtered switch event received");
-			mHandler.removeCallbacks(mFullResetRunnable);
+			TeclaApp.getInstance().cancelFullReset();
 			//FIXME: This is a temporal work-around for compatibility with older Shield versions
 			if (mShieldVersion < 2) mSwitchStates ^= 0x30;
 			
@@ -279,12 +279,12 @@ public class SwitchEventProvider extends Service implements Runnable {
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {
-				if (!TeclaApp.persistence.isInverseScanningEnabled()) {
-					mHandler.postDelayed(mFullResetRunnable, FULL_RESET_TIMEOUT);
-				} else {
+				if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					// FIXME: Temporal beta implementation for specific user (should turn into a preference)
 					// 4 full scans before calling home
-					mHandler.postDelayed(mFullResetRunnable, 32 * TeclaApp.persistence.getScanDelay());
+					TeclaApp.getInstance().postDelayedFullReset(32 * TeclaApp.persistence.getScanDelay());
+				} else {
+					TeclaApp.getInstance().postDelayedFullReset(FULL_RESET_TIMEOUT);
 				}
 			}
 			
@@ -303,10 +303,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 		} else if (!TeclaApp.persistence.isScreenOn()) {
 			// Screen is off, so just wake it
 			TeclaApp.getInstance().wakeUnlockScreen();
-		} else if (TeclaApp.persistence.isInverseScanningChanged() && TeclaApp.persistence.isInverseScanningEnabled()) {
-			//Ignore event right after Inverse Scanning is Enabled (assuming it is a release)
-			TeclaApp.persistence.unsetInverseScanningChanged();
-			Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
 		} else {
 			// In all other instances acquire wake lock,
 			// WARNING: just poking user activity timer DOES NOT WORK on gingerbread
@@ -323,17 +319,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 			sendBroadcast(mSwitchEventIntent);
 		}
 	}
-
-	private Runnable mFullResetRunnable = new Runnable () {
-
-		public void run() {
-			Intent home = new Intent(Intent.ACTION_MAIN);
-			home.addCategory(Intent.CATEGORY_HOME);
-			home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(home);
-		}
-
-	};
 
 	private void killSocket() {
 		mHandler.removeCallbacks(mPingingRunnable);
