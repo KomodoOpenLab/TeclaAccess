@@ -28,7 +28,7 @@ public class TeclaSplash extends Activity
 	private static final String CLASS_TAG = "Splash: ";
 	
 	private TextView mSplashText;
-	private boolean mIMECreated;
+	private boolean mIMECreated, mConnectToShieldCalled, mStartFullscreenSwitchCalled;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -56,6 +56,9 @@ public class TeclaSplash extends Activity
 		mSplashText.setOnFocusChangeListener(this);
 		mSplashText.clearFocus();
 		mSplashText.requestFocus();
+		
+		mConnectToShieldCalled = false;
+		mStartFullscreenSwitchCalled = false;
 		
 	}
 	
@@ -103,9 +106,16 @@ public class TeclaSplash extends Activity
 			unregisterReceiver(mReceiver);
 		// Sometimes IME hides so show it again!
 		TeclaApp.getInstance().requestSoftIME();
+		if (!mConnectToShieldCalled) {
+			connectToShield();
+		}
+		if (!mStartFullscreenSwitchCalled) {
+			startFullscreenSwitch();
+		}
 	}
 
 	private void connectToShield() {
+		mConnectToShieldCalled = true;
 		if (TeclaApp.persistence.shouldConnectToShield()) {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Starting SEP...");
 			SepManager.start(this);
@@ -113,6 +123,7 @@ public class TeclaSplash extends Activity
 	}
 
 	private void startFullscreenSwitch() {
+		mStartFullscreenSwitchCalled = true;
 		if (TeclaApp.persistence.isFullscreenSwitchEnabled()) {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Starting fullscreen switch mode");
 			TeclaApp.getInstance().startFullScreenSwitchMode();

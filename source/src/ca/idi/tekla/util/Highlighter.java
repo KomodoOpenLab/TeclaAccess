@@ -177,7 +177,6 @@ public class Highlighter {
 	 * Resume auto scanning. Call after {@link #pauseSelfScanning()} to resume scanning from where it was last paused.
 	 */
 	public void resumeSelfScanning() {
-		pauseSelfScanning();
 		if (TeclaApp.persistence.isScanningEnabled()) {
 			mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
 		}
