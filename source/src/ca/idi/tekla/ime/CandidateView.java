@@ -118,9 +118,8 @@ public class CandidateView extends View {
      */
     public CandidateView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        //FIXME: Tekla - Use own resource
-        //mSelectionHighlight = context.getResources().getDrawable(
-        //        com.android.internal.R.drawable.list_selector_background_pressed);
+        mSelectionHighlight = context.getResources().getDrawable(
+        		R.drawable.list_selector_background_pressed);
 
         LayoutInflater inflate =
             (LayoutInflater) context

@@ -114,7 +114,7 @@ public class TeclaApp extends Application {
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
-		if (persistence.isPersistentKeyboardEnabled()) queueSplash();
+		//if (persistence.isPersistentKeyboardEnabled()) queueSplash();
 
 	}
 
