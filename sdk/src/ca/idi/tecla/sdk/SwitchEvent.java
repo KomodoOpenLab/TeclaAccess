@@ -18,10 +18,10 @@ public class SwitchEvent {
 	public static final String EXTRA_SWITCH_STATES = "ca.idi.tekla.sdk.extra.SWITCH_STATES";
 	
 	// MASKS FOR READING SWITCH STATES
-	public static final int SWITCH_J1 = 0x01;
-	public static final int SWITCH_J2 = 0x02;
-	public static final int SWITCH_J3 = 0x04;
-	public static final int SWITCH_J4 = 0x08;
+	public static final int SWITCH_J1 = 0x01; //Forward / Up
+	public static final int SWITCH_J2 = 0x02; //Back / Down
+	public static final int SWITCH_J3 = 0x04; //Left
+	public static final int SWITCH_J4 = 0x08; //Right
 	public static final int SWITCH_E1 = 0x10;
 	public static final int SWITCH_E2 = 0x20;
 
