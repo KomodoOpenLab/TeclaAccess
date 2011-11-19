@@ -21,6 +21,7 @@ package ca.idi.tekla;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
 
@@ -34,6 +35,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
@@ -57,6 +59,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefPersistentKeyboard;
+	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
@@ -67,6 +70,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private String mShieldAddress, mShieldName;
 	
 	private ScanSpeedDialog mScanSpeedDialog;
+	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -85,6 +89,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
+		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
+		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
+		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
@@ -98,6 +105,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (!TeclaApp.getInstance().isDefaultIME()) {
 			//Tecla Access is not selected
 			mPrefPersistentKeyboard.setEnabled(false);
+			mPrefAutohideTimeout.setEnabled(false);
 			mPrefFullScreenSwitch.setEnabled(false);
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
@@ -232,6 +240,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
 		}
+		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
+			mAutohideTimeoutDialog.show();
+		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
 
@@ -245,6 +256,20 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			}
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
+			if (mPrefPersistentKeyboard.isChecked()) {
+				// Show keyboard immediately if Tecla Access IME is selected
+				TeclaApp.getInstance().requestSoftIME();
+			} else {
+				mPrefSelfScanning.setChecked(false);
+				mPrefSelfScanning.setEnabled(false);
+				mPrefInverseScanning.setChecked(false);
+				mPrefInverseScanning.setEnabled(false);
+				mPrefFullScreenSwitch.setChecked(false);
+				mPrefConnectToShield.setChecked(false);
+				TeclaApp.getInstance().hideSoftIME();
+			}
+		}
+		if (key.equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				// Show keyboard immediately if Tecla Access IME is selected
 				TeclaApp.getInstance().requestSoftIME();

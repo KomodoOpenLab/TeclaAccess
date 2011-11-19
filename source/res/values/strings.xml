@@ -220,10 +220,23 @@
 	<string name="pref_voice_input">Enable voice input</string>
 	<string name="pref_voice_input_summary">Use your voice to enter text</string>
 
-    <!-- Option to show the UI navigation keyboard on the screen -->
-	<string name="persistent_keyboard">Always show keyboard</string>
-    <!-- Summary for UI navigation keyboard option -->
+	<!-- Option to show the UI navigation keyboard on the screen -->
+	<string name="persistent_keyboard">Show navigation keyboard</string>
+	<!-- Summary for UI navigation keyboard option -->
 	<string name="persistent_keyboard_summary">Shows a small navigation keyboard when not entering text</string>
+    <!-- Option to autohide the UI navigation keyboard on the screen -->
+	<string name="autohide_timeout">Navigation keyboard timeout</string>
+	<string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
+	<string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
+	<string-array name="autohide_strings">
+		<item>Immediately</item>
+		<item>After 4 seconds</item>
+		<item>After 8 seconds</item>
+		<item>After 15 seconds</item>
+		<item>After 30 seconds</item>
+		<item>After 60 seconds</item>
+		<item>Never</item>
+	</string-array>
 
     <!-- Option to scan and connect to Tecla shields -->
 	<string name="shield_connect">Connect to Tecla Shield</string>
@@ -248,7 +261,12 @@
 
     <!-- Self-scanning delay strings-->
 	<string name="scan_speed">Scanning speed</string>
-	<string name="scan_speed_summary">Change the scanning speed</string>
+	<string name="scan_speed_summary">Adjust the scanning speed</string>
+
+	<!-- Tecla: Scan Speed Dialog -->
+	<string name="dialog_faster">Faster</string>
+	<string name="dialog_slower">Slower</string>
+	<string name="btn_done">Done</string>
 
     <!-- Toasts and dialogs -->
 	<string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
@@ -262,12 +280,6 @@
 	<string name="shield_disconnected">Tecla Shield disconnected</string>
 	<string name="no_voice_input_available">No speech recognition applications available!</string>
 	<string name="no_voice_actions_installed">Voice Actions is not installed!</string>
-
-	<!-- Tecla: Scan Speed Dialog -->
-	<string name="scan_speed_dialog_title">Adjust Scan Speed</string>
-	<string name="dialog_faster">Faster</string>
-	<string name="dialog_slower">Slower</string>
-	<string name="btn_done">Done</string>
 
 	<!-- Tecla: Titles and labels -->
 	<string name="sep_label">Switch event provider</string>

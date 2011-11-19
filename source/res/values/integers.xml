@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer-array name="autohide_values">
+		<item>1</item>
+		<item>4</item>
+		<item>8</item>
+		<item>15</item>
+		<item>30</item>
+		<item>60</item>
+		<item>-1</item>
+	</integer-array>
+</resources>

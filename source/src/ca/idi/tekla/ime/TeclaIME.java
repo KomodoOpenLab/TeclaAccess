@@ -28,7 +28,6 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
@@ -67,6 +66,7 @@ import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
+import ca.idi.tekla.util.Persistence;
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
@@ -267,7 +267,7 @@ public class TeclaIME extends InputMethodService
 		mCandidateView = (CandidateView) mCandidateViewContainer.findViewById(R.id.candidates);
 		mCandidateView.setService(this);
 		setCandidatesViewShown(true);
-		// TODO: Tekla - uncomment to enable suggestions
+		// TODO: Tecla - uncomment to enable suggestions
 		//return mCandidateViewContainer;
 		return null;
 	}
@@ -390,8 +390,11 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
+		
+		evaluateNavKbdTimeout();
+		
 	}
-
+	
 	@Override
 	public void onFinishInput() {
 		super.onFinishInput();
@@ -500,7 +503,7 @@ public class TeclaIME extends InputMethodService
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			// FIXME: Tekla - Prevent soft input method from consuming the back key
+			// FIXME: Tecla - Prevent soft input method from consuming the back key
 			/*if (event.getRepeatCount() == 0 && mInputView != null) {
                     if (mInputView.handleBack()) {
                         return true;
@@ -556,7 +559,7 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public void onWindowHidden() {
 		super.onWindowHidden();
-		if (shouldShowIME()) {
+		if (shouldShowIME() && !isNavKbdTimedOut) {
 			showSoftIME();
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
@@ -581,7 +584,7 @@ public class TeclaIME extends InputMethodService
 				updateRingerMode();
 			if (action.equals(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received switch event intent.");
-				handleSwitchEvent(intent.getExtras());
+				handleSwitchEvent(new SwitchEvent(intent.getExtras()));
 			}
 			if (action.equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield connected intent.");
@@ -753,6 +756,8 @@ public class TeclaIME extends InputMethodService
 		if (mKeyboardSwitcher.onKey(primaryCode)) {
 			changeKeyboardMode();
 		}
+		
+		evaluateNavKbdTimeout();
 	}
 
 	public void onText(CharSequence text) {
@@ -1207,7 +1212,7 @@ public class TeclaIME extends InputMethodService
 		// If there is no auto text data, then quickfix is forced to "on", so that the other options
 		// will continue to work
 		if (AutoText.getSize(mIMEView) < 1) mQuickFixes = true;
-		//TODO: Tekla - changed default show_suggestions to false
+		//TODO: Tecla - changed default show_suggestions to false
 		//      need to change back when the dictionary is ready!
 		//mShowSuggestions = sp.getBoolean(PREF_SHOW_SUGGESTIONS, true) & mQuickFixes;
 		mShowSuggestions = sp.getBoolean(PREF_SHOW_SUGGESTIONS, false) & mQuickFixes;
@@ -1267,7 +1272,7 @@ public class TeclaIME extends InputMethodService
 		super.dump(fd, fout, args);
 
 		final Printer p = new PrintWriterPrinter(fout);
-		p.println("TeklaIME state :");
+		p.println("TeclaIME state :");
 		p.println("  Keyboard mode = " + mKeyboardSwitcher.getKeyboardMode());
 		p.println("  mCapsLock=" + mCapsLock);
 		p.println("  mComposing=" + mComposing.toString());
@@ -1331,13 +1336,13 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 
-	//TEKLA CONSTANTS AND VARIABLES
+	//TECLA CONSTANTS AND VARIABLES
 	/**
 	 * Tag used for logging in this class
 	 */
 	private static final String CLASS_TAG = "IME: ";
 
-	//TODO: Try moving these variables to TeklaApp class
+	//TODO: Try moving these variables to TeclaApp class
 	private String mVoiceInputString;
 	private int mLastKeyboardMode, mLastNonUIKeyboardMode;
 	private boolean mShieldConnected, mRepeating;
@@ -1345,10 +1350,11 @@ public class TeclaIME extends InputMethodService
 	private View mSwitch;
 	private Handler mTeclaHandler;
 	private int[] mKeyCodes;
+	private boolean isNavKbdTimedOut;
 
 	private void initTeclaA11y() {
 
-		// register to receive switch events from Tekla shield
+		// register to receive switch events from Tecla shield
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_CONNECTED));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED));
@@ -1387,56 +1393,103 @@ public class TeclaIME extends InputMethodService
 		
 	};
 
-	private void handleSwitchEvent(Bundle bundle) {
+	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
-		if (!TeclaApp.highlighter.isSoftIMEShowing()) showSoftIME();
-		
-		SwitchEvent switchEvent = new SwitchEvent(bundle);
+		cancelNavKbdTimeout();
+		if (!TeclaApp.highlighter.isSoftIMEShowing()) {
+			showSoftIME();
+			TeclaApp.highlighter.resetHighlight();
+		} else {
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
-				TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
-				TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
-
-		if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
-			if (TeclaApp.persistence.isInverseScanningEnabled()) {
-				TeclaApp.highlighter.resumeSelfScanning();
-			} else {
-				selectHighlighted(true);
-			}
-		}
-		if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
-			if (TeclaApp.persistence.isInverseScanningEnabled()) {
-				if (TeclaApp.persistence.isInverseScanningChanged()) {
-					//Ignore event right after Inverse Scanning is Enabled
-					stopRepeatingKey();
-					TeclaApp.persistence.unsetInverseScanningChanged();
-					Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+			if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
+				if (TeclaApp.persistence.isInverseScanningEnabled()) {
+					TeclaApp.highlighter.resumeSelfScanning();
 				} else {
-					selectHighlighted(false);
+					selectHighlighted(true);
 				}
-			} else {
-				stopRepeatingKey();
 			}
-		}
-		if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-			TeclaApp.highlighter.stepOut();
-		}
-		if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
-			TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
-		}
-		if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
-			TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
+			if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
+				if (TeclaApp.persistence.isInverseScanningEnabled()) {
+					if (TeclaApp.persistence.isInverseScanningChanged()) {
+						//Ignore event right after Inverse Scanning is Enabled
+						stopRepeatingKey();
+						TeclaApp.persistence.unsetInverseScanningChanged();
+						Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+					} else {
+						selectHighlighted(false);
+					}
+				} else {
+					stopRepeatingKey();
+				}
+			}
+			if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
+				TeclaApp.highlighter.stepOut();
+			}
+			if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
+				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
+			}
+			if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
+				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
+			}
+			
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
 		}
 		
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
-				TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
+		evaluateNavKbdTimeout();
+				
+	}
+	
+	/**
+	 * Determine weather the current keyboard should auto-hide.
+	 */
+	private void evaluateNavKbdTimeout() {
+		if(mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_NAV) {
+			resetNavKbdTimeout();
+		} else {
+			cancelNavKbdTimeout();
+		}
 	}
 
 	/**
+	 * Cancel any currently active calls to auto-hide the keyboard.
+	 */
+	private void cancelNavKbdTimeout() {
+		isNavKbdTimedOut = false;
+		mTeclaHandler.removeCallbacks(hideNavKbdRunnable);
+	}
+
+	/**
+	 * Do not use this method, use {@link #evaluateNavKbdTimeout()} instead.
+	 */
+	private void resetNavKbdTimeout() {
+		cancelNavKbdTimeout();
+		int navKbdTimeout = TeclaApp.persistence.getNavigationKeyboardTimeout();
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Timeout in: " + navKbdTimeout + "seconds");
+		if (navKbdTimeout != Persistence.NEVER_AUTOHIDE)
+			mTeclaHandler.postDelayed(hideNavKbdRunnable, navKbdTimeout * 1000);
+	}
+
+	private Runnable hideNavKbdRunnable = new Runnable() {
+		@Override
+		public void run() {
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Navigation keyboard timed out!");
+			isNavKbdTimedOut = true;
+			hideSoftIME();
+		}
+	};
+
+	/**
 	 * Select the currently highlighted item.
-	 * @param repeat true if a key will be repeated on hold, false otherwise.
+	 * @param repeat true if a key should be repeated on hold, false otherwise.
 	 */
 	private void selectHighlighted(Boolean repeat) {
+		//FIXME: Repeat key should be re-implemented as repeat switch action on hold on the SEP
+		// will disable it here for now.
+		repeat = false;
 		TeclaApp.highlighter.pauseSelfScanning();
 		if (TeclaApp.highlighter.getScanDepth() == Highlighter.DEPTH_KEY) {
 			//Selected item is a key
@@ -1467,7 +1520,7 @@ public class TeclaIME extends InputMethodService
 			if (thisKBMode != KeyboardSwitcher.MODE_NAV) {
 				// Closing
 				mLastNonUIKeyboardMode = thisKBMode;
-				hideWindow();
+				hideSoftIME();
 			}
 			else {
 				// Opening

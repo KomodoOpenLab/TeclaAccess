@@ -17,6 +17,7 @@ public class Persistence {
 
 	public static final String PREF_VOICE_INPUT = "voice_input";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
+	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
 	public static final String PREF_SHIELD_ADDRESS = "shield_address";
 	public static final String PREF_FULLSCREEN_SWITCH = "fullscreen_switch";
@@ -26,6 +27,8 @@ public class Persistence {
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int MAX_SCAN_DELAY = 3000;
 	public static final int MIN_SCAN_DELAY = 250;
+	public static final int AUTOHIDE_NULL = -999;
+	public static final int NEVER_AUTOHIDE = -1;
 	
 	private boolean mScreenOn, mInverseScanningChanged;
 	
@@ -51,18 +54,6 @@ public class Persistence {
 		mScreenOn = false;
 	}
 	
-	public boolean isInverseScanningChanged() {
-		return mInverseScanningChanged;
-	}
-	
-	public void setInverseScanningChanged() {
-		mInverseScanningChanged = true;
-	}
-	
-	public void unsetInverseScanningChanged() {
-		mInverseScanningChanged = false;
-	}
-	
 	public boolean isVoiceInputEnabled() {
 		return shared_prefs.getBoolean(PREF_VOICE_INPUT, false);
 	}
@@ -71,8 +62,13 @@ public class Persistence {
 		return shared_prefs.getBoolean(PREF_PERSISTENT_KEYBOARD, false);
 	}
 
-	public boolean shouldConnectToShield() {
-		return shared_prefs.getBoolean(PREF_CONNECT_TO_SHIELD, false);
+	public void setNavigationKeyboardTimeout(int timeout) {
+		prefs_editor.putInt(PREF_AUTOHIDE_TIMEOUT, timeout);
+		prefs_editor.commit();
+	}
+
+	public int getNavigationKeyboardTimeout() {
+		return shared_prefs.getInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
 	}
 
 	public void setConnectToShield(boolean shieldConnect) {
@@ -80,14 +76,18 @@ public class Persistence {
 		prefs_editor.commit();
 	}
 
-	public String getShieldAddress() {
-		String mac = shared_prefs.getString(PREF_SHIELD_ADDRESS, "");
-		return BluetoothAdapter.checkBluetoothAddress(mac)? mac:null;
+	public boolean shouldConnectToShield() {
+		return shared_prefs.getBoolean(PREF_CONNECT_TO_SHIELD, false);
 	}
 
 	public void setShieldAddress(String shieldAddress) {
 		prefs_editor.putString(PREF_SHIELD_ADDRESS, shieldAddress);
 		prefs_editor.commit();
+	}
+
+	public String getShieldAddress() {
+		String mac = shared_prefs.getString(PREF_SHIELD_ADDRESS, "");
+		return BluetoothAdapter.checkBluetoothAddress(mac)? mac:null;
 	}
 
 	public boolean isFullscreenSwitchEnabled() {
@@ -102,17 +102,29 @@ public class Persistence {
 		return shared_prefs.getBoolean(PREF_INVERSE_SCANNING, false);
 	}
 
+	public void setInverseScanningChanged() {
+		mInverseScanningChanged = true;
+	}
+	
+	public void unsetInverseScanningChanged() {
+		mInverseScanningChanged = false;
+	}
+	
+	public boolean isInverseScanningChanged() {
+		return mInverseScanningChanged;
+	}
+	
 	public boolean isScanningEnabled() {
 		return  isSelfScanningEnabled() || isInverseScanningEnabled();
-	}
-
-	public int getScanDelay() {
-		return shared_prefs.getInt(PREF_SCAN_DELAY_INT, DEFAULT_SCAN_DELAY);
 	}
 
 	public void setScanDelay(int delay) {
 		prefs_editor.putInt(PREF_SCAN_DELAY_INT, delay);
 		prefs_editor.commit();
+	}
+
+	public int getScanDelay() {
+		return shared_prefs.getInt(PREF_SCAN_DELAY_INT, DEFAULT_SCAN_DELAY);
 	}
 
 }

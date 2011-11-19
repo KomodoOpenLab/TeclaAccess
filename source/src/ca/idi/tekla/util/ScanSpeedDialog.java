@@ -55,12 +55,14 @@ public class ScanSpeedDialog extends Dialog
 
 	public ScanSpeedDialog(Context context) {
 		super(context);
-		setTitle(R.string.scan_speed_dialog_title);
+		setTitle(R.string.scan_speed_summary);
 		setOnKeyListener(this);
 	}
 
 	public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
+		if (keyCode == KeyEvent.KEYCODE_BACK ||
+			keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+			keyCode == KeyEvent.KEYCODE_ENTER) {
 			dismiss();
 			return true;
 		}

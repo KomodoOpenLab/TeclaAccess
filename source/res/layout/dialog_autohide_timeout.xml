@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    >
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="horizontal"
+		android:id="@+id/linearLayout1">
+        <TextView
+        	android:layout_height="wrap_content"
+        	android:layout_width="fill_parent"
+        	android:gravity="left"
+        	android:id="@+id/autohide_dlg_min_label" android:layout_weight="1"/>
+        <TextView
+        	android:layout_height="wrap_content"
+        	android:layout_width="fill_parent"
+        	android:gravity="right"
+        	android:id="@+id/autohide_dlg_max_label" android:layout_weight="1"/>
+    </LinearLayout>
+    <SeekBar
+    	android:layout_height="wrap_content"
+    	android:layout_width="fill_parent"
+    	android:id="@+id/autohide_dlg_seekbar"
+    	/>
+
+    <TextView
+        android:id="@+id/autohide_dlg_timeout_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="horizontal"
+		android:id="@+id/linearLayout1" android:layout_marginTop="8sp">
+		<Button
+			android:id="@+id/autohide_dlg_btn_done"
+			android:text="@string/btn_done"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:layout_width="0dp"/>
+    </LinearLayout>
+</LinearLayout>

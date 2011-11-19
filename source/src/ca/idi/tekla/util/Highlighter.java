@@ -190,6 +190,11 @@ public class Highlighter {
 		clear();
 	}
 	
+	public void resetHighlight() {
+		move(HIGHLIGHT_NEXT);
+		move(HIGHLIGHT_PREV);
+	}
+
 	/**
 	 * Runnable used to auto scan
 	 */
@@ -285,11 +290,6 @@ public class Highlighter {
 		if (counter > max) counter = min;
 		if (counter < min) counter = max;
 		return counter;
-	}
-
-	private void resetHighlight() {
-		move(HIGHLIGHT_NEXT);
-		move(HIGHLIGHT_PREV);
 	}
 
 	private void redrawInputView () {

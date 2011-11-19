@@ -422,7 +422,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 				mShieldVersion = teclaShield.getName().startsWith(PREFIX_SHIELD_V1)? 1:2;
 			}
 		} else {
-			Log.d(TeclaApp.TAG, CLASS_TAG + "Can't open socket. Bluetooth is disabled.");
+			Log.w(TeclaApp.TAG, CLASS_TAG + "Can't open socket. Bluetooth is disabled.");
 		}
 		return success;
 	}

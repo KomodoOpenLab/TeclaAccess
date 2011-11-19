@@ -53,6 +53,12 @@
 			android:summary="@string/persistent_keyboard_summary"
 			android:persistent="true"
 			android:defaultValue="false"
+		/>
+		<Preference
+			android:key="autohide_timeout"
+			android:title="@string/autohide_timeout"
+			android:summary="@string/autohide_timeout_summary"
+			android:persistent="true"
 			/>
 		<CheckBoxPreference
 			android:key="fullscreen_switch"
