@@ -190,7 +190,7 @@ public class Highlighter {
 		clear();
 	}
 	
-	public void resetHighlight() {
+	public void restoreHighlight() {
 		move(HIGHLIGHT_NEXT);
 		move(HIGHLIGHT_PREV);
 	}
@@ -233,7 +233,7 @@ public class Highlighter {
 			//Keyboard has only one row so don't reset highlighting
 			mScanDepth = DEPTH_KEY;
 		}
-		resetHighlight();
+		restoreHighlight();
 	}
 
 	private boolean shouldDelayKey(int keyCode) {
@@ -248,7 +248,7 @@ public class Highlighter {
 	private void initRowHighlighting() {
 		mScanDepth = DEPTH_KEY;
 		mScanKeyCounter = getRowStart(mIMEView.getKeyboard(), mScanRowCounter);
-		resetHighlight();
+		restoreHighlight();
 	}
 
 	private Integer getRowCount(Keyboard keyboard) {

@@ -247,7 +247,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 			}
 			if (mKeepReconnecting) {
 				int delay = 3 * PING_DELAY;
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Connection will be attempted in " + delay + " miliseconds.");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Connection will be attempted in " + delay + " miliseconds.");
 				try {
 					Thread.sleep(delay);
 				} catch (InterruptedException e) {
@@ -363,7 +363,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 		Boolean success = false;
 
 		if (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
-			Log.d(TeclaApp.TAG, CLASS_TAG + "Attempting to open socket to " + shieldAddress + "...");
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Attempting to open socket to " + shieldAddress + "...");
 
 			BluetoothDevice teclaShield;
 			teclaShield = mBluetoothAdapter.getRemoteDevice(shieldAddress);

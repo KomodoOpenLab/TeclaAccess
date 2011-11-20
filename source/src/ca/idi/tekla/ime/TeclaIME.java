@@ -601,6 +601,7 @@ public class TeclaIME extends InputMethodService
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received show IME intent.");
 				showSoftIME();
 				evaluateStartScanning();
+				evaluateNavKbdTimeout();
 				//TODO: Assume/force persistent keyboard preference
 			}
 			if (action.equals(TeclaApp.ACTION_HIDE_IME)) {
@@ -1398,7 +1399,7 @@ public class TeclaIME extends InputMethodService
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing()) {
 			showSoftIME();
-			TeclaApp.highlighter.resetHighlight();
+			TeclaApp.highlighter.startSelfScanning();
 		} else {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +

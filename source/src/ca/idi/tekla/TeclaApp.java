@@ -147,6 +147,7 @@ public class TeclaApp extends Application {
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen on");
 				persistence.setScreenOn();
+				requestSoftIME();
 			}
 //			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
 //				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Phone state changed");
