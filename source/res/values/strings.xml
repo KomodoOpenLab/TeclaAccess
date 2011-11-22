@@ -212,18 +212,32 @@
     <string name="english_ime_settings">Tecla Access</string>
 	<string name="inputMethod">Input method</string>
 	
+    <!-- Option to enable speech input -->
+	<string name="pref_voice_input">Enable voice input</string>
+	<string name="pref_voice_input_summary">Adds a key for quick access to voice commands and speech recognition</string>
+
+    <!-- Option to enable accented characters -->
+	<string name="pref_variants_key">Show accents key</string>
+	<string name="pref_variants_key_summary">Adds a key to enable accents and other character variants</string>
+
 	<!-- Tecla: IME Preferences Strings -->
     <!-- Category title for tecla shield -->
     <string name="alternative_input_category">Alternative input settings</string>
 
-    <!-- Option to enable speech input -->
-	<string name="pref_voice_input">Enable voice input</string>
-	<string name="pref_voice_input_summary">Use your voice to enter text</string>
+    <!-- Option to scan and connect to Tecla shields -->
+	<string name="shield_connect">Connect to Tecla Shield</string>
+	<string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
+	<string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
+	<string name="shield_connect_summary">Check to connect to a nearby Tecla Shield</string>
+
+    <!-- Option to enable fullscreen switch mode -->
+	<string name="fullscreen_switch">Fullscreen switch mode</string>
+	<string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
 
 	<!-- Option to show the UI navigation keyboard on the screen -->
 	<string name="persistent_keyboard">Show navigation keyboard</string>
-	<!-- Summary for UI navigation keyboard option -->
 	<string name="persistent_keyboard_summary">Shows a small navigation keyboard when not entering text</string>
+
     <!-- Option to autohide the UI navigation keyboard on the screen -->
 	<string name="autohide_timeout">Navigation keyboard timeout</string>
 	<string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
@@ -237,16 +251,6 @@
 		<item>After 60 seconds</item>
 		<item>Never</item>
 	</string-array>
-
-    <!-- Option to scan and connect to Tecla shields -->
-	<string name="shield_connect">Connect to Tecla Shield</string>
-	<string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
-	<string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
-	<string name="shield_connect_summary">Check to connect to a nearby Tecla Shield</string>
-
-    <!-- Option to scan and connect to Tecla shields -->
-	<string name="fullscreen_switch">Fullscreen switch mode</string>
-	<string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
 
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>

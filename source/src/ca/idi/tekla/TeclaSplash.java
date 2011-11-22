@@ -72,15 +72,14 @@ public class TeclaSplash extends Activity
 			//and we won't want to unregister, either:
 			mReceiver=null;
 		}
-		TeclaApp.getInstance().requestSoftIME(4000);
+		TeclaApp.getInstance().requestShowIMEView(4000);
 		Log.d(TeclaApp.TAG, CLASS_TAG + "Splash started.");
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		Log.w(TeclaApp.TAG, CLASS_TAG + "Splash called again!");
-		TeclaApp.getInstance().requestSoftIME(4000);
+		Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring duplicate call to show Splash");
 	}
 
 	// All intents will be processed here
@@ -105,7 +104,7 @@ public class TeclaSplash extends Activity
 		if (mReceiver != null)
 			unregisterReceiver(mReceiver);
 		// Sometimes IME hides so show it again!
-		TeclaApp.getInstance().requestSoftIME();
+		TeclaApp.getInstance().requestShowIMEView();
 		if (!mConnectToShieldCalled) {
 			connectToShield();
 		}

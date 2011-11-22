@@ -4,18 +4,17 @@
 
 package ca.idi.tekla.util;
 
-import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import ca.idi.tekla.TeclaApp;
+import ca.idi.tekla.ime.TeclaKeyboard;
+import ca.idi.tekla.ime.TeclaKeyboardView;
 
 public class Highlighter {
 
@@ -32,7 +31,7 @@ public class Highlighter {
 	
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
-	private KeyboardView mIMEView;
+	private TeclaKeyboardView mIMEView;
 	private Handler mHandler;
 
 	public Highlighter(Context context) {
@@ -60,10 +59,10 @@ public class Highlighter {
 	 * Set the input method view that the highlighter will work on.
 	 * @param imeView the input method view the highlighter class will work on.
 	 */
-	public void setView(KeyboardView imeView) {
+	public void setIMEView(TeclaKeyboardView imeView) {
 		TeclaApp.getInstance().broadcastInputViewCreated();
 		mIMEView = imeView;
-		if (getRowCount(mIMEView.getKeyboard()) == 1) {
+		if (mIMEView.getKeyboard().getRowCount() == 1) {
 			mScanDepth = Highlighter.DEPTH_KEY;
 		}
 	}
@@ -108,8 +107,8 @@ public class Highlighter {
 	}
 	
 	public void move(int direction) {
-		Keyboard keyboard = mIMEView.getKeyboard();
-		int rowCount = getRowCount(keyboard);
+		TeclaKeyboard keyboard = mIMEView.getKeyboard();
+		int rowCount = keyboard.getRowCount();
 
 		if (rowCount == 1) {
 			mScanDepth = DEPTH_KEY;
@@ -120,8 +119,8 @@ public class Highlighter {
 			if (direction == Highlighter.HIGHLIGHT_PREV) mScanRowCounter--;
 			mScanRowCounter = wrapCounter(mScanRowCounter, 0, rowCount - 1);
 		}
-		int fromIndex = getRowStart(keyboard, mScanRowCounter);
-		int toIndex = getRowEnd(keyboard, mScanRowCounter);
+		int fromIndex = keyboard.getRowStart(mScanRowCounter);
+		int toIndex = keyboard.getRowEnd(mScanRowCounter);
 		if (mScanDepth == Highlighter.DEPTH_KEY) {
 			if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
 			if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
@@ -132,12 +131,12 @@ public class Highlighter {
 	}
 	
 	public void stepOut() {
-		Keyboard keyboard = mIMEView.getKeyboard();
-		if (getRowCount(keyboard) != 1) {
+		TeclaKeyboard keyboard = mIMEView.getKeyboard();
+		if (keyboard.getRowCount() != 1) {
 			mScanDepth = Highlighter.DEPTH_ROW;		
 			highlightKeys(
-					getRowStart(keyboard, mScanRowCounter),
-					getRowEnd(keyboard, mScanRowCounter));
+					keyboard.getRowStart(mScanRowCounter),
+					keyboard.getRowEnd(mScanRowCounter));
 		}
 	}
 
@@ -145,8 +144,8 @@ public class Highlighter {
 		return mScanDepth;
 	}
 
-	public Keyboard.Key getCurrentKey() {
-		Keyboard keyboard = mIMEView.getKeyboard();
+	public TeclaKeyboard.Key getCurrentKey() {
+		TeclaKeyboard keyboard = mIMEView.getKeyboard();
 		List<Key> keyList = keyboard.getKeys();
 		return keyList.get(mScanKeyCounter);
 	}
@@ -224,7 +223,7 @@ public class Highlighter {
 	 * Start highlighting the current keyboard. Automatically handles single row keyboards.
 	 */
 	private void init() {
-		if (getRowCount(mIMEView.getKeyboard()) > 1) {
+		if (mIMEView.getKeyboard().getRowCount() > 1) {
 			//Keyboard has multiple rows
 			mScanDepth = DEPTH_ROW;
 			mScanKeyCounter = 0;
@@ -237,9 +236,9 @@ public class Highlighter {
 	}
 
 	private boolean shouldDelayKey(int keyCode) {
-		if (keyCode == Keyboard.KEYCODE_DONE ||
-				keyCode == Keyboard.KEYCODE_MODE_CHANGE ||
-				keyCode == Keyboard.KEYCODE_SHIFT) {
+		if (keyCode == TeclaKeyboard.KEYCODE_DONE ||
+				keyCode == TeclaKeyboard.KEYCODE_MODE_CHANGE ||
+				keyCode == TeclaKeyboard.KEYCODE_SHIFT) {
 			return false;
 		}
 		return true;
@@ -247,31 +246,12 @@ public class Highlighter {
 	
 	private void initRowHighlighting() {
 		mScanDepth = DEPTH_KEY;
-		mScanKeyCounter = getRowStart(mIMEView.getKeyboard(), mScanRowCounter);
+		mScanKeyCounter = mIMEView.getKeyboard().getRowStart(mScanRowCounter);
 		restoreHighlight();
 	}
 
-	private Integer getRowCount(Keyboard keyboard) {
-		List<Key> keyList = keyboard.getKeys();
-		Key key;
-		int rowCounter = 0;
-		int coord = 0;
-		for (Iterator<Key> i = keyList.iterator(); i.hasNext();) {
-			key = i.next();
-			if (rowCounter == 0) {
-				rowCounter++;
-				coord = key.y;
-			}
-			if (coord != key.y) {
-				rowCounter++;
-				coord = key.y;
-			}
-		}
-		return rowCounter;
-	}
-
 	private void highlightKeys(int fromIndex, int toIndex) {
-		Keyboard keyboard = mIMEView.getKeyboard();
+		TeclaKeyboard keyboard = mIMEView.getKeyboard();
 		List<Key> keyList = keyboard.getKeys();
 		int totalKeys = keyList.size();
 		Key key;
@@ -299,54 +279,6 @@ public class Highlighter {
 		Message msg = Message.obtain();
 		msg.what = Highlighter.REDRAW_KEYBOARD;
 		mHandler.sendMessage(msg);  
-	}
-
-	private Integer getRowStart(Keyboard keyboard, int rowNumber) {
-		int keyCounter = 0;
-		if (rowNumber != 0) {
-			List<Key> keyList = keyboard.getKeys();
-			Key key;
-			int rowCounter = 0;
-			int prevCoord = keyList.get(0).y;
-			int thisCoord;
-			while (rowCounter != rowNumber) {
-				keyCounter++;
-				key = keyList.get(keyCounter);
-				thisCoord = key.y;
-				if (thisCoord != prevCoord) {
-					// Changed rows
-					rowCounter++;
-					prevCoord = thisCoord;
-				}
-			}
-		}
-		return keyCounter;
-	}
-
-	private Integer getRowEnd(Keyboard keyboard, int rowNumber) {
-		List<Key> keyList = keyboard.getKeys();
-		int totalKeys = keyList.size();
-		int keyCounter = 0;
-		if (rowNumber == (getRowCount(keyboard) - 1)) {
-			keyCounter = totalKeys - 1;
-		} else {
-			Key key;
-			int rowCounter = 0;
-			int prevCoord = keyList.get(0).y;
-			int thisCoord;
-			while (rowCounter <= rowNumber) {
-				keyCounter++;
-				key = keyList.get(keyCounter);
-				thisCoord = key.y;
-				if (thisCoord != prevCoord) {
-					// Changed rows
-					rowCounter++;
-					prevCoord = thisCoord;
-				}
-			}
-			keyCounter--;
-		}
-		return keyCounter;
 	}
 
 }

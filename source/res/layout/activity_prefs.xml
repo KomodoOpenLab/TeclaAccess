@@ -36,14 +36,34 @@
             android:persistent="true"
             android:defaultValue="true"
             />
+		<CheckBoxPreference
+			android:key="voice_input"
+			android:title="@string/pref_voice_input"
+			android:summary="@string/pref_voice_input_summary"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:key="variants_key"
+			android:title="@string/pref_variants_key"
+			android:summary="@string/pref_variants_key_summary"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
 
     <PreferenceCategory
             android:title="@string/alternative_input_category"
             android:key="alternative_input_settings">
 		<CheckBoxPreference
-			android:key="voice_input"
-			android:title="@string/pref_voice_input"
-			android:summary="@string/pref_voice_input_summary"
+			android:key="shield_connect"
+			android:title="@string/shield_connect"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
+			android:key="fullscreen_switch"
+			android:title="@string/fullscreen_switch"
+			android:summary="@string/fullscreen_switch_summary"
 			android:persistent="true"
 			android:defaultValue="false"
 			/>
@@ -60,19 +80,6 @@
 			android:summary="@string/autohide_timeout_summary"
 			android:persistent="true"
 			android:dependency="persistent_keyboard"
-			/>
-		<CheckBoxPreference
-			android:key="fullscreen_switch"
-			android:title="@string/fullscreen_switch"
-			android:summary="@string/fullscreen_switch_summary"
-			android:persistent="true"
-			android:defaultValue="false"
-			/>
-		<CheckBoxPreference
-			android:key="shield_connect"
-			android:title="@string/shield_connect"
-			android:persistent="true"
-			android:defaultValue="false"
 			/>
     </PreferenceCategory>            
 

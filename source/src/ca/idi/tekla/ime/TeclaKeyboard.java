@@ -16,7 +16,11 @@
 
 package ca.idi.tekla.ime;
 
+import java.util.Iterator;
+import java.util.List;
+
 import ca.idi.tekla.R;
+import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.R.dimen;
 import ca.idi.tekla.R.drawable;
 import ca.idi.tekla.R.string;
@@ -27,9 +31,14 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.Keyboard.Key;
+import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
-public class LatinKeyboard extends Keyboard {
+public class TeclaKeyboard extends Keyboard {
+
+	public static int KEYCODE_VOICE = -202;
+	public static int KEYCODE_VARIANTS = -222;
 
     private Drawable mShiftLockIcon;
     private Drawable mShiftLockPreviewIcon;
@@ -46,11 +55,11 @@ public class LatinKeyboard extends Keyboard {
 
     static int sSpacebarVerticalCorrection;
 
-    public LatinKeyboard(Context context, int xmlLayoutResId) {
+    public TeclaKeyboard(Context context, int xmlLayoutResId) {
         this(context, xmlLayoutResId, 0);
     }
 
-    public LatinKeyboard(Context context, int xmlLayoutResId, int mode) {
+    public TeclaKeyboard(Context context, int xmlLayoutResId, int mode) {
         super(context, xmlLayoutResId, mode);
         Resources res = context.getResources();
         mShiftLockIcon = res.getDrawable(R.drawable.sym_keyboard_shift_locked);
@@ -62,7 +71,7 @@ public class LatinKeyboard extends Keyboard {
                 R.dimen.spacebar_vertical_correction);
     }
 
-    public LatinKeyboard(Context context, int layoutTemplateResId, 
+    public TeclaKeyboard(Context context, int layoutTemplateResId, 
             CharSequence characters, int columns, int horizontalPadding) {
         super(context, layoutTemplateResId, characters, columns, horizontalPadding);
     }
@@ -70,7 +79,7 @@ public class LatinKeyboard extends Keyboard {
     @Override
     protected Key createKeyFromXml(Resources res, Row parent, int x, int y, 
             XmlResourceParser parser) {
-        Key key = new LatinKey(res, parent, x, y, parser);
+        Key key = new TeclaKey(res, parent, x, y, parser);
         if (key.codes[0] == 10) {
             mEnterKey = key;
         }
@@ -140,8 +149,8 @@ public class LatinKeyboard extends Keyboard {
         int index = getShiftKeyIndex();
         if (index >= 0) {
             mShiftKey = getKeys().get(index);
-            if (mShiftKey instanceof LatinKey) {
-                ((LatinKey)mShiftKey).enableShiftLock();
+            if (mShiftKey instanceof TeclaKey) {
+                ((TeclaKey)mShiftKey).enableShiftLock();
             }
             mOldShiftIcon = mShiftKey.icon;
             mOldShiftPreviewIcon = mShiftKey.iconPreview;
@@ -197,11 +206,11 @@ public class LatinKeyboard extends Keyboard {
         }
     }
 
-    static class LatinKey extends Keyboard.Key {
+    static class TeclaKey extends Keyboard.Key {
         
         private boolean mShiftLockEnabled;
         
-        public LatinKey(Resources res, Keyboard.Row parent, int x, int y, 
+        public TeclaKey(Resources res, Keyboard.Row parent, int x, int y, 
                 XmlResourceParser parser) {
             super(res, parent, x, y, parser);
             if (popupCharacters != null && popupCharacters.length() == 0) {
@@ -235,9 +244,108 @@ public class LatinKeyboard extends Keyboard {
                 if (code == KEYCODE_SHIFT) x += width / 6;
                 if (code == KEYCODE_DELETE) x -= width / 6;
             } else if (code == TeclaIME.KEYCODE_SPACE) {
-                y += LatinKeyboard.sSpacebarVerticalCorrection;
+                y += TeclaKeyboard.sSpacebarVerticalCorrection;
             }
             return super.isInside(x, y);
         }
     }
+    
+	/**
+	 * Tag used for logging in this class
+	 */
+	private static final String CLASS_TAG = "TeclaKeyboard: ";
+
+	public Integer getRowCount() {
+		List<Key> keyList = getKeys();
+		Key key;
+		int rowCounter = 0;
+		int coord = 0;
+		for (Iterator<Key> i = keyList.iterator(); i.hasNext();) {
+			key = i.next();
+			if (rowCounter == 0) {
+				rowCounter++;
+				coord = key.y;
+			}
+			if (coord != key.y) {
+				rowCounter++;
+				coord = key.y;
+			}
+		}
+		return rowCounter;
+	}
+
+	public Integer getRowStart(int rowNumber) {
+		int keyCounter = 0;
+		if (rowNumber != 0) {
+			List<Key> keyList = getKeys();
+			Key key;
+			int rowCounter = 0;
+			int prevCoord = keyList.get(0).y;
+			int thisCoord;
+			while (rowCounter != rowNumber) {
+				keyCounter++;
+				key = keyList.get(keyCounter);
+				thisCoord = key.y;
+				if (thisCoord != prevCoord) {
+					// Changed rows
+					rowCounter++;
+					prevCoord = thisCoord;
+				}
+			}
+		}
+		return keyCounter;
+	}
+
+	public Integer getRowEnd(int rowNumber) {
+		List<Key> keyList = getKeys();
+		int totalKeys = keyList.size();
+		int keyCounter = 0;
+		if (rowNumber == (getRowCount() - 1)) {
+			keyCounter = totalKeys - 1;
+		} else {
+			Key key;
+			int rowCounter = 0;
+			int prevCoord = keyList.get(0).y;
+			int thisCoord;
+			while (rowCounter <= rowNumber) {
+				keyCounter++;
+				key = keyList.get(keyCounter);
+				thisCoord = key.y;
+				if (thisCoord != prevCoord) {
+					// Changed rows
+					rowCounter++;
+					prevCoord = thisCoord;
+				}
+			}
+			keyCounter--;
+		}
+		return keyCounter;
+	}
+
+	/**
+	 * Get the variants key index
+	 * @return the variants key index or null if the keyboard doesn't have a variants key 
+	 */
+	public int getVariantsKeyIndex() {
+		List<Key> keys = getKeys();
+		int i = 0;
+		Key key = keys.get(i);
+		while (((i + 1) < keys.size()) && (key.codes[0] != TeclaKeyboard.KEYCODE_VARIANTS)) {
+			i++;
+			key = keys.get(i);
+		}
+		Log.d(TeclaApp.TAG, CLASS_TAG + "There are " + keys.size() + " keys.");
+		Log.d(TeclaApp.TAG, CLASS_TAG + "Variants key index is " + i);
+		return key.codes[0] == TeclaKeyboard.KEYCODE_VARIANTS? i : -1;
+	}
+	
+	public Key getVariantsKey() {
+		int index = getVariantsKeyIndex();
+		List<Key> keyList = getKeys();
+		if (index > -1) {
+			return keyList.get(index);
+		}
+		return null;
+	}
+
 }

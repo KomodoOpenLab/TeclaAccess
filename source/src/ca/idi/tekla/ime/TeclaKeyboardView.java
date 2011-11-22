@@ -65,9 +65,13 @@ public class TeclaKeyboardView extends KeyboardView {
             return super.onLongPress(key);
         }
     }
-
     
-    /****************************  INSTRUMENTATION  *******************************/
+	@Override
+	public TeclaKeyboard getKeyboard() {
+		return (TeclaKeyboard) super.getKeyboard();
+	}
+
+	/****************************  INSTRUMENTATION  *******************************/
 
     static final boolean DEBUG_AUTO_PLAY = false;
     private static final int MSG_TOUCH_DOWN = 1;

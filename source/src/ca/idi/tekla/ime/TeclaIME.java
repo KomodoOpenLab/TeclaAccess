@@ -27,6 +27,7 @@ import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.inputmethodservice.Keyboard.Key;
 import android.media.AudioManager;
 import android.os.Debug;
 import android.os.Handler;
@@ -254,7 +255,7 @@ public class TeclaIME extends InputMethodService
 		mIMEView.setOnKeyboardActionListener(this);
 		mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME view created.");
-		TeclaApp.highlighter.setView(mIMEView);
+		TeclaApp.highlighter.setIMEView(mIMEView);
 		return mIMEView;
 	}
 
@@ -560,7 +561,7 @@ public class TeclaIME extends InputMethodService
 	public void onWindowHidden() {
 		super.onWindowHidden();
 		if (shouldShowIME() && !isNavKbdTimedOut) {
-			showSoftIME();
+			showIMEView();
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 				evaluateStartScanning();
@@ -589,7 +590,7 @@ public class TeclaIME extends InputMethodService
 			if (action.equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield connected intent.");
 				if (!mShieldConnected) mShieldConnected = true;
-				showSoftIME();
+				showIMEView();
 				evaluateStartScanning();
 			}
 			if (action.equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
@@ -599,7 +600,7 @@ public class TeclaIME extends InputMethodService
 			}
 			if (action.equals(TeclaApp.ACTION_SHOW_IME)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received show IME intent.");
-				showSoftIME();
+				showIMEView();
 				evaluateStartScanning();
 				evaluateNavKbdTimeout();
 				//TODO: Assume/force persistent keyboard preference
@@ -820,40 +821,55 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void handleCharacter(int primaryCode, int[] keyCodes) {
-		if (isAlphabet(primaryCode) && isPredictionOn() && !isCursorTouchingWord()) {
-			if (!mPredicting) {
-				mPredicting = true;
-				mComposing.setLength(0);
-				mWord.reset();
-			}
-		}
-		if (mIMEView.isShifted()) {
-			// TODO: This doesn't work with ß, need to fix it in the next release.
-			if (keyCodes == null || keyCodes[0] < Character.MIN_CODE_POINT
-					|| keyCodes[0] > Character.MAX_CODE_POINT) {
-				return;
-			}
-			primaryCode = new String(keyCodes, 0, 1).toUpperCase().charAt(0);
-		}
-		if (mPredicting) {
-			if (mIMEView.isShifted() && mComposing.length() == 0) {
-				mWord.setCapitalized(true);
-			}
-			mComposing.append((char) primaryCode);
-			mWord.add(primaryCode, keyCodes);
-			InputConnection ic = getCurrentInputConnection();
-			if (ic != null) {
-				ic.setComposingText(mComposing, 1);
-			}
-			postUpdateSuggestions();
+		if (TeclaApp.persistence.isVariantsOn() && hasVariants(primaryCode)) {
+			//TODO: Just switch keyboard
 		} else {
-			sendKeyChar((char)primaryCode);
+			if (isAlphabet(primaryCode) && isPredictionOn() && !isCursorTouchingWord()) {
+				if (!mPredicting) {
+					mPredicting = true;
+					mComposing.setLength(0);
+					mWord.reset();
+				}
+			}
+			if (mIMEView.isShifted()) {
+				// TODO: This doesn't work with ß, need to fix it in the next release.
+				if (keyCodes == null || keyCodes[0] < Character.MIN_CODE_POINT
+						|| keyCodes[0] > Character.MAX_CODE_POINT) {
+					return;
+				}
+				primaryCode = new String(keyCodes, 0, 1).toUpperCase().charAt(0);
+			}
+			if (mPredicting) {
+				if (mIMEView.isShifted() && mComposing.length() == 0) {
+					mWord.setCapitalized(true);
+				}
+				mComposing.append((char) primaryCode);
+				mWord.add(primaryCode, keyCodes);
+				InputConnection ic = getCurrentInputConnection();
+				if (ic != null) {
+					ic.setComposingText(mComposing, 1);
+				}
+				postUpdateSuggestions();
+			} else {
+				sendKeyChar((char)primaryCode);
+			}
+			updateShiftKeyState(getCurrentInputEditorInfo());
+			measureCps();
+			TextEntryState.typedCharacter((char) primaryCode, isWordSeparator(primaryCode));
 		}
-		updateShiftKeyState(getCurrentInputEditorInfo());
-		measureCps();
-		TextEntryState.typedCharacter((char) primaryCode, isWordSeparator(primaryCode));
 	}
 
+	//FIXME: Consider moving to TeclaKeyboardView class
+	private boolean hasVariants(int keycode) {
+		//TODO: Return whether the given key has character variants
+		return false;
+	}
+    
+	private boolean isVariantsKeyOn() {
+		//TODO: Return whether the given key has character variants
+		return false;
+	}
+    
 	private void handleSeparator(int primaryCode) {
 		boolean pickedDefault = false;
 		// Handle separator
@@ -910,7 +926,7 @@ public class TeclaIME extends InputMethodService
 	private void toggleCapsLock() {
 		mCapsLock = !mCapsLock;
 		if (mKeyboardSwitcher.isAlphabetMode()) {
-			((LatinKeyboard) mIMEView.getKeyboard()).setShiftLocked(mCapsLock);
+			((TeclaKeyboard) mIMEView.getKeyboard()).setShiftLocked(mCapsLock);
 		}
 	}
 
@@ -1263,7 +1279,7 @@ public class TeclaIME extends InputMethodService
 	private void changeKeyboardMode() {
 		mKeyboardSwitcher.toggleSymbols();
 		if (mCapsLock && mKeyboardSwitcher.isAlphabetMode()) {
-			((LatinKeyboard) mIMEView.getKeyboard()).setShiftLocked(mCapsLock);
+			((TeclaKeyboard) mIMEView.getKeyboard()).setShiftLocked(mCapsLock);
 		}
 
 		updateShiftKeyState(getCurrentInputEditorInfo());
@@ -1398,7 +1414,7 @@ public class TeclaIME extends InputMethodService
 
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing()) {
-			showSoftIME();
+			showIMEView();
 			TeclaApp.highlighter.startSelfScanning();
 		} else {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
@@ -1512,7 +1528,8 @@ public class TeclaIME extends InputMethodService
 				&& (keycode<=KeyEvent.KEYCODE_DPAD_CENTER))
 				|| (keycode == KeyEvent.KEYCODE_BACK)
 				|| (keycode == Keyboard.KEYCODE_DONE)
-				|| (keycode == TeclaApp.getInstance().KEYCODE_VOICE);
+				|| (keycode == TeclaKeyboard.KEYCODE_VOICE)
+				|| (keycode == TeclaKeyboard.KEYCODE_VARIANTS);
 	}
 
 	private void handleSpecialKey(int keyEventCode) {
@@ -1528,11 +1545,25 @@ public class TeclaIME extends InputMethodService
 				mKeyboardSwitcher.setKeyboardMode(mLastNonUIKeyboardMode, 0);
 				evaluateStartScanning();
 			}
-		} else if (keyEventCode == TeclaApp.getInstance().KEYCODE_VOICE) {
+		} else if (keyEventCode == TeclaKeyboard.KEYCODE_VOICE) {
 			if (thisKBMode == KeyboardSwitcher.MODE_NAV) {
 				TeclaApp.getInstance().broadcastVoiceCommand();
 			} else {
 				TeclaApp.getInstance().startVoiceInput(RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+			}
+		} else if (keyEventCode ==  TeclaKeyboard.KEYCODE_VARIANTS) {
+			Key key = mIMEView.getKeyboard().getVariantsKey();
+			if (key != null) {
+				Log.d(TeclaApp.TAG, CLASS_TAG + "Variants key code is " + key.codes[0]);
+				if (key.on) {
+					//TODO: Move string to resources
+					TeclaApp.getInstance().showToast("Accents & variants enabled");
+					TeclaApp.persistence.setVariantsOn();
+				} else {
+					//TODO: Move string to resources
+					TeclaApp.getInstance().showToast("Accents & variants disabled");
+					TeclaApp.persistence.setVariantsOff();
+				}
 			}
 		} else {
 			keyDownUp(keyEventCode);
@@ -1550,7 +1581,7 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private boolean isRepeatableWithTecla(int code) {
-		if (code == Keyboard.KEYCODE_DONE ||code == TeclaApp.getInstance().KEYCODE_VOICE) {
+		if (code == TeclaKeyboard.KEYCODE_DONE ||code == TeclaKeyboard.KEYCODE_VOICE) {
 			return false;
 		}
 		return true;
@@ -1719,7 +1750,7 @@ public class TeclaIME extends InputMethodService
 		return TeclaApp.persistence.isPersistentKeyboardEnabled();
 	}
 
-	private void showSoftIME() {
+	private void showIMEView() {
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME is already showing");
 		} else {
@@ -1742,7 +1773,7 @@ public class TeclaIME extends InputMethodService
 				// If IME View still not showing...
 				// We are force-openning the soft IME through an intent since
 				//it seems to be the only way to make it work
-				TeclaApp.getInstance().requestSoftIME();
+				TeclaApp.getInstance().requestShowIMEView();
 			}
 		}
 		

@@ -35,7 +35,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
@@ -56,8 +55,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private CheckBoxPreference mQuickFixes;
 	private CheckBoxPreference mShowSuggestions;
-
 	private CheckBoxPreference mPrefVoiceInput;
+	private CheckBoxPreference mPrefVariantsKey;
+
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
@@ -88,6 +88,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
 		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
+		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
@@ -248,17 +249,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (key.equals(Persistence.PREF_VOICE_INPUT)) {
+		if (key.equals(Persistence.PREF_VOICE_INPUT) || key.equals(Persistence.PREF_VARIANTS_KEY)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				//Reset IME
-				TeclaApp.getInstance().hideSoftIME();
-				TeclaApp.getInstance().requestSoftIME();
+				TeclaApp.getInstance().requestHideIMEView();
+				TeclaApp.getInstance().requestShowIMEView();
 			}
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				// Show keyboard immediately if Tecla Access IME is selected
-				TeclaApp.getInstance().requestSoftIME();
+				TeclaApp.getInstance().requestShowIMEView();
 			} else {
 				mPrefSelfScanning.setChecked(false);
 				mPrefSelfScanning.setEnabled(false);
@@ -266,13 +267,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefInverseScanning.setEnabled(false);
 				mPrefFullScreenSwitch.setChecked(false);
 				mPrefConnectToShield.setChecked(false);
-				TeclaApp.getInstance().hideSoftIME();
+				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
 		if (key.equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				// Show keyboard immediately if Tecla Access IME is selected
-				TeclaApp.getInstance().requestSoftIME();
+				TeclaApp.getInstance().requestShowIMEView();
 			} else {
 				mPrefSelfScanning.setChecked(false);
 				mPrefSelfScanning.setEnabled(false);
@@ -280,7 +281,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefInverseScanning.setEnabled(false);
 				mPrefFullScreenSwitch.setChecked(false);
 				mPrefConnectToShield.setChecked(false);
-				TeclaApp.getInstance().hideSoftIME();
+				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {

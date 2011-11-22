@@ -22,7 +22,7 @@
 	android:keyWidth="10%p" android:horizontalGap="0px"
 	android:verticalGap="0px" android:keyHeight="@dimen/key_height">
 
-	<Row android:rowEdgeFlags="bottom">
+	<Row android:keyboardMode="@+id/mode_normal" android:rowEdgeFlags="bottom">
 		<Key android:codes="4" android:keyIcon="@drawable/nav_keyboard_back"
 			android:iconPreview="@drawable/nav_keyboard_feedback_back"
 			android:keyWidth="15%p" android:keyEdgeFlags="left" />
@@ -44,4 +44,29 @@
 			android:keyWidth="15%p" android:keyEdgeFlags="right" />
 	</Row>
 
+	<Row android:keyboardMode="@+id/mode_voice" android:rowEdgeFlags="bottom">
+		<Key android:codes="@integer/key_back" android:keyIcon="@drawable/nav_keyboard_back"
+			android:iconPreview="@drawable/nav_keyboard_feedback_back"
+			android:keyWidth="13%p" android:keyEdgeFlags="left" />
+		<Key android:codes="@integer/key_voice" android:keyIcon="@drawable/sym_keyboard_mic"
+			android:iconPreview="@drawable/sym_keyboard_feedback_mic"
+			android:keyWidth="13%p" />
+		<Key android:codes="@integer/key_dpad_up" android:keyIcon="@drawable/nav_keyboard_up"
+			android:iconPreview="@drawable/nav_keyboard_feedback_up"
+			android:keyWidth="12%p" />
+		<Key android:codes="@integer/key_dpad_down" android:keyIcon="@drawable/nav_keyboard_down"
+			android:iconPreview="@drawable/nav_keyboard_feedback_down"
+			android:keyWidth="12%p" />
+		<Key android:codes="@integer/key_dpad_left" android:keyIcon="@drawable/nav_keyboard_left"
+			android:iconPreview="@drawable/nav_keyboard_feedback_left"
+			android:keyWidth="12%p" />
+		<Key android:codes="@integer/key_dpad_right" android:keyIcon="@drawable/nav_keyboard_right"
+			android:iconPreview="@drawable/nav_keyboard_feedback_right"
+			android:keyWidth="12%p" />
+		<Key android:codes="@integer/key_dpad_center" android:keyLabel="OK"
+			android:keyWidth="12%p" />
+		<Key android:codes="@integer/key_done" android:keyIcon="@drawable/sym_keyboard_show"
+			android:iconPreview="@drawable/sym_keyboard_feedback_show"
+			android:keyWidth="14%p" android:keyEdgeFlags="right" />
+	</Row>
 </Keyboard>

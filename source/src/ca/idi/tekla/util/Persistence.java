@@ -16,6 +16,8 @@ public class Persistence {
 	//public static final String PREF_SHIELD_VERSION = "shield_version";
 
 	public static final String PREF_VOICE_INPUT = "voice_input";
+	public static final String PREF_VARIANTS = "variants";
+	public static final String PREF_VARIANTS_KEY = "variants_key";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
@@ -30,7 +32,7 @@ public class Persistence {
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
 	
-	private boolean mScreenOn, mInverseScanningChanged;
+	private boolean mScreenOn, mInverseScanningChanged, mVariantsOn;;
 	
 	private SharedPreferences shared_prefs;
 	private SharedPreferences.Editor prefs_editor;
@@ -56,6 +58,24 @@ public class Persistence {
 	
 	public boolean isVoiceInputEnabled() {
 		return shared_prefs.getBoolean(PREF_VOICE_INPUT, false);
+	}
+
+	public boolean isVariantsKeyEnabled() {
+		return shared_prefs.getBoolean(PREF_VARIANTS_KEY, false);
+	}
+	
+	public boolean isVariantsOn() {
+		return shared_prefs.getBoolean(PREF_VARIANTS, false);
+	}
+	
+	public void setVariantsOn() {
+		prefs_editor.putBoolean(PREF_VARIANTS, true);
+		prefs_editor.commit();
+	}
+
+	public void setVariantsOff() {
+		prefs_editor.putBoolean(PREF_VARIANTS, false);
+		prefs_editor.commit();
 	}
 
 	public boolean isPersistentKeyboardEnabled() {
