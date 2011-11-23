@@ -251,19 +251,21 @@ public class Highlighter {
 	}
 
 	private void highlightKeys(int fromIndex, int toIndex) {
-		TeclaKeyboard keyboard = mIMEView.getKeyboard();
-		List<Key> keyList = keyboard.getKeys();
-		int totalKeys = keyList.size();
-		Key key;
-		for (int i=0;i < totalKeys;i++) {
-			key = keyList.get(i);
-			if ((i >= fromIndex) && (i <= toIndex)) {
-				key.pressed = true;
-			} else {
-				key.pressed = false;
+		if (mIMEView != null) {
+			TeclaKeyboard keyboard = mIMEView.getKeyboard();
+			List<Key> keyList = keyboard.getKeys();
+			int totalKeys = keyList.size();
+			Key key;
+			for (int i=0;i < totalKeys;i++) {
+				key = keyList.get(i);
+				if ((i >= fromIndex) && (i <= toIndex)) {
+					key.pressed = true;
+				} else {
+					key.pressed = false;
+				}
 			}
+			redrawInputView();
 		}
-		redrawInputView();
 	}
 
 	private int wrapCounter(int counter, int min, int max) {

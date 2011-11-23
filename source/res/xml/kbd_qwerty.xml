@@ -25,7 +25,7 @@
     android:keyHeight="@dimen/key_height"
     >
 
-    <Row>
+    <Row android:rowEdgeFlags="top">
         <Key android:codes="113" android:keyLabel="q" android:keyEdgeFlags="left"/>
         <Key android:codes="119" android:keyLabel="w"/>
         <Key android:codes="101" android:keyLabel="e"

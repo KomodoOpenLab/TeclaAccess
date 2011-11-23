@@ -37,4 +37,5 @@
     <integer name="key_f1">-103</integer>
     <integer name="key_voice">-202</integer>
     <integer name="key_variants">-222</integer>
+    <integer name="key_custom">-232</integer>
 </resources>

@@ -249,7 +249,7 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public View onCreateInputView() {
 		mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(
-				R.layout.input, null);
+				R.xml.input, null);
 		mKeyboardSwitcher.setInputView(mIMEView);
 		mKeyboardSwitcher.makeKeyboards(true);
 		mIMEView.setOnKeyboardActionListener(this);
@@ -821,8 +821,18 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void handleCharacter(int primaryCode, int[] keyCodes) {
-		if (TeclaApp.persistence.isVariantsOn() && hasVariants(primaryCode)) {
-			//TODO: Just switch keyboard
+		CharSequence popupChars = null;
+		Key key = mIMEView.getKeyboard().getKeyFromCode(primaryCode);
+		if (key != null) popupChars = key.popupCharacters;
+		if (TeclaApp.persistence.isVariantsOn() && popupChars != null && popupChars.length() > 0) {
+			switch (popupChars.length()) {
+			case 1:
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X2, 0);
+				populateKeyboard(key.label, popupChars, keyCodes);
+				//TODO: Set variantKeyboardShowing
+				break;
+			}
+			TeclaApp.getInstance().showToast(popupChars.toString());
 		} else {
 			if (isAlphabet(primaryCode) && isPredictionOn() && !isCursorTouchingWord()) {
 				if (!mPredicting) {
@@ -859,7 +869,7 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 
-	//FIXME: Consider moving to TeclaKeyboardView class
+	//FIXME: Consider moving to TeclaKeyboard class
 	private boolean hasVariants(int keycode) {
 		//TODO: Return whether the given key has character variants
 		return false;
@@ -1782,6 +1792,16 @@ public class TeclaIME extends InputMethodService
 	private void hideSoftIME() {
 		hideWindow();
 		updateInputViewShown();
+	}
+	
+	private void populateKeyboard (CharSequence keyLabel, CharSequence popupChars, int[] keyCodes) {
+		List<Key> keyList = mIMEView.getKeyboard().getKeys();
+		keyList.get(0).label = keyLabel;
+		keyList.get(0).codes = keyCodes;
+		for (int i=0; i < popupChars.length(); i++) {
+			keyList.get(i+1).label = popupChars.subSequence(i, i+1);
+			Log.d(TeclaApp.TAG, "Char: " + popupChars.subSequence(i, i+1).toString());
+		}
 	}
 
 }

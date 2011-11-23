@@ -57,6 +57,7 @@ public class TeclaKeyboard extends Keyboard {
 
     public TeclaKeyboard(Context context, int xmlLayoutResId) {
         this(context, xmlLayoutResId, 0);
+        customInit();
     }
 
     public TeclaKeyboard(Context context, int xmlLayoutResId, int mode) {
@@ -69,11 +70,13 @@ public class TeclaKeyboard extends Keyboard {
                 mShiftLockPreviewIcon.getIntrinsicHeight());
         sSpacebarVerticalCorrection = res.getDimensionPixelOffset(
                 R.dimen.spacebar_vertical_correction);
+        customInit();
     }
 
     public TeclaKeyboard(Context context, int layoutTemplateResId, 
             CharSequence characters, int columns, int horizontalPadding) {
         super(context, layoutTemplateResId, characters, columns, horizontalPadding);
+        customInit();
     }
 
     @Override
@@ -322,30 +325,38 @@ public class TeclaKeyboard extends Keyboard {
 		return keyCounter;
 	}
 
-	/**
-	 * Get the variants key index
-	 * @return the variants key index or null if the keyboard doesn't have a variants key 
-	 */
-	public int getVariantsKeyIndex() {
+	private int getKeyIndexFromKeyCode(int keycode) {
 		List<Key> keys = getKeys();
 		int i = 0;
 		Key key = keys.get(i);
-		while (((i + 1) < keys.size()) && (key.codes[0] != TeclaKeyboard.KEYCODE_VARIANTS)) {
+		while (((i + 1) < keys.size()) && (key.codes[0] != keycode)) {
 			i++;
 			key = keys.get(i);
 		}
-		Log.d(TeclaApp.TAG, CLASS_TAG + "There are " + keys.size() + " keys.");
-		Log.d(TeclaApp.TAG, CLASS_TAG + "Variants key index is " + i);
-		return key.codes[0] == TeclaKeyboard.KEYCODE_VARIANTS? i : -1;
+		return key.codes[0] == keycode? i : -1;
 	}
 	
-	public Key getVariantsKey() {
-		int index = getVariantsKeyIndex();
-		List<Key> keyList = getKeys();
+	/**
+	 * Return the key with the specified keycode
+	 * @return the key or null if the keyboard doesn't have a key with the keycode provided
+	 */
+	public Key getKeyFromCode(int keycode) {
+		int index = getKeyIndexFromKeyCode(keycode);
 		if (index > -1) {
-			return keyList.get(index);
+			return getKeys().get(index);
 		}
 		return null;
 	}
+	
+	public Key getVariantsKey() {
+		return getKeyFromCode(TeclaKeyboard.KEYCODE_VARIANTS);
+	}
 
+	private void customInit() {
+		Key key = getVariantsKey();
+		if (key != null) {
+			key.on = TeclaApp.persistence.isVariantsOn();
+		}
+	}
+	
 }

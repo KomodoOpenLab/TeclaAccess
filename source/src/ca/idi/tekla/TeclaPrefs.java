@@ -56,7 +56,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mQuickFixes;
 	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
-	private CheckBoxPreference mPrefVariantsKey;
 
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
@@ -88,7 +87,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
 		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
-		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
