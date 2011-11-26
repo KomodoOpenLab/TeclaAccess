@@ -358,5 +358,12 @@ public class TeclaKeyboard extends Keyboard {
 			key.on = TeclaApp.persistence.isVariantsOn();
 		}
 	}
+
+	public void updateVariantsState() {
+		Key key = getVariantsKey();
+		if (key != null) {
+			key.on = TeclaApp.persistence.isVariantsOn();
+		}
+	}
 	
 }

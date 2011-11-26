@@ -31,6 +31,8 @@ public class Highlighter {
 	
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
+	private int mLastKeyCounter, mLastRowCounter;
+	private boolean mWasShowingVariants;
 	private TeclaKeyboardView mIMEView;
 	private Handler mHandler;
 
@@ -39,6 +41,7 @@ public class Highlighter {
 		mScanDepth = Highlighter.DEPTH_ROW;
 		mScanKeyCounter = 0;
 		mScanRowCounter = 0;
+		mWasShowingVariants = false;
 		mHandler = new Handler() {
 			@Override
 			public void handleMessage(Message msg) {
@@ -89,6 +92,11 @@ public class Highlighter {
 	 * Update highlighting after a key selection. Key should be obtained with {@link #getCurrentKey()}
 	 */
 	public void doSelectKey (int keyCode) {
+		if (mWasShowingVariants && !TeclaApp.persistence.isVariantsShowing()) {
+			mScanKeyCounter = mLastKeyCounter;
+			mScanRowCounter = mLastRowCounter;
+			mWasShowingVariants = false;
+		}
 		if (shouldDelayKey(keyCode)) {
 			startSelfScanning(Math.round(1.5 * TeclaApp.persistence.getScanDelay()));
 		} else {
@@ -229,16 +237,25 @@ public class Highlighter {
 			mScanKeyCounter = 0;
 			mScanRowCounter = 0;
 		} else {
-			//Keyboard has only one row so don't reset highlighting
+			//Keyboard has only one row, don't reset highlighting unless it is a variants keyboard
 			mScanDepth = DEPTH_KEY;
+			if (TeclaApp.persistence.isVariantsShowing()) {
+				mLastKeyCounter = mScanKeyCounter;
+				mLastRowCounter = mScanRowCounter;
+				mWasShowingVariants = true;
+				mScanKeyCounter = 0;
+				mScanRowCounter = 0;
+			}
 		}
 		restoreHighlight();
 	}
 
 	private boolean shouldDelayKey(int keyCode) {
+		if (TeclaApp.persistence.isVariantsShowing()) return false;
 		if (keyCode == TeclaKeyboard.KEYCODE_DONE ||
 				keyCode == TeclaKeyboard.KEYCODE_MODE_CHANGE ||
-				keyCode == TeclaKeyboard.KEYCODE_SHIFT) {
+				keyCode == TeclaKeyboard.KEYCODE_SHIFT ||
+				keyCode == TeclaKeyboard.KEYCODE_VARIANTS) {
 			return false;
 		}
 		return true;

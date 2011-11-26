@@ -31,7 +31,14 @@ public class KeyboardSwitcher {
     public static final int MODE_EMAIL = 5;
     public static final int MODE_IM = 6;
     public static final int MODE_NAV = 7;
-    public static final int MODE_1X2 = 8;
+    public static final int MODE_1X3 = 8;
+    public static final int MODE_1X4 = 9;
+    public static final int MODE_1X5 = 10;
+    public static final int MODE_1X6 = 11;
+    public static final int MODE_1X7 = 12;
+    public static final int MODE_1X8 = 13;
+    public static final int MODE_1X9 = 14;
+    public static final int MODE_1X10 = 15;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -147,6 +154,7 @@ public class KeyboardSwitcher {
         keyboard.setShifted(false);
         keyboard.setShiftLocked(keyboard.isShiftLocked());
         keyboard.setImeOptions(mContext.getResources(), mMode, imeOptions);
+        keyboard.updateVariantsState();
 
     }
 
@@ -230,8 +238,22 @@ public class KeyboardSwitcher {
             		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_VOICE, true);
             	}
                 return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_NORMAL, true);
-            case MODE_1X2:
-                return new KeyboardId(R.xml.kbd_1_2, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X3:
+                return new KeyboardId(R.xml.kbd_1x3, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X4:
+                return new KeyboardId(R.xml.kbd_1x4, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X5:
+                return new KeyboardId(R.xml.kbd_1x5, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X6:
+                return new KeyboardId(R.xml.kbd_1x6, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X7:
+                return new KeyboardId(R.xml.kbd_1x7, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X8:
+                return new KeyboardId(R.xml.kbd_1x8, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X9:
+                return new KeyboardId(R.xml.kbd_1x9, KEYBOARDMODE_NORMAL, true);
+            case MODE_1X10:
+                return new KeyboardId(R.xml.kbd_1x10, KEYBOARDMODE_NORMAL, true);
         }
         return null;
     }
@@ -296,6 +318,31 @@ public class KeyboardSwitcher {
         } else {
             mSymbolsModeState = SYMBOLS_MODE_STATE_NONE;
         }
+    }
+    
+    boolean isSymbols() {
+    	return mIsSymbols;
+    }
+
+    boolean isVariants() {
+		if (mMode == MODE_1X3 ||
+				mMode == MODE_1X4 ||
+				mMode == MODE_1X5 ||
+				mMode == MODE_1X6 ||
+				mMode == MODE_1X7 ||
+				mMode == MODE_1X8 ||
+				mMode == MODE_1X9 ||
+				mMode == MODE_1X10) {
+			return true;
+		}
+		return false;
+    }
+
+    boolean isNavigation() {
+		if (mMode == MODE_NAV) {
+			return true;
+		}
+		return false;
     }
 
     /**

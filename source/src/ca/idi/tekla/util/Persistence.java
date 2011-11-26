@@ -32,7 +32,7 @@ public class Persistence {
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
 	
-	private boolean mScreenOn, mInverseScanningChanged, mVariantsOn;;
+	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
 	
 	private SharedPreferences shared_prefs;
 	private SharedPreferences.Editor prefs_editor;
@@ -41,6 +41,7 @@ public class Persistence {
 		
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
+		mVariantsShowing = false;
 		
 	}
 	
@@ -77,6 +78,14 @@ public class Persistence {
 		prefs_editor.putBoolean(PREF_VARIANTS, false);
 		prefs_editor.commit();
 	}
+	
+	public void setVariantsShowing (boolean showing) {
+		mVariantsShowing = showing;
+	}
+
+	public boolean isVariantsShowing () {
+		return mVariantsShowing;
+	}
 
 	public boolean isPersistentKeyboardEnabled() {
 		return shared_prefs.getBoolean(PREF_PERSISTENT_KEYBOARD, false);
@@ -84,6 +93,11 @@ public class Persistence {
 
 	public void setNavigationKeyboardTimeout(int timeout) {
 		prefs_editor.putInt(PREF_AUTOHIDE_TIMEOUT, timeout);
+		prefs_editor.commit();
+	}
+	
+	public void setNeverHideNavigationKeyboard () {
+		prefs_editor.putInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
 		prefs_editor.commit();
 	}
 

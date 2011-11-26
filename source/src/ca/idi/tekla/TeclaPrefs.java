@@ -56,6 +56,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mQuickFixes;
 	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
+	private CheckBoxPreference mPrefVariantsKey;
 
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
@@ -87,6 +88,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
 		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
+		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
@@ -248,17 +250,21 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		if (key.equals(Persistence.PREF_VOICE_INPUT) || key.equals(Persistence.PREF_VARIANTS_KEY)) {
-			if (mPrefPersistentKeyboard.isChecked()) {
-				//Reset IME
-				TeclaApp.getInstance().requestHideIMEView();
-				TeclaApp.getInstance().requestShowIMEView();
+			if (mPrefPersistentKeyboard.isChecked() || mPrefVariantsKey.isChecked()) {
+				if (mPrefPersistentKeyboard.isChecked()) {
+					//Reset IME
+					TeclaApp.getInstance().requestHideIMEView();
+					TeclaApp.getInstance().requestShowIMEView();
+				}
 			}
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
-				// Show keyboard immediately if Tecla Access IME is selected
+				mPrefAutohideTimeout.setEnabled(true);
+				// Show keyboard immediately
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
+				mPrefAutohideTimeout.setEnabled(false);
 				mPrefSelfScanning.setChecked(false);
 				mPrefSelfScanning.setEnabled(false);
 				mPrefInverseScanning.setChecked(false);
@@ -310,12 +316,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if (!(mPrefSelfScanning.isChecked() || mPrefInverseScanning.isChecked())) {
 					mPrefSelfScanning.setChecked(true);
 				}
+				mPrefAutohideTimeout.setEnabled(false);
+				TeclaApp.persistence.setNeverHideNavigationKeyboard();
 			} else {
 				if (!mPrefConnectToShield.isChecked()) {
 					mPrefSelfScanning.setChecked(false);
 					mPrefSelfScanning.setEnabled(false);
 					mPrefInverseScanning.setChecked(false);
 					mPrefInverseScanning.setEnabled(false);
+				}
+				if (mPrefPersistentKeyboard.isChecked()) {
+					mPrefAutohideTimeout.setEnabled(true);
 				}
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}

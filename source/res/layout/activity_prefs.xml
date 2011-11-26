@@ -79,7 +79,6 @@
 			android:title="@string/autohide_timeout"
 			android:summary="@string/autohide_timeout_summary"
 			android:persistent="true"
-			android:dependency="persistent_keyboard"
 			/>
     </PreferenceCategory>            
 
