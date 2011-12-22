@@ -170,7 +170,6 @@ public class TeclaApp extends Application {
 	
 	private Runnable mRequestShowIMERunnable = new Runnable() {
 
-		@Override
 		public void run() {
 			if (DEBUG) Log.d(TAG, "Broadcasting show IME intent...");
 			sendBroadcast(new Intent(ACTION_SHOW_IME));
@@ -253,7 +252,6 @@ public class TeclaApp extends Application {
 	
 	private Runnable mShowSplashRunnable = new Runnable() {
 
-		@Override
 		public void run() {
 			// Show configuration splash
 			showSplashScreen();

@@ -1529,7 +1529,6 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private Runnable hideNavKbdRunnable = new Runnable() {
-		@Override
 		public void run() {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Navigation keyboard timed out!");
 			mIsNavKbdTimedOut = true;
@@ -1639,7 +1638,6 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private Runnable mRepeatKeyRunnable = new Runnable() {
-		@Override
 		public void run() {
 			emulateKeyPress(mKeyCodes);
 			if (mRepeating) {
