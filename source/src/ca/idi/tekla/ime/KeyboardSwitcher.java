@@ -129,6 +129,20 @@ public class KeyboardSwitcher {
         }
     }
 
+    /**
+     * Forces a reset of the last keyboard mode
+     */
+    public void setKeyboardMode() {
+    	setKeyboardMode(mMode, mImeOptions);
+    }
+    
+    /**
+     * Sets the keyboard mode using the most recently set IME Options
+     */
+    public void setKeyboardMode(int mode) {
+    	setKeyboardMode(mode, mImeOptions);
+    }
+    
     void setKeyboardMode(int mode, int imeOptions) {
         mSymbolsModeState = SYMBOLS_MODE_STATE_NONE;
         mPreferSymbols = mode == MODE_SYMBOLS;
@@ -257,7 +271,7 @@ public class KeyboardSwitcher {
         }
         return null;
     }
-
+    
     int getKeyboardMode() {
         return mMode;
     }

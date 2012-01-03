@@ -293,16 +293,13 @@ public class TeclaIME extends InputMethodService
 		switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
 		case EditorInfo.TYPE_CLASS_NUMBER:
 		case EditorInfo.TYPE_CLASS_DATETIME:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SYMBOLS,
-					attribute.imeOptions);
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SYMBOLS, attribute.imeOptions);
 			break;
 		case EditorInfo.TYPE_CLASS_PHONE:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_PHONE,
-					attribute.imeOptions);
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_PHONE, attribute.imeOptions);
 			break;
 		case EditorInfo.TYPE_CLASS_TEXT:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT,
-					attribute.imeOptions);
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
 			//startPrediction();
 			mPredictionOn = true;
 			// Make sure that passwords are not displayed in candidate view
@@ -319,15 +316,12 @@ public class TeclaIME extends InputMethodService
 			}
 			if (variation == EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) {
 				mPredictionOn = false;
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_EMAIL,
-						attribute.imeOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_EMAIL, attribute.imeOptions);
 			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_URI) {
 				mPredictionOn = false;
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_URL,
-						attribute.imeOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_URL, attribute.imeOptions);
 			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_SHORT_MESSAGE) {
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_IM,
-						attribute.imeOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_IM, attribute.imeOptions);
 			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_FILTER) {
 				mPredictionOn = false;
 			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT) {
@@ -355,13 +349,11 @@ public class TeclaIME extends InputMethodService
 			updateShiftKeyState(attribute);
 			break;
 		case EditorInfo.TYPE_NULL:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV,
-					attribute.imeOptions);
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, attribute.imeOptions);
 			updateShiftKeyState(attribute);
 			break;
 		default:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT,
-					attribute.imeOptions);
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
 			updateShiftKeyState(attribute);
 		}
 		mIMEView.closing();
@@ -391,8 +383,6 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-		
-		mThisIMEOptions = attribute.imeOptions;
 		
 		evaluateNavKbdTimeout();
 		
@@ -837,28 +827,28 @@ public class TeclaIME extends InputMethodService
 			TeclaApp.persistence.setVariantsShowing(true);
 			switch (variants.length()) {
 			case 1:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X3, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X3);
 				break;
 			case 2:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X4, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X4);
 				break;
 			case 3:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X5, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X5);
 				break;
 			case 4:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X6, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X6);
 				break;
 			case 5:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X7, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X7);
 				break;
 			case 6:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X8, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X8);
 				break;
 			case 7:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X9, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X9);
 				break;
 			case 8:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X10, mThisIMEOptions);
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_1X10);
 				break;
 			}
 			populateVariants(key.label, variants);
@@ -1395,7 +1385,7 @@ public class TeclaIME extends InputMethodService
 
 	//TODO: Try moving these variables to TeclaApp class
 	private String mVoiceInputString;
-	private int mLastKeyboardMode, mLastFullKeyboardMode, mThisIMEOptions;
+	private int mLastKeyboardMode, mLastFullKeyboardMode;
 	private boolean mShieldConnected, mRepeating;
 	private PopupWindow mSwitchPopup;
 	private View mSwitch;
@@ -1419,7 +1409,6 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_INPUT_STRING));
 
 		 mLastFullKeyboardMode = KeyboardSwitcher.MODE_TEXT;
-		 mThisIMEOptions = 0;
 		 mTeclaHandler = new Handler();
 		 mShieldConnected = false;
 		 mRepeating = false;
@@ -1581,7 +1570,7 @@ public class TeclaIME extends InputMethodService
 				if (mKeyboardSwitcher.isVariants()) {
 					doVariantsExit(keyEventCode);
 				} else {
-					mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode, mThisIMEOptions);
+					mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode);
 					mIMEView.getKeyboard().setShifted(mWasShifted);
 				}
 				evaluateStartScanning();
@@ -1797,8 +1786,12 @@ public class TeclaIME extends InputMethodService
 		} else {
 			showWindow(true);
 			updateInputViewShown();
+			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
+			if (TeclaApp.highlighter.isSoftIMEShowing()) {
+				mKeyboardSwitcher.setKeyboardMode();
+			}
 			// This call causes a looped intent call until the IME View is created
-			callShowSoftIMEWatchDog(500);
+			callShowSoftIMEWatchDog(350);
 		}
 	}
 	
@@ -1846,7 +1839,7 @@ public class TeclaIME extends InputMethodService
 
 	private void doVariantsExit(int keyCode) {
 		TeclaApp.persistence.setVariantsShowing(false);
-		mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode, mThisIMEOptions);
+		mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode);
 		if (keyCode != TeclaKeyboard.KEYCODE_DONE) {
 			TeclaApp.persistence.setVariantsOff();
 			Key key = mIMEView.getKeyboard().getVariantsKey();
