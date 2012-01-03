@@ -1840,19 +1840,18 @@ public class TeclaIME extends InputMethodService
 	private void doVariantsExit(int keyCode) {
 		TeclaApp.persistence.setVariantsShowing(false);
 		mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode);
-		if (keyCode != TeclaKeyboard.KEYCODE_DONE) {
-			TeclaApp.persistence.setVariantsOff();
-			Key key = mIMEView.getKeyboard().getVariantsKey();
-			key.on = false;
-		}
 		if (mWasSymbols && !mKeyboardSwitcher.isSymbols()) {
 			mKeyboardSwitcher.toggleSymbols();
 		}
 		if (mWasShifted && mWasSymbols) {
 			handleShift();
-		}
-		else {
+		} else {
 			mIMEView.setShifted(mWasShifted);
+		}
+		if (keyCode != TeclaKeyboard.KEYCODE_DONE) {
+			TeclaApp.persistence.setVariantsOff();
+			Key key = mIMEView.getKeyboard().getVariantsKey();
+			key.on = false;
 		}
 	}
 
