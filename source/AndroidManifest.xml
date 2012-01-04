@@ -6,7 +6,8 @@
     	android:icon="@drawable/tecla_icon" android:debuggable="false">
 		<activity
 			android:name=".TeclaPrefs"
-			android:label="@string/english_ime_settings">
+			android:label="@string/english_ime_settings"
+			android:noHistory="true">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -17,12 +18,11 @@
 			android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
 			android:launchMode="singleTop"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			>
+			android:noHistory="true">
 		</activity>
 		<activity
 			android:name=".TeclaVoiceInput"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			>
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 			<intent-filter>
 				<action android:name="android.intent.action.VOICE_COMMAND"/>
 				<category android:name="android.intent.category.DEFAULT" />
