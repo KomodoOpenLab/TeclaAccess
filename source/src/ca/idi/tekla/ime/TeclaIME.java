@@ -1788,7 +1788,7 @@ public class TeclaIME extends InputMethodService
 			updateInputViewShown();
 			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
-				mKeyboardSwitcher.setKeyboardMode();
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV);
 			}
 			// This call causes a looped intent call until the IME View is created
 			callShowSoftIMEWatchDog(350);
