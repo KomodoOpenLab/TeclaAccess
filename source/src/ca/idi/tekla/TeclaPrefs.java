@@ -192,9 +192,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 			if (intent.getAction().equals(BluetoothDevice.ACTION_FOUND) && !mShieldFound) {
 				BluetoothDevice dev = intent.getExtras().getParcelable(BluetoothDevice.EXTRA_DEVICE);
-				if ((dev.getName() != null) &&
-						(dev.getName().startsWith(SwitchEventProvider.PREFIX_SHIELD_V1) ||
-						dev.getName().startsWith(SwitchEventProvider.PREFIX_SHIELD))) {
+				if ((dev.getName() != null) && (
+						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_2) ||
+						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_3) )) {
 					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
 					mShieldFound = true;
 					mShieldAddress = dev.getAddress(); 
@@ -299,7 +299,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// Connect to shield but also keep connection alive
 				discoverShield();
 			} else {
-				// TODO: Tecla Access - Find out how to disconnect
+				// FIXME: Tecla Access - Find out how to disconnect
 				// switch event provider without breaking
 				// connection with other potential clients.
 				// Should perhaps use Binding?
@@ -310,7 +310,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefInverseScanning.setChecked(false);
 					mPrefInverseScanning.setEnabled(false);
 				}
-				SepManager.stop(this);
+				SepManager.stop(getApplicationContext());
 			}
 		}
 		if (key.equals(Persistence.PREF_FULLSCREEN_SWITCH)) {
