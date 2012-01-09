@@ -145,16 +145,6 @@ public class TeclaApp extends Application {
 				persistence.setScreenOn();
 				if (persistence.isPersistentKeyboardEnabled()) requestShowIMEView();
 			}
-//			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
-//				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Phone state changed");
-//				if (intent.hasExtra(TelephonyManager.EXTRA_STATE)) {
-//					TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-//					if (tm.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-//						if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Phone ringing");
-//						mPhoneRinging = true;
-//					}
-//				}
-//			}
 		}
 
 	};
@@ -353,6 +343,17 @@ public class TeclaApp extends Application {
 		mKeyguardLock.reenableKeyguard();
 	}
 	
+	/**
+	 * Hold wake lock until releaseWakeLock() is called.
+	 */
+	public void holdWakeLock() {
+		holdWakeLock(0);
+	}
+	
+	/**
+	 * Hold wake lock for the number of seconds specified by length
+	 * @param length the number of seconds to hold the wake lock for
+	 */
 	public void holdWakeLock(long length) {
 		if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring wake lock...");
 		if (length > 0) {
@@ -368,6 +369,9 @@ public class TeclaApp extends Application {
 		mWakeLock.release();
 	}
 	
+	/**
+	 * Wakes and unlocks the screen for a minimum of {@link WAKE_LOCK_TIMEOUT} miliseconds
+	 */
 	public void wakeUnlockScreen() {
 		holdKeyguardLock();
 		holdWakeLock(WAKE_LOCK_TIMEOUT);

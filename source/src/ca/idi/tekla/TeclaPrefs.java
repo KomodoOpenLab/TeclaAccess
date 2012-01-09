@@ -236,7 +236,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
 				closeDialog();
-				TeclaApp.getInstance().showToast(R.string.shield_disconnected);
 			}
 		}
 	};

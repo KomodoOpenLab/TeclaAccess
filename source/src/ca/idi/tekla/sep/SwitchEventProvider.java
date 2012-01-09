@@ -36,9 +36,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class SwitchEventProvider extends Service implements Runnable {
-
+	
 	//Constants
-
 	/**
 	 * Tag used for logging in this class
 	 */
@@ -73,6 +72,13 @@ public class SwitchEventProvider extends Service implements Runnable {
 
 	private static final int PING_DELAY = 2000; //milliseconds
 	private static final int PING_TIMEOUT_COUNTER = 4;
+
+	private static final int SHIELD_RECONNECT_DELAY = 5000; //milliseconds
+	private static final int SHY_RECONNECT_ATTEMPTS = 20; // * SHIELD_RECONNECT_DELAY = SHY_RECONNECT_DELAY
+	private static final int BOLD_RECONNECT_ATTEMPTS = 2; //
+	
+	private int mShyCounter, mBoldCounter;
+	private boolean mIsBold;
 
 	private BluetoothSocket mBluetoothSocket;
 	private OutputStream mOutStream;
@@ -123,6 +129,10 @@ public class SwitchEventProvider extends Service implements Runnable {
 		mPrevSwitchStates = STATE_DEFAULT;
 		mShieldVersion = NULL_SHIELD_VERSION;
 		mServiceStarted = false;
+		
+		mShyCounter = 0;
+		mBoldCounter = 0;
+		mIsBold = false;
 	}
 	
 	@Override
@@ -201,6 +211,24 @@ public class SwitchEventProvider extends Service implements Runnable {
 		shieldAddress = TeclaApp.persistence.getShieldAddress();
 		while(mKeepReconnecting) {
 			Log.i(TeclaApp.TAG, CLASS_TAG + "Attempting connection to TeclaShield: " + shieldAddress);
+			// The code below is an attempt to poke the bluetooth chip on devices that put it on stand-by when the
+			// screen is off (e.g., Samsung Galaxy series). For additional details see
+			// https://github.com/jorgesilva/TeclaAccess/issues/11
+			if (!mIsBold) {
+				mShyCounter++;
+				if (mShyCounter >= SHY_RECONNECT_ATTEMPTS) {
+					mShyCounter = 0;
+					TeclaApp.getInstance().holdWakeLock();
+					mIsBold = true;
+				}
+			} else {
+				mBoldCounter++;
+				if (mBoldCounter >= BOLD_RECONNECT_ATTEMPTS) {
+					mBoldCounter = 0;
+					TeclaApp.getInstance().releaseWakeLock();
+					mIsBold = false;
+				}
+			}
 			gotStreams = false;
 			if (openSocket(shieldAddress)) {
 				try {
@@ -245,10 +273,17 @@ public class SwitchEventProvider extends Service implements Runnable {
 					broadcastShieldDisconnected();
 					cancelNotification();
 					Log.w(TeclaApp.TAG, CLASS_TAG + "Disconnected from Tecla Shield");
+					TeclaApp.getInstance().wakeUnlockScreen();
+					//Need to toast on a separate thread!
+					mHandler.post(new Runnable () {
+						public void run() {
+							TeclaApp.getInstance().showToast(R.string.shield_disconnected);
+						}
+					});
 				}
 			}
 			if (mKeepReconnecting) {
-				long delay = Math.round(2.5 * PING_DELAY);
+				long delay = SHIELD_RECONNECT_DELAY;
 				Log.i(TeclaApp.TAG, CLASS_TAG + "Connection will be attempted in " + delay + " miliseconds.");
 				try {
 					Thread.sleep(delay);
@@ -334,7 +369,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 				Log.e(TeclaApp.TAG, CLASS_TAG + "killSocket: " + e.getMessage());
 				e.printStackTrace();
 			}
-			mBluetoothSocket = null; //Reset socket
 		}
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Socket killed");
 	}
@@ -389,10 +423,8 @@ public class SwitchEventProvider extends Service implements Runnable {
 						Build.MANUFACTURER.equals("ReflectionCompatibleManufacturer")) {
 					/*
 					 * WARNING! Although fast, the reflection method for reconnecting a lost Bluetooth connection
-					 * can fail silently and sometimes lock the App and the Bluetooth chip. At the very least,
-					 * a force close will be caused when stopping the SEP. In other cases, a power cycle on both the
-					 * Android device and the Tecla Shield will be required. This method should be deprecated.
-					 * Devices know NOT to work with reflection are:
+					 * can fail silently and sometimes lock the App and the Bluetooth chip. This method should be
+					 * deprecated. Devices know NOT to work with reflection are:
 					 *   LG Phoenix (LG-P505R)
 					 *   Samsung Galaxy (SGH-T989D)
 					 */
@@ -444,6 +476,9 @@ public class SwitchEventProvider extends Service implements Runnable {
 	
 	private boolean connectSocket() {
 		try {
+			// See http://developer.android.com/reference/android/bluetooth/BluetoothSocket.html#connect%28%29
+			// for why the cancelDiscovery() call is necessary
+			mBluetoothAdapter.cancelDiscovery();
 			mBluetoothSocket.connect();
 			Log.d(TeclaApp.TAG, CLASS_TAG + "Connected to " + mBluetoothSocket.getRemoteDevice().getAddress());
 			return true;
