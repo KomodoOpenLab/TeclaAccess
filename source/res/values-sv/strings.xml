@@ -32,8 +32,6 @@
     <string name="auto_cap" msgid="1719746674854628252">"Automatiska versaler"</string>
     <string name="auto_cap_summary" msgid="3260681697600786825">"Använd versal i början av mening"</string>
     <string name="auto_punctuate" msgid="7276672334264521751">"Automatiska punkter"</string>
-    <!-- no translation found for auto_punctuate_summary (6589441565817502132) -->
-    <skip />
     <string name="quick_fixes" msgid="5353213327680897927">"Snabba lösningar"</string>
     <string name="quick_fixes_summary" msgid="3405028402510332373">"Åtgärdar automatiskt vanliga misstag"</string>
     <string name="show_suggestions" msgid="507074425254289133">"Visa förslag"</string>

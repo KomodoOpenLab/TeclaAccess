@@ -32,8 +32,6 @@
     <string name="auto_cap" msgid="1719746674854628252">"Stor forbokstav"</string>
     <string name="auto_cap_summary" msgid="3260681697600786825">"Start automatisk setninger med stor bokstav"</string>
     <string name="auto_punctuate" msgid="7276672334264521751">"Automatisk punktum"</string>
-    <!-- no translation found for auto_punctuate_summary (6589441565817502132) -->
-    <skip />
     <string name="quick_fixes" msgid="5353213327680897927">"Autokorrektur"</string>
     <string name="quick_fixes_summary" msgid="3405028402510332373">"Retter vanlige stavefeil"</string>
     <string name="show_suggestions" msgid="507074425254289133">"Vis forslag"</string>
@@ -95,32 +93,4 @@
     <!-- Tecla: IME Strings -->
     <string name="english_ime_name" msgid="7252517407088836577">"Tecla Skjermtastatur"</string>
     <string name="english_ime_settings" msgid="6661589557206947774">"Innstillinger for Tecla skjermtastatur"</string>
-    <!-- 
-		Input method
-		Alternative input settings
-		Always show keyboard
-		Shows a small navigation keyboard when not entering text
-		Connect to Tecla Shield
-		Bluetooth is not supported
-		Bluetooth is disabled
-		Check to connect to a nearby Tecla Shield
-		Fullscreen switch mode
-		Uses the entire screen as a single switch
-		Scanning settings
-		Enable self-scanning
-		Scans the keyboard automatically
-		Self-scanning delay
-		Changes the self-scanning speed
-		Enter new delay in miliseconds
-		Tecla shield connected
-		Switch event provider
-		Connecting to Tecla shield
-		Could not connect to Tecla Shield
-		No Tecla shields in range
-		Shield connected Please wait
-		Searching for Tecla shields
-		Fullscreen switch mode enabled
-		Fullscreen switch mode disabled
-	-->
-	
 </resources>
