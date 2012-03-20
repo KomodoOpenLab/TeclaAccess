@@ -7,9 +7,11 @@ for people with mobility impairments. This repo contains the source code for the
 
 Getting Involved
 ----------------
-In order to start contributing to the Tecla Access project, follow the steps below:
+There are many ways to contribute to the [Tecla Access App for Android](https://play.google.com/store/apps/details?id=ca.idi.tekla). Here are some ideas:
 
-### What do I need?
+### Code
+
+In order to start contributing code to the Tecla Access project, follow the steps below:
 
 1. Fork this repo. For detailed instructions visit [http://help.github.com/fork-a-repo/](http://help.github.com/fork-a-repo/)
 2. Download and install [Eclipse](http://www.eclipse.org/)
@@ -20,5 +22,9 @@ In order to start contributing to the Tecla Access project, follow the steps bel
 7. Import the *Tecla Access SDK* project's source from the *sdk* directory in your local repo (you may need to let Eclipse copy the source to the workspace)
 8. Go to the properties of your *Tecla Access* project and add the project *Tecla Access SDK* as a library
 9. You should now be able to compile the project, happy hacking!
+
+### Review
+
+### Translate
 
 
