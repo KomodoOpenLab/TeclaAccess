@@ -207,7 +207,7 @@
     <!-- Title for Latin keyboard  -->
     <string name="english_ime_name">Tecla Access</string>
     <!-- Title for Latin keyboard settings activity / dialog -->
-    <string name="english_ime_settings">Tecla Access</string>
+    <string name="english_ime_settings">Tecla Access settings</string>
 	<string name="inputMethod">Input method</string>
 	
     <!-- Option to enable speech input -->
