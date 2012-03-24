@@ -284,7 +284,7 @@
 	<string name="no_voice_actions_installed">Voice Actions is not installed!</string>
 
 	<!-- Tecla: Titles and labels -->
-	<string name="sep_label">Switch event provider</string>
+	<string name="sep_label">Tecla Shield Status</string> <!-- Bugfix for issue #30-->
 	<string name="voice_input">Tecla Voice Input</string>
 	<string name="configuring_tecla">Configuring Tecla...</string>
 
