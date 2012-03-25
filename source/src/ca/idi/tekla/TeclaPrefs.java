@@ -369,5 +369,4 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (mProgressDialog != null && mProgressDialog.isShowing())
 			mProgressDialog.dismiss();
 	}
-
 }
