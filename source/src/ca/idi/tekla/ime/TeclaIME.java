@@ -1482,12 +1482,12 @@ public class TeclaIME extends InputMethodService
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 			
 			//right switch to answer the call
-			if(!switchJ4Pressed && (!mCallIdle || (mPhoneRinging || mCallActive)) && 
+			if(!switchJ4Pressed && mPhoneRinging && 
 					(switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1))){
 				TeclaApp.getInstance().useAppropriateCallDevice();
 			}
 			//on right switch select the highlighted
-			else if (mCallIdle && (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1))) {
+			else if (!mPhoneRinging && (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1))) {
 				switchJ4Pressed = true;
 				if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					TeclaApp.highlighter.resumeSelfScanning();
@@ -1524,7 +1524,7 @@ public class TeclaIME extends InputMethodService
 				switchJ3Pressed = false;
 			}
 			
-			if(!switchJ2Pressed && (!mCallIdle || (mPhoneRinging || mCallActive)) && 
+			if(!switchJ2Pressed && mCallActive && 
 					switchEvent.isPressed(SwitchEvent.SWITCH_J2)){
 				if(TeclaApp.getInstance().getSpeakerPhoneState())
 					TeclaApp.getInstance().unuseSpeakerphone();
@@ -1532,7 +1532,7 @@ public class TeclaIME extends InputMethodService
 					TeclaApp.getInstance().useSpeakerphone();
 			}
 			//down to move highlighter to the previous position
-			else if (mCallIdle && switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
+			else if (!mCallActive && switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
 				switchJ2Pressed = true;
 				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
 			}
