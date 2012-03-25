@@ -334,8 +334,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 		if (mPhoneRinging) {
 			//Screen should be on
 			//Answering should also unlock
-			TeclaApp.getInstance().answerCall();
-			TeclaApp.getInstance().useSpeakerphone();
+			TeclaApp.getInstance().useAppropriateCallDevice();
 			// Assume phone is not ringing any more
 			mPhoneRinging = false;
 		} else if (!TeclaApp.persistence.isScreenOn()) {

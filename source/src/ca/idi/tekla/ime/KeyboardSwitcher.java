@@ -169,7 +169,6 @@ public class KeyboardSwitcher {
         keyboard.setShiftLocked(keyboard.isShiftLocked());
         keyboard.setImeOptions(mContext.getResources(), mMode, imeOptions);
         keyboard.updateVariantsState();
-
     }
 
     private TeclaKeyboard getKeyboard(KeyboardId id) {
