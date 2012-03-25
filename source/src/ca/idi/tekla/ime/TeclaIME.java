@@ -24,6 +24,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.gesture.GestureOverlayView;
+import android.graphics.Point;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -36,6 +38,7 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
+import android.telephony.TelephonyManager;
 import android.text.AutoText;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
@@ -158,6 +161,17 @@ public class TeclaIME extends InputMethodService
 
 	private String mWordSeparators;
 	private String mSentenceSeparators;
+	
+	//mCallActive : A call is in active state that is being answered or on a hold
+	//mCallIdle : No call is active or on hold or ringing
+	//mPhoneRinging : The phone is ringing
+	private boolean mPhoneRinging = false;
+	private boolean mCallActive = false;
+	private boolean mCallIdle = true;
+
+	private boolean switchJ4Pressed = false;
+	private boolean switchJ3Pressed = false;
+	private boolean switchJ2Pressed = false;
 
 	Handler mHandler = new Handler() {
 		@Override
@@ -201,7 +215,9 @@ public class TeclaIME extends InputMethodService
 
 		// register to receive ringer mode changes for silent mode
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
+		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
 
+		//load the swipe gestures from the resources
 		initTeclaA11y();
 
 	}
@@ -621,6 +637,23 @@ public class TeclaIME extends InputMethodService
 				String input_string = intent.getExtras().getString(TeclaApp.EXTRA_INPUT_STRING);
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received input string intent.");
 				typeInputString(input_string);
+			}
+			if(action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)){
+				TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+				if(tm.getCallState() == TelephonyManager.CALL_STATE_RINGING){
+					mPhoneRinging = true;
+					mCallIdle = false;
+				}
+				else if(tm.getCallState() == TelephonyManager.CALL_STATE_IDLE){
+					mCallIdle = true;
+					mPhoneRinging = false;
+					mCallActive = false;
+				}
+				else if(tm.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK){
+					mCallActive = true;
+					mCallIdle = false;
+					mPhoneRinging = false;
+				}
 			}
 		}
 	};
@@ -1388,7 +1421,7 @@ public class TeclaIME extends InputMethodService
 	private int mLastKeyboardMode, mLastFullKeyboardMode;
 	private boolean mShieldConnected, mRepeating;
 	private PopupWindow mSwitchPopup;
-	private View mSwitch;
+	private GestureOverlayView mSwitch;
 	private Handler mTeclaHandler;
 	private int[] mKeyCodes;
 	private boolean mIsNavKbdTimedOut;
@@ -1447,15 +1480,23 @@ public class TeclaIME extends InputMethodService
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
-
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
+			
+			//right switch to answer the call
+			if(!switchJ4Pressed && mPhoneRinging && 
+					(switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1))){
+				TeclaApp.getInstance().useAppropriateCallDevice();
+			}
+			//on right switch select the highlighted
+			else if (!mPhoneRinging && (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1))) {
+				switchJ4Pressed = true;
 				if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					TeclaApp.highlighter.resumeSelfScanning();
 				} else {
 					selectHighlighted(true);
 				}
 			}
-			if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
+			if (switchJ4Pressed && (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1))) {
+				switchJ4Pressed = false;
 				if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					if (TeclaApp.persistence.isInverseScanningChanged()) {
 						//Ignore event right after Inverse Scanning is Enabled
@@ -1469,12 +1510,36 @@ public class TeclaIME extends InputMethodService
 					stopRepeatingKey();
 				}
 			}
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
+			//left switch for cancelling the call
+			if(!switchJ3Pressed && (!mCallIdle || (mPhoneRinging || mCallActive)) &&
+					(switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2))){
+				TeclaApp.getInstance().endCall();
+			}
+			//left for stepping out
+			else if (mCallIdle && (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2))) {
+				switchJ3Pressed = true;
 				TeclaApp.highlighter.stepOut();
 			}
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
+			if(switchJ3Pressed && (switchEvent.isReleased(SwitchEvent.SWITCH_J3) || switchEvent.isReleased(SwitchEvent.SWITCH_E2))){
+				switchJ3Pressed = false;
+			}
+			
+			if(!switchJ2Pressed && mCallActive && 
+					switchEvent.isPressed(SwitchEvent.SWITCH_J2)){
+				if(TeclaApp.getInstance().getSpeakerPhoneState())
+					TeclaApp.getInstance().unuseSpeakerphone();
+				else
+					TeclaApp.getInstance().useSpeakerphone();
+			}
+			//down to move highlighter to the previous position
+			else if (!mCallActive && switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
+				switchJ2Pressed = true;
 				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
 			}
+			if(switchJ2Pressed && switchEvent.isReleased(SwitchEvent.SWITCH_J2)){
+				switchJ2Pressed = false;
+			}
+			//up to move highlighter to the next position
 			if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
 				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
 			}
@@ -1656,17 +1721,18 @@ public class TeclaIME extends InputMethodService
 	 */
 	private Runnable mCreateSwitchRunnable = new Runnable () {
 
+
 		public void run() {
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				Display display = getDisplay();
 				if (mSwitchPopup == null) {
 					//Create single-switch pop-up
-					mSwitch = getLayoutInflater().inflate(R.layout.popup_fullscreen_transparent, null);
-					mSwitch.setOnTouchListener(mSwitchTouchListener);
+					View popUplayout = getLayoutInflater().inflate(R.layout.popup_fullscreen_transparent, null);
+					mSwitchPopup = new PopupWindow(popUplayout);
+					mSwitch = (GestureOverlayView)mSwitchPopup.getContentView().findViewById(R.id.gestures);
+					mSwitch.addOnGestureListener(mSwitchGesturingListener);
 					mSwitch.setOnClickListener(mSwitchClickListener);
-					mSwitch.setOnLongClickListener(mSwitchLongPressListener);
-					mSwitchPopup = new PopupWindow(mSwitch);
-				}
+					}
 				if (mSwitchPopup.isShowing()) mSwitchPopup.dismiss();
 				mSwitchPopup.setWidth(display.getWidth());
 				mSwitchPopup.setHeight(display.getHeight());
@@ -1679,45 +1745,28 @@ public class TeclaIME extends InputMethodService
 			}
 		}
 	};
+	
+	private GestureOverlayView.OnGestureListener mSwitchGesturingListener =  new GestureOverlayView.OnGestureListener() {
 
-	/**
-	 * Listener for full-screen single switch long press
-	 */
-	private View.OnLongClickListener mSwitchLongPressListener = new View.OnLongClickListener() {
-		
-		public boolean onLongClick(View v) {
-			if (!TeclaApp.persistence.isInverseScanningEnabled()) {
-				launchSettings();
-				//Doing this here again because the ACTION_UP event in the onTouch listener doesn't always work.
-				mSwitch.setBackgroundResource(android.R.color.transparent);
-				return true;
-			}
-			return false;
-		}
-	};
-
-	/**
-	 * Listener for full-screen switch actions
-	 */
-	private View.OnTouchListener mSwitchTouchListener = new View.OnTouchListener() {
-		
-		public boolean onTouch(View v, MotionEvent event) {
-			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
-				mSwitch.setBackgroundResource(R.color.switch_pressed);
-				vibrate();
-				playKeyClick(KEYCODE_ENTER);
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					TeclaApp.highlighter.resumeSelfScanning();
-				} else {
-					selectHighlighted(false);
+		private Point startPoint;
+		public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+			int popUpwidth = mSwitchPopup.getWidth();
+			//set width of pop up layout to  so that other windows can receive touch events
+			mSwitchPopup.setWidth(0);
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
+			mSwitch.setBackgroundResource(android.R.color.transparent);
+			Point endPoint = new Point((int)event.getX(),(int)event.getY());
+			double gestureLength = Math.sqrt(Math.abs(Math.pow(startPoint.x-endPoint.x, 2.0)+Math.pow(startPoint.y-endPoint.y, 2.0)));
+			//To recognize a tap
+			if(gestureLength < 5.0){
+				if(mCallActive){
+					if(TeclaApp.getInstance().getSpeakerPhoneState()){
+						TeclaApp.getInstance().unuseSpeakerphone();
+					}
+					else
+						TeclaApp.getInstance().useSpeakerphone();
 				}
-				break;
-			case MotionEvent.ACTION_UP:
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
-				mSwitch.setBackgroundResource(android.R.color.transparent);
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
+				else if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					if (TeclaApp.persistence.isInverseScanningChanged()) {
 						//Ignore event right after Inverse Scanning is Enabled
 						TeclaApp.persistence.unsetInverseScanningChanged();
@@ -1728,12 +1777,74 @@ public class TeclaIME extends InputMethodService
 						selectHighlighted(false);
 					}
 				}
-				break;
-			default:
-				break;
+				else{
+					selectHighlighted(false);
+				}
 			}
-			return false;
+			//to recognize a gesture
+			else if(gestureLength > 30.0){
+					//three call states : mCallActive mCallIdle mPhoneRinging
+					//-1 for left and 1 for right
+					int swipeDir = 1;
+					swipeDir = (endPoint.x-startPoint.x<0)?-1:1;
+					//No phone call state
+					//we need to change the direction of movement of highlighter in this state
+					if(mCallIdle||(!mCallActive&&!mPhoneRinging)){
+						TeclaApp.highlighter.setScanDirection(swipeDir==1?Highlighter.HIGHLIGHT_NEXT:Highlighter.HIGHLIGHT_PREV);
+					}
+					//for the case when we listening to a call and no another call is ringing
+					else if(mCallActive && !mPhoneRinging){
+						if(swipeDir == -1)
+							TeclaApp.getInstance().endCall();
+					}
+					//if we are listening to a call and another call rings
+					else if(mCallActive && mPhoneRinging){
+						//Yet to be decided what to do
+						//But fir the time using
+						//Default Effect of Telephony.ITelephony
+						TeclaApp.getInstance().rejectCall();
+					}
+					//the case when no phone call is active and a phone call rings
+					else if(!mCallActive && mPhoneRinging){
+						if(swipeDir == -1)
+							TeclaApp.getInstance().rejectCall();
+						else{
+							TeclaApp.getInstance().useAppropriateCallDevice();
+						}
+					}
+					//to handle the case when inverse scanning is enabled and we released pointer after dragging
+					if(TeclaApp.persistence.isInverseScanningEnabled()){
+						TeclaApp.highlighter.pauseSelfScanning();
+					}
+				}
+			else{
+				//to handle the case when inverse scanning is enabled and we released pointer after dragging
+				if(TeclaApp.persistence.isInverseScanningEnabled()){
+					TeclaApp.highlighter.pauseSelfScanning();
+				}
+			}
+			mSwitchPopup.setWidth(popUpwidth);
 		}
+		
+		public void onGestureStarted(GestureOverlayView overlay,
+				MotionEvent event) {
+			startPoint = new Point((int)event.getX(),(int)event.getY());
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
+			mSwitch.setBackgroundResource(R.color.switch_pressed);
+			vibrate();
+			playKeyClick(KEYCODE_ENTER);
+			if (TeclaApp.persistence.isInverseScanningEnabled()) {
+				TeclaApp.highlighter.resumeSelfScanning();
+			}
+		}
+
+		public void onGesture(GestureOverlayView overlay, MotionEvent event) {
+		}
+
+		public void onGestureCancelled(GestureOverlayView overlay,
+				MotionEvent event) {
+		}
+		
 	};
 
 	private View.OnClickListener mSwitchClickListener =  new View.OnClickListener() {
@@ -1744,7 +1855,7 @@ public class TeclaIME extends InputMethodService
 		}
 	};
 
-	private void stopFullScreenSwitchMode() {
+		private void stopFullScreenSwitchMode() {
 		if (isFullScreenShowing()) {
 			mSwitchPopup.dismiss();
 		}

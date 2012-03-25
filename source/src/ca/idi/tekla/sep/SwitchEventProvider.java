@@ -24,15 +24,11 @@ import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class SwitchEventProvider extends Service implements Runnable {
@@ -88,7 +84,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 	// TODO: This variable should be used when new Shield versions are available
 	private int mShieldVersion;
 	private int mPrevSwitchStates, mSwitchStates;
-	private boolean mPhoneRinging;
 	private static final long DEBOUNCE_TIMEOUT = 20; // milliseconds
 	private static final long FULL_RESET_TIMEOUT = 3000; // milliseconds
 
@@ -119,13 +114,11 @@ public class SwitchEventProvider extends Service implements Runnable {
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 		//Intents & Intent Filters
-		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
 		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
 
 		mNotificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		mHandler = new Handler();
 		mIsBroadcasting = false;
-		mPhoneRinging = false;
 		mPrevSwitchStates = STATE_DEFAULT;
 		mShieldVersion = NULL_SHIELD_VERSION;
 		mServiceStarted = false;
@@ -139,7 +132,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 	public void onDestroy() {
 		super.onDestroy();
 		stopMainThread();
-		unregisterReceiver(mReceiver);
 		Log.i(TeclaApp.TAG, CLASS_TAG + "Service Stopped");
 	}
 
@@ -331,14 +323,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 	};
 
 	private void handleSwitchEvent(int switchChanges, int switchStates) {
-		if (mPhoneRinging) {
-			//Screen should be on
-			//Answering should also unlock
-			TeclaApp.getInstance().answerCall();
-			TeclaApp.getInstance().useSpeakerphone();
-			// Assume phone is not ringing any more
-			mPhoneRinging = false;
-		} else if (!TeclaApp.persistence.isScreenOn()) {
+		if (!TeclaApp.persistence.isScreenOn()) {
 			// Screen is off, so just wake it
 			TeclaApp.getInstance().wakeUnlockScreen();
 		} else {
@@ -373,25 +358,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Socket killed");
 	}
 	
-	// All intents will be processed here
-	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-
-			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Phone state changed");
-				mPhoneRinging = false;
-				TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-				if (tm.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Phone ringing");
-					mPhoneRinging = true;
-				}
-			}
-		}
-
-	};
-
 	/**
 	 * Connects to bluetooth server.
 	 */

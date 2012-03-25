@@ -36,6 +36,9 @@ public class Highlighter {
 	private TeclaKeyboardView mIMEView;
 	private Handler mHandler;
 
+	//stores the current direction of movement of the highlighter
+	private int currentDirection = Highlighter.HIGHLIGHT_NEXT;
+	
 	public Highlighter(Context context) {
 
 		mScanDepth = Highlighter.DEPTH_ROW;
@@ -65,6 +68,7 @@ public class Highlighter {
 	public void setIMEView(TeclaKeyboardView imeView) {
 		TeclaApp.getInstance().broadcastInputViewCreated();
 		mIMEView = imeView;
+		setScanDirection(Highlighter.HIGHLIGHT_NEXT);
 		if (mIMEView.getKeyboard().getRowCount() == 1) {
 			mScanDepth = Highlighter.DEPTH_KEY;
 		}
@@ -201,6 +205,17 @@ public class Highlighter {
 		move(HIGHLIGHT_NEXT);
 		move(HIGHLIGHT_PREV);
 	}
+	
+	public void setScanDirection(int scanDirection){
+		if(scanDirection == Highlighter.HIGHLIGHT_PREV)
+			currentDirection = scanDirection;
+		else
+			currentDirection = Highlighter.HIGHLIGHT_NEXT;
+	}
+	
+	public int getScanDirection(){
+		return currentDirection;
+	}
 
 	/**
 	 * Runnable used to auto scan
@@ -209,7 +224,7 @@ public class Highlighter {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
-			move(Highlighter.HIGHLIGHT_NEXT);
+			move(getScanDirection());
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}
 	};
@@ -247,6 +262,7 @@ public class Highlighter {
 				mScanRowCounter = 0;
 			}
 		}
+		setScanDirection(Highlighter.HIGHLIGHT_NEXT);
 		restoreHighlight();
 	}
 
