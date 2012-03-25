@@ -25,6 +25,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
+import android.media.AudioManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
