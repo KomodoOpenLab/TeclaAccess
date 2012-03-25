@@ -25,7 +25,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
-import android.media.AudioManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -335,14 +334,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 		if (mPhoneRinging) {
 			//Screen should be on
 			//Answering should also unlock
-			TeclaApp.getInstance().answerCall();
-	Intent sco_device_intent = registerReceiver(null, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED));
-			if(sco_device_intent.getExtras().getInt(AudioManager.EXTRA_SCO_AUDIO_STATE) == AudioManager.SCO_AUDIO_STATE_CONNECTED){
-				TeclaApp.getInstance().useBluetoothSCO();
-			}
-			else{
-				TeclaApp.getInstance().useSpeakerphone();
-			}
+			TeclaApp.getInstance().useAppropriateCallDevice();
 			// Assume phone is not ringing any more
 			mPhoneRinging = false;
 		} else if (!TeclaApp.persistence.isScreenOn()) {

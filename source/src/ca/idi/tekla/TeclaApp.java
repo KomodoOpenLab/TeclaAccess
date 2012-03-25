@@ -4,11 +4,15 @@
 
 package ca.idi.tekla;
 
+import java.lang.reflect.Method;
+
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothProfile;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -24,9 +28,11 @@ import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import com.android.internal.telephony.ITelephony;
 
 public class TeclaApp extends Application {
 
@@ -51,6 +57,9 @@ public class TeclaApp extends Application {
 	public static final String EXTRA_INPUT_STRING = "ca.idi.tekla.sep.extra.INPUT_STRING";
 	private static final long BOOT_TIMEOUT = 60000;
 	private static final int WAKE_LOCK_TIMEOUT = 5000;
+	private static final int PHONE_HEADSET = 0;
+	private static final int BT_HEADSET = 1;
+	private static final int UNKNOWN_HEADSET = 2;
 	
 	private PowerManager mPowerManager;
 	private KeyguardManager mKeyguardManager;
@@ -70,6 +79,9 @@ public class TeclaApp extends Application {
 	public static Persistence persistence;
 	public static Highlighter highlighter;
 
+	private ITelephony telephonyService = null;
+	private boolean speakerPhoneState = false;
+	
 	public TeclaApp() {
         instance = this;
     }
@@ -98,6 +110,7 @@ public class TeclaApp extends Application {
 		mKeyguardManager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
 		mKeyguardLock = mKeyguardManager.newKeyguardLock(TeclaApp.TAG);
 		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+		
 		mPackageManager = getPackageManager();
 		
 		mHandler = new Handler();
@@ -106,6 +119,16 @@ public class TeclaApp extends Application {
 		persistence.unsetInverseScanningChanged();
 		persistence.setScreenOn();
 		
+        try{
+        	TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+	        Class c = Class.forName(tm.getClass().getName());
+	        Method m = c.getDeclaredMethod("getITelephony");
+	        m.setAccessible(true);
+	        telephonyService = (ITelephony)m.invoke(tm);
+        }catch(Exception e){
+        	telephonyService = null;
+        	Log.e("telephony service", e.getMessage());
+        }
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
@@ -328,15 +351,94 @@ public class TeclaApp extends Application {
 		buttonUp.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
 		sendOrderedBroadcast(buttonUp, "android.permission.CALL_PRIVILEGED");
 	}
-
-	public void useSpeakerphone() {
-		mAudioManager.setBluetoothScoOn(false);
-		mAudioManager.setSpeakerphoneOn(true);
+	
+	//rejects the received call
+	public boolean rejectCall() {
+		if(telephonyService != null){
+			try{
+				telephonyService.endCall();
+			}catch(Exception e){
+				Log.e("TeclaApp rejectCall:", e.getMessage());
+			}
+			return true;
+		}
+		else
+			return false;
 	}
 
-	public void useBluetoothSCO() {
+	//ends the active call
+	public boolean endCall() {
+		if(telephonyService != null){
+			try{
+				telephonyService.endCall();
+			}catch(Exception e){
+				Log.e("TeclaApp endCall:", e.getMessage());
+			}
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	public boolean useBluetoothHeadset(){
+		if(BluetoothAdapter.getDefaultAdapter() != null){
+			int btheadet_state = BluetoothAdapter.getDefaultAdapter().getProfileConnectionState(BluetoothProfile.HEADSET);
+			if(btheadet_state == BluetoothProfile.STATE_CONNECTED){
+				if(telephonyService == null)
+					return false;
+				else{
+					try{
+						telephonyService.silenceRinger();
+						telephonyService.answerRingingCall();
+						return true;
+					}
+					catch(Exception e){
+						Log.e("TeclaApp useBTHeadset:", e.getMessage());
+						return false;
+					}
+				}
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public int useAppropriateCallDevice(){
+		boolean btConnected = useBluetoothHeadset();
+		if(!btConnected){
+			try{
+				if(telephonyService != null){
+					telephonyService.silenceRinger();
+					telephonyService.answerRingingCall();
+				}
+				return UNKNOWN_HEADSET;
+			}catch(Exception e){
+				Log.e("Calling device","Bluetooth headset notbeing used.");
+				this.answerCall();
+				return PHONE_HEADSET;
+			}
+		}
+		return BT_HEADSET;
+	}
+
+	public void useSpeakerphone() {
+		speakerPhoneState = true;
+		mAudioManager.setSpeakerphoneOn(true);
+		TeclaApp.getInstance().showToast("Speakers are on");
+	}
+
+	public void unuseSpeakerphone() {
+		speakerPhoneState = false;
 		mAudioManager.setSpeakerphoneOn(false);
-		mAudioManager.setBluetoothScoOn(true);
+		TeclaApp.getInstance().showToast("Speakers are off");
+	}
+	
+	public boolean getSpeakerPhoneState(){
+		return speakerPhoneState;
 	}
 
 	public void holdKeyguardLock() {
