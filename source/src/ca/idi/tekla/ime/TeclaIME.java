@@ -1802,7 +1802,17 @@ public class TeclaIME extends InputMethodService
 							TeclaApp.getInstance().useAppropriateCallDevice();
 						}
 					}
+					//to handle the case when inverse scanning is enabled and we released pointer after dragging
+					if(TeclaApp.persistence.isInverseScanningEnabled()){
+						TeclaApp.highlighter.pauseSelfScanning();
+					}
 				}
+			else{
+				//to handle the case when inverse scanning is enabled and we released pointer after dragging
+				if(TeclaApp.persistence.isInverseScanningEnabled()){
+					TeclaApp.highlighter.pauseSelfScanning();
+				}
+			}
 			mSwitchPopup.setWidth(popUpwidth);
 		}
 		
