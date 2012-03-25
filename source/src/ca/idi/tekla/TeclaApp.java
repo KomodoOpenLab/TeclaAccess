@@ -330,7 +330,13 @@ public class TeclaApp extends Application {
 	}
 
 	public void useSpeakerphone() {
+		mAudioManager.setBluetoothScoOn(false);
 		mAudioManager.setSpeakerphoneOn(true);
+	}
+
+	public void useBluetoothSCO() {
+		mAudioManager.setSpeakerphoneOn(false);
+		mAudioManager.setBluetoothScoOn(true);
 	}
 
 	public void holdKeyguardLock() {

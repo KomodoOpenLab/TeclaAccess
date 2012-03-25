@@ -335,7 +335,13 @@ public class SwitchEventProvider extends Service implements Runnable {
 			//Screen should be on
 			//Answering should also unlock
 			TeclaApp.getInstance().answerCall();
-			TeclaApp.getInstance().useSpeakerphone();
+	Intent sco_device_intent = registerReceiver(null, new IntentFilter(AudioManager.ACTION_SCO_AUDIO_STATE_UPDATED));
+			if(sco_device_intent.getExtras().getInt(AudioManager.EXTRA_SCO_AUDIO_STATE) == AudioManager.SCO_AUDIO_STATE_CONNECTED){
+				TeclaApp.getInstance().useBluetoothSCO();
+			}
+			else{
+				TeclaApp.getInstance().useSpeakerphone();
+			}
 			// Assume phone is not ringing any more
 			mPhoneRinging = false;
 		} else if (!TeclaApp.persistence.isScreenOn()) {
