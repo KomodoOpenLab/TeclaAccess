@@ -356,11 +356,11 @@ public class TeclaApp extends Application {
 	public boolean rejectCall() {
 		if(telephonyService != null){
 			try{
-				telephonyService.endCall();
+				return telephonyService.endCall();
 			}catch(Exception e){
 				Log.e("TeclaApp rejectCall:", e.getMessage());
+				return false;
 			}
-			return true;
 		}
 		else
 			return false;
@@ -370,11 +370,11 @@ public class TeclaApp extends Application {
 	public boolean endCall() {
 		if(telephonyService != null){
 			try{
-				telephonyService.endCall();
+				return telephonyService.endCall();
 			}catch(Exception e){
-				Log.e("TeclaApp endCall:", e.getMessage());
+				Log.e("TeclaApp rejectCall:", e.getMessage());
+				return false;
 			}
-			return true;
 		}
 		else
 			return false;
