@@ -4,8 +4,6 @@
 
 package ca.idi.tekla;
 
-import ca.idi.tekla.util.Highlighter;
-import ca.idi.tekla.util.Persistence;
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -16,17 +14,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import ca.idi.tekla.util.Highlighter;
+import ca.idi.tekla.util.Persistence;
 
 public class TeclaApp extends Application {
 
@@ -46,6 +47,7 @@ public class TeclaApp extends Application {
 	public static final String ACTION_HIDE_IME = "ca.idi.tekla.ime.action.HIDE_IME";
 	public static final String ACTION_IME_CREATED = "ca.idi.tekla.ime.action.SOFT_IME_CREATED";
 	public static final String ACTION_START_FS_SWITCH_MODE = "ca.idi.tekla.ime.action.START_FS_SWITCH_MODE";
+	public static final String ACTION_RESTART_FS_SWITCH_MODE = "ca.idi.tekla.ime.action.RESTART_FS_SWITCH_MODE";
 	public static final String ACTION_STOP_FS_SWITCH_MODE = "ca.idi.tekla.ime.action.STOP_FS_SWITCH_MODE";
 	public static final String ACTION_INPUT_STRING = "ca.idi.tekla.ime.action.INPUT_STRING";
 	public static final String EXTRA_INPUT_STRING = "ca.idi.tekla.sep.extra.INPUT_STRING";
@@ -128,6 +130,22 @@ public class TeclaApp extends Application {
 		Log.d(TAG, "TECLA APP TERMINATED!");
 		super.onTerminate();
 	}
+	
+	/**
+	 * Called when the configuration changes. 
+	 * Used here to detect when the screen orientation changes
+	 * If fullscreen switch is enabled, it needs to change size
+	 * to fit the new screen orientation 
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration config) {
+		super.onConfigurationChanged(config);
+		if(DEBUG) Log.d(TAG, "onConfigurationChanged");
+		if(persistence.isFullscreenSwitchEnabled()) {
+			if(DEBUG) Log.d(TAG, "Screen rotated while fullscreen switch enabled. Changing size.");
+			restartFullScreenSwitchMode();
+		}
+	}
 
 	// All intents will be processed here
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -175,6 +193,11 @@ public class TeclaApp extends Application {
 	public void startFullScreenSwitchMode() {
 		if (DEBUG) Log.d(TAG, "Broadcasting start fullscreen switch mode intent...");
 		sendBroadcast(new Intent(ACTION_START_FS_SWITCH_MODE));
+	}
+	
+	public void restartFullScreenSwitchMode() {
+		if (DEBUG) Log.d(TAG, "Broadcasting restart fullscreen switch mode intent...");
+		sendBroadcast(new Intent(ACTION_RESTART_FS_SWITCH_MODE));
 	}
 
 	public void stopFullScreenSwitchMode() {
