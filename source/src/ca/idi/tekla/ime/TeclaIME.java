@@ -237,6 +237,7 @@ public class TeclaIME extends InputMethodService
 		if (conf.orientation != mOrientation) {
 			commitTyped(getCurrentInputConnection());
 			mOrientation = conf.orientation;
+			startFullScreenSwitchMode(500, false);
 		}
 		if (mKeyboardSwitcher == null) {
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
@@ -1402,7 +1403,7 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_SHOW_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_HIDE_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_START_FS_SWITCH_MODE));
-		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_RESTART_FS_SWITCH_MODE));
+		//registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_RESTART_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_STOP_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_START_SCANNING));
 		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_STOP_SCANNING));
