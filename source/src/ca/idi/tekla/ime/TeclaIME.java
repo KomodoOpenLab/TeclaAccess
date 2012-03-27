@@ -619,6 +619,10 @@ public class TeclaIME extends InputMethodService
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
 				startFullScreenSwitchMode(500, true);
 			}
+			if (action.equals(TeclaApp.ACTION_STOP_FS_SWITCH_MODE)) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
+				stopFullScreenSwitchMode();
+			}
 			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start scanning IME intent.");
 				evaluateStartScanning();
@@ -1657,9 +1661,9 @@ public class TeclaIME extends InputMethodService
 
 	private void startFullScreenSwitchMode(int delay, boolean showToast) {
 		mTeclaHandler.removeCallbacks(mCreateSwitchRunnable);
-		//mCreateSwitchRunnable = new CreateSwitchRunnable (showToast);
+		mCreateSwitchRunnable = new CreateSwitchRunnable (showToast);
 		mTeclaHandler.postDelayed(mCreateSwitchRunnable, delay);
-		Log.d(TeclaApp.TAG, CLASS_TAG + "Sent delayed broadcast to show fullscreen switch");
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Sent delayed broadcast to show fullscreen switch");
 	}
 	
 	/**
@@ -1694,7 +1698,7 @@ public class TeclaIME extends InputMethodService
 				mSwitchPopup.setHeight(display.getHeight());
 				mSwitchPopup.showAtLocation(mIMEView, Gravity.NO_GRAVITY, 0, 0);
 				if (showToast) TeclaApp.getInstance().showToast(R.string.fullscreen_enabled);
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch shown");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch shown");
 				evaluateStartScanning();
 			} else {
 				startFullScreenSwitchMode(1000, showToast);
