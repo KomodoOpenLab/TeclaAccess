@@ -8,6 +8,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import ca.idi.tekla.TeclaApp;
 
 public class Persistence {
 	
@@ -125,7 +127,9 @@ public class Persistence {
 	}
 
 	public boolean isFullscreenSwitchEnabled() {
-		return shared_prefs.getBoolean(PREF_FULLSCREEN_SWITCH, false);
+		boolean enabled = shared_prefs.getBoolean(PREF_FULLSCREEN_SWITCH, false);
+		Log.d(TeclaApp.TAG, "Checking if fullscreenswitch enabled " + enabled);
+		return enabled;
 	}
 
 	public boolean isSelfScanningEnabled() {
