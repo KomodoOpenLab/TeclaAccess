@@ -16,6 +16,11 @@
 
 package ca.idi.tekla.ime;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,8 +31,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
+import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.os.Debug;
 import android.os.Handler;
@@ -54,17 +59,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.idi.tecla.sdk.SepManager;
+import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tecla.sdk.SepManager;
-import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
@@ -229,6 +228,14 @@ public class TeclaIME extends InputMethodService
 		SepManager.stop(this);
 	}
 
+	
+	/**
+	 * Called when the configuration changes. 
+	 * Used here to detect when the screen orientation changes
+	 * If fullscreen switch is enabled, it needs to change size
+	 * to fit the new screen orientation, and the keyboard needs
+	 * altered as well.
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
 		if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
@@ -238,6 +245,13 @@ public class TeclaIME extends InputMethodService
 		if (conf.orientation != mOrientation) {
 			commitTyped(getCurrentInputConnection());
 			mOrientation = conf.orientation;
+			
+			// If the fullscreen switch is enabled, change its size/shape
+			if(TeclaApp.persistence.isFullscreenSwitchEnabled()) {
+				if(TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen rotated while fullscreen switch enabled. Changing size.");
+				startFullScreenSwitchMode(500, false);
+			}
+				
 		}
 		if (mKeyboardSwitcher == null) {
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
@@ -602,12 +616,8 @@ public class TeclaIME extends InputMethodService
 				hideSoftIME();
 			}
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
-				startFullScreenSwitchMode(500);
-			}
-			if (action.equals(TeclaApp.ACTION_STOP_FS_SWITCH_MODE)) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
-				stopFullScreenSwitchMode();
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
+				startFullScreenSwitchMode(500, true);
 			}
 			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start scanning IME intent.");
@@ -1645,8 +1655,9 @@ public class TeclaIME extends InputMethodService
 	}
 
 
-	private void startFullScreenSwitchMode(int delay) {
+	private void startFullScreenSwitchMode(int delay, boolean showToast) {
 		mTeclaHandler.removeCallbacks(mCreateSwitchRunnable);
+		mCreateSwitchRunnable = new CreateSwitchRunnable (showToast);
 		mTeclaHandler.postDelayed(mCreateSwitchRunnable, delay);
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Sent delayed broadcast to show fullscreen switch");
 	}
@@ -1654,7 +1665,18 @@ public class TeclaIME extends InputMethodService
 	/**
 	 * Runnable used to create full-screen switch overlay
 	 */
-	private Runnable mCreateSwitchRunnable = new Runnable () {
+	private Runnable mCreateSwitchRunnable = new CreateSwitchRunnable (true); 
+	
+	class CreateSwitchRunnable implements Runnable {
+		final boolean showToast;
+		
+		public CreateSwitchRunnable(boolean shouldShowToast) {
+			showToast = shouldShowToast;
+		}
+		
+		public CreateSwitchRunnable() {
+			showToast = true;
+		}
 
 		public void run() {
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
@@ -1671,14 +1693,15 @@ public class TeclaIME extends InputMethodService
 				mSwitchPopup.setWidth(display.getWidth());
 				mSwitchPopup.setHeight(display.getHeight());
 				mSwitchPopup.showAtLocation(mIMEView, Gravity.NO_GRAVITY, 0, 0);
-				TeclaApp.getInstance().showToast(R.string.fullscreen_enabled);
+				if (showToast) TeclaApp.getInstance().showToast(R.string.fullscreen_enabled);
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch shown");
 				evaluateStartScanning();
 			} else {
-				startFullScreenSwitchMode(1000);
+				startFullScreenSwitchMode(1000, showToast);
 			}
 		}
-	};
+		
+	}
 
 	/**
 	 * Listener for full-screen single switch long press
