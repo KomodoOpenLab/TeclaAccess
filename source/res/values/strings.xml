@@ -253,6 +253,10 @@
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
 
+    <!-- Option to recognoze gestures in fullscreen switch mode -->
+	<string name="recognize_gestures">Recognize Gestures</string>
+	<string name="recognize_gestures_summary">Recognize gestures and act accordingly</string>
+    
     <!-- Option to enable self-scanning -->
 	<string name="self_scanning">Enable self-scanning</string>
 	<string name="self_scanning_summary">Scans the keyboard automatically</string>
