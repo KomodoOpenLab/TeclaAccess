@@ -252,6 +252,8 @@ public class TeclaIME extends InputMethodService
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
 		}
 		mKeyboardSwitcher.makeKeyboards(true);
+		if(mSwitchPopup != null)
+			mSwitchPopup.update();
 		super.onConfigurationChanged(conf);
 	}
 
