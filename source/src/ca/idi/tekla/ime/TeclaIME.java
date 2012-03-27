@@ -228,6 +228,14 @@ public class TeclaIME extends InputMethodService
 		SepManager.stop(this);
 	}
 
+	
+	/**
+	 * Called when the configuration changes. 
+	 * Used here to detect when the screen orientation changes
+	 * If fullscreen switch is enabled, it needs to change size
+	 * to fit the new screen orientation, and the keyboard needs
+	 * altered as well.
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
 		if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
@@ -237,7 +245,13 @@ public class TeclaIME extends InputMethodService
 		if (conf.orientation != mOrientation) {
 			commitTyped(getCurrentInputConnection());
 			mOrientation = conf.orientation;
-			startFullScreenSwitchMode(500, false);
+			
+			// If the fullscreen switch is enabled, change its size/shape
+			if(TeclaApp.persistence.isFullscreenSwitchEnabled()) {
+				if(TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen rotated while fullscreen switch enabled. Changing size.");
+				startFullScreenSwitchMode(500, false);
+			}
+				
 		}
 		if (mKeyboardSwitcher == null) {
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
@@ -604,10 +618,6 @@ public class TeclaIME extends InputMethodService
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
 				startFullScreenSwitchMode(500, true);
-			}
-			if (action.equals(TeclaApp.ACTION_RESTART_FS_SWITCH_MODE)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received restart fullscreen switch mode intent.");
-				startFullScreenSwitchMode(500, false);
 			}
 			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start scanning IME intent.");
@@ -1403,7 +1413,6 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_SHOW_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_HIDE_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_START_FS_SWITCH_MODE));
-		//registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_RESTART_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_STOP_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_START_SCANNING));
 		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_STOP_SCANNING));
