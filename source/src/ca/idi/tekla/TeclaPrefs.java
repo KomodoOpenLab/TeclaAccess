@@ -25,11 +25,13 @@ import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -309,7 +311,20 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefInverseScanning.setChecked(false);
 					mPrefInverseScanning.setEnabled(false);
 				}
-				SepManager.stop(getApplicationContext());
+				AlertDialog.Builder mShieldBuilder = new AlertDialog.Builder(this);
+				mShieldBuilder.setMessage(R.string.shield_disconnect_confirmation_msg)
+				       .setCancelable(false)
+				       .setPositiveButton(R.string.shield_disconnect_confirmation_yes, new DialogInterface.OnClickListener() {
+				           public void onClick(DialogInterface dialog, int id) {
+				        	   SepManager.stop(getApplicationContext());
+				        	   dialog.cancel();
+				           }
+				       })
+				       .setNegativeButton(R.string.shield_disconnect_confirmation_no, new DialogInterface.OnClickListener() {
+				           public void onClick(DialogInterface dialog, int id) {
+				        	   dialog.cancel();
+				           }
+				       });
 			}
 		}
 		if (key.equals(Persistence.PREF_FULLSCREEN_SWITCH)) {
