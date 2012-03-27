@@ -23,6 +23,7 @@ public class Persistence {
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
 	public static final String PREF_SHIELD_ADDRESS = "shield_address";
 	public static final String PREF_FULLSCREEN_SWITCH = "fullscreen_switch";
+	public static final String PREF_RECOGNIZE_GESTURES = "recognize_gestures";
 	public static final String PREF_SELF_SCANNING = "self_scanning";
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
@@ -155,6 +156,14 @@ public class Persistence {
 	public void setScanDelay(int delay) {
 		prefs_editor.putInt(PREF_SCAN_DELAY_INT, delay);
 		prefs_editor.commit();
+	}
+	
+	public void setGestureRecognitionEnabled(boolean set){
+		prefs_editor.putBoolean(PREF_RECOGNIZE_GESTURES, set);
+	}
+
+	public boolean isGestureRecognitionEnabled(){
+		return shared_prefs.getBoolean(PREF_RECOGNIZE_GESTURES, false);
 	}
 
 	public int getScanDelay() {
