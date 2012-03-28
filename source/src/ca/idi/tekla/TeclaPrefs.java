@@ -368,7 +368,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					
 					public void onCancel(DialogInterface dialog) {
 						if(mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()){
-							TeclaApp.getInstance().showToast("shutting off");
 							mBluetoothAdapter.cancelDiscovery();
 						}
 						
