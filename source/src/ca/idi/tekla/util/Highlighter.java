@@ -28,6 +28,8 @@ public class Highlighter {
 	public static final int HIGHLIGHT_PREV = 0xAA; // arbitrary number.
 	public static final int DEPTH_ROW = 0x0F; // arbitrary number.
 	public static final int DEPTH_KEY = 0xF0; // arbitrary number.
+
+	private static boolean extendDwellTime = false;
 	
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
@@ -110,6 +112,8 @@ public class Highlighter {
 	public void doSelectRow() {
 		initRowHighlighting();
 		if (TeclaApp.persistence.isSelfScanningEnabled()) {
+			// Extends dwell time for first key after a row-key transition.
+			extendDwellTime = true;
 			resumeSelfScanning();
 		}
 	}
@@ -209,9 +213,14 @@ public class Highlighter {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
-			move(Highlighter.HIGHLIGHT_NEXT);
+			
+			if(!extendDwellTime){
+				move(Highlighter.HIGHLIGHT_NEXT);
+			}
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
+			extendDwellTime = false;
 		}
+		
 	};
 	
 	/**
