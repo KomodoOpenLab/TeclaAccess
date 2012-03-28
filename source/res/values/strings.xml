@@ -253,9 +253,9 @@
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
 
-    <!-- Option to recognoze gestures in fullscreen switch mode -->
-	<string name="recognize_gestures">Recognize Gestures</string>
-	<string name="recognize_gestures_summary">Recognize gestures and act accordingly</string>
+    <!-- Option to recognize gestures in fullscreen switch mode -->
+	<string name="recognize_gestures">Swipe to change scanning direction</string>
+	<string name="recognize_gestures_summary">Changes the self-scanning direction when swiping left/right in fullscreen switch mode</string>
     
     <!-- Option to enable self-scanning -->
 	<string name="self_scanning">Enable self-scanning</string>
