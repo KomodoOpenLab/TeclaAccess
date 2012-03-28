@@ -30,6 +30,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -362,7 +364,15 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private void showDiscoveryDialog() {
 		mProgressDialog = ProgressDialog.show(this, "", 
-				getString(R.string.searching_for_shields), true, true);
+				getString(R.string.searching_for_shields), true, true, new OnCancelListener() {
+					
+					public void onCancel(DialogInterface dialog) {
+						if(mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()){
+							mBluetoothAdapter.cancelDiscovery();
+						}
+						
+					}
+				});
 	}
 
 	private void closeDialog() {
