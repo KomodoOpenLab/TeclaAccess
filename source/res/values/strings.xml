@@ -282,8 +282,13 @@
 	<string name="shield_disconnected">Tecla Shield disconnected</string>
 	<string name="no_voice_input_available">No speech recognition applications available!</string>
 	<string name="no_voice_actions_installed">Voice Actions is not installed!</string>
+	
+	<!--  Alert when disconnecting the shield -->
+	<string name="shield_disconnect_confirmation_msg">Are you sure you want to disconnect the shield?</string>
+	<string name="shield_disconnect_confirmation_yes">Yes</string>
+	<string name="shield_disconnect_confirmation_no">No</string>
 
-	<!-- Tecla: Titles and labels -->
+		<!-- Tecla: Titles and labels -->
 	<string name="sep_label">Switch event provider</string>
 	<string name="voice_input">Tecla Voice Input</string>
 	<string name="configuring_tecla">Configuring Tecla...</string>
