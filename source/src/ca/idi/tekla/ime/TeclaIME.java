@@ -1747,10 +1747,10 @@ public class TeclaIME extends InputMethodService
 				if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					TeclaApp.highlighter.pauseSelfScanning();
 				}
-				if(swipeDir == -1 && TeclaApp.persistence.isGestureRecognitionEnabled()){
+				if(swipeDir == -1 && TeclaApp.persistence.isSwipeDetectionEnabled()){
 					TeclaApp.highlighter.setScanDirection(Highlighter.HIGHLIGHT_PREV);
 				}
-				else if(swipeDir == 1 && TeclaApp.persistence.isGestureRecognitionEnabled()){
+				else if(swipeDir == 1 && TeclaApp.persistence.isSwipeDetectionEnabled()){
 					TeclaApp.highlighter.setScanDirection(Highlighter.HIGHLIGHT_NEXT);
 				}
 				}

@@ -86,9 +86,9 @@
             android:title="@string/scanning_category"
             android:key="scanning_settings">
 		<CheckBoxPreference
-			android:key="recognize_gestures"
-			android:title="@string/recognize_gestures"
-			android:summary="@string/recognize_gestures_summary"
+			android:key="detect_swipe"
+			android:title="@string/detect_swipe"
+			android:summary="@string/detect_swipe_summary"
 			android:persistent="true"
 			android:defaultValue="false"
 			/>
