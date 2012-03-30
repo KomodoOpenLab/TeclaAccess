@@ -35,6 +35,7 @@ public class Highlighter {
 	private boolean mWasShowingVariants;
 	private TeclaKeyboardView mIMEView;
 	private Handler mHandler;
+	private int scanDirection = Highlighter.HIGHLIGHT_NEXT;
 
 	public Highlighter(Context context) {
 
@@ -209,7 +210,7 @@ public class Highlighter {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
-			move(Highlighter.HIGHLIGHT_NEXT);
+			move(scanDirection);
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}
 	};
@@ -226,6 +227,7 @@ public class Highlighter {
 			}
 		}
 	};
+
 
 	/** 
 	 * Start highlighting the current keyboard. Automatically handles single row keyboards.
@@ -247,6 +249,7 @@ public class Highlighter {
 				mScanRowCounter = 0;
 			}
 		}
+		scanDirection = Highlighter.HIGHLIGHT_NEXT;
 		restoreHighlight();
 	}
 
@@ -300,4 +303,11 @@ public class Highlighter {
 		mHandler.sendMessage(msg);  
 	}
 
+	public void setScanDirection(int scanDirection) {
+		this.scanDirection = scanDirection;
+	}
+
+	public int getScanDirection() {
+		return scanDirection;
+	}
 }
