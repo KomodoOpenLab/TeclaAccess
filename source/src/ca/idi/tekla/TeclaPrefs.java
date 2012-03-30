@@ -66,6 +66,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+
+	private CheckBoxPreference mPrefDetectSwipe;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private ProgressDialog mProgressDialog;
@@ -102,6 +104,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
+		mPrefDetectSwipe = (CheckBoxPreference) findPreference(Persistence.PREF_DETECT_SWIPE);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
@@ -115,6 +118,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefPersistentKeyboard.setEnabled(false);
 			mPrefAutohideTimeout.setEnabled(false);
 			mPrefFullScreenSwitch.setEnabled(false);
+			mPrefDetectSwipe.setEnabled(false);
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
@@ -290,6 +294,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 								mPrefInverseScanning.setEnabled(false);
 								mPrefFullScreenSwitch.setChecked(false);
 								mPrefConnectToShield.setChecked(false);
+								mPrefDetectSwipe.setEnabled(false);
 								TeclaApp.getInstance().requestHideIMEView();
 								dialog.cancel();
 				           }
@@ -392,6 +397,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefSelfScanning.setChecked(true);
 				}
 				mPrefAutohideTimeout.setEnabled(false);
+				mPrefDetectSwipe.setEnabled(true);
 				TeclaApp.persistence.setNeverHideNavigationKeyboard();
 			} else {
 				if (!mPrefConnectToShield.isChecked()) {
@@ -399,12 +405,16 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefSelfScanning.setEnabled(false);
 					mPrefInverseScanning.setChecked(false);
 					mPrefInverseScanning.setEnabled(false);
+					mPrefDetectSwipe.setEnabled(false);
 				}
 				if (mPrefPersistentKeyboard.isChecked()) {
 					mPrefAutohideTimeout.setEnabled(true);
 				}
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}
+		}
+		if(key.equals(Persistence.PREF_DETECT_SWIPE)){
+			TeclaApp.persistence.setSwipeDetectionEnabled(mPrefDetectSwipe.isChecked());
 		}
 		if (key.equals(Persistence.PREF_SELF_SCANNING)) {
 			if (mPrefSelfScanning.isChecked()) {

@@ -24,6 +24,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GesturePoint;
+import android.gesture.GestureStroke;
+import android.gesture.Prediction;
+import android.graphics.Point;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -159,6 +167,8 @@ public class TeclaIME extends InputMethodService
 	private String mWordSeparators;
 	private String mSentenceSeparators;
 
+	private static final float CLICK_THRESHOLD =  10.0f;
+
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -198,7 +208,6 @@ public class TeclaIME extends InputMethodService
 		mOrientation = conf.orientation;
 
 		mVibrateDuration = getResources().getInteger(R.integer.vibrate_duration_ms);
-
 		// register to receive ringer mode changes for silent mode
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
@@ -1383,12 +1392,13 @@ public class TeclaIME extends InputMethodService
 	 */
 	private static final String CLASS_TAG = "IME: ";
 
+
 	//TODO: Try moving these variables to TeclaApp class
 	private String mVoiceInputString;
 	private int mLastKeyboardMode, mLastFullKeyboardMode;
 	private boolean mShieldConnected, mRepeating;
 	private PopupWindow mSwitchPopup;
-	private View mSwitch;
+	private GestureOverlayView mSwitch;
 	private Handler mTeclaHandler;
 	private int[] mKeyCodes;
 	private boolean mIsNavKbdTimedOut;
@@ -1661,11 +1671,11 @@ public class TeclaIME extends InputMethodService
 				Display display = getDisplay();
 				if (mSwitchPopup == null) {
 					//Create single-switch pop-up
-					mSwitch = getLayoutInflater().inflate(R.layout.popup_fullscreen_transparent, null);
-					mSwitch.setOnTouchListener(mSwitchTouchListener);
-					mSwitch.setOnClickListener(mSwitchClickListener);
+					View mPopupLayout = getLayoutInflater().inflate(R.layout.popup_fullscreen_transparent, null);
+					mSwitchPopup = new PopupWindow(mPopupLayout);
+					mSwitch = (GestureOverlayView) mSwitchPopup.getContentView().findViewById(R.id.gestures);
+					mSwitch.addOnGestureListener(mGestureListener);
 					mSwitch.setOnLongClickListener(mSwitchLongPressListener);
-					mSwitchPopup = new PopupWindow(mSwitch);
 				}
 				if (mSwitchPopup.isShowing()) mSwitchPopup.dismiss();
 				mSwitchPopup.setWidth(display.getWidth());
@@ -1696,27 +1706,26 @@ public class TeclaIME extends InputMethodService
 		}
 	};
 
-	/**
-	 * Listener for full-screen switch actions
-	 */
-	private View.OnTouchListener mSwitchTouchListener = new View.OnTouchListener() {
+	private GestureOverlayView.OnGestureListener mGestureListener = new GestureOverlayView.OnGestureListener() {
+
+		Point startPoint,endPoint;
 		
-		public boolean onTouch(View v, MotionEvent event) {
-			switch (event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
-				mSwitch.setBackgroundResource(R.color.switch_pressed);
-				vibrate();
-				playKeyClick(KEYCODE_ENTER);
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					TeclaApp.highlighter.resumeSelfScanning();
-				} else {
-					selectHighlighted(false);
-				}
-				break;
-			case MotionEvent.ACTION_UP:
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
-				mSwitch.setBackgroundResource(android.R.color.transparent);
+		public void onGesture(GestureOverlayView overlay, MotionEvent event) {
+		}
+
+		public void onGestureCancelled(GestureOverlayView overlay,
+				MotionEvent event) {
+		}
+
+		public void onGestureEnded(GestureOverlayView overlay, MotionEvent event) {
+			endPoint = new Point((int)event.getX(),(int)event.getY());
+			if(startPoint == null)
+				startPoint = endPoint;
+			double gestureLength = Math.sqrt(Math.pow(endPoint.x-startPoint.x, 2)+Math.pow(endPoint.y-startPoint.y, 2));
+			int swipeDir = (endPoint.x-startPoint.x<0)?-1:1;
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
+			mSwitch.setBackgroundResource(android.R.color.transparent);
+			if(gestureLength < CLICK_THRESHOLD){
 				if (TeclaApp.persistence.isInverseScanningEnabled()) {
 					if (TeclaApp.persistence.isInverseScanningChanged()) {
 						//Ignore event right after Inverse Scanning is Enabled
@@ -1728,22 +1737,39 @@ public class TeclaIME extends InputMethodService
 						selectHighlighted(false);
 					}
 				}
-				break;
-			default:
-				break;
+				else{
+					selectHighlighted(false);
+				}
 			}
-			return false;
+			else{
+				//User can keep press down the screen then slide and then up the touch
+				//which will cause inverse scanning to improperly function
+				if (TeclaApp.persistence.isInverseScanningEnabled()) {
+					TeclaApp.highlighter.pauseSelfScanning();
+				}
+				if(swipeDir == -1 && TeclaApp.persistence.isSwipeDetectionEnabled()){
+					TeclaApp.highlighter.setScanDirection(Highlighter.HIGHLIGHT_PREV);
+				}
+				else if(swipeDir == 1 && TeclaApp.persistence.isSwipeDetectionEnabled()){
+					TeclaApp.highlighter.setScanDirection(Highlighter.HIGHLIGHT_NEXT);
+				}
+				}
+			}
+	
+		public void onGestureStarted(GestureOverlayView overlay,
+				MotionEvent event) {
+			startPoint = new Point((int)event.getX(),(int)event.getY());
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
+			mSwitch.setBackgroundResource(R.color.switch_pressed);
+			vibrate();
+			playKeyClick(KEYCODE_ENTER);
+			if (TeclaApp.persistence.isInverseScanningEnabled()) {
+				TeclaApp.highlighter.resumeSelfScanning();
+			}
 		}
-	};
 
-	private View.OnClickListener mSwitchClickListener =  new View.OnClickListener() {
-		
-		public void onClick(View v) {
-			//Doing this here again because the ACTION_UP event in the onTouch listener doesn't always work.
-			mSwitch.setBackgroundResource(android.R.color.transparent);
-		}
 	};
-
+	
 	private void stopFullScreenSwitchMode() {
 		if (isFullScreenShowing()) {
 			mSwitchPopup.dismiss();
