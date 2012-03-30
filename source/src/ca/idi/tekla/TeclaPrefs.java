@@ -62,6 +62,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+
 	private CheckBoxPreference mPrefDetectSwipe;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
