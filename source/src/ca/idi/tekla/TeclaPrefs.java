@@ -61,8 +61,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
-	private CheckBoxPreference mPrefDetectSwipe;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+	private CheckBoxPreference mPrefDetectSwipe;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private ProgressDialog mProgressDialog;
