@@ -310,7 +310,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				alertDialog.show();
 			}
 		}
-		else if(mPrefPersistentKeyboard_invalidate){
+		else if(key.equals(Persistence.PREF_PERSISTENT_KEYBOARD) && mPrefPersistentKeyboard_invalidate){
 			mPrefPersistentKeyboard_invalidate = false;
 		}
 		
