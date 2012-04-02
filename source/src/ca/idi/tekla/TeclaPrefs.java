@@ -369,6 +369,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					public void onCancel(DialogInterface arg0) {
 						if(mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()){
 							mBluetoothAdapter.cancelDiscovery();
+							//since we have cancelled the discovery the check state needs to be reset
+							mPrefConnectToShield.setChecked(false);
 						}
 						
 					}});
