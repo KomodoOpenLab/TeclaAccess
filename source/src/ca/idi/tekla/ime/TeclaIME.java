@@ -708,6 +708,10 @@ public class TeclaIME extends InputMethodService
 
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
 		
+		//prevent by double call
+		if (isNaviKey(primaryCode) && when < mLastKeyTime + QUICK_PRESS)
+			return;
+
 		if (primaryCode != Keyboard.KEYCODE_DELETE || 
 				when > mLastKeyTime + QUICK_PRESS) {
 			mDeleteCount = 0;
@@ -1156,10 +1160,16 @@ public class TeclaIME extends InputMethodService
 	public void onPress(int primaryCode) {
 		vibrate();
 		playKeyClick(primaryCode);
+		if (isNaviKey(primaryCode)) {
+			mKeyCodes = new int[] {primaryCode};
+			mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
+			mTeclaHandler.postDelayed(mRepeatKeyRunnable, TeclaApp.persistence.getScanDelay());
+		}
 	}
 
 	public void onRelease(int primaryCode) {
 		//vibrate();
+		mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
 	}
 
 	// update flags for silent mode
@@ -1547,6 +1557,11 @@ public class TeclaIME extends InputMethodService
 			//Selected item is a row
 			TeclaApp.highlighter.doSelectRow();
 		}
+	}
+
+	private boolean isNaviKey(int keycode) {
+		return ((keycode >= KeyEvent.KEYCODE_DPAD_UP) && (keycode <= KeyEvent.KEYCODE_DPAD_CENTER))
+				|| (keycode == KeyEvent.KEYCODE_BACK);
 	}
 
 	private boolean isSpecialKey(int keycode) {
