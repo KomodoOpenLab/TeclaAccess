@@ -9,4 +9,16 @@
 		<item>60</item>
 		<item>-1</item>
 	</integer-array>
+	<integer-array name="full_reset_values">
+		<item>3</item>
+		<item>6</item>
+		<item>9</item>
+		<item>12</item>
+		<item>15</item>
+		<item>18</item>
+		<item>21</item>
+		<item>24</item>
+		<item>27</item>
+		<item>-1</item>
+	</integer-array>
 </resources>

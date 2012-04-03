@@ -250,6 +250,23 @@
 		<item>Never</item>
 	</string-array>
 
+    <!-- Option to set full reset timeout -->
+	<string name="full_reset_timeout">Full Reset Timeout</string>
+	<string name="full_reset_timeout_summary">Full Reset Timeout Summary</string>
+    <string name="full_reset_timeout_dlg_title">Set Full Reset Timeout</string>
+    <string-array name="full_reset_strings">
+		<item>After 3 seconds</item>
+		<item>After 6 seconds</item>
+		<item>After 9 seconds</item>
+		<item>After 12 seconds</item>
+		<item>After 15 seconds</item>
+		<item>After 18 seconds</item>
+		<item>After 21 seconds</item>
+		<item>After 24 seconds</item>
+		<item>After 27 seconds</item>
+		<item>Never</item>
+	</string-array>
+	
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
 

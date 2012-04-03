@@ -80,6 +80,12 @@
 			android:summary="@string/autohide_timeout_summary"
 			android:persistent="true"
 			/>
+		<Preference
+			android:key="full_reset_timeout"
+			android:title="@string/full_reset_timeout"
+			android:summary="@string/full_reset_timeout_summary"
+			android:persistent="true"
+			/>
     </PreferenceCategory>            
 
     <PreferenceCategory
