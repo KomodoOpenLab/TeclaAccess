@@ -289,7 +289,7 @@
   	<string name="shield_disconnect_confirmation_no">No</string>
 	
 	<!-- Tecla: Titles and labels -->
-	<string name="sep_label">Switch event provider</string>
+	<string name="sep_label">Tecla Shield Connection Status</string>
 	<string name="voice_input">Tecla Voice Input</string>
 	<string name="configuring_tecla">Configuring Tecla...</string>
 
