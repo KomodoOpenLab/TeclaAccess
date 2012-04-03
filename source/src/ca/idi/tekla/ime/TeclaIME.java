@@ -709,7 +709,9 @@ public class TeclaIME extends InputMethodService
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
 		
 		//prevent by double call
-		if (isNaviKey(primaryCode) && when < mLastKeyTime + QUICK_PRESS)
+		if (isNaviKey(primaryCode)
+				&& !TeclaApp.persistence.isInverseScanningEnabled()
+				&& when < mLastKeyTime + QUICK_PRESS)
 			return;
 
 		if (primaryCode != Keyboard.KEYCODE_DELETE || 
@@ -1160,7 +1162,7 @@ public class TeclaIME extends InputMethodService
 	public void onPress(int primaryCode) {
 		vibrate();
 		playKeyClick(primaryCode);
-		if (isNaviKey(primaryCode)) {
+		if (isNaviKey(primaryCode) && !TeclaApp.persistence.isInverseScanningEnabled()) {
 			mKeyCodes = new int[] {primaryCode};
 			mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
 			mTeclaHandler.postDelayed(mRepeatKeyRunnable, TeclaApp.persistence.getScanDelay());
