@@ -86,6 +86,13 @@
             android:title="@string/scanning_category"
             android:key="scanning_settings">
 		<CheckBoxPreference
+			android:key="detect_swipe"
+			android:title="@string/detect_swipe"
+			android:summary="@string/detect_swipe_summary"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
+     	<CheckBoxPreference
 			android:key="self_scanning"
 			android:title="@string/self_scanning"
 			android:summary="@string/self_scanning_summary"
