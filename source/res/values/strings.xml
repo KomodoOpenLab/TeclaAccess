@@ -253,6 +253,10 @@
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
 
+    <!-- Option to detect swipe in fullscreen switch mode -->
+	<string name="detect_swipe">Swipe to change scanning direction</string>
+	<string name="detect_swipe_summary">Changes the self-scanning direction when swiping left/right in fullscreen switch mode</string>
+    
     <!-- Option to enable self-scanning -->
 	<string name="self_scanning">Enable self-scanning</string>
 	<string name="self_scanning_summary">Scans the keyboard automatically</string>
