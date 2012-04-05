@@ -62,6 +62,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private ProgressDialog mProgressDialog;
@@ -95,6 +96,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
+		mPrefSpeakerPhoneSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_SPEAKERPHONE_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
@@ -265,7 +267,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
+				//TeclaApp.getInstance().useSpeakerphone();
 				mPrefAutohideTimeout.setEnabled(true);
+				
 				// Show keyboard immediately
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
@@ -336,6 +340,15 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}
 		}
+		
+		if (key.equals(Persistence.PREF_SPEAKERPHONE_SWITCH)) {
+			if (mPrefSpeakerPhoneSwitch.isChecked()) {				
+				TeclaApp.getInstance().useSpeakerphone();				
+			} else {
+				TeclaApp.getInstance().stopUsingSpeakerPhone();
+			}
+		}
+		
 		if (key.equals(Persistence.PREF_SELF_SCANNING)) {
 			if (mPrefSelfScanning.isChecked()) {
 				mPrefInverseScanning.setChecked(false);
