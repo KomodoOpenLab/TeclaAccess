@@ -160,6 +160,7 @@ public class Persistence {
 	
 	public void setSwipeDetectionEnabled(boolean set){
 		prefs_editor.putBoolean(PREF_DETECT_SWIPE, set);
+		prefs_editor.commit();
 	}
 
 	public boolean isSwipeDetectionEnabled(){
