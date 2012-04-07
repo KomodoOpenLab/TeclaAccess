@@ -67,6 +67,7 @@ import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
+import ca.idi.tekla.util.MapSwitchAction;
 import ca.idi.tekla.util.Persistence;
 
 /**
@@ -183,7 +184,6 @@ public class TeclaIME extends InputMethodService
 			}
 		}
 	};
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -203,7 +203,6 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 		initTeclaA11y();
-
 	}
 	
 	private void initSuggest(String locale) {
@@ -1439,6 +1438,7 @@ public class TeclaIME extends InputMethodService
 
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
+		switchEvent = MapSwitchAction.getMappedSwitchEvent(switchEvent, getResources().getStringArray(R.array.switch_actions));
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();

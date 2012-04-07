@@ -4,10 +4,15 @@
 
 package ca.idi.tekla.util;
 
+import java.util.LinkedList;
+import java.util.List;
+import ca.idi.tekla.R;
+
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class Persistence {
 	
@@ -26,12 +31,15 @@ public class Persistence {
 	public static final String PREF_SELF_SCANNING = "self_scanning";
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
+	public static final String PREF_SWITCH_ACTIONS = "map_switch_actions";
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int MAX_SCAN_DELAY = 3000;
 	public static final int MIN_SCAN_DELAY = 250;
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
 	
+	private static final String delimiter = "@##@";
+	private String[] default_switch_action_map;
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
 	
 	private SharedPreferences shared_prefs;
@@ -42,7 +50,7 @@ public class Persistence {
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
 		mVariantsShowing = false;
-		
+		default_switch_action_map = context.getResources().getStringArray(R.array.switch_actions);
 	}
 	
 	public boolean isScreenOn() {
@@ -159,6 +167,45 @@ public class Persistence {
 
 	public int getScanDelay() {
 		return shared_prefs.getInt(PREF_SCAN_DELAY_INT, DEFAULT_SCAN_DELAY);
+	}
+
+	public void setSwitchActionMap(String[] switch_actions){
+		String str_to_save = "";
+		if(switch_actions != null)
+			for(int i=0;i<switch_actions.length;i++){
+				str_to_save += switch_actions[i] + delimiter;
+			}
+		else{
+			str_to_save = "";
+		}
+		//Log.d("Persistence : saving map", str_to_save);
+		prefs_editor.putString(PREF_SWITCH_ACTIONS, str_to_save);
+		prefs_editor.commit();
+	}
+
+	public String[] getSwitchActionMap(){
+		String str = shared_prefs.getString(PREF_SWITCH_ACTIONS, "");
+		//Log.d("Persistence : map recall", str);
+		if(str == null || str.equals(""))
+			return default_switch_action_map;
+		else{
+			List<String>list = new LinkedList<String>();
+			int i=0,new_index=0;
+			while(i<str.length()){
+				if((new_index = str.indexOf(delimiter,i))==-1){
+					break;
+				}
+				else{
+					list.add(str.substring(i, new_index));
+				}
+				i = new_index+delimiter.length();
+			}
+			String[] switch_action_arr = new String[list.size()];
+			for(i=0;i<switch_action_arr.length;i++){
+				switch_action_arr[i] = list.get(i);
+			}
+			return switch_action_arr;
+		}
 	}
 
 }

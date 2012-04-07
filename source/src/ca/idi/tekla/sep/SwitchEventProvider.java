@@ -353,7 +353,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, switchChanges);
 			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, switchStates);
 			// Broadcast event
-			sendBroadcast(mSwitchEventIntent);
+			sendOrderedBroadcast(mSwitchEventIntent,null);
 		}
 	}
 

@@ -80,7 +80,13 @@
 			android:summary="@string/autohide_timeout_summary"
 			android:persistent="true"
 			/>
-    </PreferenceCategory>            
+		<Preference
+			android:key="map_switch_actions"
+			android:title="@string/configure_input"
+			android:summary="@string/configure_input_summary"
+			android:persistent="true"
+			/>
+	</PreferenceCategory>
 
     <PreferenceCategory
             android:title="@string/scanning_category"

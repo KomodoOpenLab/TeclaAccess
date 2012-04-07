@@ -7,7 +7,7 @@
 		<activity
 			android:name=".TeclaPrefs"
 			android:label="@string/english_ime_settings"
-			android:noHistory="true">
+			android:noHistory="false">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -28,6 +28,13 @@
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
 		</activity>
+		<activity
+			android:name=".util.MapSwitchAction"
+			android:theme="@style/Theme.Dialog.NoTitleDialog">
+			<intent-filter android:priority="2">
+				<action android:name="ca.idi.tekla.sdk.action.SWITCH_EVENT_RECEIVED"/>
+			</intent-filter>
+		</activity>
 		<service
 			android:name=".ime.TeclaIME"
 			android:label="@string/english_ime_name"
@@ -35,6 +42,9 @@
 			>
 			<intent-filter>
 				<action android:name="android.view.InputMethod" />
+			</intent-filter>
+			<intent-filter android:priority="1">
+				<action android:name="ca.idi.tekla.sdk.action.SWITCH_EVENT_RECEIVED" />
 			</intent-filter>
 			<meta-data
 				android:name="android.view.im"
@@ -58,6 +68,7 @@
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
 	<uses-sdk android:minSdkVersion="5"></uses-sdk>
 
 </manifest>

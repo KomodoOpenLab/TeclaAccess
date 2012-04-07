@@ -8,4 +8,7 @@
     <item name="android:windowIsFloating">true</item>
     <item name="android:backgroundDimEnabled">false</item>
   </style>
+  <style name="Theme.Dialog.NoTitleDialog" parent="android:Theme.Dialog">
+	<item name="android:windowNoTitle">true</item>
+  </style>
 </resources>
