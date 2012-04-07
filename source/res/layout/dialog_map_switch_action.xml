@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:id="@+id/action_display_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/mapped_switch_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_keyboard_key" 
+            android:layout_gravity="center" 
+            android:layout_margin="5dp"/>
+			
+        <TextView
+            android:id="@+id/current_switch_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_switch_action"
+            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:layout_marginRight="5dp"/>
+
+
+        </LinearLayout>
+
+    <Button
+        android:id="@+id/switch_action_mapping_done"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/done_mapping" 
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/switch_action_mapping_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel_mapping" 
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"/>
+
+</LinearLayout>
