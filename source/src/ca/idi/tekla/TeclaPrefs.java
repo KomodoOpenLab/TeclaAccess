@@ -234,11 +234,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
+				mPrefConfigureInput.setEnabled(true);
 			}
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
 				closeDialog();
+				mPrefConfigureInput.setEnabled(false);
 			}
 		}
 	};
