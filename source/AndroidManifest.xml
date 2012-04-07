@@ -31,9 +31,6 @@
 		<activity
 			android:name=".util.MapSwitchAction"
 			android:theme="@style/Theme.Dialog.NoTitleDialog">
-			<intent-filter android:priority="2">
-				<action android:name="ca.idi.tekla.sdk.action.SWITCH_EVENT_RECEIVED"/>
-			</intent-filter>
 		</activity>
 		<service
 			android:name=".ime.TeclaIME"
@@ -42,9 +39,6 @@
 			>
 			<intent-filter>
 				<action android:name="android.view.InputMethod" />
-			</intent-filter>
-			<intent-filter android:priority="1">
-				<action android:name="ca.idi.tekla.sdk.action.SWITCH_EVENT_RECEIVED" />
 			</intent-filter>
 			<meta-data
 				android:name="android.view.im"
