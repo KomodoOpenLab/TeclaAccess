@@ -20,7 +20,6 @@ import android.widget.TextView;
 import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
-import ca.idi.tekla.TeclaPrefs;
 
 public class MapSwitchAction extends Activity {
 	
@@ -47,7 +46,6 @@ public class MapSwitchAction extends Activity {
 	Intent mSwitchIntent;
 	
 	private BroadcastReceiver mReceiver = new BroadcastReceiver(){
-
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -79,13 +77,13 @@ public class MapSwitchAction extends Activity {
 	
 	/*
 	 * @param switchEvent the switchEvent to be transformed
-	 * @param defaultMapResource the string-array switch_action_map defined
 	 * Changes the switchEvent according to the currently defined mapping
 	*/
-	public static SwitchEvent getMappedSwitchEvent(SwitchEvent switchEvent, String[] defaultMapResource){
+	public static SwitchEvent getMappedSwitchEvent(SwitchEvent switchEvent){
 		//Log.d("MapSwitchAction","binary of 2 " + Integer.toBinaryString(2));
 		//Log.d("MapSwitchAction","integer of binary string 011 " + Integer.parseInt("011",2));
 		Log.d("MapSwitchAction : lowest bit last","old SwitchChanges : " + Integer.toBinaryString(switchEvent.getSwitchChanges()) +" old SwichStates : " + Integer.toBinaryString(switchEvent.getSwitchStates()));
+		String[] defaultMapResource = TeclaApp.getInstance().getResources().getStringArray(R.array.switch_actions);
 		//reversing so that the lowest bit is at the 0th index
 		StringBuilder switchChangesBuilder = new StringBuilder(Integer.toBinaryString(switchEvent.getSwitchChanges())).reverse().append(extra_zeros) ;
 		StringBuilder switchStatesBuilder = new StringBuilder(Integer.toBinaryString(switchEvent.getSwitchStates())).reverse().append(extra_zeros);

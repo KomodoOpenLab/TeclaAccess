@@ -1440,7 +1440,7 @@ public class TeclaIME extends InputMethodService
 
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
-		switchEvent = MapSwitchAction.getMappedSwitchEvent(switchEvent, getResources().getStringArray(R.array.switch_actions));
+		switchEvent = MapSwitchAction.getMappedSwitchEvent(switchEvent);
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
