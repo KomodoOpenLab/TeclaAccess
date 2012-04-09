@@ -82,7 +82,7 @@ public class MapSwitchAction extends Activity {
 	public static SwitchEvent getMappedSwitchEvent(SwitchEvent switchEvent){
 		//Log.d("MapSwitchAction","binary of 2 " + Integer.toBinaryString(2));
 		//Log.d("MapSwitchAction","integer of binary string 011 " + Integer.parseInt("011",2));
-		Log.d("MapSwitchAction : lowest bit last","old SwitchChanges : " + Integer.toBinaryString(switchEvent.getSwitchChanges()) +" old SwichStates : " + Integer.toBinaryString(switchEvent.getSwitchStates()));
+		if(DEBUG) Log.d("MapSwitchAction : lowest bit last","old SwitchChanges : " + Integer.toBinaryString(switchEvent.getSwitchChanges()) +" old SwichStates : " + Integer.toBinaryString(switchEvent.getSwitchStates()));
 		String[] defaultMapResource = TeclaApp.getInstance().getResources().getStringArray(R.array.switch_actions);
 		//reversing so that the lowest bit is at the 0th index
 		StringBuilder switchChangesBuilder = new StringBuilder(Integer.toBinaryString(switchEvent.getSwitchChanges())).reverse().append(extra_zeros) ;
@@ -94,11 +94,11 @@ public class MapSwitchAction extends Activity {
 			for(int oldSwitchIndex=0;oldSwitchIndex<defaultMapResource.length;oldSwitchIndex++){
 				int newSwitchIndex = isMappedTo(defaultMapResource[oldSwitchIndex], action_map);
 				//Log.d("MapSwitchAction",oldSwitchIndex + " maps to " + newSwitchIndex);
-				newSwitchChangesBuilder.setCharAt(newSwitchIndex, switchChangesBuilder.charAt(oldSwitchIndex));
-				newSwitchStatesBuilder.setCharAt(newSwitchIndex, switchStatesBuilder.charAt(oldSwitchIndex));
+				newSwitchChangesBuilder.setCharAt(oldSwitchIndex, switchChangesBuilder.charAt(newSwitchIndex));
+				newSwitchStatesBuilder.setCharAt(oldSwitchIndex, switchStatesBuilder.charAt(newSwitchIndex));
 			}
 		}
-		Log.d("MapSwitchAction : lowest bit last","new SwitchChanges : " + newSwitchChangesBuilder.reverse() +" new SwichStates : " + newSwitchStatesBuilder.reverse());
+		if(DEBUG) Log.d("MapSwitchAction : lowest bit last","new SwitchChanges : " + newSwitchChangesBuilder.reverse() +" new SwichStates : " + newSwitchStatesBuilder.reverse());
 		//reversing so that the lowest bit is at the highest index
 		return new SwitchEvent(Integer.parseInt(newSwitchChangesBuilder.reverse().toString(), 2), Integer.parseInt(newSwitchStatesBuilder.reverse().toString(), 2));
 	}
