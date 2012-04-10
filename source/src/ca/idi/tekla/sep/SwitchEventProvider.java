@@ -253,7 +253,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 						try {
 							inByte = mInStream.read();
 							if (TeclaApp.DEBUG) Log.v(TeclaApp.TAG, CLASS_TAG + "Byte received: " +
-									TeclaApp.getInstance().byte2Hex(inByte) + "at " + SystemClock.uptimeMillis());
+									TeclaApp.getInstance().byte2Hex(inByte) + " at " + SystemClock.uptimeMillis());
 							if (inByte != 0xffffffff) { // Work-around for Samsung Galaxy 
 								if (inByte == STATE_PING) {
 									mPingCounter--;

@@ -334,7 +334,7 @@ public class TeclaApp extends Application {
 	}
 
 	public void holdKeyguardLock() {
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Unlocking screen...");
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Acquiring keyguard lock...");
 		mKeyguardLock.disableKeyguard();
 	}
 	
@@ -355,10 +355,11 @@ public class TeclaApp extends Application {
 	 * @param length the number of seconds to hold the wake lock for
 	 */
 	public void holdWakeLock(long length) {
-		if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring wake lock...");
 		if (length > 0) {
+			if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring temporal wake lock...");
 			mWakeLock.acquire(length);
 		} else {
+			if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring wake lock...");
 			mWakeLock.acquire();
 		}
 		pokeUserActivityTimer();

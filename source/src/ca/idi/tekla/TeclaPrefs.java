@@ -167,6 +167,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		cancelDialog();
 		finish();
 	}
 
@@ -199,8 +200,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_3) )) {
 					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
 					mShieldFound = true;
-					mShieldAddress = dev.getAddress(); 
-					mShieldName = dev.getName();					if (mBluetoothAdapter.isDiscovering())
+					mShieldAddress = dev.getAddress();
+					mShieldName = dev.getName();
+					if (mBluetoothAdapter.isDiscovering())
 						mBluetoothAdapter.cancelDiscovery();
 				}
 			}
@@ -208,18 +210,18 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (intent.getAction().equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
 				if (mShieldFound) {
 					// Shield found, try to connect
-					if (!mProgressDialog.isShowing())
-						mProgressDialog.show();
 					mProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
 							" " + mShieldName);
+					if (!mProgressDialog.isShowing())
+						mProgressDialog.show();
 					if(!SepManager.start(TeclaPrefs.this, mShieldAddress)) {
-						// Could not connect to switch
-						closeDialog();
+						// Could not connect to Shield
+						dismissDialog();
 						TeclaApp.getInstance().showToast(R.string.couldnt_connect_shield);
 					}
 				} else {
 					// Shield not found
-					closeDialog();
+					dismissDialog();
 					mPrefConnectToShield.setChecked(false);
 					TeclaApp.getInstance().showToast(R.string.no_shields_inrange);
 				}
@@ -228,7 +230,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
 				mPrefPersistentKeyboard.setChecked(true);
-				closeDialog();
+				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
@@ -237,7 +239,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
-				closeDialog();
+				dismissDialog();
 			}
 		}
 	};
@@ -304,7 +306,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// switch event provider without breaking
 				// connection with other potential clients.
 				// Should perhaps use Binding?
-				closeDialog();
+				dismissDialog();
 				if (!mPrefFullScreenSwitch.isChecked()) {
 					mPrefSelfScanning.setChecked(false);
 					mPrefSelfScanning.setEnabled(false);
@@ -363,22 +365,30 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	}
 
 	private void showDiscoveryDialog() {
-		mProgressDialog = ProgressDialog.show(this, "", 
-				getString(R.string.searching_for_shields), true, true, new OnCancelListener(){
-
-					public void onCancel(DialogInterface arg0) {
-						if(mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()){
-							mBluetoothAdapter.cancelDiscovery();
-							//since we have cancelled the discovery the check state needs to be reset
-							mPrefConnectToShield.setChecked(false);
-						}
-						
-					}});
+		mProgressDialog.setMessage(getString(R.string.searching_for_shields));
+		mProgressDialog.setOnCancelListener(new OnCancelListener() {
+			public void onCancel(DialogInterface arg0) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Tecla Shield discovery cancelled");
+				if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()) {
+					mBluetoothAdapter.cancelDiscovery();
+					//since we have cancelled the discovery the check state needs to be reset
+					mPrefConnectToShield.setChecked(false);
+				}
+			}
+		});
+		mProgressDialog.show();
 	}
 
-	private void closeDialog() {
-		if (mProgressDialog != null && mProgressDialog.isShowing())
+	private void cancelDialog() {
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
+			mProgressDialog.cancel();
+		}
+	}
+
+	private void dismissDialog() {
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
 			mProgressDialog.dismiss();
+		}
 	}
 
 }
