@@ -198,12 +198,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if ((dev.getName() != null) && (
 						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_2) ||
 						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_3) )) {
-					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
 					mShieldFound = true;
 					mShieldAddress = dev.getAddress();
 					mShieldName = dev.getName();
-					if (mBluetoothAdapter.isDiscovering())
-						mBluetoothAdapter.cancelDiscovery();
+					if (mBluetoothAdapter.isDiscovering()) mBluetoothAdapter.cancelDiscovery();
+					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
 				}
 			}
 
@@ -212,8 +211,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					// Shield found, try to connect
 					mProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
 							" " + mShieldName);
-					if (!mProgressDialog.isShowing())
-						mProgressDialog.show();
 					if(!SepManager.start(TeclaPrefs.this, mShieldAddress)) {
 						// Could not connect to Shield
 						dismissDialog();
@@ -377,18 +374,21 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			}
 		});
 		mProgressDialog.show();
+		TeclaApp.getInstance().holdWakeLock();
 	}
 
 	private void cancelDialog() {
 		if (mProgressDialog != null && mProgressDialog.isShowing()) {
 			mProgressDialog.cancel();
 		}
+		TeclaApp.getInstance().releaseWakeLock();
 	}
 
 	private void dismissDialog() {
 		if (mProgressDialog != null && mProgressDialog.isShowing()) {
 			mProgressDialog.dismiss();
 		}
+		TeclaApp.getInstance().releaseWakeLock();
 	}
 
 }
