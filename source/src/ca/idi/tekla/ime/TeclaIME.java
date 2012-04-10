@@ -188,7 +188,7 @@ public class TeclaIME extends InputMethodService
 	public void onCreate() {
 		super.onCreate();
 		// Setup Debugging
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
 
 		//setStatusIcon(R.drawable.ime_qwerty);

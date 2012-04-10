@@ -37,7 +37,7 @@ public class TeclaApp extends Application {
 	/**
 	 * Main debug switch, turns on/off debugging for the whole app
 	 */
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
@@ -86,7 +86,7 @@ public class TeclaApp extends Application {
 	
 	private void init() {
 
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		Log.d(TAG, "TECLA APP STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
 		
 		persistence = new Persistence(this);

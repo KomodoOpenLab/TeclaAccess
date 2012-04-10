@@ -76,7 +76,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		
 		init();
 		

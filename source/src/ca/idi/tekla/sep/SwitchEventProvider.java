@@ -113,7 +113,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 	}
 
 	private void init() {
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating SEP...");
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
