@@ -366,12 +366,8 @@ public class TeclaApp extends Application {
 	}
 
 	public void releaseWakeLock () {
-		if (mWakeLock.isHeld()) {
-			if (DEBUG) Log.d(TeclaApp.TAG, "Releasing wake lock...");
-			mWakeLock.release();
-		} else {
-			if (DEBUG) Log.d(TeclaApp.TAG, "Wake lock not held, so not releasing");
-		}
+		if (DEBUG) Log.d(TeclaApp.TAG, "Releasing wake lock...");
+		mWakeLock.release();
 	}
 	
 	/**

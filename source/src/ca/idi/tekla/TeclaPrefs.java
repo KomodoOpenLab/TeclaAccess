@@ -181,8 +181,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private void discoverShield() {
 		mShieldFound = false;
-		if (mBluetoothAdapter.isDiscovering())
-			mBluetoothAdapter.cancelDiscovery();
+		if (mBluetoothAdapter.isDiscovering()) mBluetoothAdapter.cancelDiscovery();
 		mBluetoothAdapter.startDiscovery();
 		showDiscoveryDialog();
 	}
@@ -201,8 +200,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mShieldFound = true;
 					mShieldAddress = dev.getAddress();
 					mShieldName = dev.getName();
-					if (mBluetoothAdapter.isDiscovering()) mBluetoothAdapter.cancelDiscovery();
 					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
+					if (mBluetoothAdapter.isDiscovering()) mBluetoothAdapter.cancelDiscovery();
 				}
 			}
 
@@ -368,27 +367,24 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Tecla Shield discovery cancelled");
 				if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()) {
 					mBluetoothAdapter.cancelDiscovery();
-					//since we have cancelled the discovery the check state needs to be reset
-					mPrefConnectToShield.setChecked(false);
 				}
+				//since we have cancelled the discovery the check state needs to be reset
+				mPrefConnectToShield.setChecked(false);
 			}
 		});
 		mProgressDialog.show();
-		TeclaApp.getInstance().holdWakeLock();
 	}
 
 	private void cancelDialog() {
 		if (mProgressDialog != null && mProgressDialog.isShowing()) {
 			mProgressDialog.cancel();
 		}
-		TeclaApp.getInstance().releaseWakeLock();
 	}
 
 	private void dismissDialog() {
 		if (mProgressDialog != null && mProgressDialog.isShowing()) {
 			mProgressDialog.dismiss();
 		}
-		TeclaApp.getInstance().releaseWakeLock();
 	}
 
 }
