@@ -313,7 +313,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 			if ((switchChanges & SwitchEvent.SWITCH_E2) != SwitchEvent.SWITCH_E2) {
 				mSwitchStates |= SwitchEvent.SWITCH_E2;
 			}
-			
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {

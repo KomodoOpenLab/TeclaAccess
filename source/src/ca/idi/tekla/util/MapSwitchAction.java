@@ -23,14 +23,15 @@ import ca.idi.tekla.TeclaApp;
 
 public class MapSwitchAction extends Activity {
 	
+	private int currentCounter = -1;
+	private Handler mHandler;
+	/*Resources*/
 	private static String[] action_array;
 	private TextView currentTextView;	
 	private ImageView switchImageView;
 	private LinearLayout actionDisplayLayout;
 	private Button done_button;
 	private Button cancel_button;
-	private int currentCounter = -1;
-	//string resource
 	private String no_action_string ;
 	//loops looped since the last user
 	//input was received
@@ -42,8 +43,8 @@ public class MapSwitchAction extends Activity {
 	//receiving any event from the user
 	private static final int MAX_LOOP_COUNT = 2;
 	private static String extra_zeros = "00000000";
+	/*for debugging purposes*/
 	private static final boolean DEBUG = false;
-	Intent mSwitchIntent;
 	
 	private BroadcastReceiver mReceiver = new BroadcastReceiver(){
 		@Override
@@ -51,13 +52,12 @@ public class MapSwitchAction extends Activity {
 			String action = intent.getAction();
 			if(action.equals(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED)){
 				SwitchEvent newSwitchEvent = new SwitchEvent(intent.getExtras());
-				handleSwitchEvent(newSwitchEvent, currentCounter, -1, false);
+				handleSwitchEvent(newSwitchEvent, currentCounter);
 				abortBroadcast();
 			}
 		}
 	};
 	
-	private Handler mHandler = new Handler();
 		
 	//the switch index to which this action maps
 	private static int isMappedTo(String action, String[] mapping_array){
@@ -99,7 +99,10 @@ public class MapSwitchAction extends Activity {
 			}
 		}
 		if(DEBUG) Log.d("MapSwitchAction : lowest bit last","new SwitchChanges : " + newSwitchChangesBuilder.reverse() +" new SwichStates : " + newSwitchStatesBuilder.reverse());
+		//TeclaApp.getInstance().showToast("new SwitchChanges : " + newSwitchChangesBuilder.reverse() +" new SwichStates : " + newSwitchStatesBuilder.reverse());
 		//reversing so that the lowest bit is at the highest index
+		//TeclaApp.getInstance().showToast("switch states : " + TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "," + TeclaApp.getInstance().byte2Hex(Integer.parseInt(newSwitchStatesBuilder.reverse().toString(), 2)));
+		//TeclaApp.getInstance().showToast("switch changes : " + TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + "," + TeclaApp.getInstance().byte2Hex(Integer.parseInt(newSwitchChangesBuilder.reverse().toString(), 2)));
 		return new SwitchEvent(Integer.parseInt(newSwitchChangesBuilder.reverse().toString(), 2), Integer.parseInt(newSwitchStatesBuilder.reverse().toString(), 2));
 	}
 		
@@ -113,6 +116,10 @@ public class MapSwitchAction extends Activity {
 			return 2;
 		if(switchEvent.isPressed(SwitchEvent.SWITCH_J4))
 			return 3;
+		if(switchEvent.isPressed(SwitchEvent.SWITCH_E1))
+			return 4;
+		if(switchEvent.isPressed(SwitchEvent.SWITCH_E2))
+			return 5;
 		else return -1;
 	}
 	
@@ -122,70 +129,29 @@ public class MapSwitchAction extends Activity {
 	 * @param direction the key event generated for testing purposes
 	 * @param test whether testing is being done
 	 */	
-	protected void handleSwitchEvent(SwitchEvent newSwitchEvent, int currCounter, int direction, boolean test) {
+	protected void handleSwitchEvent(SwitchEvent newSwitchEvent, int currCounter) {
 		round = 0;
+		int switch_index = getSwitchIndex(newSwitchEvent);
 		//if the current item being displayed is Done button
-		if(currCounter == action_array.length){
+		if(currCounter == action_array.length && switch_index != -1){//to ensure that the switch has been released
 			TeclaApp.persistence.setSwitchActionMap(mappings);
 			TeclaApp.getInstance().showToast(R.string.configure_input_changes_saved);
 			finish();
 		}
 		//if the current item being displayed is Cancel button
-		else if(currCounter > action_array.length){
+		else if(currCounter > action_array.length && switch_index != -1){//to ensure that the switch has been released
 			TeclaApp.getInstance().showToast(R.string.configure_input_changes_discarded);
 			finish();
 		}
 		//if the current item being displayed is an action
-		else{
+		else if(switch_index != -1){
 			//exchange the mappings
 			int mappedTo = isMappedTo(action_array[currCounter]);
-			if(!test){
-				mappings[mappedTo] = mappings[getSwitchIndex(newSwitchEvent)];
-				mappings[getSwitchIndex(newSwitchEvent)] = action_array[currCounter];
+			if(mappedTo != -1){
+				mappings[mappedTo] = mappings[switch_index];
+				mappings[switch_index] = action_array[currCounter];
+				switchImageView.setImageResource(getCorresspondingDrawable(action_array[currCounter]));
 			}
-			//for testing purposes
-			else{
-				Log.d("mapping", "old mappedTo = "+mappedTo + " and value = " + mappings[direction] + " new mapping dir = " + direction + " and value = " + action_array[currCounter]);
-				mappings[mappedTo] = mappings[direction];
-				mappings[direction] = action_array[currCounter];
-			}
-			switchImageView.setImageResource(getCorresspondingDrawable(action_array[currCounter]));
-		}
-	}
-
-	/*Used while debugging on emulator*/
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(!DEBUG){
-			return super.onKeyDown(keyCode, event);
-		}
-		else{
-			mSwitchIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_CHANGES);
-			mSwitchIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_STATES);
-			if(keyCode == KeyEvent.KEYCODE_DPAD_UP){
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, (int)Math.pow(2, 0));
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, 0);
-				sendOrderedBroadcast(mSwitchIntent, null);
-			}
-			else if(keyCode == KeyEvent.KEYCODE_DPAD_DOWN){
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, (int)Math.pow(2, 1));
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, 0);
-				sendOrderedBroadcast(mSwitchIntent, null);
-			}
-			else if(keyCode == KeyEvent.KEYCODE_DPAD_LEFT){
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, (int)Math.pow(2, 2));
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, 0);
-				sendOrderedBroadcast(mSwitchIntent, null);
-			}
-			else if(keyCode == KeyEvent.KEYCODE_DPAD_RIGHT){
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, (int)Math.pow(2, 3));
-				mSwitchIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, 0);
-				sendOrderedBroadcast(mSwitchIntent, null);
-			}
-			else{
-				return super.onKeyDown(keyCode, event);
-			}
-			return false;
 		}
 	}
 
@@ -201,7 +167,7 @@ public class MapSwitchAction extends Activity {
 		cancel_button = (Button) findViewById(R.id.switch_action_mapping_cancel);
 		actionDisplayLayout = (LinearLayout) findViewById(R.id.action_display_layout);
 		getWindow().setLayout((int) (getDisplay().getWidth()*0.95), LayoutParams.WRAP_CONTENT);
-		mSwitchIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
+		mHandler = new Handler();
 	}
 	
 	private Display getDisplay(){
@@ -216,14 +182,14 @@ public class MapSwitchAction extends Activity {
 
 	@Override
 	public void onResume(){
+		super.onResume();
 		mappings =  TeclaApp.persistence.getSwitchActionMap();
 		currentCounter = -1;
 		round = 0;
 		IntentFilter action_switch_event_received_filter = new IntentFilter(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
 		action_switch_event_received_filter.setPriority(2);
 		registerReceiver(mReceiver, action_switch_event_received_filter);
-		mHandler.postDelayed(mSwitchActionRunnable, 1500);
-		super.onResume();
+		mHandler.postDelayed(mSwitchActionRunnable, 0);
 	}
 	
 	@Override
@@ -252,7 +218,7 @@ public class MapSwitchAction extends Activity {
 	
 	private Runnable mSwitchActionRunnable = new Runnable(){
 		public void run(){
-			//Checking if no actions have been defined
+			//Checking if no action resource has been defined
 			if(action_array == null){
 				TeclaApp.getInstance().showToast(R.string.no_switch_action);
 				finish();
