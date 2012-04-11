@@ -188,7 +188,7 @@ public class TeclaIME extends InputMethodService
 	public void onCreate() {
 		super.onCreate();
 		// Setup Debugging
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
 
 		//setStatusIcon(R.drawable.ime_qwerty);
@@ -1480,7 +1480,7 @@ public class TeclaIME extends InputMethodService
 			}
 			
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
-					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + " at " + SystemClock.uptimeMillis());
 		}
 		
 		evaluateNavKbdTimeout();
@@ -1512,7 +1512,7 @@ public class TeclaIME extends InputMethodService
 	private void resetNavKbdTimeout() {
 		cancelNavKbdTimeout();
 		int navKbdTimeout = TeclaApp.persistence.getNavigationKeyboardTimeout();
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Timeout in: " + navKbdTimeout + "seconds");
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Navigation keyboard timeout in: " + navKbdTimeout + " seconds");
 		if (navKbdTimeout != Persistence.NEVER_AUTOHIDE)
 			mTeclaHandler.postDelayed(hideNavKbdRunnable, navKbdTimeout * 1000);
 	}
