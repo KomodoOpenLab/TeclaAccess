@@ -41,7 +41,6 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.AutoText;
 import android.util.Log;
-import android.widget.Toast;
 
 public class TeclaPrefs extends PreferenceActivity
 implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -303,7 +302,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// switch event provider without breaking
 				// connection with other potential clients.
 				// Should perhaps use Binding?
-				TeclaApp.getInstance().showToast(R.string.shield_connect_cancelled);
 				closeDialog();
 				if (!mPrefFullScreenSwitch.isChecked()) {
 					mPrefSelfScanning.setChecked(false);
