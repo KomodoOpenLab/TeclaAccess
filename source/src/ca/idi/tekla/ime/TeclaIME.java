@@ -228,13 +228,6 @@ public class TeclaIME extends InputMethodService
 	}
 
 	
-	/**
-	 * Called when the configuration changes. 
-	 * Used here to detect when the screen orientation changes
-	 * If fullscreen switch is enabled, it needs to change size
-	 * to fit the new screen orientation, and the keyboard needs
-	 * altered as well.
-	 */
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
 		if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
@@ -245,7 +238,7 @@ public class TeclaIME extends InputMethodService
 			commitTyped(getCurrentInputConnection());
 			mOrientation = conf.orientation;
 			
-			// If the fullscreen switch is enabled, change its size/shape to match
+			// If the fullscreen switch is enabled, change its size to match screen
 			if(isFullScreenShowing()) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen rotated while fullscreen switch enabled. Changing size.");
 				Display display = getDisplay();
