@@ -4,8 +4,6 @@
 
 package ca.idi.tekla;
 
-import ca.idi.tekla.util.Highlighter;
-import ca.idi.tekla.util.Persistence;
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -20,13 +18,15 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import ca.idi.tekla.util.Highlighter;
+import ca.idi.tekla.util.Persistence;
 
 public class TeclaApp extends Application {
 
