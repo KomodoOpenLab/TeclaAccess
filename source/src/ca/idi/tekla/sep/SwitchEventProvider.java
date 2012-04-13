@@ -313,7 +313,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 			if ((switchChanges & SwitchEvent.SWITCH_E2) != SwitchEvent.SWITCH_E2) {
 				mSwitchStates |= SwitchEvent.SWITCH_E2;
 			}
-			
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {
@@ -353,7 +352,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, switchChanges);
 			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, switchStates);
 			// Broadcast event
-			sendBroadcast(mSwitchEventIntent);
+			sendOrderedBroadcast(mSwitchEventIntent,null);
 		}
 	}
 

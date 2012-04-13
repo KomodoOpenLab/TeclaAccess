@@ -66,6 +66,7 @@ import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
+import ca.idi.tekla.util.MapSwitchAction;
 import ca.idi.tekla.util.Persistence;
 
 /**
@@ -182,7 +183,6 @@ public class TeclaIME extends InputMethodService
 			}
 		}
 	};
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -1409,7 +1409,9 @@ public class TeclaIME extends InputMethodService
 		// register to receive switch events from Tecla shield
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_CONNECTED));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED));
-		registerReceiver(mReceiver, new IntentFilter(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED));
+		IntentFilter action_switch_event_received_filter = new IntentFilter(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
+		action_switch_event_received_filter.setPriority(1);
+		registerReceiver(mReceiver, action_switch_event_received_filter);
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_SHOW_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_HIDE_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_START_FS_SWITCH_MODE));
@@ -1449,6 +1451,7 @@ public class TeclaIME extends InputMethodService
 
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
+		switchEvent = MapSwitchAction.getMappedSwitchEvent(switchEvent);
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();

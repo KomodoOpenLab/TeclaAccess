@@ -32,6 +32,11 @@ public class SwitchEvent {
 		switch_states = bundle.getInt(EXTRA_SWITCH_STATES);
 	}
 	
+	public SwitchEvent(int switchChanges, int switchStates) {
+		switch_changes = switchChanges;
+		switch_states = switchStates;
+	}
+
 	public int getSwitchChanges() {
 		return switch_changes;
 	}

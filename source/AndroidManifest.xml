@@ -7,7 +7,7 @@
 		<activity
 			android:name=".TeclaPrefs"
 			android:label="@string/english_ime_settings"
-			android:noHistory="true">
+			android:noHistory="false">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -27,6 +27,10 @@
 				<action android:name="android.intent.action.VOICE_COMMAND"/>
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
+		</activity>
+		<activity
+			android:name=".util.MapSwitchAction"
+			android:theme="@style/Theme.Dialog.NoTitleDialog">
 		</activity>
 		<service
 			android:name=".ime.TeclaIME"

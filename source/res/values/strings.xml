@@ -236,7 +236,11 @@
 	<string name="persistent_keyboard">Show navigation keyboard</string>
 	<string name="persistent_keyboard_summary">Shows a small navigation keyboard when not entering text</string>
 
-    <!-- Option to autohide the UI navigation keyboard on the screen -->
+	<!-- Option to configure input -->
+	<string name="configure_input">Configure input method</string>
+	<string name="configure_input_summary">Change the action associated with a switch event</string>
+	
+	<!-- Option to autohide the UI navigation keyboard on the screen -->
 	<string name="autohide_timeout">Navigation keyboard timeout</string>
 	<string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
 	<string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
@@ -288,4 +292,21 @@
 	<string name="voice_input">Tecla Voice Input</string>
 	<string name="configuring_tecla">Configuring Tecla...</string>
 
+    <!-- Array of switch actions -->
+    <!--  List the actions in the default desired order for J1 then J2 then J3 then J4 -->
+    <string-array name="switch_actions">
+        <item>Move the highlighter to the next position</item>
+        <item>Move the highlighter to the previous position</item>
+        <item>Step out of the highlighted sub-array</item>
+        <item>Select the highlighted item</item>
+	</string-array>
+
+    <!--  For the switch action mapping dialog -->
+	<string name="no_switch_action">No switch action defined</string>
+	<string name="no_switch_input_received">Closing the dialog beacuse the user is not responding</string>
+	<string name="done_mapping">Done</string>
+	<string name="cancel_mapping">Cancel</string>
+	<string name="configure_input_changes_saved">Changes saved</string>
+	<string name="configure_input_changes_discarded">Changes discarded</string>
+	
 </resources>
