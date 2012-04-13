@@ -1,7 +1,4 @@
-*.classpath
-*.project
 *bin/
 *gen/
-*project.properties
 *.settings
 *.*~
