@@ -706,7 +706,11 @@ public class TeclaIME extends InputMethodService
 	public void onKey(int primaryCode, int[] keyCodes) {
 		long when = SystemClock.uptimeMillis();
 
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
+		if (TeclaApp.DEBUG) {
+			if (keyCodes != null && keyCodes.length > 0) {
+				Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
+			}
+		}
 		
 		if (primaryCode != Keyboard.KEYCODE_DELETE || 
 				when > mLastKeyTime + QUICK_PRESS) {
