@@ -16,6 +16,11 @@
 
 package ca.idi.tekla.ime;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,8 +31,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
+import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.os.Debug;
 import android.os.Handler;
@@ -54,17 +59,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.idi.tecla.sdk.SepManager;
+import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tecla.sdk.SepManager;
-import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
@@ -203,7 +202,6 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 		initTeclaA11y();
-
 	}
 	
 	private void initSuggest(String locale) {
@@ -229,6 +227,14 @@ public class TeclaIME extends InputMethodService
 		SepManager.stop(this);
 	}
 
+	
+	/**
+	 * Called when the configuration changes. 
+	 * Used here to detect when the screen orientation changes
+	 * If fullscreen switch is enabled, it needs to change size
+	 * to fit the new screen orientation, and the keyboard needs
+	 * altered as well.
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
 		if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
@@ -238,6 +244,13 @@ public class TeclaIME extends InputMethodService
 		if (conf.orientation != mOrientation) {
 			commitTyped(getCurrentInputConnection());
 			mOrientation = conf.orientation;
+			
+			// If the fullscreen switch is enabled, change its size/shape to match
+			if(isFullScreenShowing()) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen rotated while fullscreen switch enabled. Changing size.");
+				Display display = getDisplay();
+				mSwitchPopup.update(display.getWidth(), display.getHeight());
+			}
 		}
 		if (mKeyboardSwitcher == null) {
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
@@ -602,11 +615,11 @@ public class TeclaIME extends InputMethodService
 				hideSoftIME();
 			}
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
 				startFullScreenSwitchMode(500);
 			}
 			if (action.equals(TeclaApp.ACTION_STOP_FS_SWITCH_MODE)) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
 				stopFullScreenSwitchMode();
 			}
 			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
