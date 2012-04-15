@@ -273,6 +273,7 @@
     <!-- Toasts and dialogs -->
 	<string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
 	<string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
+	<string name="shield_connection_cancelled">Connection to Tecla Shield cancelled</string>
 	<string name="no_shields_inrange">No Tecla Shields in range</string>
 	<string name="searching_for_shields">Searching for Tecla Shields. Please wait...</string>
 	<string name="fullscreen_enabled">Fullscreen switch mode enabled</string>

@@ -4,8 +4,11 @@
 
 package ca.idi.tecla.sdk;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class SepManager {
 
@@ -15,6 +18,7 @@ public class SepManager {
 	 * must be provided to start the service.
 	 */
 	private static final String SEP_SERVICE = "ca.idi.tekla.SEP_SERVICE";
+	private static final String SEP_SERVICE_CLASS = "ca.idi.tekla.sep.SwitchEventProvider";
 	/**
 	 * Tecla Shield MAC Address to connect to.
 	 */
@@ -28,7 +32,7 @@ public class SepManager {
 	}
 
 	/**
-	 * Start the Switch Event Provider and attempt a connection with the Tecla Shield provided
+	 * Start the Switch Event Provider and attempt a connection with a Tecla Shield with the address provided
 	 */
 	public static boolean start(Context context, String shieldAddress) {
 		Intent sepIntent = new Intent(SEP_SERVICE);
@@ -41,4 +45,15 @@ public class SepManager {
 		return context.stopService(sepIntent);
 	}
 
+	public static boolean isRunning(Context context) {
+	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+	    	Log.d("Tecla SDK", service.service.getClassName().toString());
+	    	if (SEP_SERVICE_CLASS.equals(service.service.getClassName())) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
 }

@@ -240,7 +240,7 @@ public class TeclaIME extends InputMethodService
 			
 			// If the fullscreen switch is enabled, change its size to match screen
 			if(isFullScreenShowing()) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen rotated while fullscreen switch enabled. Changing size.");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Changing size of fullscreen overlay.");
 				Display display = getDisplay();
 				mSwitchPopup.update(display.getWidth(), display.getHeight());
 			}

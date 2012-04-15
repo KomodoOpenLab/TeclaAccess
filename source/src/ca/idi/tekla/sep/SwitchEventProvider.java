@@ -368,6 +368,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 				Log.e(TeclaApp.TAG, CLASS_TAG + "killSocket: " + e.getMessage());
 				e.printStackTrace();
 			}
+			mBluetoothSocket = null;
 		}
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Socket killed");
 	}
@@ -405,9 +406,9 @@ public class SwitchEventProvider extends Service implements Runnable {
 			teclaShield = mBluetoothAdapter.getRemoteDevice(shieldAddress);
 
 			if (!success) {
+				killSocket();
 				// Try usual method
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating bluetooth serial socket...");
-				killSocket();
 				try {
 					mBluetoothSocket = teclaShield.createRfcommSocketToServiceRecord(SPP_UUID);
 				} catch (IOException e) {
