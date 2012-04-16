@@ -28,7 +28,9 @@ public class Highlighter {
 	public static final int HIGHLIGHT_PREV = 0xAA; // arbitrary number.
 	public static final int DEPTH_ROW = 0x0F; // arbitrary number.
 	public static final int DEPTH_KEY = 0xF0; // arbitrary number.
+
 	
+	private long mScanDelay = Math.round(1.5 * TeclaApp.persistence.getScanDelay());
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
 	private int mLastKeyCounter, mLastRowCounter;
@@ -98,7 +100,7 @@ public class Highlighter {
 			mWasShowingVariants = false;
 		}
 		if (shouldDelayKey(keyCode)) {
-			startSelfScanning(Math.round(1.5 * TeclaApp.persistence.getScanDelay()));
+			startSelfScanning(mScanDelay);
 		} else {
 			startSelfScanning();
 		}
@@ -110,7 +112,9 @@ public class Highlighter {
 	public void doSelectRow() {
 		initRowHighlighting();
 		if (TeclaApp.persistence.isSelfScanningEnabled()) {
-			resumeSelfScanning();
+			// Extends dwell time for first key after a row-key transition.
+			pauseSelfScanning();
+			mHandler.postDelayed(mScanRunnable, mScanDelay);
 		}
 	}
 	
@@ -185,7 +189,7 @@ public class Highlighter {
 	 */
 	public void resumeSelfScanning() {
 		if (TeclaApp.persistence.isScanningEnabled()) {
-			mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
+				mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
 		}
 	}
 	
@@ -196,6 +200,7 @@ public class Highlighter {
 		pauseSelfScanning();
 		clear();
 	}
+	
 	
 	public void restoreHighlight() {
 		move(HIGHLIGHT_NEXT);
@@ -209,9 +214,10 @@ public class Highlighter {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
-			move(Highlighter.HIGHLIGHT_NEXT);
+				move(Highlighter.HIGHLIGHT_NEXT);
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}
+		
 	};
 	
 	/**
@@ -249,8 +255,8 @@ public class Highlighter {
 		}
 		restoreHighlight();
 	}
-
-	private boolean shouldDelayKey(int keyCode) {
+	
+	private boolean shouldDelayKey(int keyCode){
 		if (TeclaApp.persistence.isVariantsShowing()) return false;
 		if (keyCode == TeclaKeyboard.KEYCODE_DONE ||
 				keyCode == TeclaKeyboard.KEYCODE_MODE_CHANGE ||
