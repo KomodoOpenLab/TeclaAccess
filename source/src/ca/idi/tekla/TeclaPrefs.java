@@ -363,6 +363,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (mPrefInverseScanning.isChecked()) {
 				mPrefSelfScanning.setChecked(false);
 				TeclaApp.persistence.setInverseScanningChanged();
+			} else {
+				TeclaApp.getInstance().stopScanningTeclaIME();
+				if (!mPrefSelfScanning.isChecked()) {
+					mPrefFullScreenSwitch.setChecked(false);
+					if (!mPrefConnectToShield.isChecked()) {
+						mPrefInverseScanning.setEnabled(false);
+					}
+				}
 			}
 		}
 		//FIXME: Tecla Access - Solve backup elsewhere
