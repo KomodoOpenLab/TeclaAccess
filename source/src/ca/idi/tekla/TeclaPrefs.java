@@ -105,6 +105,22 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
 
+		// If no voice apps available, disable voice input
+		if (!(TeclaApp.getInstance().isVoiceInputSupported() && 
+				TeclaApp.getInstance().isVoiceActionsInstalled())) {
+			if (mPrefVoiceInput.isChecked()) mPrefVoiceInput.setChecked(false);
+			mPrefVoiceInput.setEnabled(false);
+			mPrefVoiceInput.setSummary(R.string.no_voice_input_available);
+		}
+		
+		updateShieldPreference();
+
+		// If no alternative input selected, disable scanning
+		if (!mPrefConnectToShield.isChecked() && !mPrefFullScreenSwitch.isChecked()) {
+			mPrefSelfScanning.setEnabled(false);
+			mPrefInverseScanning.setEnabled(false);
+		}
+
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
 		if (!TeclaApp.getInstance().isDefaultIME()) {
@@ -118,34 +134,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
 
-		// If no voice apps available, disable voice input
-		if (!(TeclaApp.getInstance().isVoiceInputSupported() && 
-				TeclaApp.getInstance().isVoiceActionsInstalled())) {
-			if (mPrefVoiceInput.isChecked()) mPrefVoiceInput.setChecked(false);
-			mPrefVoiceInput.setEnabled(false);
-			mPrefVoiceInput.setSummary(R.string.no_voice_input_available);
-		}
-		
-		// If Bluetooth disabled or unsupported disable Shield connection
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (mBluetoothAdapter == null) {
-			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_nosupport);
-			mPrefConnectToShield.setEnabled(false);
-		} else if (!mBluetoothAdapter.isEnabled()) {
-			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_disabled);
-			mPrefConnectToShield.setEnabled(false);
-		} else {
-			mPrefConnectToShield.setSummary(R.string.shield_connect_summary);
-		}
-
-		// If no alternative input selected, disable scanning
-		if (!mPrefConnectToShield.isChecked() && !mPrefFullScreenSwitch.isChecked()) {
-			mPrefSelfScanning.setEnabled(false);
-			mPrefInverseScanning.setEnabled(false);
-		}
-
 		//Tecla Access Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_CONNECTED));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED));
@@ -209,6 +200,10 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				}
 			}
 
+			if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+				updateShieldPreference();
+			}
+			
 			if (intent.getAction().equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
 				if (mShieldFound) {
 					// Shield found, try to connect
@@ -419,6 +414,20 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()) {
 			// Triggers ACTION_DISCOVERY_FINISHED on mReceiver.onReceive
 			mBluetoothAdapter.cancelDiscovery();
+		}
+	}
+	
+	private void updateShieldPreference() {
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (mBluetoothAdapter == null) {
+			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_nosupport);
+			mPrefConnectToShield.setEnabled(false);
+		} else if (!mBluetoothAdapter.isEnabled()) {
+			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_disabled);
+			mPrefConnectToShield.setEnabled(false);
+		} else {
+			mPrefConnectToShield.setSummary(R.string.shield_connect_summary);
+			mPrefConnectToShield.setEnabled(true);
 		}
 	}
 
