@@ -252,8 +252,8 @@
 
     <!-- Option to set full reset timeout -->
 	<string name="full_reset_timeout">Full Reset Timeout</string>
-	<string name="full_reset_timeout_summary">Reset to Home after this time delay</string>
-    <string name="full_reset_timeout_dlg_title">Set Full Reset Timeout</string>
+	<string name="full_reset_timeout_summary">Full Reset Timeout</string>
+    <string name="full_reset_timeout_dlg_title">Full Reset Timeout</string>
     <string-array name="full_reset_strings">
 		<item>After 3 seconds</item>
 		<item>After 6 seconds</item>

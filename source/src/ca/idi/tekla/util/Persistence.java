@@ -27,13 +27,13 @@ public class Persistence {
 	public static final String PREF_SELF_SCANNING = "self_scanning";
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
-	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3000; //millisecond
+	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3; //second
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int MAX_SCAN_DELAY = 3000;
 	public static final int MIN_SCAN_DELAY = 250;
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
-	public static final int NEVER_FULL_RESET = -1;
+	
 	
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
 	
