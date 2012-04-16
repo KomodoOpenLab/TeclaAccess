@@ -30,6 +30,7 @@ public class Highlighter {
 	public static final int DEPTH_KEY = 0xF0; // arbitrary number.
 
 	
+	private long mScanDelay = Math.round(1.5 * TeclaApp.persistence.getScanDelay());
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
 	private int mLastKeyCounter, mLastRowCounter;
@@ -99,7 +100,7 @@ public class Highlighter {
 			mWasShowingVariants = false;
 		}
 		if (shouldDelayKey(keyCode)) {
-			startSelfScanning(Math.round(1.5 * TeclaApp.persistence.getScanDelay()));
+			startSelfScanning(mScanDelay);
 		} else {
 			startSelfScanning();
 		}
@@ -112,7 +113,8 @@ public class Highlighter {
 		initRowHighlighting();
 		if (TeclaApp.persistence.isSelfScanningEnabled()) {
 			// Extends dwell time for first key after a row-key transition.
-			delaySelfScanning();
+			pauseSelfScanning();
+			mHandler.postDelayed(mScanRunnable, mScanDelay);
 		}
 	}
 	
@@ -197,14 +199,6 @@ public class Highlighter {
 	public void stopSelfScanning() {
 		pauseSelfScanning();
 		clear();
-	}
-	
-	/**
-	 * Wait for a delay before resuming auto scanning.
-	 */
-	public void delaySelfScanning(){
-		pauseSelfScanning();
-		mHandler.postDelayed(mScanRunnable, Math.round(1.5 * TeclaApp.persistence.getScanDelay()));
 	}
 	
 	
