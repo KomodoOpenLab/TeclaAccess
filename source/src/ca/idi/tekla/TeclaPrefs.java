@@ -117,6 +117,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		// If no alternative input selected, disable scanning
 		if (!mPrefConnectToShield.isChecked() && !mPrefFullScreenSwitch.isChecked()) {
+			mPrefSelfScanning.setChecked(false);
+			mPrefInverseScanning.setChecked(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
 		}
