@@ -58,6 +58,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
 
+	private CheckBoxPreference mMorseKeyboard;
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
@@ -89,6 +90,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
+		mMorseKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_KEYBOARD);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
@@ -263,6 +265,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				}
 			}
 		}
+		
+		if (key.equals(Persistence.PREF_MORSE_KEYBOARD)) {
+			System.out.println("MORSE KEYBOARD ACTIVATED");
+		}
+		
+		//TODO Elyas: check how to override Morse keyboard
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);

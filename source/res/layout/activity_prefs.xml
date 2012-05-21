@@ -68,6 +68,13 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
+			android:key="morse_input_mode"
+			android:title="@string/morse_input_mode"
+			android:summary="@string/morse_input_mode_summary"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
 			android:key="persistent_keyboard"
 			android:title="@string/persistent_keyboard"
 			android:summary="@string/persistent_keyboard_summary"

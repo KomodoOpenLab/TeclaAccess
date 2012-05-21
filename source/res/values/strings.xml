@@ -249,7 +249,11 @@
 		<item>After 60 seconds</item>
 		<item>Never</item>
 	</string-array>
-
+    
+    <!-- Option to enable Morse input method -->
+	<string name="morse_input_mode">Use Morse input method</string>
+	<string name="morse_input_mode_summary">Enables user to type in Morse</string>
+    
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
 

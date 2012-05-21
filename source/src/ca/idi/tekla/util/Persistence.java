@@ -18,6 +18,7 @@ public class Persistence {
 	public static final String PREF_VOICE_INPUT = "voice_input";
 	public static final String PREF_VARIANTS = "variants";
 	public static final String PREF_VARIANTS_KEY = "variants_key";
+	public static final String PREF_MORSE_KEYBOARD = "morse_keyboard";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
