@@ -1447,40 +1447,58 @@ public class TeclaIME extends InputMethodService
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
-
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					TeclaApp.highlighter.resumeSelfScanning();
-				} else {
-					selectHighlighted(true);
-				}
-			}
-			if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					if (TeclaApp.persistence.isInverseScanningChanged()) {
-						//Ignore event right after Inverse Scanning is Enabled
-						stopRepeatingKey();
-						TeclaApp.persistence.unsetInverseScanningChanged();
-						Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
-					} else {
-						selectHighlighted(false);
-					}
-				} else {
-					stopRepeatingKey();
-				}
-			}
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-				TeclaApp.highlighter.stepOut();
-			}
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
-				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
-			}
-			if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
-				TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
-			}
 			
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
-					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
+			if (TeclaApp.persistence.isMorseModeEnabled()) {
+				//if UI not shown, show it
+				
+				
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E1)){
+					//addDit();
+					//if sound enabled, play sound
+				}				
+				
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)){
+					//addDah();
+					//if sound enabled, play sound
+				}
+			}
+
+			else{
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
+					if (TeclaApp.persistence.isInverseScanningEnabled()) {
+						TeclaApp.highlighter.resumeSelfScanning();
+					} else {
+						selectHighlighted(true);
+					}
+				}
+				if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
+					if (TeclaApp.persistence.isInverseScanningEnabled()) {
+						if (TeclaApp.persistence.isInverseScanningChanged()) {
+							//Ignore event right after Inverse Scanning is Enabled
+							stopRepeatingKey();
+							TeclaApp.persistence.unsetInverseScanningChanged();
+							Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+						} else {
+							selectHighlighted(false);
+						}
+					} else {
+						stopRepeatingKey();
+					}
+				}
+
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
+					TeclaApp.highlighter.stepOut();
+				}
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
+					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
+				}
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
+					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
+				}
+
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
+						TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
+			}
 		}
 		
 		evaluateNavKbdTimeout();

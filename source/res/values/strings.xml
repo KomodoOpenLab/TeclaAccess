@@ -252,7 +252,7 @@
     
     <!-- Option to enable Morse input method -->
 	<string name="morse_input_mode">Use Morse input method</string>
-	<string name="morse_input_mode_summary">Enables user to type in Morse</string>
+	<string name="morse_input_mode_summary">Enables users to type in Morse</string>
     
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>

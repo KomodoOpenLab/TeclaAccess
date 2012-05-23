@@ -18,7 +18,7 @@ public class Persistence {
 	public static final String PREF_VOICE_INPUT = "voice_input";
 	public static final String PREF_VARIANTS = "variants";
 	public static final String PREF_VARIANTS_KEY = "variants_key";
-	public static final String PREF_MORSE_KEYBOARD = "morse_keyboard";
+	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
@@ -123,6 +123,10 @@ public class Persistence {
 	public String getShieldAddress() {
 		String mac = shared_prefs.getString(PREF_SHIELD_ADDRESS, "");
 		return BluetoothAdapter.checkBluetoothAddress(mac)? mac:null;
+	}
+	
+	public boolean isMorseModeEnabled() {
+		return shared_prefs.getBoolean(PREF_MORSE_MODE, false);
 	}
 
 	public boolean isFullscreenSwitchEnabled() {
