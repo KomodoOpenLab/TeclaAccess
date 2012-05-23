@@ -44,13 +44,14 @@ public class TeclaMorse{
 	}
 	
 	public String letterReturn(){
-		try{
-			return mMorseChart.value(mCurrentLetter).toString();
-		}catch(Exception e){
-			throw new Exception("No such symbol found");
+		String letter = mMorseChart.get(mCurrentLetter).toString();
+		if(letter != null){
+			mCurrentLetter = "";
+			return letter;
 		}
+		throw new Exception("No such symbol found");
 	}
-	
+
 	
 	
 }
