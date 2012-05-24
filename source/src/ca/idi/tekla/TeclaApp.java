@@ -4,6 +4,7 @@
 
 package ca.idi.tekla;
 
+import ca.idi.tekla.ime.TeclaMorse;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import android.app.Application;
@@ -69,6 +70,7 @@ public class TeclaApp extends Application {
 	private static TeclaApp instance;
 	public static Persistence persistence;
 	public static Highlighter highlighter;
+	public static TeclaMorse teclaMorse;
 
 	public TeclaApp() {
         instance = this;
