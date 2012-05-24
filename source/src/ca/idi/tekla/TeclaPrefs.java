@@ -113,6 +113,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
+			mPrefMorse.setEnabled(false);
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
 
@@ -233,6 +234,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
+				mPrefMorse.setEnabled(true);
 			}
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
@@ -266,8 +268,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			}
 		}
 		
+		if (key.equals(Persistence.PREF_MORSE_MODE)) {
+			if (mPrefMorse.isChecked()){
+				//TODO ELyas
+				TeclaApp.getInstance().showToast(R.string.morse_enabled);
+			}
+		}
 		
-		//TODO Elyas: need to override with Morse keyboard when needed.
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);

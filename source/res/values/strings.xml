@@ -251,8 +251,8 @@
 	</string-array>
     
     <!-- Option to enable Morse input method -->
-	<string name="morse_input_mode">Use Morse input method</string>
-	<string name="morse_input_mode_summary">Enables users to type in Morse</string>
+	<string name="morse_mode">Use Morse input method</string>
+	<string name="morse_mode_summary">Enables users to type in Morse</string>
     
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
@@ -279,6 +279,8 @@
 	<string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
 	<string name="no_shields_inrange">No Tecla Shields in range</string>
 	<string name="searching_for_shields">Searching for Tecla Shields. Please wait...</string>
+    <string name="morse_enabled">Morse input method enabled</string>
+    <string name="morse_disabled">Morse input method disabled</string>
 	<string name="fullscreen_enabled">Fullscreen switch mode enabled</string>
 	<string name="fullscreen_disabled">Fullscreen switch mode disabled</string>
 	<string name="tecla_notselected">Tecla keyboard is not selected!</string>

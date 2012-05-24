@@ -2,7 +2,7 @@ package ca.idi.tekla.ime;
 
 import java.util.*;
 
-public class TeclaMorse{
+public class TeclaMorse {
 	
 	
 	private HashMap<String,String> mMorseChart;
@@ -10,7 +10,7 @@ public class TeclaMorse{
 	private static StringBuffer mCurrentLetter;
 	
 	
-	public TeclaMorse(){
+	public TeclaMorse() {
 		mCurrentLetter = new StringBuffer();
 		mMorseChart = new HashMap<String,String>();
 		mCandidates = new HashMap<String,String>();
@@ -18,7 +18,7 @@ public class TeclaMorse{
 		createMapping(mCandidates);
 	}
 	
-	public void createMapping(HashMap<String,String> map){
+	public void createMapping(HashMap<String,String> map) {
 		//dit-first letters
 		map.put("0", "e"); map.put("00", "i"); map.put("01", "a");
 		map.put("000", "s"); map.put("001", "u"); map.put("011", "w");
@@ -38,31 +38,31 @@ public class TeclaMorse{
 		//special characters
 	}
 	
-	public void updateCandidates(){
-		for(String key : mCandidates.keySet()){
-			if(!key.startsWith(mCurrentLetter.toString()))
+	public void updateCandidates() {
+		for (String key : mCandidates.keySet()) {
+			if (!key.startsWith(mCurrentLetter.toString()))
 				mCandidates.remove(key);
 		}
 	}
 	
-	public String getCurrentLetter(){
+	public String getCurrentLetter() {
 		return mCurrentLetter.toString();
 	}
 	
 	
-	public void addDit(){
+	public void addDit() {
 		mCurrentLetter.append("0");
 		updateCandidates();
 	}
 	
-	public void addDah(){
+	public void addDah() {
 		mCurrentLetter.append("1");
 		updateCandidates();
 	}
 	
-	public String letterReturn() throws Exception{
+	public String letterReturn() {
 		String letter = mMorseChart.get(mCurrentLetter.toString());
-		if(letter != null){
+		if (letter != null) {
 			mCurrentLetter = new StringBuffer();
 			mCandidates.clear();
 			createMapping(mCandidates);

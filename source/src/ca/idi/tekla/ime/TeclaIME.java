@@ -1438,7 +1438,6 @@ public class TeclaIME extends InputMethodService
 	};
 
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
-		Log.d(TeclaApp.TAG, CLASS_TAG + "Received switch event");
 
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
@@ -1452,25 +1451,22 @@ public class TeclaIME extends InputMethodService
 			if (TeclaApp.persistence.isMorseModeEnabled()) {
 				//if UI not shown, show it
 				
-				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E1)){
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
 					//temporary
 					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Morse input: " + TeclaApp.teclaMorse.getCurrentLetter());
 					TeclaApp.teclaMorse.addDit();
-					if(Math.random() == 0)
-						selectMorse();
 					//if sound enabled, play dit sound
 				}				
 				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)){
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
 					//temporary
 					TeclaApp.teclaMorse.addDah();
 					//if sound enabled, play dah sound
 				}
 				
-				/*if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)){
+				/*if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
 					//letterReturn();
-					//if sound enabled, play dah sound
+					//if sound enabled, play sound of word
 				}*/
 				
 				
@@ -1520,7 +1516,7 @@ public class TeclaIME extends InputMethodService
 	
 	private void selectMorse() {
 		//TODO Elyas
-		
+		//update mKeyCodes properly
 		
 		mKeyCodes = TeclaApp.highlighter.getCurrentKey().codes;
 		emulateKeyPress(mKeyCodes);
@@ -1571,7 +1567,6 @@ public class TeclaIME extends InputMethodService
 	private void selectHighlighted(Boolean repeat) {
 		//FIXME: Repeat key should be re-implemented as repeat switch action on hold on the SEP
 		// will disable it here for now.
-		Log.d(TeclaApp.TAG, "TESTING SELECT_HIGHLITED");
 		repeat = false;
 		TeclaApp.highlighter.pauseSelfScanning();
 		if (TeclaApp.highlighter.getScanDepth() == Highlighter.DEPTH_KEY) {

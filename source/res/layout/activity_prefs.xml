@@ -68,9 +68,9 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
-			android:key="morse_input_mode"
-			android:title="@string/morse_input_mode"
-			android:summary="@string/morse_input_mode_summary"
+			android:key="morse_mode"
+			android:title="@string/morse_mode"
+			android:summary="@string/morse_mode_summary"
 			android:persistent="true"
 			android:defaultValue="false"
 			/>
