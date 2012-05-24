@@ -1,47 +1,45 @@
 package ca.idi.tekla.ime;
 
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.AbstractMap.*;
+
+import ca.idi.tekla.R;
+import ca.idi.tekla.TeclaApp;
+import ca.idi.tekla.ime.MorseDictionary;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 
 public class TeclaMorse {
 	
+	private String CLASS_TAG = "TeclaMorse: ";
 	
-	private HashMap<String,String> mMorseChart;
+	private MorseDictionary mMorseDictionary;
 	private HashMap<String, String> mCandidates;
 	private static StringBuffer mCurrentLetter;
 	
 	
-	public TeclaMorse() {
+	public TeclaMorse(Context context) {
+		Resources res = context.getResources();
+		//String s = res.getString(R.xml.kbd_qwerty);
+		//Log.d(TeclApp.TAG, CLASS_TAG + "Retrieved from XML: " + s);
+		
 		mCurrentLetter = new StringBuffer();
-		mMorseChart = new HashMap<String,String>();
+		mMorseDictionary = new MorseDictionary();
 		mCandidates = new HashMap<String,String>();
-		createMapping(mMorseChart);
-		createMapping(mCandidates);
+		MorseDictionary.createMapping(mCandidates);
 	}
 	
-	public void createMapping(HashMap<String,String> map) {
-		//dit-first letters
-		map.put("0", "e"); map.put("00", "i"); map.put("01", "a");
-		map.put("000", "s"); map.put("001", "u"); map.put("011", "w");
-		map.put("010", "r"); map.put("0000", "h"); map.put("0001", "v");
-		map.put("0010", "f"); map.put("0110", "p"); map.put("0111", "j");
-		map.put("0100", "l"); 
-		
-		//dah-first letters
-		map.put("1", "t"); map.put("11", "m"); map.put("10", "n");
-		map.put("111", "o"); map.put("110", "g"); map.put("100", "d");
-		map.put("101", "k"); map.put("1100", "z"); map.put("1101", "q");
-		map.put("1000", "b"); map.put("1001", "x"); map.put("1010", "c");
-		map.put("1011", "y");
-		
-		//numbers
-		
-		//special characters
-	}
+
 	
 	public void updateCandidates() {
-		for (String key : mCandidates.keySet()) {
+		Iterator<String> it = mCandidates.keySet().iterator();
+		while (it.hasNext()){
+			String key = it.next();
 			if (!key.startsWith(mCurrentLetter.toString()))
-				mCandidates.remove(key);
+				it.remove();
 		}
 	}
 	
@@ -60,16 +58,23 @@ public class TeclaMorse {
 		updateCandidates();
 	}
 	
-	public String letterReturn() {
-		String letter = mMorseChart.get(mCurrentLetter.toString());
+	public int letterReturn() {
+		String letter = mMorseDictionary.getKey(mCurrentLetter.toString());
 		if (letter != null) {
 			mCurrentLetter = new StringBuffer();
 			mCandidates.clear();
-			createMapping(mCandidates);
-			return letter;
+			MorseDictionary.createMapping(mCandidates);
+			return getKeycodeFromString(letter);
 		}
 		//throw new Exception("No such symbol found");
-		return "";
+		return getKeycodeFromString("");
+	}
+	
+	public int getKeycodeFromString(String s) {
+		if (s.equals(""))
+			return 0;
+		
+		return 113;
 	}
 	
 	

@@ -1452,14 +1452,12 @@ public class TeclaIME extends InputMethodService
 				//if UI not shown, show it
 				
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
-					//temporary
 					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Morse input: " + TeclaApp.teclaMorse.getCurrentLetter());
 					TeclaApp.teclaMorse.addDit();
 					//if sound enabled, play dit sound
 				}				
 				
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					//temporary
 					TeclaApp.teclaMorse.addDah();
 					//if sound enabled, play dah sound
 				}
@@ -1468,7 +1466,6 @@ public class TeclaIME extends InputMethodService
 					//letterReturn();
 					//if sound enabled, play sound of word
 				}*/
-				
 				
 			}
 
