@@ -18,50 +18,57 @@ public class TeclaMorse {
 	
 	private MorseDictionary mMorseDictionary;
 	private HashMap<String, String> mCandidates;
-	private static StringBuffer mCurrentLetter;
+	private static StringBuilder mCurrentChar;
 	
 	
-	public TeclaMorse(Context context) {
-		Resources res = context.getResources();
+	public TeclaMorse() {
+		//Resources res = context.getResources();
 		//String s = res.getString(R.xml.kbd_qwerty);
 		//Log.d(TeclApp.TAG, CLASS_TAG + "Retrieved from XML: " + s);
 		
-		mCurrentLetter = new StringBuffer();
+		mCurrentChar = new StringBuilder();
 		mMorseDictionary = new MorseDictionary();
 		mCandidates = new HashMap<String,String>();
 		MorseDictionary.createMapping(mCandidates);
 	}
 	
+	public void clearCharInProgress(){
+		mCurrentChar.setLength(0);
+	}
 
 	
 	public void updateCandidates() {
 		Iterator<String> it = mCandidates.keySet().iterator();
 		while (it.hasNext()){
 			String key = it.next();
-			if (!key.startsWith(mCurrentLetter.toString()))
+			if (!key.startsWith(mCurrentChar.toString()))
 				it.remove();
 		}
 	}
 	
-	public String getCurrentLetter() {
-		return mCurrentLetter.toString();
+	public String getCurrentChar() {
+		return mCurrentChar.toString();
+	}
+	
+	public MorseDictionary getMorseDictionary(){
+		return mMorseDictionary;
 	}
 	
 	
 	public void addDit() {
-		mCurrentLetter.append("0");
+		mCurrentChar.append("•");
 		updateCandidates();
 	}
 	
 	public void addDah() {
-		mCurrentLetter.append("1");
+		mCurrentChar.append("-");
 		updateCandidates();
 	}
 	
 	public int letterReturn() {
-		String letter = mMorseDictionary.getKey(mCurrentLetter.toString());
+		String letter = mMorseDictionary.getKey(mCurrentChar.toString());
 		if (letter != null) {
-			mCurrentLetter = new StringBuffer();
+			mCurrentChar = new StringBuilder();
 			mCandidates.clear();
 			MorseDictionary.createMapping(mCandidates);
 			return getKeycodeFromString(letter);

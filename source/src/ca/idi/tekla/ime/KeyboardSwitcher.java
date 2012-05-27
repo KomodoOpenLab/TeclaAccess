@@ -39,6 +39,7 @@ public class KeyboardSwitcher {
     public static final int MODE_1X8 = 13;
     public static final int MODE_1X9 = 14;
     public static final int MODE_1X10 = 15;
+    public static final int MODE_MORSE = 16;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -50,11 +51,15 @@ public class KeyboardSwitcher {
     public static final int KEYBOARDMODE_IM = R.id.mode_im;
     public static final int KEYBOARDMODE_VOICE = R.id.mode_voice;
     public static final int KEYBOARDMODE_VARIANTS = R.id.mode_variants;
+    public static final int KEYBOARDMODE_MORSE = R.xml.morse;
     
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
     private static final int SYMBOLS_MODE_STATE_SYMBOL = 2;
 
+    MorseKeyboardView mIMEView2;
+    MorseIME mContext2;
+    
     TeclaKeyboardView mIMEView;
     TeclaIME mContext;
     
@@ -63,6 +68,7 @@ public class KeyboardSwitcher {
 
     private KeyboardId mCurrentId;
     private Map<KeyboardId, TeclaKeyboard> mKeyboards;
+    private Map<KeyboardId, MorseKeyboard> mKeyboards2;
     
     private int mMode;
     private int mImeOptions;
@@ -78,10 +84,21 @@ public class KeyboardSwitcher {
         mKeyboards = new HashMap<KeyboardId, TeclaKeyboard>();
         mSymbolsId = new KeyboardId(R.xml.kbd_symbols);
         mSymbolsShiftedId = new KeyboardId(R.xml.kbd_symbols_shift);
+    }    
+    
+    KeyboardSwitcher(MorseIME context) {
+        mContext2 = context;
+        mKeyboards = new HashMap<KeyboardId, TeclaKeyboard>();
+        mSymbolsId = new KeyboardId(R.xml.kbd_symbols);
+        mSymbolsShiftedId = new KeyboardId(R.xml.kbd_symbols_shift);
     }
 
     void setInputView(TeclaKeyboardView imeView) {
         mIMEView = imeView;
+    }    
+    
+    void setInputView(MorseKeyboardView imeView) {
+        mIMEView2 = imeView;
     }
     
     void makeKeyboards(boolean forceCreate) {

@@ -6,34 +6,57 @@ public class MorseDictionary {
 	
 	private String CLASS_TAG = "MorseDictionary: ";
 	private static HashMap<String,String> mMorseChart;
+	private static int mMaxCodeLength;
 	
 	public MorseDictionary() {
 		mMorseChart = new HashMap<String,String>();
 		createMapping(mMorseChart);
+		setMaxCodeLength();
 	}
 	
 	public static void createMapping(HashMap<String,String> map) {
 		//dit-first letters
-		map.put("0", "e"); map.put("00", "i"); map.put("01", "a");
-		map.put("000", "s"); map.put("001", "u"); map.put("011", "w");
-		map.put("010", "r"); map.put("0000", "h"); map.put("0001", "v");
-		map.put("0010", "f"); map.put("0110", "p"); map.put("0111", "j");
-		map.put("0100", "l"); 
+		map.put("•", "e"); map.put("••", "i"); map.put("•-", "a");
+		map.put("•••", "s"); map.put("••-", "u"); map.put("•--", "w");
+		map.put("•-•", "r"); map.put("••••", "h"); map.put("•••-", "v");
+		map.put("••-•", "f"); map.put("•--•", "p"); map.put("•---", "j");
+		map.put("•-••", "l"); 
 		
 		//dah-first letters
-		map.put("1", "t"); map.put("11", "m"); map.put("10", "n");
-		map.put("111", "o"); map.put("110", "g"); map.put("100", "d");
-		map.put("101", "k"); map.put("1100", "z"); map.put("1101", "q");
-		map.put("1000", "b"); map.put("1001", "x"); map.put("1010", "c");
-		map.put("1011", "y");
+		map.put("-", "t"); map.put("--", "m"); map.put("-•", "n");
+		map.put("---", "o"); map.put("--•", "g"); map.put("-••", "d");
+		map.put("-•-", "k"); map.put("--••", "z"); map.put("--•-", "q");
+		map.put("-•••", "b"); map.put("-••-", "x"); map.put("-•-•", "c");
+		map.put("-•--", "y");
 		
 		//numbers
-		map.put("01111", "1"); map.put("00111", "2"); map.put("00011", "3");
-		map.put("00001", "4"); map.put("00000", "5"); map.put("01111", "6");
-		map.put("11000", "7"); map.put("11110", "8"); map.put("11110", "9");
-		map.put("11111", "0");
+		map.put("•----", "-"); map.put("••---", "2"); map.put("•••--", "3");
+		map.put("••••-", "4"); map.put("•••••", "5"); map.put("•----", "6");
+		map.put("--•••", "7"); map.put("----•", "8"); map.put("----•", "9");
+		map.put("-----", "•");
 		
 		//special characters
+		map.put("•----•", "\'"); map.put("•--•-•", "@"); map.put("•-•••", "&");
+		map.put("---•••", ":"); map.put("--••--", ","); map.put("•••-••-", "$");
+		map.put("-•••-", "="); map.put("---•", "!"); map.put("-•-•--", "!");
+		map.put("-••••-", "-"); map.put("-•--•", "("); map.put("-•--•-", ")");
+		map.put("•-•-•-", "."); map.put("•-•-•", "+"); map.put("••--••", "?");
+		map.put("•-••-•", "\""); map.put("-•-•-•", ";"); map.put("-••-•", "/");
+		map.put("••--•-", "_");
+	}
+	
+	public void setMaxCodeLength(){
+		int max = 0;
+		for (String key : mMorseChart.keySet()) {
+			if (key.length() > max) {
+				max = key.length();
+			}
+		}
+		mMaxCodeLength = max;
+	}
+	
+	public int getMaxCodeLength(){
+		return mMaxCodeLength;
 	}
 	
 	public String getKey(String key) {

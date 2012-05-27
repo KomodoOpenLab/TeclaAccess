@@ -70,7 +70,7 @@ public class TeclaApp extends Application {
 	private static TeclaApp instance;
 	public static Persistence persistence;
 	public static Highlighter highlighter;
-	public static TeclaMorse teclaMorse;
+	//public static TeclaMorse teclaMorse;
 
 	public TeclaApp() {
         instance = this;
@@ -93,7 +93,7 @@ public class TeclaApp extends Application {
 		
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
-		teclaMorse = new TeclaMorse(this);
+		//teclaMorse = new TeclaMorse(this);
 
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		mWakeLock = mPowerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK |

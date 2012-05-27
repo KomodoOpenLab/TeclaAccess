@@ -250,6 +250,12 @@
 		<item>Never</item>
 	</string-array>
     
+    <!-- Temporary -->
+    <string name="caps_lock_off">abc</string>
+    <string name="caps_lock_next">Abc</string>
+    <string name="caps_lock_all">ABC</string>
+    <string name="tapforpunctuation">Tap for punctuation</string>
+    
     <!-- Option to enable Morse input method -->
 	<string name="morse_mode">Use Morse input method</string>
 	<string name="morse_mode_summary">Enables users to type in Morse</string>
