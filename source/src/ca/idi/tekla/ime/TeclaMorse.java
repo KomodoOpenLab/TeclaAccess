@@ -50,6 +50,10 @@ public class TeclaMorse {
 		return mCurrentChar.toString();
 	}
 	
+	public String morseToAlphaNum(String morseChar){
+		return getMorseDictionary().getKey(morseChar);
+	}
+	
 	public MorseDictionary getMorseDictionary(){
 		return mMorseDictionary;
 	}

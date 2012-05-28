@@ -30,10 +30,10 @@ public class MorseDictionary {
 		map.put("-•--", "y");
 		
 		//numbers
-		map.put("•----", "-"); map.put("••---", "2"); map.put("•••--", "3");
-		map.put("••••-", "4"); map.put("•••••", "5"); map.put("•----", "6");
-		map.put("--•••", "7"); map.put("----•", "8"); map.put("----•", "9");
-		map.put("-----", "•");
+		map.put("•----", "1"); map.put("••---", "2"); map.put("•••--", "3");
+		map.put("••••-", "4"); map.put("•••••", "5"); map.put("-••••", "6");
+		map.put("--•••", "7"); map.put("---••", "8"); map.put("----•", "9");
+		map.put("-----", "0");
 		
 		//special characters
 		map.put("•----•", "\'"); map.put("•--•-•", "@"); map.put("•-•••", "&");

@@ -24,6 +24,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -119,9 +122,9 @@ public class TeclaIME extends InputMethodService
 	
 	// Morse variables	
 	private TeclaMorse mTeclaMorse;
-	private MorseIME mMorseIME;
-	private MorseKeyboardView mIMEViewMorse;
-	public MorseKeyboard mMorseKeyboard;
+	//private MorseIME mMorseIME;
+	private MorseKeyboardView mMorseIMEView;
+	private MorseKeyboard mMorseKeyboard;
 	private Keyboard.Key spaceKey;
 	int spaceKeyIndex;
 	private Keyboard.Key capsLockKey;
@@ -249,11 +252,14 @@ public class TeclaIME extends InputMethodService
 
 	@Override public void onDestroy() {
 		super.onDestroy();
-		mUserDictionary.close();
-		mContactsDictionary.close();
-		unregisterReceiver(mReceiver);
-		TeclaApp.highlighter.stopSelfScanning();
-		SepManager.stop(this);
+		
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			mUserDictionary.close();
+			mContactsDictionary.close();
+			unregisterReceiver(mReceiver);
+			TeclaApp.highlighter.stopSelfScanning();
+			SepManager.stop(this);
+		}
 	}
 
 	@Override
@@ -278,11 +284,11 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public View onCreateInputView() {
 		if(TeclaApp.persistence.isMorseModeEnabled()) {
-			mIMEViewMorse = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_input, null);
-			mIMEViewMorse.setOnKeyboardActionListener(this);
-			mIMEViewMorse.setKeyboard(mMorseKeyboard);
-			mIMEViewMorse.setService(mMorseIME);
-			return mIMEViewMorse;
+			mMorseIMEView = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_input, null);
+			mMorseIMEView.setOnKeyboardActionListener(this);
+			mMorseIMEView.setKeyboard(mMorseKeyboard);
+			//mMorseIMEView.setService(mMorseIME);
+			return mMorseIMEView;
 		}
 		else {
 			mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(R.xml.input, null);
@@ -317,8 +323,8 @@ public class TeclaIME extends InputMethodService
 	
 	@Override
 	public void onInitializeInterface() {
-		if(TeclaApp.persistence.isMorseModeEnabled()){
-			// TODO Auto-generated method stub
+		if(TeclaApp.persistence.isMorseModeEnabled()) {
+			
 			super.onInitializeInterface();
 			mMorseKeyboard = new MorseKeyboard(this, R.xml.morse);
 			spaceKey = mMorseKeyboard.getSpaceKey();
@@ -337,115 +343,122 @@ public class TeclaIME extends InputMethodService
 	@Override 
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 		
-		// In landscape mode, this method gets called without the input view being created.
-		if (mIMEView == null) {
-			return;
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			//TODO Elyas
 		}
+		else {
 
-		mKeyboardSwitcher.makeKeyboards(false);
-
-		TextEntryState.newSession(this);
-
-		boolean disableAutoCorrect = false;
-		mPredictionOn = false;
-		mCompletionOn = false;
-		mCompletions = null;
-		mCapsLock = false;
-		switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
-		case EditorInfo.TYPE_CLASS_NUMBER:
-		case EditorInfo.TYPE_CLASS_DATETIME:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SYMBOLS, attribute.imeOptions);
-			break;
-		case EditorInfo.TYPE_CLASS_PHONE:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_PHONE, attribute.imeOptions);
-			break;
-		case EditorInfo.TYPE_CLASS_TEXT:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
-			//startPrediction();
-			mPredictionOn = true;
-			// Make sure that passwords are not displayed in candidate view
-			int variation = attribute.inputType &  EditorInfo.TYPE_MASK_VARIATION;
-			if (variation == EditorInfo.TYPE_TEXT_VARIATION_PASSWORD ||
-					variation == EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ) {
-				mPredictionOn = false;
+			// In landscape mode, this method gets called without the input view being created.
+			if (mIMEView == null) {
+				return;
 			}
-			if (variation == EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-					|| variation == EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME) {
-				mAutoSpace = false;
-			} else {
-				mAutoSpace = true;
-			}
-			if (variation == EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) {
-				mPredictionOn = false;
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_EMAIL, attribute.imeOptions);
-			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_URI) {
-				mPredictionOn = false;
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_URL, attribute.imeOptions);
-			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_SHORT_MESSAGE) {
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_IM, attribute.imeOptions);
-			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_FILTER) {
-				mPredictionOn = false;
-			} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT) {
-				// If it's a browser edit field and auto correct is not ON explicitly, then
-				// disable auto correction, but keep suggestions on.
-				if ((attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT) == 0) {
+
+			mKeyboardSwitcher.makeKeyboards(false);
+
+			TextEntryState.newSession(this);
+
+			boolean disableAutoCorrect = false;
+			mPredictionOn = false;
+			mCompletionOn = false;
+			mCompletions = null;
+			mCapsLock = false;
+			switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
+			case EditorInfo.TYPE_CLASS_NUMBER:
+			case EditorInfo.TYPE_CLASS_DATETIME:
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SYMBOLS, attribute.imeOptions);
+				break;
+			case EditorInfo.TYPE_CLASS_PHONE:
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_PHONE, attribute.imeOptions);
+				break;
+			case EditorInfo.TYPE_CLASS_TEXT:
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
+				//startPrediction();
+				mPredictionOn = true;
+				// Make sure that passwords are not displayed in candidate view
+				int variation = attribute.inputType &  EditorInfo.TYPE_MASK_VARIATION;
+				if (variation == EditorInfo.TYPE_TEXT_VARIATION_PASSWORD ||
+						variation == EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD ) {
+					mPredictionOn = false;
+				}
+				if (variation == EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+						|| variation == EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME) {
+					mAutoSpace = false;
+				} else {
+					mAutoSpace = true;
+				}
+				if (variation == EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS) {
+					mPredictionOn = false;
+					mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_EMAIL, attribute.imeOptions);
+				} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_URI) {
+					mPredictionOn = false;
+					mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_URL, attribute.imeOptions);
+				} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_SHORT_MESSAGE) {
+					mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_IM, attribute.imeOptions);
+				} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_FILTER) {
+					mPredictionOn = false;
+				} else if (variation == EditorInfo.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT) {
+					// If it's a browser edit field and auto correct is not ON explicitly, then
+					// disable auto correction, but keep suggestions on.
+					if ((attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT) == 0) {
+						disableAutoCorrect = true;
+					}
+				}
+
+				// If NO_SUGGESTIONS is set, don't do prediction.
+				if ((attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS) != 0) {
+					mPredictionOn = false;
 					disableAutoCorrect = true;
 				}
+				// If it's not multiline and the autoCorrect flag is not set, then don't correct
+				if ((attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT) == 0 &&
+						(attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE) == 0) {
+					disableAutoCorrect = true;
+				}
+				if ((attribute.inputType&EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE) != 0) {
+					mPredictionOn = false;
+					mCompletionOn = true && isFullscreenMode();
+				}
+				updateShiftKeyState(attribute);
+				break;
+			case EditorInfo.TYPE_NULL:
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, attribute.imeOptions);
+				updateShiftKeyState(attribute);
+				break;
+			default:
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
+				updateShiftKeyState(attribute);
+			}
+			mIMEView.closing();
+			mComposing.setLength(0);
+			mPredicting = false;
+			mDeleteCount = 0;
+			setCandidatesViewShown(false);
+			if (mCandidateView != null) mCandidateView.setSuggestions(null, false, false, false);
+			loadSettings();
+			// Override auto correct
+			if (disableAutoCorrect) {
+				mAutoCorrectOn = false;
+				if (mCorrectionMode == Suggest.CORRECTION_FULL) {
+					mCorrectionMode = Suggest.CORRECTION_BASIC;
+				}
+			}
+			mIMEView.setProximityCorrectionEnabled(true);
+			if (mSuggest != null) {
+				mSuggest.setCorrectionMode(mCorrectionMode);
+			}
+			mPredictionOn = mPredictionOn && mCorrectionMode > 0;
+			checkTutorial(attribute.privateImeOptions);
+			if (TRACE) Debug.startMethodTracing("/data/trace/latinime");
+
+			int thisKBMode = mKeyboardSwitcher.getKeyboardMode();
+			if(mLastKeyboardMode != thisKBMode) {
+				mLastKeyboardMode = thisKBMode;
+				evaluateStartScanning();
 			}
 
-			// If NO_SUGGESTIONS is set, don't do prediction.
-			if ((attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_NO_SUGGESTIONS) != 0) {
-				mPredictionOn = false;
-				disableAutoCorrect = true;
-			}
-			// If it's not multiline and the autoCorrect flag is not set, then don't correct
-			if ((attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_AUTO_CORRECT) == 0 &&
-					(attribute.inputType & EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE) == 0) {
-				disableAutoCorrect = true;
-			}
-			if ((attribute.inputType&EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE) != 0) {
-				mPredictionOn = false;
-				mCompletionOn = true && isFullscreenMode();
-			}
-			updateShiftKeyState(attribute);
-			break;
-		case EditorInfo.TYPE_NULL:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, attribute.imeOptions);
-			updateShiftKeyState(attribute);
-			break;
-		default:
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
-			updateShiftKeyState(attribute);
-		}
-		mIMEView.closing();
-		mComposing.setLength(0);
-		mPredicting = false;
-		mDeleteCount = 0;
-		setCandidatesViewShown(false);
-		if (mCandidateView != null) mCandidateView.setSuggestions(null, false, false, false);
-		loadSettings();
-		// Override auto correct
-		if (disableAutoCorrect) {
-			mAutoCorrectOn = false;
-			if (mCorrectionMode == Suggest.CORRECTION_FULL) {
-				mCorrectionMode = Suggest.CORRECTION_BASIC;
-			}
-		}
-		mIMEView.setProximityCorrectionEnabled(true);
-		if (mSuggest != null) {
-			mSuggest.setCorrectionMode(mCorrectionMode);
-		}
-		mPredictionOn = mPredictionOn && mCorrectionMode > 0;
-		checkTutorial(attribute.privateImeOptions);
-		if (TRACE) Debug.startMethodTracing("/data/trace/latinime");
+			evaluateNavKbdTimeout();
 
-		int thisKBMode = mKeyboardSwitcher.getKeyboardMode();
-		if(mLastKeyboardMode != thisKBMode) {
-			mLastKeyboardMode = thisKBMode;
-			evaluateStartScanning();
 		}
-		
-		evaluateNavKbdTimeout();
 		
 	}
 	
@@ -462,45 +475,53 @@ public class TeclaIME extends InputMethodService
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd,
 			int candidatesStart, int candidatesEnd) {
-		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
-				candidatesStart, candidatesEnd);
-		// If the current selection in the text view changes, we should
-		// clear whatever candidate text we have.
-		if (mComposing.length() > 0 && mPredicting && (newSelStart != candidatesEnd
-				|| newSelEnd != candidatesEnd)) {
-			mComposing.setLength(0);
-			mPredicting = false;
-			updateSuggestions();
-			TextEntryState.reset();
-			InputConnection ic = getCurrentInputConnection();
-			if (ic != null) {
-				ic.finishComposingText();
+		if (!TeclaApp.persistence.isMorseModeEnabled()) {
+
+			super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
+					candidatesStart, candidatesEnd);
+			// If the current selection in the text view changes, we should
+			// clear whatever candidate text we have.
+			if (mComposing.length() > 0 && mPredicting && (newSelStart != candidatesEnd
+					|| newSelEnd != candidatesEnd)) {
+				mComposing.setLength(0);
+				mPredicting = false;
+				updateSuggestions();
+				TextEntryState.reset();
+				InputConnection ic = getCurrentInputConnection();
+				if (ic != null) {
+					ic.finishComposingText();
+				}
+			} else if (!mPredicting && !mJustAccepted
+					&& TextEntryState.getState() == TextEntryState.STATE_ACCEPTED_DEFAULT) {
+				TextEntryState.reset();
 			}
-		} else if (!mPredicting && !mJustAccepted
-				&& TextEntryState.getState() == TextEntryState.STATE_ACCEPTED_DEFAULT) {
-			TextEntryState.reset();
+			mJustAccepted = false;
+			postUpdateShiftKeyState();
 		}
-		mJustAccepted = false;
-		postUpdateShiftKeyState();
 	}
 
 	@Override
 	public void hideWindow() {
-		if (TeclaApp.highlighter.isSoftIMEShowing()) {
-			TeclaApp.highlighter.stopSelfScanning();
-			TeclaApp.highlighter.clear();
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			//TODO Elyas
 		}
-		if (TRACE) Debug.stopMethodTracing();
-		if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
-			mOptionsDialog.dismiss();
-			mOptionsDialog = null;
+		else {
+			if (TeclaApp.highlighter.isSoftIMEShowing()) {
+				TeclaApp.highlighter.stopSelfScanning();
+				TeclaApp.highlighter.clear();
+			}
+			if (TRACE) Debug.stopMethodTracing();
+			if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
+				mOptionsDialog.dismiss();
+				mOptionsDialog = null;
+			}
+			if (mTutorial != null) {
+				mTutorial.close();
+				mTutorial = null;
+			}
+			super.hideWindow();
+			TextEntryState.endSession();
 		}
-		if (mTutorial != null) {
-			mTutorial.close();
-			mTutorial = null;
-		}
-		super.hideWindow();
-		TextEntryState.endSession();
 	}
 
 	@Override
@@ -555,10 +576,14 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		switch (keyCode) {
-		case KeyEvent.KEYCODE_BACK:
-			// FIXME: Tecla - Prevent soft input method from consuming the back key
-			/*if (event.getRepeatCount() == 0 && mInputView != null) {
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			return super.onKeyDown(keyCode, event);
+		}
+		else {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				// FIXME: Tecla - Prevent soft input method from consuming the back key
+				/*if (event.getRepeatCount() == 0 && mInputView != null) {
                     if (mInputView.handleBack()) {
                         return true;
                     } else if (mTutorial != null) {
@@ -567,18 +592,19 @@ public class TeclaIME extends InputMethodService
                     }
                 }
                 break;*/
-			return false;
-		case KeyEvent.KEYCODE_DPAD_DOWN:
-		case KeyEvent.KEYCODE_DPAD_UP:
-		case KeyEvent.KEYCODE_DPAD_LEFT:
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			// If tutorial is visible, don't allow dpad to work
-			if (mTutorial != null) {
-				return true;
+				return false;
+			case KeyEvent.KEYCODE_DPAD_DOWN:
+			case KeyEvent.KEYCODE_DPAD_UP:
+			case KeyEvent.KEYCODE_DPAD_LEFT:
+			case KeyEvent.KEYCODE_DPAD_RIGHT:
+				// If tutorial is visible, don't allow dpad to work
+				if (mTutorial != null) {
+					return true;
+				}
+				break;
 			}
-			break;
+			return super.onKeyDown(keyCode, event);
 		}
-		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
@@ -770,14 +796,8 @@ public class TeclaIME extends InputMethodService
 
 	// Implementation of KeyboardViewListener
 	public void onKey(int primaryCode, int[] keyCodes) {
-		if(TeclaApp.persistence.isMorseModeEnabled()) {
-			int kbd = mIMEViewMorse.whichKeyboard();
-			if (kbd == MorseKeyboardView.KBD_DITDAH) {
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
 				onKeyMorse(primaryCode, keyCodes);
-			}
-			//else if (kbd == MorseKeyboardView.KBD_UTILITY) {
-				//onKeyUtility(primaryCode, keyCodes);
-			//}
 		}
 		else {
 
@@ -843,18 +863,14 @@ public class TeclaIME extends InputMethodService
 	 * @param keyCodes
 	 */
 	public void onKeyMorse(int primaryCode, int[] keyCodes) {
-		// Log.d(TeclaApp.TAG, CLASS_TAG + "primaryCode: " + Integer.toString(primaryCode));
-		//String curCharMatch = morseMap.get(charInProgress.toString());
-		String curCharMatch = mTeclaMorse.getMorseDictionary().getKey(mTeclaMorse.getCurrentChar());
+		String curCharMatch = mTeclaMorse.morseToAlphaNum(mTeclaMorse.getCurrentChar());
 
 		switch (primaryCode) {
 
-		// 0 represents a dot, 1 represents a dash
+		// 0 represents a dit, 1 represents a dah
 		case 0:
 		case 1:
 			
-			Log.d(TeclaApp.TAG, CLASS_TAG + "curCharMatch: " + mTeclaMorse.getMorseDictionary().getKey(mTeclaMorse.getCurrentChar()));
-			Log.d(TeclaApp.TAG, CLASS_TAG + "primaryCode: " + Integer.toString(primaryCode) + ", mDictionary: " + mTeclaMorse.getMorseDictionary());
 			if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 
 				if(primaryCode == 0)
@@ -865,27 +881,22 @@ public class TeclaIME extends InputMethodService
 			//Log.d(TeclaApp.TAG, CLASS_TAG + "currentChar: " + mTeclaMorse.getCurrentChar());
 			break;
 
-			// Space button ends the current dotdash sequence
+			// Space button ends the current ditdah sequence
 			// Space twice in a row sends through a standard space character
 		case KeyEvent.KEYCODE_SPACE:
 			if (mTeclaMorse.getCurrentChar().length() == 0) {
 				getCurrentInputConnection().commitText(" ", 1);
 
-				/*if (autoCapState == AUTO_CAP_SENTENCE_ENDED) {
-					capsLockState = CAPS_LOCK_NEXT;
-					updateCapsLockKey(true);
-				}*/
-			} else {
-				// Log.d(TAG, "Pressed space, look for " +
-				// charInProgress.toString());
-
+			}
+			else {
+				//Log.d(TeclaApp.TAG, CLASS_TAG + "Looking for: " + mTeclaMorse.getCurrentChar());
 				if (curCharMatch != null) {
 
 					if (curCharMatch.contentEquals("\n")) {
 						sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
 					} else if (curCharMatch.contentEquals("END")) {
 						requestHideSelf(0);
-						mIMEViewMorse.closing();
+						mMorseIMEView.closing();
 					} else {
 
 						boolean uppercase = false;
@@ -900,9 +911,7 @@ public class TeclaIME extends InputMethodService
 							curCharMatch = curCharMatch.toUpperCase();
 						}
 
-						// Log.d(TAG, "Char identified as " + curCharMatch);
-						getCurrentInputConnection().commitText(curCharMatch,
-								curCharMatch.length());
+						getCurrentInputConnection().commitText(curCharMatch, curCharMatch.length());
 					}
 				}
 			}
@@ -914,7 +923,7 @@ public class TeclaIME extends InputMethodService
 		case KeyEvent.KEYCODE_DEL:
 			if (mTeclaMorse.getCurrentChar().length() > 0) {
 				clearCharInProgress();
-			} else {
+			}else {
 				sendDownUpKeyEvents(primaryCode);
 				clearCharInProgress();
 				updateSpaceKey(true);
@@ -951,15 +960,27 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	public void updateSpaceKey(boolean refreshScreen) {
-		if (!spaceKey.label.toString().equals(mTeclaMorse.getCurrentChar())) {
-			// Log.d(TAG, "!spaceKey.label.equals(charInProgress)");
-			spaceKey.label = mTeclaMorse.getCurrentChar();
-			if (refreshScreen) {
-				mIMEViewMorse.invalidateKey(spaceKeyIndex);
-			}
+		//if (!spaceKey.label.toString().equals(charInProgress.toString())) {
+		String s = mTeclaMorse.morseToAlphaNum(mTeclaMorse.getCurrentChar()) + " " + mTeclaMorse.getCurrentChar();
+		if (!mTeclaMorse.getCurrentChar().equals("")){ //FIXME Elyas: && under the maxCodeLength
+			spaceKey.label = s;
+			
+			//MorseCandidates candidates = new MorseCandidates(this);
+			//spaceKey.icon = candidates.mDrawable;
+			
+			//Resources res = this.getResources();
+			//spaceKey.icon = res.getDrawable(R.drawable.morse_candidates);
+			//mMorseIMEView.invalidateAllKeys();
+			
 		}
+		else
+			spaceKey.label = "space";
+		
+		if (refreshScreen)
+			mMorseIMEView.invalidateKey(spaceKeyIndex);
 	}
 	
+	//Unused for now.
 	public void updateCapsLockKey(boolean refreshScreen) {
 
 		Context context = this.getApplicationContext();
@@ -979,7 +1000,7 @@ public class TeclaIME extends InputMethodService
 		}
 
 		if (refreshScreen) {
-			mIMEViewMorse.invalidateKey(capsLockKeyIndex);
+			mMorseIMEView.invalidateKey(capsLockKeyIndex);
 		}
 	}
 
@@ -1161,10 +1182,15 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void handleClose() {
-		commitTyped(getCurrentInputConnection());
-		requestHideSelf(0);
-		mIMEView.closing();
-		TextEntryState.endSession();
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			//TODO Elyas: handle closing for Morse keyboard
+		}
+		else {
+			commitTyped(getCurrentInputConnection());
+			requestHideSelf(0);
+			mIMEView.closing();
+			TextEntryState.endSession();
+		}
 	}
 
 	private void checkToggleCapsLock() {
