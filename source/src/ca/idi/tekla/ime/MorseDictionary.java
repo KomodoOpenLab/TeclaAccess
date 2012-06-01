@@ -6,29 +6,39 @@ import java.util.Map.Entry;
 public class MorseDictionary {
 	
 	private String CLASS_TAG = "MorseDictionary: ";
-	private static HashMap<String,String> mMorseChart;
+	public static LinkedHashMap<String,String> mMorseChart;
 	private static int mMaxCodeLength;
 	
 	public MorseDictionary() {
-		mMorseChart = new HashMap<String,String>();
+		mMorseChart = new LinkedHashMap<String,String>();
 		createMapping(mMorseChart);
 		setMaxCodeLength();
 	}
 	
-	public static void createMapping(HashMap<String,String> map) {
+	public static void createMapping(LinkedHashMap<String,String> map) {
+		map.put("•-", "a"); map.put("-•••", "b"); map.put("-•-•", "c");
+		map.put("-••", "d"); map.put("•", "e"); map.put("••-•", "f");
+		map.put("--•", "g"); map.put("••••", "h"); map.put("••", "i");
+		map.put("•---", "j"); map.put("-•-", "k"); map.put("•-••", "l");
+		map.put("--", "m"); map.put("-•", "n"); map.put("---", "o");
+		map.put("•--•", "p"); map.put("--•-", "q"); map.put("•-•", "r");
+		map.put("•••", "s"); map.put("-", "t"); map.put("••-", "u");
+		map.put("•••-", "v"); map.put("•--", "w");	map.put("-••-", "x");
+		map.put("-•--", "y"); map.put("--••", "z"); 
+		
 		//dit-first letters
-		map.put("•", "e"); map.put("••", "i"); map.put("•-", "a");
+		/*map.put("•", "e"); map.put("••", "i"); map.put("•-", "a");
 		map.put("•••", "s"); map.put("••-", "u"); map.put("•--", "w");
 		map.put("•-•", "r"); map.put("••••", "h"); map.put("•••-", "v");
 		map.put("••-•", "f"); map.put("•--•", "p"); map.put("•---", "j");
-		map.put("•-••", "l"); 
+		map.put("•-••", "l"); */
 		
 		//dah-first letters
-		map.put("-", "t"); map.put("--", "m"); map.put("-•", "n");
+		/*map.put("-", "t"); map.put("--", "m"); map.put("-•", "n");
 		map.put("---", "o"); map.put("--•", "g"); map.put("-••", "d");
 		map.put("-•-", "k"); map.put("--••", "z"); map.put("--•-", "q");
 		map.put("-•••", "b"); map.put("-••-", "x"); map.put("-•-•", "c");
-		map.put("-•--", "y");
+		map.put("-•--", "y");*/
 		
 		//numbers
 		map.put("•----", "1"); map.put("••---", "2"); map.put("•••--", "3");
@@ -64,8 +74,8 @@ public class MorseDictionary {
 		return mMorseChart.get(key);
 	}
 	
-	public HashMap<String,String> startsWith(char c) {
-		HashMap<String,String> map = new HashMap<String,String>();
+	public LinkedHashMap<String,String> startsWith(char c) {
+		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
 		Iterator<Entry<String,String>> it = mMorseChart.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String,String> entry = it.next();

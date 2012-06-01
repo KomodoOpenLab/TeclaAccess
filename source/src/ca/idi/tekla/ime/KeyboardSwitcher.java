@@ -39,7 +39,7 @@ public class KeyboardSwitcher {
     public static final int MODE_1X8 = 13;
     public static final int MODE_1X9 = 14;
     public static final int MODE_1X10 = 15;
-    public static final int MODE_MORSE = 16;
+    //public static final int MODE_MORSE = 16;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -51,7 +51,7 @@ public class KeyboardSwitcher {
     public static final int KEYBOARDMODE_IM = R.id.mode_im;
     public static final int KEYBOARDMODE_VOICE = R.id.mode_voice;
     public static final int KEYBOARDMODE_VARIANTS = R.id.mode_variants;
-    public static final int KEYBOARDMODE_MORSE = R.xml.morse;
+    //public static final int KEYBOARDMODE_MORSE = R.layout.morse_kbd;
     
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;

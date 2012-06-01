@@ -4,9 +4,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 import ca.idi.tekla.R;
-import ca.idi.tekla.R.drawable;
-import ca.idi.tekla.R.layout;
-import ca.idi.tekla.R.string;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,8 +15,6 @@ import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
 
 public class MorseIME extends InputMethodService implements
 KeyboardView.OnKeyboardActionListener, OnSharedPreferenceChangeListener {
@@ -73,7 +68,7 @@ KeyboardView.OnKeyboardActionListener, OnSharedPreferenceChangeListener {
 	public void onInitializeInterface() {
 		// TODO Auto-generated method stub
 		super.onInitializeInterface();
-		mMorseKeyboard = new MorseKeyboard(this, R.xml.morse);
+		mMorseKeyboard = new MorseKeyboard(this, R.layout.morse_kbd);
 		spaceKey = mMorseKeyboard.getSpaceKey();
 		capsLockKey = mMorseKeyboard.getCapsLockKey();
 		List<Keyboard.Key> keys = mMorseKeyboard.getKeys();

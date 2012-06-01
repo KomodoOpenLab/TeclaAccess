@@ -60,11 +60,11 @@ public class MorseKeyboardView extends KeyboardView {
 		Log.d(TeclaApp.TAG, "ONDRAW METHOD");
 		
         MorseChart mc = new MorseChart(getContext(), mTeclaMorse);
-        mc.tl.measure(canvas.getWidth(), canvas.getHeight());
-        mc.tl.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+        mc.ll.measure(canvas.getWidth(), canvas.getHeight());
+        mc.ll.layout(0, 0, canvas.getWidth(), canvas.getHeight());
         
-        //super.onDraw(canvas); 
-        mc.tl.draw(canvas);
+        super.onDraw(canvas); 
+        mc.ll.draw(canvas);
         
 	}
 	

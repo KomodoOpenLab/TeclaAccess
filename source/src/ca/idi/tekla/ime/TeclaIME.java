@@ -288,7 +288,7 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public View onCreateInputView() {
 		if(TeclaApp.persistence.isMorseModeEnabled()) {
-			mMorseIMEView = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_input, null);
+			mMorseIMEView = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_view, null);
 			mMorseIMEView.setOnKeyboardActionListener(this);
 			mMorseIMEView.setKeyboard(mMorseKeyboard);
 			mMorseIMEView.setTeclaMorse(mTeclaMorse);
@@ -332,7 +332,7 @@ public class TeclaIME extends InputMethodService
 		if(TeclaApp.persistence.isMorseModeEnabled()) {
 			
 			super.onInitializeInterface();
-			mMorseKeyboard = new MorseKeyboard(this, R.xml.morse);
+			mMorseKeyboard = new MorseKeyboard(this, R.layout.morse_kbd);
 			spaceKey = mMorseKeyboard.getSpaceKey();
 			capsLockKey = mMorseKeyboard.getCapsLockKey();
 			List<Keyboard.Key> keys = mMorseKeyboard.getKeys();

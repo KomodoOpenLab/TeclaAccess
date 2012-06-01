@@ -17,14 +17,14 @@ public class TeclaMorse {
 	private String CLASS_TAG = "TeclaMorse: ";
 	
 	private MorseDictionary mMorseDictionary;
-	private HashMap<String, String> mCandidates;
+	private LinkedHashMap<String, String> mCandidates;
 	private static StringBuilder mCurrentChar;
 	
 	
 	public TeclaMorse() {
 		mCurrentChar = new StringBuilder();
 		mMorseDictionary = new MorseDictionary();
-		mCandidates = new HashMap<String,String>();
+		mCandidates = new LinkedHashMap<String,String>();
 		MorseDictionary.createMapping(mCandidates);
 	}
 	
