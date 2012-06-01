@@ -64,5 +64,17 @@ public class MorseDictionary {
 		return mMorseChart.get(key);
 	}
 	
+	public HashMap<String,String> startsWith(char c) {
+		HashMap<String,String> map = new HashMap<String,String>();
+		Iterator<Entry<String,String>> it = mMorseChart.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String,String> entry = it.next();
+			if (entry.getKey().startsWith(Character.toString(c)))
+				map.put(entry.getKey(), entry.getValue());
+		}
+		
+		return map;
+	}
+	
 	
 }

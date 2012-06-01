@@ -28,14 +28,14 @@ public class TeclaMorse {
 		MorseDictionary.createMapping(mCandidates);
 	}
 	
-	public void clearCharInProgress(){
+	public void clearCharInProgress() {
 		mCurrentChar.setLength(0);
 	}
 
 	
 	private void updateCandidates() {
 		Iterator<String> it = mCandidates.keySet().iterator();
-		while (it.hasNext()){
+		while (it.hasNext()) {
 			String key = it.next();
 			if (!key.startsWith(mCurrentChar.toString()))
 				it.remove();
@@ -46,7 +46,7 @@ public class TeclaMorse {
 		return mCurrentChar.toString();
 	}
 	
-	public String morseToChar(String morseChar){
+	public String morseToChar(String morseChar) {
 		return getMorseDictionary().getKey(morseChar);
 	}
 	
