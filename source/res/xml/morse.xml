@@ -28,17 +28,19 @@
         <Row
                 android:keyWidth="100%"
                 android:rowEdgeFlags="top"
-                android:keyHeight="35%"
+                android:keyHeight="37%"
         >
-           <!-- <Key
+            
+            
+            
+            
+                <!-- <Key
                         android:keyLabel="@string/caps_lock_off"
                         android:keyEdgeFlags="left"
                         android:codes="59"
                         android:isSticky="true"
                         /> -->
-                <Key
-                        android:codes="62"
-                        />
+
                <!-- <Key
                         android:keyIcon="@drawable/sym_keyboard_delete"
                         android:keyEdgeFlags="right"
@@ -49,15 +51,21 @@
         </Row>
         
         <Row
-                android:keyWidth="50%"
+                android:keyWidth="30%"
                 android:rowEdgeFlags="bottom"
-                android:keyHeight="10%"
+                android:keyHeight="15%"
         >
                 <Key
                         android:keyLabel="•"
                         android:keyEdgeFlags="left"
                         android:codes="0"
                         />
+                        
+                <Key
+                        android:keyWidth="40%"
+                        android:codes="62"
+                        />
+                        
                 <Key
                         android:keyLabel="-"
                         android:keyEdgeFlags="right"

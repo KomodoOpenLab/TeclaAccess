@@ -25,6 +25,11 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.inputmethodservice.InputMethodService;
@@ -122,7 +127,6 @@ public class TeclaIME extends InputMethodService
 	
 	// Morse variables	
 	private TeclaMorse mTeclaMorse;
-	//private MorseIME mMorseIME;
 	private MorseKeyboardView mMorseIMEView;
 	private MorseKeyboard mMorseKeyboard;
 	private Keyboard.Key spaceKey;
@@ -287,7 +291,9 @@ public class TeclaIME extends InputMethodService
 			mMorseIMEView = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_input, null);
 			mMorseIMEView.setOnKeyboardActionListener(this);
 			mMorseIMEView.setKeyboard(mMorseKeyboard);
-			//mMorseIMEView.setService(mMorseIME);
+			mMorseIMEView.setTeclaMorse(mTeclaMorse);
+			mMorseIMEView.setResources(this.getResources());
+			
 			return mMorseIMEView;
 		}
 		else {
@@ -504,6 +510,8 @@ public class TeclaIME extends InputMethodService
 	public void hideWindow() {
 		if (TeclaApp.persistence.isMorseModeEnabled()) {
 			//TODO Elyas
+			super.hideWindow();
+			TextEntryState.endSession();
 		}
 		else {
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
@@ -863,7 +871,7 @@ public class TeclaIME extends InputMethodService
 	 * @param keyCodes
 	 */
 	public void onKeyMorse(int primaryCode, int[] keyCodes) {
-		String curCharMatch = mTeclaMorse.morseToAlphaNum(mTeclaMorse.getCurrentChar());
+		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
 
 		switch (primaryCode) {
 
@@ -878,7 +886,6 @@ public class TeclaIME extends InputMethodService
 				else
 					mTeclaMorse.addDah();
 			}
-			//Log.d(TeclaApp.TAG, CLASS_TAG + "currentChar: " + mTeclaMorse.getCurrentChar());
 			break;
 
 			// Space button ends the current ditdah sequence
@@ -886,10 +893,8 @@ public class TeclaIME extends InputMethodService
 		case KeyEvent.KEYCODE_SPACE:
 			if (mTeclaMorse.getCurrentChar().length() == 0) {
 				getCurrentInputConnection().commitText(" ", 1);
-
 			}
 			else {
-				//Log.d(TeclaApp.TAG, CLASS_TAG + "Looking for: " + mTeclaMorse.getCurrentChar());
 				if (curCharMatch != null) {
 
 					if (curCharMatch.contentEquals("\n")) {
@@ -912,6 +917,7 @@ public class TeclaIME extends InputMethodService
 						}
 
 						getCurrentInputConnection().commitText(curCharMatch, curCharMatch.length());
+						//mTeclaMorse.reset();
 					}
 				}
 			}
@@ -961,17 +967,11 @@ public class TeclaIME extends InputMethodService
 	
 	public void updateSpaceKey(boolean refreshScreen) {
 		//if (!spaceKey.label.toString().equals(charInProgress.toString())) {
-		String s = mTeclaMorse.morseToAlphaNum(mTeclaMorse.getCurrentChar()) + " " + mTeclaMorse.getCurrentChar();
-		if (!mTeclaMorse.getCurrentChar().equals("")){ //FIXME Elyas: && under the maxCodeLength
+		String s = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar()) + " " + mTeclaMorse.getCurrentChar();
+		if (!mTeclaMorse.getCurrentChar().equals("") &&
+			mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()){ 
+			
 			spaceKey.label = s;
-			
-			//MorseCandidates candidates = new MorseCandidates(this);
-			//spaceKey.icon = candidates.mDrawable;
-			
-			//Resources res = this.getResources();
-			//spaceKey.icon = res.getDrawable(R.drawable.morse_candidates);
-			//mMorseIMEView.invalidateAllKeys();
-			
 		}
 		else
 			spaceKey.label = "space";
@@ -1184,6 +1184,9 @@ public class TeclaIME extends InputMethodService
 	private void handleClose() {
 		if (TeclaApp.persistence.isMorseModeEnabled()) {
 			//TODO Elyas: handle closing for Morse keyboard
+			requestHideSelf(0);
+			mMorseIMEView.closing();
+			TextEntryState.endSession();
 		}
 		else {
 			commitTyped(getCurrentInputConnection());

@@ -1,22 +1,42 @@
 package ca.idi.tekla.ime;
 
 
+import ca.idi.tekla.R;
+import ca.idi.tekla.TeclaApp;
 import android.content.Context;
-import android.inputmethodservice.Keyboard;
+import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.inputmethodservice.KeyboardView;
-import android.inputmethodservice.Keyboard.Key;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TableRow.LayoutParams;
+import android.widget.TextView;
 
 
 public class MorseKeyboardView extends KeyboardView {
 
-	private MorseIME mIMEService;
+	private TeclaMorse mTeclaMorse;
+	private Resources mResources;
 
 	public static final int KBD_NONE = 0;
 	public static final int KBD_DITDAH = 1;
+	
+	private int scroll = 0;
 
-	public void setService(MorseIME service) {
-		mIMEService = service;
+	public void setResources(Resources res) {
+		mResources = res;
+	}
+	
+	public void setTeclaMorse(TeclaMorse tm) {
+		mTeclaMorse = tm;
 	}
 
 	public MorseKeyboardView(Context context, AttributeSet attrs) {
@@ -33,29 +53,20 @@ public class MorseKeyboardView extends KeyboardView {
 	public MorseKeyboard getKeyboard() {
 		return (MorseKeyboard) super.getKeyboard();
 	}
-
-
-	/**
-	 * Updates the newline code printed in the cheat sheet, based on the user's
-	 * current preference.
-	 */
-	 public void updateNewlineCode() {
-
-	}
-	 
-	 /*@Override
-	 protected boolean onLongPress(Key key) {
-		 invalidateAllKeys();
-		 return true;
-	 }*/
-
-
-	public void setPhoneKeyboard(MorseKeyboard keyboard) {
-		// TODO Auto-generated method stub
+	
+	
+	@Override
+	public void onDraw(Canvas canvas) {
+		Log.d(TeclaApp.TAG, "ONDRAW METHOD");
 		
+        MorseChart mc = new MorseChart(getContext(), mTeclaMorse);
+        mc.tl.measure(canvas.getWidth(), canvas.getHeight());
+        mc.tl.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+        
+        //super.onDraw(canvas); 
+        mc.tl.draw(canvas);
+        
 	}
-
-	public void startPlaying(String string) {
-		// TODO Auto-generated method stub
-	}
+	
+	
 }

@@ -1,6 +1,7 @@
 package ca.idi.tekla.ime;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class MorseDictionary {
 	
@@ -62,5 +63,6 @@ public class MorseDictionary {
 	public String getKey(String key) {
 		return mMorseChart.get(key);
 	}
+	
 	
 }

@@ -22,10 +22,6 @@ public class TeclaMorse {
 	
 	
 	public TeclaMorse() {
-		//Resources res = context.getResources();
-		//String s = res.getString(R.xml.kbd_qwerty);
-		//Log.d(TeclApp.TAG, CLASS_TAG + "Retrieved from XML: " + s);
-		
 		mCurrentChar = new StringBuilder();
 		mMorseDictionary = new MorseDictionary();
 		mCandidates = new HashMap<String,String>();
@@ -37,7 +33,7 @@ public class TeclaMorse {
 	}
 
 	
-	public void updateCandidates() {
+	private void updateCandidates() {
 		Iterator<String> it = mCandidates.keySet().iterator();
 		while (it.hasNext()){
 			String key = it.next();
@@ -50,12 +46,16 @@ public class TeclaMorse {
 		return mCurrentChar.toString();
 	}
 	
-	public String morseToAlphaNum(String morseChar){
+	public String morseToChar(String morseChar){
 		return getMorseDictionary().getKey(morseChar);
 	}
 	
-	public MorseDictionary getMorseDictionary(){
+	public MorseDictionary getMorseDictionary() {
 		return mMorseDictionary;
+	}
+	
+	public HashMap<String,String> getCandidates() {
+		return mCandidates;
 	}
 	
 	
@@ -69,24 +69,12 @@ public class TeclaMorse {
 		updateCandidates();
 	}
 	
-	public int letterReturn() {
-		String letter = mMorseDictionary.getKey(mCurrentChar.toString());
-		if (letter != null) {
-			mCurrentChar = new StringBuilder();
-			mCandidates.clear();
-			MorseDictionary.createMapping(mCandidates);
-			return getKeycodeFromString(letter);
-		}
-		//throw new Exception("No such symbol found");
-		return getKeycodeFromString("");
+	public void reset() {
+		mCurrentChar = new StringBuilder();
+		mCandidates.clear();
+		MorseDictionary.createMapping(mCandidates);
 	}
 	
-	public int getKeycodeFromString(String s) {
-		if (s.equals(""))
-			return 0;
-		
-		return 113;
-	}
 	
 	
 	
