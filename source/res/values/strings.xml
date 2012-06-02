@@ -255,6 +255,7 @@
     <string name="caps_lock_next">Abc</string>
     <string name="caps_lock_all">ABC</string>
     <string name="tapforpunctuation">Tap for punctuation</string>
+    <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
     
     <!-- Option to enable Morse input method -->
 	<string name="morse_mode">Use Morse input method</string>

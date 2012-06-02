@@ -16,12 +16,6 @@ public class MorseKeyboard extends Keyboard {
                 super(context, xmlLayoutResId);
         }
         
-        public MorseKeyboard(Context context, int layoutTemplateResId,
-                        CharSequence characters, int columns, int horizontalPadding) {
-                super(context, layoutTemplateResId, characters, columns,
-                                horizontalPadding);
-        }
-        
         public void enableShiftLock() {
         	
         }
@@ -96,7 +90,9 @@ public class MorseKeyboard extends Keyboard {
 		public Key getVariantsKey() {
 			// TODO Auto-generated method stub
 			return null;
-		}	public Integer getRowCount() {
+		}	
+		
+		public Integer getRowCount() {
 			List<Key> keyList = getKeys();
 			Key key;
 			int rowCounter = 0;

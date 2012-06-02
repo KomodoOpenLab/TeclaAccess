@@ -16,6 +16,7 @@ public class MorseDictionary {
 	}
 	
 	public static void createMapping(LinkedHashMap<String,String> map) {
+		//alphabetic order
 		map.put("•-", "a"); map.put("-•••", "b"); map.put("-•-•", "c");
 		map.put("-••", "d"); map.put("•", "e"); map.put("••-•", "f");
 		map.put("--•", "g"); map.put("••••", "h"); map.put("••", "i");

@@ -13,21 +13,19 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.TableRow.LayoutParams;
 
 public class MorseChart {
 	
-
+	private int NB_COLUMNS = 5;
+	private int index = 0;
 	public LinearLayout ll;
-	private TableLayout[] tls = new TableLayout[6];
-	private int tableSelector = 0;
+	private TableLayout[] tls = new TableLayout[NB_COLUMNS];
+	private TableRow.LayoutParams trParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+	private TableLayout.LayoutParams tlParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
 
 	public MorseChart(Context context, TeclaMorse mTeclaMorse) {
 		
-		TableRow.LayoutParams trParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-		TableLayout.LayoutParams tlParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
 		LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-		//trParams.setMargins(0, 0, 10, 10);
 		llParams.setMargins(0, 0, 20, 0);
 		
 		ll = new LinearLayout(context);
@@ -42,51 +40,52 @@ public class MorseChart {
         
         
         String s = mTeclaMorse.getCurrentChar();
-        Log.d(TeclaApp.TAG, "CurrentChar: " + s);
-        
         if (!s.equals("")) {
+        	Log.d(TeclaApp.TAG, "Filling HUD");
         	//Populate the HUD according to the 1st typed Morse character
-        	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().mMorseChart;
-        	//LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().startsWith(s.charAt(0));
-        	Log.d(TeclaApp.TAG, "Map: " + map.toString());
-        	Iterator<Entry<String,String>> it = map.entrySet().iterator();
-        	
-        	int j = 0;
-        	while (it.hasNext()) {
-    			Entry<String,String> entry = it.next();
-    			
-        		TableRow tr = new TableRow(context);
-            	tr.setId(100+j);
-            	tr.setLayoutParams(trParams);
-            	tr.setBaselineAligned(true);
-            	
-            	TextView charTV = new TextView(context);
-            	charTV.setId(200+j);
-            	charTV.setText(entry.getValue());
-            	charTV.setTextColor(0xFF5887ED);
-            	//charTV.setTextColor(Color.WHITE);
-            	//charTV.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-            	tr.addView(charTV);
-            	
-            	TextView morseTV = new TextView(context);
-            	morseTV.setId(300+j);
-            	morseTV.setText(entry.getKey());
-            	morseTV.setTextColor(Color.WHITE);
-            	//morseTV.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-            	tr.addView(morseTV);
-            	
-            	addViewToNextTable(tr, tlParams);
-            	j++;
-            	tableSelector++;
-        	}
-        	
+        	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().startsWith(s.charAt(0));
+        	fillHUD(context, map);
         }
+        else
+        	Log.d(TeclaApp.TAG, "Empty field");
         
 	}
+	
+	public void fillHUD(Context context, LinkedHashMap<String,String> chart) {
+		Iterator<Entry<String,String>> it = chart.entrySet().iterator();
+		
+    	while (it.hasNext()) {
+			Entry<String,String> entry = it.next();
+			
+    		TableRow tr = new TableRow(context);
+        	tr.setId(100 + index);
+        	tr.setLayoutParams(trParams);
+        	tr.setBaselineAligned(true);
+        	
+        	TextView charTV = new TextView(context);
+        	charTV.setId(200 + index);
+        	charTV.setText(entry.getValue());
+        	charTV.setTextSize(16.0f);
+        	charTV.setTextColor(0xFF5887ED);
+        	tr.addView(charTV);
+        	
+        	TextView morseTV = new TextView(context);
+        	morseTV.setId(300 + index);
+        	morseTV.setText(entry.getKey());
+        	morseTV.setTextSize(16.0f);
+        	morseTV.setTextColor(Color.WHITE);
+        	tr.addView(morseTV);
+        	
+        	addViewToNextTable(tr, tlParams);
+        	index++;
+    	}
+		
+	}
+	
+	
 
 	private void addViewToNextTable(View v, TableLayout.LayoutParams tlParams) {
-		int index = tableSelector % 6;
-		tls[index].addView(v, tlParams);
+		tls[index % NB_COLUMNS].addView(v, tlParams);
 	}
 	
 

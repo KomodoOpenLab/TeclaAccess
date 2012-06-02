@@ -30,8 +30,6 @@ KeyboardView.OnKeyboardActionListener, OnSharedPreferenceChangeListener {
 	private StringBuilder charInProgress;
 	
 	// Preferences
-	private String NEWLINECODE = "newline";
-	private String NEWLINECODE_NONE = "X";
 	private String AUTOCAP = "autocap";
 	private String ENABLEUTILKBD = "enableutilkbd";
 
@@ -106,16 +104,13 @@ KeyboardView.OnKeyboardActionListener, OnSharedPreferenceChangeListener {
 		switch (primaryCode) {
 
 		// 0 represents a dot, 1 represents a dash
-		// TODO The documentation for Keyboard.Key says I should be
-		// able to give a key a string as a keycode, but it
-		// errors out every time I try it.
 		case 0:
 		case 1:
 
 			if (charInProgress.length() < maxCodeLength) {
 				charInProgress.append(primaryCode == 1 ? "-" : ".");
 			}
-			// Log.d(TAG, "charInProgress: " + charInProgress);
+
 			break;
 
 			// Space button ends the current dotdash sequence
@@ -301,21 +296,9 @@ KeyboardView.OnKeyboardActionListener, OnSharedPreferenceChangeListener {
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (key.contentEquals(NEWLINECODE)) {
-			updateNewlinePref();
-		}
 	}
 
-	/**
-	 * Updates the newline character stored in morseMap, based on the user's
-	 * current preferences.
-	 * 
-	 * Not sure how I'm going to support this when I switch the codes to a
-	 * selectable XML system...
-	 */
-	private void updateNewlinePref() {
-		
-	}
+
 
 	/**
 	 * The cursor position (selection position) has changed

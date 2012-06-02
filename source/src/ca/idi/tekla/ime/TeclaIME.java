@@ -17,6 +17,7 @@
 package ca.idi.tekla.ime;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,6 +56,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.CompletionInfo;
@@ -133,8 +135,7 @@ public class TeclaIME extends InputMethodService
 	int spaceKeyIndex;
 	private Keyboard.Key capsLockKey;
 	int capsLockKeyIndex;
-	public String[] newlineGroups;
-	private int maxCodeLength;
+	
 
 	private static final int CAPS_LOCK_OFF = 0;
 	private static final int CAPS_LOCK_NEXT = 1;
@@ -216,10 +217,10 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		if(TeclaApp.persistence.isMorseModeEnabled()){
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
 			Log.d(TeclaApp.TAG, CLASS_TAG + "Creating Morse IME...");
 		}
-		else{
+		else {
 			// Setup Debugging
 			if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
@@ -268,7 +269,7 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
-		if(!TeclaApp.persistence.isMorseModeEnabled()) {
+		if (!TeclaApp.persistence.isMorseModeEnabled()) {
 			if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
 				initSuggest(conf.locale.toString());
 			}
@@ -287,12 +288,12 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public View onCreateInputView() {
-		if(TeclaApp.persistence.isMorseModeEnabled()) {
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
 			mMorseIMEView = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_view, null);
 			mMorseIMEView.setOnKeyboardActionListener(this);
 			mMorseIMEView.setKeyboard(mMorseKeyboard);
 			mMorseIMEView.setTeclaMorse(mTeclaMorse);
-			mMorseIMEView.setResources(this.getResources());
+			mMorseIMEView.setService(this);
 			
 			return mMorseIMEView;
 		}
@@ -349,7 +350,10 @@ public class TeclaIME extends InputMethodService
 	@Override 
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 		
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
+		if (TeclaApp.persistence.isMorseModeEnabled()) {	
+			// In landscape mode, this method gets called without the input view being created.	
+			if (mMorseIMEView == null)
+				return;
 			//TODO Elyas
 		}
 		else {
@@ -474,6 +478,10 @@ public class TeclaIME extends InputMethodService
 
 		if (mIMEView != null) {
 			mIMEView.closing();
+		}
+
+		if (mMorseIMEView != null) {
+			mMorseIMEView.closing();
 		}
 	}
 
@@ -959,6 +967,7 @@ public class TeclaIME extends InputMethodService
 		}
 
 		updateSpaceKey(true);
+		mMorseIMEView.invalidate();
 	}
 	
 	private void clearCharInProgress() {
@@ -967,7 +976,7 @@ public class TeclaIME extends InputMethodService
 	
 	public void updateSpaceKey(boolean refreshScreen) {
 		//if (!spaceKey.label.toString().equals(charInProgress.toString())) {
-		String s = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar()) + " " + mTeclaMorse.getCurrentChar();
+		String s = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar()) + "  " + mTeclaMorse.getCurrentChar();
 		if (!mTeclaMorse.getCurrentChar().equals("") &&
 			mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()){ 
 			
