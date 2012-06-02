@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ca.idi.tekla.ime.FixedSizeView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/cheatsheettable"
+    android:gravity="center" >
+
+    <TableRow style="@style/cheatsheettoprow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="Enter" />
+
+        <TextView
+            android:id="@+id/newline_code"
+            style="@style/code"
+            android:text=". - . -" />
+
+        <TextView
+            style="@style/symbol"
+            android:text="(" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text="- . - - ." />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="&apos;" />
+
+        <TextView
+            style="@style/code"
+            android:text=". - - - - ." />
+
+        <TextView
+            style="@style/symbol"
+            android:text=")" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text="- . - - . -" />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="\@" />
+
+        <TextView
+            style="@style/code"
+            android:text=". - - . - ." />
+
+        <TextView
+            style="@style/symbol"
+            android:text="." />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text=". - . - . -" />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="&amp;" />
+
+        <TextView
+            style="@style/code"
+            android:text=". - . . ." />
+
+        <TextView
+            style="@style/symbol"
+            android:text="+" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text=". - . - ." />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text=":" />
+
+        <TextView
+            style="@style/code"
+            android:text="- - - . . ." />
+
+        <TextView
+            style="@style/symbol"
+            android:text="\?" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text=". . - - . ." />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="," />
+
+        <TextView
+            style="@style/code"
+            android:text="- - . . - -" />
+
+        <TextView
+            style="@style/symbol"
+            android:text="&quot;" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text=". - . . - ." />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="$" />
+
+        <TextView
+            style="@style/code"
+            android:text=". . . - . . -" />
+
+        <TextView
+            style="@style/symbol"
+            android:text=";" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text="- . - . - ." />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="=" />
+
+        <TextView
+            style="@style/code"
+            android:text="- . . . -" />
+
+        <TextView
+            style="@style/symbol"
+            android:text="/" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text="- . . - ." />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="!" />
+
+        <TextView
+            style="@style/code"
+            android:text="- - - ." />
+
+        <TextView
+            style="@style/symbol"
+            android:text="_" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text=". . - - . -" />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetrow" >
+
+        <TextView
+            style="@style/symbol"
+            android:text="-" />
+
+        <TextView
+            style="@style/code_nopadding"
+            android:text="- . . . . -" />
+    </TableRow>
+
+    <TableRow style="@style/cheatsheetbottomrow" >
+
+        <TextView
+            style="@style/tapinstructions"
+            android:layout_span="4"
+            android:text="@string/tapforlettersandnumbers" />
+    </TableRow>
+
+</ca.idi.tekla.ime.FixedSizeView>
