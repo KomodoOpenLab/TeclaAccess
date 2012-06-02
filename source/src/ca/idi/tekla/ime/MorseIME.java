@@ -31,7 +31,6 @@ KeyboardView.OnKeyboardActionListener, OnSharedPreferenceChangeListener {
 	
 	// Preferences
 	private String AUTOCAP = "autocap";
-	private String ENABLEUTILKBD = "enableutilkbd";
 
 	private static final int CAPS_LOCK_OFF = 0;
 	private static final int CAPS_LOCK_NEXT = 1;

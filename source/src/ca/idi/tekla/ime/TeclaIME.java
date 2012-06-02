@@ -17,7 +17,6 @@
 package ca.idi.tekla.ime;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,14 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -56,7 +47,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.CompletionInfo;
@@ -68,7 +58,6 @@ import android.widget.PopupWindow;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import ca.idi.tekla.R;
@@ -913,19 +902,18 @@ public class TeclaIME extends InputMethodService
 					} else {
 
 						boolean uppercase = false;
-						/*if (capsLockState == CAPS_LOCK_NEXT) {
+						if (capsLockState == CAPS_LOCK_NEXT) {
 							uppercase = true;
 							capsLockState = CAPS_LOCK_OFF;
 							updateCapsLockKey(true);
 						} else if (capsLockState == CAPS_LOCK_ALL) {
 							uppercase = true;
-						}*/
+						}
 						if (uppercase) {
 							curCharMatch = curCharMatch.toUpperCase();
 						}
 
 						getCurrentInputConnection().commitText(curCharMatch, curCharMatch.length());
-						//mTeclaMorse.reset();
 					}
 				}
 			}
@@ -975,10 +963,10 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	public void updateSpaceKey(boolean refreshScreen) {
-		//if (!spaceKey.label.toString().equals(charInProgress.toString())) {
+		//TODO Elyas: don't show NULL chars
 		String s = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar()) + "  " + mTeclaMorse.getCurrentChar();
 		if (!mTeclaMorse.getCurrentChar().equals("") &&
-			mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()){ 
+			mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
 			
 			spaceKey.label = s;
 		}
@@ -989,7 +977,6 @@ public class TeclaIME extends InputMethodService
 			mMorseIMEView.invalidateKey(spaceKeyIndex);
 	}
 	
-	//Unused for now.
 	public void updateCapsLockKey(boolean refreshScreen) {
 
 		Context context = this.getApplicationContext();

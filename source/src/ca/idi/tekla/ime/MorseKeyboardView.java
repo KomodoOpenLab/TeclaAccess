@@ -3,18 +3,12 @@ package ca.idi.tekla.ime;
 
 
 import ca.idi.tekla.R;
-import ca.idi.tekla.TeclaApp;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -26,7 +20,6 @@ public class MorseKeyboardView extends KeyboardView {
 	private TeclaMorse mTeclaMorse;
 	private MorseChart mMorseChart;
 	private TeclaIME mIME;
-	private boolean mUpdated = true;
 	
 	private Dialog cheatsheetDialog;
 	private View cheatsheet1;
@@ -128,10 +121,7 @@ public class MorseKeyboardView extends KeyboardView {
 		mMorseChart = new MorseChart(getContext(), mTeclaMorse);
 		mMorseChart.ll.measure(canvas.getWidth(), canvas.getHeight());
 		mMorseChart.ll.layout(0, 0, canvas.getWidth(), canvas.getHeight());
-		mMorseChart.ll.draw(canvas);			
-
-		mUpdated = false;
-        
+		mMorseChart.ll.draw(canvas);   
 	}
 	
 	

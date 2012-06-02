@@ -4,10 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import ca.idi.tekla.TeclaApp;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -38,17 +36,12 @@ public class MorseChart {
 	        ll.addView(tls[i], llParams);
 		}
         
-        
         String s = mTeclaMorse.getCurrentChar();
         if (!s.equals("")) {
-        	Log.d(TeclaApp.TAG, "Filling HUD");
         	//Populate the HUD according to the 1st typed Morse character
         	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().startsWith(s.charAt(0));
         	fillHUD(context, map);
-        }
-        else
-        	Log.d(TeclaApp.TAG, "Empty field");
-        
+        }  
 	}
 	
 	public void fillHUD(Context context, LinkedHashMap<String,String> chart) {
