@@ -19,6 +19,8 @@ package ca.idi.tekla.ime;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
+
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 
@@ -39,6 +41,7 @@ public class KeyboardSwitcher {
     public static final int MODE_1X8 = 13;
     public static final int MODE_1X9 = 14;
     public static final int MODE_1X10 = 15;
+    public static final int MODE_MORSE = 16;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -82,7 +85,7 @@ public class KeyboardSwitcher {
     
     void setInputView(TeclaKeyboardView imeView) {
         mIMEView = imeView;
-    }    
+    } 
     
     void makeKeyboards(boolean forceCreate) {
         if (forceCreate) mKeyboards.clear();
@@ -144,6 +147,7 @@ public class KeyboardSwitcher {
     }
     
     void setKeyboardMode(int mode, int imeOptions) {
+    	Log.d(TeclaApp.TAG, "setKeyboardMode: mode: " + mode + ", imeOptions: " + imeOptions);
         mSymbolsModeState = SYMBOLS_MODE_STATE_NONE;
         mPreferSymbols = mode == MODE_SYMBOLS;
         setKeyboardMode(mode == MODE_SYMBOLS ? MODE_TEXT : mode, imeOptions,
@@ -151,6 +155,7 @@ public class KeyboardSwitcher {
     }
 
     void setKeyboardMode(int mode, int imeOptions, boolean isSymbols) {
+    	Log.d(TeclaApp.TAG, "setKeyboardMode: mode: " + mode + ", imeOptions: " + imeOptions + ", isSymbols: " + isSymbols);
         mMode = mode;
         mImeOptions = imeOptions;
         mIsSymbols = isSymbols;
@@ -185,6 +190,7 @@ public class KeyboardSwitcher {
     }
 
     private KeyboardId getKeyboardId(int mode, int imeOptions, boolean isSymbols) {
+    	Log.d(TeclaApp.TAG, "getKeyboardId");
     	
     	boolean useVoiceInput =
     			TeclaApp.getInstance().isVoiceInputSupported() && 
@@ -198,6 +204,9 @@ public class KeyboardSwitcher {
         }
 
         switch (mode) {
+
+        	case MODE_MORSE:
+        		return new KeyboardId(R.layout.morse_kbd, KEYBOARDMODE_NORMAL, true);
             case MODE_TEXT:
             	if (useVoiceInput && scanVariants) {
             		// Using voice input AND scanning variants

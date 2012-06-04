@@ -24,6 +24,7 @@ public class SwitchEvent {
 	public static final int SWITCH_J4 = 0x08; //Right
 	public static final int SWITCH_E1 = 0x10;
 	public static final int SWITCH_E2 = 0x20;
+	public static final int SWITCH_E3 = 0x40;
 
 	private int switch_changes, switch_states;
 	

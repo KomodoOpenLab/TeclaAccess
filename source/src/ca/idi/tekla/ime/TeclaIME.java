@@ -118,22 +118,15 @@ public class TeclaIME extends InputMethodService
 	
 	// Morse variables	
 	private TeclaMorse mTeclaMorse;
-	private MorseKeyboardView mMorseIMEView;
-	private MorseKeyboard mMorseKeyboard;
-	private Keyboard.Key spaceKey;
-	int spaceKeyIndex;
-	private Keyboard.Key capsLockKey;
-	int capsLockKeyIndex;
-	
+	private Keyboard.Key mSpaceKey;
+	private Keyboard.Key mCapsLockKey;
+	int mCapsLockKeyIndex;
+	int mSpaceKeyIndex;
 
 	private static final int CAPS_LOCK_OFF = 0;
 	private static final int CAPS_LOCK_NEXT = 1;
 	private static final int CAPS_LOCK_ALL = 2;
-	private Integer capsLockState = CAPS_LOCK_OFF;
-
-	private static final int AUTO_CAP_MIDSENTENCE = 0;
-	private static final int AUTO_CAP_SENTENCE_ENDED = 1;
-	private Integer autoCapState = AUTO_CAP_MIDSENTENCE;
+	private Integer mCapsLockState = CAPS_LOCK_OFF;
 
 	private UserDictionary mUserDictionary;
 	private ContactsDictionary mContactsDictionary;
@@ -205,29 +198,26 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public void onCreate() {
+		Log.d(TeclaApp.TAG, CLASS_TAG + "onCreate");
 		super.onCreate();
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			Log.d(TeclaApp.TAG, CLASS_TAG + "Creating Morse IME...");
-		}
-		else {
-			// Setup Debugging
-			if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
+		mTeclaMorse = new TeclaMorse();
+		
+		// Setup Debugging
+		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
 
-			//setStatusIcon(R.drawable.ime_qwerty);
-			mKeyboardSwitcher = new KeyboardSwitcher(this);
-			final Configuration conf = getResources().getConfiguration();
-			initSuggest(conf.locale.toString());
-			mOrientation = conf.orientation;
+		//setStatusIcon(R.drawable.ime_qwerty);
+		mKeyboardSwitcher = new KeyboardSwitcher(this);
+		final Configuration conf = getResources().getConfiguration();
+		initSuggest(conf.locale.toString());
+		mOrientation = conf.orientation;
 
-			mVibrateDuration = getResources().getInteger(R.integer.vibrate_duration_ms);
+		mVibrateDuration = getResources().getInteger(R.integer.vibrate_duration_ms);
 
-			// register to receive ringer mode changes for silent mode
-			registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
+		// register to receive ringer mode changes for silent mode
+		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
-			initTeclaA11y();
-		}
-
+		initTeclaA11y();
 	}
 	
 	private void initSuggest(String locale) {
@@ -246,19 +236,20 @@ public class TeclaIME extends InputMethodService
 
 	@Override public void onDestroy() {
 		super.onDestroy();
-		
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			mUserDictionary.close();
-			mContactsDictionary.close();
-			unregisterReceiver(mReceiver);
-			TeclaApp.highlighter.stopSelfScanning();
-			SepManager.stop(this);
-		}
+		mUserDictionary.close();
+		mContactsDictionary.close();
+		unregisterReceiver(mReceiver);
+		TeclaApp.highlighter.stopSelfScanning();
+		SepManager.stop(this);
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
-		if (!TeclaApp.persistence.isMorseModeEnabled()) {
+		Log.d(TeclaApp.TAG, CLASS_TAG + "onConfigurationChanged");
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			super.onConfigurationChanged(conf);
+		}
+		else {
 			if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
 				initSuggest(conf.locale.toString());
 			}
@@ -277,31 +268,40 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public View onCreateInputView() {
+		Log.d(TeclaApp.TAG, CLASS_TAG + "onCreateInputView");
+		mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(
+				R.xml.input, null);
+		mKeyboardSwitcher.setInputView(mIMEView);
+		mKeyboardSwitcher.makeKeyboards(true);
+		mIMEView.setOnKeyboardActionListener(this);
+		
 		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			mMorseIMEView = (MorseKeyboardView) getLayoutInflater().inflate(R.layout.morse_view, null);
-			mMorseIMEView.setOnKeyboardActionListener(this);
-			mMorseIMEView.setKeyboard(mMorseKeyboard);
-			mMorseIMEView.setTeclaMorse(mTeclaMorse);
-			mMorseIMEView.setService(this);
+			mIMEView.setTeclaMorse(mTeclaMorse);
+			mIMEView.setService(this);
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, 0);
 			
-			return mMorseIMEView;
+			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
+			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
+			
+			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
+			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
+			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
 		}
 		else {
-			mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(R.xml.input, null);
-			mKeyboardSwitcher.setInputView(mIMEView);
-			mKeyboardSwitcher.makeKeyboards(true);
-			mIMEView.setOnKeyboardActionListener(this);
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME view created.");
-			TeclaApp.highlighter.setIMEView(mIMEView);
-			return mIMEView;
 		}
+		
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME view created.");
+		TeclaApp.highlighter.setIMEView(mIMEView);
+		return mIMEView;
 	}
-	
 
 	@Override
 	public View onCreateCandidatesView() {
-		if(!TeclaApp.persistence.isMorseModeEnabled()) {
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			//TODO Elyas (should not allow candidates view on Morse keyboard)
+		}
+		else {
 			mKeyboardSwitcher.makeKeyboards(true);
 			mCandidateViewContainer = (CandidateViewContainer) getLayoutInflater().inflate(
 					R.layout.candidates, null);
@@ -314,53 +314,33 @@ public class TeclaIME extends InputMethodService
 		}
 		return null;
 	}
-	
-	/************************ Morse *****************************/
-	
-	@Override
-	public void onInitializeInterface() {
-		if(TeclaApp.persistence.isMorseModeEnabled()) {
-			
-			super.onInitializeInterface();
-			mMorseKeyboard = new MorseKeyboard(this, R.layout.morse_kbd);
-			spaceKey = mMorseKeyboard.getSpaceKey();
-			capsLockKey = mMorseKeyboard.getCapsLockKey();
-			List<Keyboard.Key> keys = mMorseKeyboard.getKeys();
-			spaceKeyIndex = keys.indexOf(spaceKey);
-			capsLockKeyIndex = keys.indexOf(capsLockKey);
-
-			mTeclaMorse = new TeclaMorse();
-		}
-	}
-	
-	
-	/***********************************************************/
 
 	@Override 
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		
-		if (TeclaApp.persistence.isMorseModeEnabled()) {	
-			// In landscape mode, this method gets called without the input view being created.	
-			if (mMorseIMEView == null)
-				return;
-			//TODO Elyas
+		Log.d(TeclaApp.TAG, CLASS_TAG + "onStartInputView");
+		// Change keyboard in navigation menu
+
+
+		// In landscape mode, this method gets called without the input view being created.
+		if (mIMEView == null) {
+			return;
 		}
+
+		mKeyboardSwitcher.makeKeyboards(false);
+
+		TextEntryState.newSession(this);
+
+		boolean disableAutoCorrect = false;
+		mPredictionOn = false;
+		mCompletionOn = false;
+		mCompletions = null;
+		mCapsLock = false;
+		
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
+		}
+		
 		else {
-
-			// In landscape mode, this method gets called without the input view being created.
-			if (mIMEView == null) {
-				return;
-			}
-
-			mKeyboardSwitcher.makeKeyboards(false);
-
-			TextEntryState.newSession(this);
-
-			boolean disableAutoCorrect = false;
-			mPredictionOn = false;
-			mCompletionOn = false;
-			mCompletions = null;
-			mCapsLock = false;
 			switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
 			case EditorInfo.TYPE_CLASS_NUMBER:
 			case EditorInfo.TYPE_CLASS_DATETIME:
@@ -424,41 +404,40 @@ public class TeclaIME extends InputMethodService
 				updateShiftKeyState(attribute);
 				break;
 			default:
+				Log.d(TeclaApp.TAG, CLASS_TAG + "onStartInputView: default mode");
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
 				updateShiftKeyState(attribute);
 			}
-			mIMEView.closing();
-			mComposing.setLength(0);
-			mPredicting = false;
-			mDeleteCount = 0;
-			setCandidatesViewShown(false);
-			if (mCandidateView != null) mCandidateView.setSuggestions(null, false, false, false);
-			loadSettings();
-			// Override auto correct
-			if (disableAutoCorrect) {
-				mAutoCorrectOn = false;
-				if (mCorrectionMode == Suggest.CORRECTION_FULL) {
-					mCorrectionMode = Suggest.CORRECTION_BASIC;
-				}
-			}
-			mIMEView.setProximityCorrectionEnabled(true);
-			if (mSuggest != null) {
-				mSuggest.setCorrectionMode(mCorrectionMode);
-			}
-			mPredictionOn = mPredictionOn && mCorrectionMode > 0;
-			checkTutorial(attribute.privateImeOptions);
-			if (TRACE) Debug.startMethodTracing("/data/trace/latinime");
-
-			int thisKBMode = mKeyboardSwitcher.getKeyboardMode();
-			if(mLastKeyboardMode != thisKBMode) {
-				mLastKeyboardMode = thisKBMode;
-				evaluateStartScanning();
-			}
-
-			evaluateNavKbdTimeout();
-
 		}
-		
+		mIMEView.closing();
+		mComposing.setLength(0);
+		mPredicting = false;
+		mDeleteCount = 0;
+		setCandidatesViewShown(false);
+		if (mCandidateView != null) mCandidateView.setSuggestions(null, false, false, false);
+		loadSettings();
+		// Override auto correct
+		if (disableAutoCorrect) {
+			mAutoCorrectOn = false;
+			if (mCorrectionMode == Suggest.CORRECTION_FULL) {
+				mCorrectionMode = Suggest.CORRECTION_BASIC;
+			}
+		}
+		mIMEView.setProximityCorrectionEnabled(true);
+		if (mSuggest != null) {
+			mSuggest.setCorrectionMode(mCorrectionMode);
+		}
+		mPredictionOn = mPredictionOn && mCorrectionMode > 0;
+		checkTutorial(attribute.privateImeOptions);
+		if (TRACE) Debug.startMethodTracing("/data/trace/latinime");
+
+		int thisKBMode = mKeyboardSwitcher.getKeyboardMode();
+		if(mLastKeyboardMode != thisKBMode) {
+			mLastKeyboardMode = thisKBMode;
+			evaluateStartScanning();
+		}
+
+		evaluateNavKbdTimeout();
 	}
 	
 	@Override
@@ -468,65 +447,53 @@ public class TeclaIME extends InputMethodService
 		if (mIMEView != null) {
 			mIMEView.closing();
 		}
-
-		if (mMorseIMEView != null) {
-			mMorseIMEView.closing();
-		}
 	}
 
 	@Override
 	public void onUpdateSelection(int oldSelStart, int oldSelEnd,
 			int newSelStart, int newSelEnd,
 			int candidatesStart, int candidatesEnd) {
-		if (!TeclaApp.persistence.isMorseModeEnabled()) {
 
-			super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
-					candidatesStart, candidatesEnd);
-			// If the current selection in the text view changes, we should
-			// clear whatever candidate text we have.
-			if (mComposing.length() > 0 && mPredicting && (newSelStart != candidatesEnd
-					|| newSelEnd != candidatesEnd)) {
-				mComposing.setLength(0);
-				mPredicting = false;
-				updateSuggestions();
-				TextEntryState.reset();
-				InputConnection ic = getCurrentInputConnection();
-				if (ic != null) {
-					ic.finishComposingText();
-				}
-			} else if (!mPredicting && !mJustAccepted
-					&& TextEntryState.getState() == TextEntryState.STATE_ACCEPTED_DEFAULT) {
-				TextEntryState.reset();
+		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
+				candidatesStart, candidatesEnd);
+		// If the current selection in the text view changes, we should
+		// clear whatever candidate text we have.
+		if (mComposing.length() > 0 && mPredicting && (newSelStart != candidatesEnd
+				|| newSelEnd != candidatesEnd)) {
+			mComposing.setLength(0);
+			mPredicting = false;
+			updateSuggestions();
+			TextEntryState.reset();
+			InputConnection ic = getCurrentInputConnection();
+			if (ic != null) {
+				ic.finishComposingText();
 			}
-			mJustAccepted = false;
-			postUpdateShiftKeyState();
+		} else if (!mPredicting && !mJustAccepted
+				&& TextEntryState.getState() == TextEntryState.STATE_ACCEPTED_DEFAULT) {
+			TextEntryState.reset();
 		}
+		mJustAccepted = false;
+		postUpdateShiftKeyState();
+
 	}
 
 	@Override
 	public void hideWindow() {
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			//TODO Elyas
-			super.hideWindow();
-			TextEntryState.endSession();
+		if (TeclaApp.highlighter.isSoftIMEShowing()) {
+			TeclaApp.highlighter.stopSelfScanning();
+			TeclaApp.highlighter.clear();
 		}
-		else {
-			if (TeclaApp.highlighter.isSoftIMEShowing()) {
-				TeclaApp.highlighter.stopSelfScanning();
-				TeclaApp.highlighter.clear();
-			}
-			if (TRACE) Debug.stopMethodTracing();
-			if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
-				mOptionsDialog.dismiss();
-				mOptionsDialog = null;
-			}
-			if (mTutorial != null) {
-				mTutorial.close();
-				mTutorial = null;
-			}
-			super.hideWindow();
-			TextEntryState.endSession();
+		if (TRACE) Debug.stopMethodTracing();
+		if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
+			mOptionsDialog.dismiss();
+			mOptionsDialog = null;
 		}
+		if (mTutorial != null) {
+			mTutorial.close();
+			mTutorial = null;
+		}
+		super.hideWindow();
+		TextEntryState.endSession();
 	}
 
 	@Override
@@ -581,14 +548,10 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			return super.onKeyDown(keyCode, event);
-		}
-		else {
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_BACK:
-				// FIXME: Tecla - Prevent soft input method from consuming the back key
-				/*if (event.getRepeatCount() == 0 && mInputView != null) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			// FIXME: Tecla - Prevent soft input method from consuming the back key
+			/*if (event.getRepeatCount() == 0 && mInputView != null) {
                     if (mInputView.handleBack()) {
                         return true;
                     } else if (mTutorial != null) {
@@ -597,19 +560,18 @@ public class TeclaIME extends InputMethodService
                     }
                 }
                 break;*/
-				return false;
-			case KeyEvent.KEYCODE_DPAD_DOWN:
-			case KeyEvent.KEYCODE_DPAD_UP:
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				// If tutorial is visible, don't allow dpad to work
-				if (mTutorial != null) {
-					return true;
-				}
-				break;
+			return false;
+		case KeyEvent.KEYCODE_DPAD_DOWN:
+		case KeyEvent.KEYCODE_DPAD_UP:
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			// If tutorial is visible, don't allow dpad to work
+			if (mTutorial != null) {
+				return true;
 			}
-			return super.onKeyDown(keyCode, event);
+			break;
 		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
@@ -643,17 +605,12 @@ public class TeclaIME extends InputMethodService
 	 */
 	@Override
 	public void onWindowHidden() {
-		if(TeclaApp.persistence.isMorseModeEnabled()) {
-			
-		}
-		else {
-			super.onWindowHidden();
-			if (shouldShowIME() && !mIsNavKbdTimedOut) {
-				showIMEView();
-				if (TeclaApp.highlighter.isSoftIMEShowing()) {
-					mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-					evaluateStartScanning();
-				}
+		super.onWindowHidden();
+		if (shouldShowIME() && !mIsNavKbdTimedOut) {
+			showIMEView();
+			if (TeclaApp.highlighter.isSoftIMEShowing()) {
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
+				evaluateStartScanning();
 			}
 		}
 	}
@@ -801,63 +758,62 @@ public class TeclaIME extends InputMethodService
 
 	// Implementation of KeyboardViewListener
 	public void onKey(int primaryCode, int[] keyCodes) {
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-				onKeyMorse(primaryCode, keyCodes);
+		Log.d(TeclaApp.TAG, CLASS_TAG + "onKey: " + primaryCode);
+
+		long when = SystemClock.uptimeMillis();
+
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
+
+		if (primaryCode != Keyboard.KEYCODE_DELETE || 
+				when > mLastKeyTime + QUICK_PRESS) {
+			mDeleteCount = 0;
 		}
-		else {
-
-			long when = SystemClock.uptimeMillis();
-
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
-
-			if (primaryCode != Keyboard.KEYCODE_DELETE || 
-					when > mLastKeyTime + QUICK_PRESS) {
-				mDeleteCount = 0;
+		mLastKeyTime = when;
+		switch (primaryCode) {
+		case Keyboard.KEYCODE_DELETE:
+			handleBackspace();
+			mDeleteCount++;
+			break;
+		case Keyboard.KEYCODE_SHIFT:
+			handleShift();
+			break;
+		case Keyboard.KEYCODE_CANCEL:
+			if (mOptionsDialog == null || !mOptionsDialog.isShowing()) {
+				handleClose();
 			}
-			mLastKeyTime = when;
-			switch (primaryCode) {
-			case Keyboard.KEYCODE_DELETE:
-				handleBackspace();
-				mDeleteCount++;
-				break;
-			case Keyboard.KEYCODE_SHIFT:
+			break;
+		case TeclaKeyboardView.KEYCODE_OPTIONS:
+			showOptionsMenu();
+			break;
+		case TeclaKeyboardView.KEYCODE_SHIFT_LONGPRESS:
+			if (mCapsLock) {
 				handleShift();
-				break;
-			case Keyboard.KEYCODE_CANCEL:
-				if (mOptionsDialog == null || !mOptionsDialog.isShowing()) {
-					handleClose();
-				}
-				break;
-			case TeclaKeyboardView.KEYCODE_OPTIONS:
-				showOptionsMenu();
-				break;
-			case TeclaKeyboardView.KEYCODE_SHIFT_LONGPRESS:
-				if (mCapsLock) {
-					handleShift();
-				} else {
-					toggleCapsLock();
-				}
-				break;
-			case Keyboard.KEYCODE_MODE_CHANGE:
-				changeKeyboardMode();
-				break;
-			default:
-				if (isWordSeparator(primaryCode)) {
-					handleSeparator(primaryCode);
-				} else if (isSpecialKey(primaryCode)) {
-					handleSpecialKey(primaryCode);
-				} else { 
-					handleCharacter(primaryCode, keyCodes);
-				}
-				// Cancel the just reverted state
-				mJustRevertedSeparator = null;
+			} else {
+				toggleCapsLock();
 			}
-			if (mKeyboardSwitcher.onKey(primaryCode)) {
-				changeKeyboardMode();
+			break;
+		case Keyboard.KEYCODE_MODE_CHANGE:
+			changeKeyboardMode();
+			break;
+		default:
+			if (isMorseKeyboardKey(primaryCode)) {
+				onKeyMorse(primaryCode, keyCodes);
 			}
-
-			evaluateNavKbdTimeout();
+			else if (isWordSeparator(primaryCode)) {
+				handleSeparator(primaryCode);
+			} else if (isSpecialKey(primaryCode)) {
+				handleSpecialKey(primaryCode);
+			} else { 
+				handleCharacter(primaryCode, keyCodes);
+			}
+			// Cancel the just reverted state
+			mJustRevertedSeparator = null;
 		}
+		if (mKeyboardSwitcher.onKey(primaryCode)) {
+			changeKeyboardMode();
+		}
+
+		evaluateNavKbdTimeout();
 	}
 	
 	/**
@@ -887,7 +843,7 @@ public class TeclaIME extends InputMethodService
 
 			// Space button ends the current ditdah sequence
 			// Space twice in a row sends through a standard space character
-		case KeyEvent.KEYCODE_SPACE:
+		case TeclaKeyboard.KEYCODE_MORSE_SPACEKEY:
 			if (mTeclaMorse.getCurrentChar().length() == 0) {
 				getCurrentInputConnection().commitText(" ", 1);
 			}
@@ -898,18 +854,18 @@ public class TeclaIME extends InputMethodService
 						sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
 					} else if (curCharMatch.contentEquals("END")) {
 						requestHideSelf(0);
-						mMorseIMEView.closing();
+						mIMEView.closing();
 					} else {
 
-						boolean uppercase = false;
-						if (capsLockState == CAPS_LOCK_NEXT) {
-							uppercase = true;
-							capsLockState = CAPS_LOCK_OFF;
+						boolean upperCase = false;
+						if (mCapsLockState == CAPS_LOCK_NEXT) {
+							upperCase = true;
+							mCapsLockState = CAPS_LOCK_OFF;
 							updateCapsLockKey(true);
-						} else if (capsLockState == CAPS_LOCK_ALL) {
-							uppercase = true;
+						} else if (mCapsLockState == CAPS_LOCK_ALL) {
+							upperCase = true;
 						}
-						if (uppercase) {
+						if (upperCase) {
 							curCharMatch = curCharMatch.toUpperCase();
 						}
 
@@ -922,7 +878,7 @@ public class TeclaIME extends InputMethodService
 
 			// If there's a character in progress, clear it
 			// otherwise, send through a backspace keypress
-		case KeyEvent.KEYCODE_DEL:
+		case TeclaKeyboard.KEYCODE_MORSE_DELKEY:
 			if (mTeclaMorse.getCurrentChar().length() > 0) {
 				clearCharInProgress();
 			}else {
@@ -930,32 +886,32 @@ public class TeclaIME extends InputMethodService
 				clearCharInProgress();
 				updateSpaceKey(true);
 
-				if (capsLockState == CAPS_LOCK_NEXT) {
+				if (mCapsLockState == CAPS_LOCK_NEXT) {
 					// If you've hit delete and you were in caps_next state,
 					// then caps_off
-					capsLockState = CAPS_LOCK_OFF;
+					mCapsLockState = CAPS_LOCK_OFF;
 					updateCapsLockKey(true);
 				}
 			}
 			break;
 
-		case KeyEvent.KEYCODE_SHIFT_LEFT:
-			switch (capsLockState) {
+		case TeclaKeyboard.KEYCODE_MORSE_CAPSKEY:
+			switch (mCapsLockState) {
 			case CAPS_LOCK_OFF:
-				capsLockState = CAPS_LOCK_NEXT;
+				mCapsLockState = CAPS_LOCK_NEXT;
 				break;
 			case CAPS_LOCK_NEXT:
-				capsLockState = CAPS_LOCK_ALL;
+				mCapsLockState = CAPS_LOCK_ALL;
 				break;
 			default:
-				capsLockState = CAPS_LOCK_OFF;
+				mCapsLockState = CAPS_LOCK_OFF;
 			}
 			updateCapsLockKey(true);
 			break;
 		}
 
 		updateSpaceKey(true);
-		mMorseIMEView.invalidate();
+		mIMEView.invalidate();
 	}
 	
 	private void clearCharInProgress() {
@@ -968,35 +924,35 @@ public class TeclaIME extends InputMethodService
 		if (!mTeclaMorse.getCurrentChar().equals("") &&
 			mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
 			
-			spaceKey.label = s;
+			mSpaceKey.label = s;
 		}
 		else
-			spaceKey.label = "space";
+			mSpaceKey.label = "space";
 		
 		if (refreshScreen)
-			mMorseIMEView.invalidateKey(spaceKeyIndex);
+			mIMEView.invalidateKey(mSpaceKeyIndex);
 	}
 	
 	public void updateCapsLockKey(boolean refreshScreen) {
 
 		Context context = this.getApplicationContext();
-		switch (capsLockState) {
+		switch (mCapsLockState) {
 		case CAPS_LOCK_OFF:
-			capsLockKey.on = false;
-			capsLockKey.label = context.getText(R.string.caps_lock_off);
+			mCapsLockKey.on = false;
+			mCapsLockKey.label = context.getText(R.string.caps_lock_off);
 			break;
 		case CAPS_LOCK_NEXT:
-			capsLockKey.on = false;
-			capsLockKey.label = context.getText(R.string.caps_lock_next);
+			mCapsLockKey.on = false;
+			mCapsLockKey.label = context.getText(R.string.caps_lock_next);
 			break;
 		case CAPS_LOCK_ALL:
-			capsLockKey.on = true;
-			capsLockKey.label = context.getText(R.string.caps_lock_all);
+			mCapsLockKey.on = true;
+			mCapsLockKey.label = context.getText(R.string.caps_lock_all);
 			break;
 		}
 
 		if (refreshScreen) {
-			mMorseIMEView.invalidateKey(capsLockKeyIndex);
+			mIMEView.invalidateKey(mCapsLockKeyIndex);
 		}
 	}
 
@@ -1181,7 +1137,7 @@ public class TeclaIME extends InputMethodService
 		if (TeclaApp.persistence.isMorseModeEnabled()) {
 			//TODO Elyas: handle closing for Morse keyboard
 			requestHideSelf(0);
-			mMorseIMEView.closing();
+			mIMEView.closing();
 			TextEntryState.endSession();
 		}
 		else {
@@ -1201,7 +1157,7 @@ public class TeclaIME extends InputMethodService
 	private void toggleCapsLock() {
 		mCapsLock = !mCapsLock;
 		if (mKeyboardSwitcher.isAlphabetMode()) {
-			((TeclaKeyboard) mIMEView.getKeyboard()).setShiftLocked(mCapsLock);
+			mIMEView.getKeyboard().setShiftLocked(mCapsLock);
 		}
 	}
 
@@ -1554,7 +1510,7 @@ public class TeclaIME extends InputMethodService
 	private void changeKeyboardMode() {
 		mKeyboardSwitcher.toggleSymbols();
 		if (mCapsLock && mKeyboardSwitcher.isAlphabetMode()) {
-			((TeclaKeyboard) mIMEView.getKeyboard()).setShiftLocked(mCapsLock);
+			mIMEView.getKeyboard().setShiftLocked(mCapsLock);
 		}
 
 		updateShiftKeyState(getCurrentInputEditorInfo());
@@ -1580,7 +1536,7 @@ public class TeclaIME extends InputMethodService
 	}
 
 	// Characters per second measurement
-
+	
 	private static final boolean PERF_DEBUG = false;
 	private long mLastCpsTime;
 	private static final int CPS_BUFFER_SIZE = 16;
@@ -1700,23 +1656,24 @@ public class TeclaIME extends InputMethodService
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 			
 			if (TeclaApp.persistence.isMorseModeEnabled()) {
-				//if UI not shown, show it
 				
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Morse input: " );
-					//TeclaApp.teclaMorse.addDit();
+					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 1: ");
+					emulateDit();
 					//if sound enabled, play dit sound
 				}				
 				
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					//TeclaApp.teclaMorse.addDah();
+					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 2: ");
+					emulateDah();
 					//if sound enabled, play dah sound
 				}
 				
-				/*if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
-					//letterReturn();
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
+					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 3: ");
+					emulateLetterReturn();
 					//if sound enabled, play sound of word
-				}*/
+				}
 				
 			}
 
@@ -1762,12 +1719,22 @@ public class TeclaIME extends InputMethodService
 				
 	}
 	
-	private void selectMorse() {
-		//TODO Elyas
-		//update mKeyCodes properly
-		
-		mKeyCodes = TeclaApp.highlighter.getCurrentKey().codes;
-		emulateKeyPress(mKeyCodes);
+	private void emulateDit() {
+		int[] keyCode = new int[1];
+		keyCode[0] = TeclaKeyboard.KEYCODE_MORSE_DIT;
+		emulateKeyPress(keyCode);
+	}	
+	
+	private void emulateDah() {
+		int[] keyCode = new int[1];
+		keyCode[0] = TeclaKeyboard.KEYCODE_MORSE_DAH;
+		emulateKeyPress(keyCode);
+	}
+	
+	private void emulateLetterReturn() {
+		int[] keyCode = new int[1];
+		keyCode[0] = TeclaKeyboard.KEYCODE_MORSE_SPACEKEY;
+		emulateKeyPress(keyCode);
 	}
 	
 	/**
@@ -1830,6 +1797,15 @@ public class TeclaIME extends InputMethodService
 			//Selected item is a row
 			TeclaApp.highlighter.doSelectRow();
 		}
+	}
+	
+	//TODO Elyas: pick up from here
+	private boolean isMorseKeyboardKey(int keycode) {
+		return (keycode == TeclaKeyboard.KEYCODE_MORSE_DIT)
+				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_DAH)
+				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY)
+				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_DELKEY)
+				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_CAPSKEY);
 	}
 
 	private boolean isSpecialKey(int keycode) {
@@ -2064,13 +2040,17 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void showIMEView() {
+		Log.d(TeclaApp.TAG, CLASS_TAG + "showIMEView()");
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME is already showing");
 		} else {
 			showWindow(true);
 			updateInputViewShown();
+			if (TeclaApp.persistence.isMorseModeEnabled()) {
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE);
+			}
 			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
-			if (TeclaApp.highlighter.isSoftIMEShowing()) {
+			else if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV);
 			}
 			// This call causes a looped intent call until the IME View is created

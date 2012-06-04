@@ -51,40 +51,45 @@
         </Row>
         
         <Row
-                android:keyWidth="15%"
+                android:keyWidth="13%"
                 android:rowEdgeFlags="bottom"
                 android:keyHeight="13%"
         >
                 <Key
                         android:keyLabel="@string/caps_lock_off"
                         android:keyEdgeFlags="left"
-                        android:codes="59"
+                        android:codes="559"
                         android:isSticky="true"
                         />
                         
                 <Key
                         android:keyLabel="•"
-                        android:keyWidth="20%"
+                        android:keyWidth="18%"
                         android:codes="0"
                         />
                         
                 <Key
-                        android:keyWidth="30%"
-                        android:codes="62"
+                        android:keyWidth="26%"
+                        android:codes="562"
                         />
                         
                 <Key
                         android:keyLabel="-"
-                        android:keyWidth="20%"
+                        android:keyWidth="18%"
                         android:codes="1"
                         />
                         
                 <Key
                         android:keyIcon="@drawable/sym_keyboard_delete"
-                        android:keyEdgeFlags="right"
                         android:isRepeatable="true"
                         android:codes="67"
                 />
+                
+                <Key 	android:codes="-4"
+                    	android:keyIcon="@drawable/sym_keyboard_done"
+                    	android:iconPreview="@drawable/sym_keyboard_feedback_done"
+                    	android:keyWidth="12%"
+                    	android:keyEdgeFlags="right"/>
         </Row>
 
 </Keyboard>

@@ -59,7 +59,7 @@ public class MorseChart {
         	charTV.setId(200 + index);
         	charTV.setText(entry.getValue());
         	charTV.setTextSize(16.0f);
-        	charTV.setTextColor(0xFF5887ED);
+        	charTV.setTextColor(0xFF77A8D4);
         	tr.addView(charTV);
         	
         	TextView morseTV = new TextView(context);

@@ -4,7 +4,6 @@
 
 package ca.idi.tekla;
 
-import ca.idi.tekla.ime.TeclaMorse;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import android.app.Application;
