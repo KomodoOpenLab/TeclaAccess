@@ -318,9 +318,6 @@ public class TeclaIME extends InputMethodService
 	@Override 
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
 		Log.d(TeclaApp.TAG, CLASS_TAG + "onStartInputView");
-		// Change keyboard in navigation menu
-
-
 		// In landscape mode, this method gets called without the input view being created.
 		if (mIMEView == null) {
 			return;
@@ -404,7 +401,6 @@ public class TeclaIME extends InputMethodService
 				updateShiftKeyState(attribute);
 				break;
 			default:
-				Log.d(TeclaApp.TAG, CLASS_TAG + "onStartInputView: default mode");
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
 				updateShiftKeyState(attribute);
 			}
@@ -758,8 +754,6 @@ public class TeclaIME extends InputMethodService
 
 	// Implementation of KeyboardViewListener
 	public void onKey(int primaryCode, int[] keyCodes) {
-		Log.d(TeclaApp.TAG, CLASS_TAG + "onKey: " + primaryCode);
-
 		long when = SystemClock.uptimeMillis();
 
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
@@ -1799,7 +1793,6 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 	
-	//TODO Elyas: pick up from here
 	private boolean isMorseKeyboardKey(int keycode) {
 		return (keycode == TeclaKeyboard.KEYCODE_MORSE_DIT)
 				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_DAH)
@@ -2040,7 +2033,6 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void showIMEView() {
-		Log.d(TeclaApp.TAG, CLASS_TAG + "showIMEView()");
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME is already showing");
 		} else {

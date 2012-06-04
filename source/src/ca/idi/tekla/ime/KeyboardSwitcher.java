@@ -19,8 +19,6 @@ package ca.idi.tekla.ime;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.util.Log;
-
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 
@@ -147,7 +145,6 @@ public class KeyboardSwitcher {
     }
     
     void setKeyboardMode(int mode, int imeOptions) {
-    	Log.d(TeclaApp.TAG, "setKeyboardMode: mode: " + mode + ", imeOptions: " + imeOptions);
         mSymbolsModeState = SYMBOLS_MODE_STATE_NONE;
         mPreferSymbols = mode == MODE_SYMBOLS;
         setKeyboardMode(mode == MODE_SYMBOLS ? MODE_TEXT : mode, imeOptions,
@@ -155,7 +152,6 @@ public class KeyboardSwitcher {
     }
 
     void setKeyboardMode(int mode, int imeOptions, boolean isSymbols) {
-    	Log.d(TeclaApp.TAG, "setKeyboardMode: mode: " + mode + ", imeOptions: " + imeOptions + ", isSymbols: " + isSymbols);
         mMode = mode;
         mImeOptions = imeOptions;
         mIsSymbols = isSymbols;
@@ -190,7 +186,6 @@ public class KeyboardSwitcher {
     }
 
     private KeyboardId getKeyboardId(int mode, int imeOptions, boolean isSymbols) {
-    	Log.d(TeclaApp.TAG, "getKeyboardId");
     	
     	boolean useVoiceInput =
     			TeclaApp.getInstance().isVoiceInputSupported() && 
