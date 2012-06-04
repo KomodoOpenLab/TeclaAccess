@@ -65,6 +65,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
+	private CheckBoxPreference mPrefTempDisconnect;
 	private CheckBoxPreference mPrefFullScreenSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
@@ -98,6 +99,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
 		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
+		mPrefTempDisconnect = (CheckBoxPreference) findPreference(Persistence.PREF_TEMP_SHIELD_DISCONNECT);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
@@ -117,6 +119,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		// If no alternative input selected, disable scanning
 		if (!mPrefConnectToShield.isChecked() && !mPrefFullScreenSwitch.isChecked()) {
+			mPrefTempDisconnect.setChecked(false);
+			mPrefTempDisconnect.setEnabled(false);
 			mPrefSelfScanning.setChecked(false);
 			mPrefInverseScanning.setChecked(false);
 			mPrefSelfScanning.setEnabled(false);
@@ -131,6 +135,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefAutohideTimeout.setEnabled(false);
 			mPrefFullScreenSwitch.setEnabled(false);
 			mPrefConnectToShield.setEnabled(false);
+			mPrefTempDisconnect.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
@@ -229,6 +234,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					dismissDialog();
 					if (!mConnectionCancelled) TeclaApp.getInstance().showToast(R.string.no_shields_inrange);
 					mPrefConnectToShield.setChecked(false);
+					mPrefTempDisconnect.setChecked(false);
+					mPrefTempDisconnect.setEnabled(false);
 				}
 			}
 
@@ -238,6 +245,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				// Enable scanning checkboxes so they can be turned on/off
+				mPrefTempDisconnect.setEnabled(true);
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
 			}
@@ -245,6 +253,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
 				dismissDialog();
+				mPrefTempDisconnect.setChecked(false);
+				mPrefTempDisconnect.setEnabled(false);
 			}
 		}
 	};
@@ -285,6 +295,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefInverseScanning.setEnabled(false);
 				mPrefFullScreenSwitch.setChecked(false);
 				mPrefConnectToShield.setChecked(false);
+				mPrefTempDisconnect.setChecked(false);
+				mPrefTempDisconnect.setEnabled(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
@@ -299,6 +311,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefInverseScanning.setEnabled(false);
 				mPrefFullScreenSwitch.setChecked(false);
 				mPrefConnectToShield.setChecked(false);
+				mPrefTempDisconnect.setChecked(false);
+				mPrefTempDisconnect.setEnabled(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
@@ -313,6 +327,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// Should perhaps use Binding?
 				dismissDialog();
 				if (!mPrefFullScreenSwitch.isChecked()) {
+					mPrefTempDisconnect.setChecked(false);
+					mPrefTempDisconnect.setEnabled(false);
 					mPrefSelfScanning.setChecked(false);
 					mPrefSelfScanning.setEnabled(false);
 					mPrefInverseScanning.setChecked(false);
@@ -334,6 +350,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.persistence.setNeverHideNavigationKeyboard();
 			} else {
 				if (!mPrefConnectToShield.isChecked()) {
+					mPrefTempDisconnect.setChecked(false);
+					mPrefTempDisconnect.setEnabled(false);
 					mPrefSelfScanning.setChecked(false);
 					mPrefSelfScanning.setEnabled(false);
 					mPrefInverseScanning.setChecked(false);
@@ -354,6 +372,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if (!mPrefInverseScanning.isChecked()) {
 					mPrefFullScreenSwitch.setChecked(false);
 					if (!mPrefConnectToShield.isChecked()) {
+						mPrefTempDisconnect.setChecked(false);
+						mPrefTempDisconnect.setEnabled(false);
 						mPrefSelfScanning.setEnabled(false);
 					}
 				}
@@ -368,6 +388,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if (!mPrefSelfScanning.isChecked()) {
 					mPrefFullScreenSwitch.setChecked(false);
 					if (!mPrefConnectToShield.isChecked()) {
+						mPrefTempDisconnect.setChecked(false);
+						mPrefTempDisconnect.setEnabled(false);
 						mPrefInverseScanning.setEnabled(false);
 					}
 				}
@@ -385,6 +407,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Tecla Shield discovery cancelled");
 				TeclaApp.getInstance().showToast(R.string.shield_connection_cancelled);
 				mConnectionCancelled = true;
+				mPrefTempDisconnect.setChecked(false);
+				mPrefTempDisconnect.setEnabled(false);
 				//Since we have cancelled the discovery the check state needs to be reset
 				//(triggers onSharedPreferenceChanged)
 				//mPrefConnectToShield.setChecked(false);
@@ -432,9 +456,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (mBluetoothAdapter == null) {
 			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_nosupport);
 			mPrefConnectToShield.setEnabled(false);
+			mPrefTempDisconnect.setChecked(false);
+			mPrefTempDisconnect.setEnabled(false);
 		} else if (!mBluetoothAdapter.isEnabled()) {
 			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_disabled);
 			mPrefConnectToShield.setEnabled(false);
+			mPrefTempDisconnect.setChecked(false);
+			mPrefTempDisconnect.setEnabled(false);
 		} else {
 			mPrefConnectToShield.setSummary(R.string.shield_connect_summary);
 			mPrefConnectToShield.setEnabled(true);
