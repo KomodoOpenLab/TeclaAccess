@@ -19,9 +19,12 @@ public class TeclaMorse {
 	private MorseDictionary mMorseDictionary;
 	private LinkedHashMap<String, String> mCandidates;
 	private static StringBuilder mCurrentChar;
+	private static MorseChart mMorseChart;
 	
 	
-	public TeclaMorse() {
+	
+	public TeclaMorse(Context context) {
+		mMorseChart = new MorseChart(context, this);
 		mCurrentChar = new StringBuilder();
 		mMorseDictionary = new MorseDictionary();
 		mCandidates = new LinkedHashMap<String,String>();
@@ -56,6 +59,11 @@ public class TeclaMorse {
 	
 	public HashMap<String,String> getCandidates() {
 		return mCandidates;
+	}
+	
+	public MorseChart getMorseChart() {
+		mMorseChart.update();
+		return mMorseChart;
 	}
 	
 	

@@ -21,18 +21,12 @@ import java.util.List;
 
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
-import ca.idi.tekla.R.dimen;
-import ca.idi.tekla.R.drawable;
-import ca.idi.tekla.R.string;
-import ca.idi.tekla.R.xml;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.Keyboard.Key;
-import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
 public class TeclaKeyboard extends Keyboard {

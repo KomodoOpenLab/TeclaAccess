@@ -269,8 +269,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		
 		if (key.equals(Persistence.PREF_MORSE_MODE)) {
-			if (mPrefMorse.isChecked()){
-				//TODO ELyas
+			if (mPrefMorse.isChecked()) {
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
 			}
 		}

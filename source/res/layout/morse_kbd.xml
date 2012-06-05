@@ -28,7 +28,7 @@
         <Row
                 android:keyWidth="100%"
                 android:rowEdgeFlags="top"
-                android:keyHeight="30%"
+                android:keyHeight="25%"
         >
             
             
@@ -53,7 +53,7 @@
         <Row
                 android:keyWidth="13%"
                 android:rowEdgeFlags="bottom"
-                android:keyHeight="13%"
+                android:keyHeight="11%"
         >
                 <Key
                         android:keyLabel="@string/caps_lock_off"

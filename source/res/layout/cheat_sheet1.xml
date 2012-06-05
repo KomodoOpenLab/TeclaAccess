@@ -12,7 +12,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". -" />
+            android:text="• -" />
 
         <TextView
             style="@style/symbol"
@@ -20,7 +20,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- ." />
+            android:text="- •" />
 
         <TextView
             style="@style/symbol"
@@ -28,7 +28,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text=". - - - -" />
+            android:text="• - - - -" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -39,7 +39,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- . . ." />
+            android:text="- • • •" />
 
         <TextView
             style="@style/symbol"
@@ -55,7 +55,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text=". . - - -" />
+            android:text="• • - - -" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -66,7 +66,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- . - ." />
+            android:text="- • - •" />
 
         <TextView
             style="@style/symbol"
@@ -74,7 +74,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". - - ." />
+            android:text="• - - •" />
 
         <TextView
             style="@style/symbol"
@@ -82,7 +82,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text=". . . - -" />
+            android:text="• • • - -" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -93,7 +93,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- . ." />
+            android:text="- • •" />
 
         <TextView
             style="@style/symbol"
@@ -101,7 +101,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- - . -" />
+            android:text="- - • -" />
 
         <TextView
             style="@style/symbol"
@@ -109,7 +109,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text=". . . . -" />
+            android:text="• • • • -" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -120,7 +120,7 @@
 
         <TextView
             style="@style/code"
-            android:text="." />
+            android:text="•" />
 
         <TextView
             style="@style/symbol"
@@ -128,7 +128,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". - ." />
+            android:text="• - •" />
 
         <TextView
             style="@style/symbol"
@@ -136,7 +136,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text=". . . . ." />
+            android:text="• • • • •" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -147,7 +147,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". . - ." />
+            android:text="• • - •" />
 
         <TextView
             style="@style/symbol"
@@ -155,7 +155,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". . ." />
+            android:text="• • •" />
 
         <TextView
             style="@style/symbol"
@@ -163,7 +163,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- . . . ." />
+            android:text="- • • • •" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -174,7 +174,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- - ." />
+            android:text="- - •" />
 
         <TextView
             style="@style/symbol"
@@ -190,7 +190,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- - . . ." />
+            android:text="- - • • •" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -201,7 +201,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". . . ." />
+            android:text="• • • •" />
 
         <TextView
             style="@style/symbol"
@@ -209,7 +209,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". . -" />
+            android:text="• • -" />
 
         <TextView
             style="@style/symbol"
@@ -217,7 +217,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- - - . ." />
+            android:text="- - - • •" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -228,7 +228,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". ." />
+            android:text="• •" />
 
         <TextView
             style="@style/symbol"
@@ -236,7 +236,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". . . -" />
+            android:text="• • • -" />
 
         <TextView
             style="@style/symbol"
@@ -244,7 +244,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- - - - ." />
+            android:text="- - - - •" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -255,7 +255,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". - - -" />
+            android:text="• - - -" />
 
         <TextView
             style="@style/symbol"
@@ -263,7 +263,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". - -" />
+            android:text="• - -" />
 
         <TextView
             style="@style/symbol"
@@ -282,7 +282,7 @@
 
         <TextView
             style="@style/code"
-            android:text="- . -" />
+            android:text="- • -" />
 
         <TextView
             style="@style/symbol"
@@ -290,7 +290,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- . . -" />
+            android:text="- • • -" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -301,7 +301,7 @@
 
         <TextView
             style="@style/code"
-            android:text=". - . ." />
+            android:text="• - • •" />
 
         <TextView
             style="@style/symbol"
@@ -309,7 +309,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- . - -" />
+            android:text="- • - -" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
@@ -328,7 +328,7 @@
 
         <TextView
             style="@style/code_nopadding"
-            android:text="- - . ." />
+            android:text="- - • •" />
     </TableRow>
 
     <TableRow style="@style/cheatsheetbottomrow">
