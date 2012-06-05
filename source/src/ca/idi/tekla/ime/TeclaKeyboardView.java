@@ -273,6 +273,7 @@ public class TeclaKeyboardView extends KeyboardView {
 
 		if (TeclaApp.persistence.isMorseModeEnabled()) {
 			mMorseChart = mTeclaMorse.getMorseChart();
+			mMorseChart.update();
 			mMorseChart.ll.measure(canvas.getWidth(), canvas.getHeight());
 			mMorseChart.ll.layout(0, 0, canvas.getWidth(), canvas.getHeight());
 			mMorseChart.ll.draw(canvas);  

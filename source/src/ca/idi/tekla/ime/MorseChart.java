@@ -22,6 +22,7 @@ public class MorseChart {
 	private boolean updated = false;
 	
 	public LinearLayout ll;
+	private LinearLayout ll_save;
 	private TableLayout[] tls = new TableLayout[NB_COLUMNS];
 	
 	private TableRow.LayoutParams trParams = new TableRow.LayoutParams(
@@ -55,7 +56,6 @@ public class MorseChart {
 	}
 	
 	public void update() {
-		//TODO Elyas: hide HUD when keyboard minimized
         String s = mTeclaMorse.getCurrentChar();
         if ((s.equals("•") || s.equals("-")) && !updated) {
         	//Populate the HUD according to the 1st typed Morse character
@@ -68,6 +68,28 @@ public class MorseChart {
         	setViews();
         	updated = false;
         }
+	}
+	
+	
+	public void hide() {
+		ll_save = new LinearLayout(mContext);
+		ll_save.setLayoutParams(llParams);
+		
+		//Retrieve the child views
+		TableLayout temp[] = new TableLayout[NB_COLUMNS];
+		for (int i = 0; i < NB_COLUMNS; i++)
+			temp[i] = (TableLayout) ll.getChildAt(i);
+		
+		ll.removeAllViews();
+		
+		//Save the views
+		for (int i = 0; i < NB_COLUMNS; i++)
+			ll_save.addView(temp[i], llParams);
+	}
+	
+	public void restore() {
+		if (ll_save != null)
+			ll = ll_save;
 	}
 	
 	public void fillHUD(LinkedHashMap<String,String> chart) {

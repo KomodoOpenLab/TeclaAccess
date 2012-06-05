@@ -62,7 +62,6 @@ public class TeclaMorse {
 	}
 	
 	public MorseChart getMorseChart() {
-		mMorseChart.update();
 		return mMorseChart;
 	}
 	

@@ -1787,14 +1787,18 @@ public class TeclaIME extends InputMethodService
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
 				if (TeclaApp.persistence.isMorseModeEnabled()) {
-					//TODO Elyas: clear chart when minimizing, redraw upon restoring view
-					mIMEView.invalidate();
+					mTeclaMorse.getMorseChart().hide();
 				}
 				// Closing
 				mLastFullKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
 				mWasShifted = mIMEView.getKeyboard().isShifted();
 				hideSoftIME();
 			} else {
+				if (TeclaApp.persistence.isMorseModeEnabled()) {
+					Log.d(TeclaApp.TAG, CLASS_TAG + "Restoring HUD");
+					mTeclaMorse.getMorseChart().restore();
+					mIMEView.invalidate();
+				}
 				// Opening
 				if (mKeyboardSwitcher.isVariants()) {
 					doVariantsExit(keyEventCode);
