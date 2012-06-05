@@ -25,6 +25,7 @@ import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
 
+import android.R.bool;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -37,6 +38,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -335,6 +337,34 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefInverseScanning.setEnabled(false);
 				}
 				stopSEP();
+			}
+		}
+		if (key.equals(Persistence.PREF_TEMP_SHIELD_DISCONNECT)) {
+			if(mPrefTempDisconnect.isChecked()) {
+				stopSEP();
+				Handler mHandler = new Handler();
+				Runnable mReconnect = new Runnable() {
+					
+					@Override
+					public void run() {
+						if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Re-enabling discovery");
+						discoverShield();						
+					}
+				};
+				
+				// See if the handler was posted
+				if(mHandler.postDelayed(mReconnect, 90000))	// 90 second delay
+				{
+					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Posted Runnable");
+				}
+				else
+				{
+					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Could not post Runnable");
+				}
+				
+			}
+			else {
+				
 			}
 		}
 		if (key.equals(Persistence.PREF_FULLSCREEN_SWITCH)) {

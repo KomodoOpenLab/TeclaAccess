@@ -18,7 +18,8 @@ In order to start contributing code to the Tecla Access project, follow the step
 3. Download and install the [Android SDK](http://developer.android.com/sdk/index.html)
 4. Create a new Android project in Eclipse named *Tecla Access* (target Android 2.0)
 5. Import the *Tecla Access* project's source from the *source* directory in your local repo (you may need to let Eclipse copy the source to the workspace)
-6. Create a new Android **library** project in Eclipse named *Tecla Access SDK* (target Android 2.0)
+6. Create a new Android **library** project in Eclipse named *Tecla Access SDK* 
+6a.If you have Eclipse 3.6 (Helios) or older, you may not have a **library** project option. In that case,just import the *Tecla Access SDK* project like a normal project, then right click on the project -> Properties -> Android and make sure **Is Library** is checked.
 7. Import the *Tecla Access SDK* project's source from the *sdk* directory in your local repo (you may need to let Eclipse copy the source to the workspace)
 8. Go to the properties of your *Tecla Access* project and add the project *Tecla Access SDK* as a library
 9. You should now be able to compile the project
