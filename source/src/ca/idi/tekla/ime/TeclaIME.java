@@ -38,6 +38,7 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.text.AutoText;
 import android.text.ClipboardManager;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.PrintWriterPrinter;
@@ -906,12 +907,15 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	public void updateSpaceKey(boolean refreshScreen) {
-		//TODO Elyas: don't show NULL chars
-		String s = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar()) + "  " + mTeclaMorse.getCurrentChar();
-		if (!mTeclaMorse.getCurrentChar().equals("") &&
-			mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
-			
-			mSpaceKey.label = s;
+		String charac = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
+		String sequence = mTeclaMorse.getCurrentChar();
+		
+		if (charac == null)
+			mSpaceKey.label = sequence;
+		
+		else if (!mTeclaMorse.getCurrentChar().equals("") &&
+			mTeclaMorse.getCurrentChar().length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
+			mSpaceKey.label = charac + "  " + sequence;
 		}
 		else
 			mSpaceKey.label = "space";
@@ -1642,14 +1646,14 @@ public class TeclaIME extends InputMethodService
 					//if sound enabled, play dit sound
 				}				
 				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 2: ");
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
+					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 3: ");
 					emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
 					//if sound enabled, play dah sound
 				}
 				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 3: ");
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
+					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 2: ");
 					emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 					//if sound enabled, play sound of word
 				}
@@ -1795,7 +1799,6 @@ public class TeclaIME extends InputMethodService
 				hideSoftIME();
 			} else {
 				if (TeclaApp.persistence.isMorseModeEnabled()) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Restoring HUD");
 					mTeclaMorse.getMorseChart().restore();
 					mIMEView.invalidate();
 				}
