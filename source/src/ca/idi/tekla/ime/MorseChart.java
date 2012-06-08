@@ -5,7 +5,9 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -23,7 +25,7 @@ public class MorseChart {
 	
 	public LinearLayout ll;
 	private LinearLayout ll_save;
-	private TableLayout[] tls = new TableLayout[NB_COLUMNS];
+	private TableLayout[] mTableLayout;
 	
 	private TableRow.LayoutParams trParams = new TableRow.LayoutParams(
 			TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
@@ -47,10 +49,11 @@ public class MorseChart {
 	}
 	
 	public void setViews() {
-		for (int i = 0; i < tls.length; i++) {
-			tls[i] = new TableLayout(mContext);
-			tls[i].setLayoutParams(tlParams);
-			ll.addView(tls[i], llParams);
+		mTableLayout = new TableLayout[NB_COLUMNS];
+		for (int i = 0; i < NB_COLUMNS; i++) {
+			mTableLayout[i] = new TableLayout(mContext);
+			mTableLayout[i].setLayoutParams(tlParams);
+			ll.addView(mTableLayout[i], llParams);
 			index = 0;
 		}
 	}
@@ -124,7 +127,18 @@ public class MorseChart {
 	}
 
 	private void addViewToNextTable(View v, TableLayout.LayoutParams tlParams) {
-		tls[index % NB_COLUMNS].addView(v, tlParams);
+		mTableLayout[index % NB_COLUMNS].addView(v, tlParams);
+	}
+	
+	public void configChanged(Configuration conf) {
+		if (conf.orientation == conf.ORIENTATION_LANDSCAPE)
+			NB_COLUMNS = 8;
+		else
+			NB_COLUMNS = 5;
+		
+		ll.removeAllViews();
+    	setViews();
+    	updated = false;
 	}
 	
 }

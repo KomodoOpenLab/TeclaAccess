@@ -258,7 +258,14 @@ public class TeclaIME extends InputMethodService
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
 		}
 		mKeyboardSwitcher.makeKeyboards(true);
-		super.onConfigurationChanged(conf);
+		super.onConfigurationChanged(conf);	
+		
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			mTeclaMorse.getMorseChart().configChanged(conf);
+			mIMEView.invalidate();
+			updateSpaceKey(true);
+			updateCapsLockKey(true);
+		}
 	}
 
 	@Override
@@ -816,13 +823,12 @@ public class TeclaIME extends InputMethodService
 
 		switch (primaryCode) {
 
-		// 0 represents a dit, 1 represents a dah
-		case 0:
-		case 1:
+		case TeclaKeyboard.KEYCODE_MORSE_DIT:
+		case TeclaKeyboard.KEYCODE_MORSE_DAH:
 			
 			if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 
-				if(primaryCode == 0)
+				if(primaryCode == TeclaKeyboard.KEYCODE_MORSE_DIT)
 					mTeclaMorse.addDit();
 				else
 					mTeclaMorse.addDah();
