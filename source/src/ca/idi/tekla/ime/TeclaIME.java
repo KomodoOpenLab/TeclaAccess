@@ -844,8 +844,10 @@ public class TeclaIME extends InputMethodService
 			else {
 				if (curCharMatch != null) {
 
-					if (curCharMatch.contentEquals("\n")) {
+					if (curCharMatch.contentEquals("↵")) {
 						sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+					} else if (curCharMatch.contentEquals("DEL")) {
+						handleMorseBackspace(false);	
 					} else if (curCharMatch.contentEquals("END")) {
 						requestHideSelf(0);
 						mIMEView.closing();
@@ -873,20 +875,7 @@ public class TeclaIME extends InputMethodService
 			// If there's a character in progress, clear it
 			// otherwise, send through a backspace keypress
 		case TeclaKeyboard.KEYCODE_MORSE_DELKEY:
-			if (mTeclaMorse.getCurrentChar().length() > 0) {
-				clearCharInProgress();
-			}else {
-				sendDownUpKeyEvents(primaryCode);
-				clearCharInProgress();
-				updateSpaceKey(true);
-
-				if (mCapsLockState == CAPS_LOCK_NEXT) {
-					// If you've hit delete and you were in caps_next state,
-					// then caps_off
-					mCapsLockState = CAPS_LOCK_OFF;
-					updateCapsLockKey(true);
-				}
-			}
+			handleMorseBackspace(true);
 			break;
 
 		case TeclaKeyboard.KEYCODE_MORSE_CAPSKEY:
@@ -912,15 +901,32 @@ public class TeclaIME extends InputMethodService
 		mTeclaMorse.clearCharInProgress();
 	}
 	
+	public void handleMorseBackspace(boolean clearEnabled) {
+		if (mTeclaMorse.getCurrentChar().length() > 0 && clearEnabled) {
+			clearCharInProgress();
+		}else {
+			sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
+			clearCharInProgress();
+			updateSpaceKey(true);
+
+			if (mCapsLockState == CAPS_LOCK_NEXT) {
+				// If you've hit delete and you were in caps_next state,
+				// then caps_off
+				mCapsLockState = CAPS_LOCK_OFF;
+				updateCapsLockKey(true);
+			}
+		}
+	}
+	
 	public void updateSpaceKey(boolean refreshScreen) {
-		String charac = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
 		String sequence = mTeclaMorse.getCurrentChar();
+		String charac = mTeclaMorse.morseToChar(sequence);
 		
 		if (charac == null)
 			mSpaceKey.label = sequence;
 		
-		else if (!mTeclaMorse.getCurrentChar().equals("") &&
-			mTeclaMorse.getCurrentChar().length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
+		else if (!sequence.equals("") &&
+				 sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
 			mSpaceKey.label = charac + "  " + sequence;
 		}
 		else
@@ -948,9 +954,8 @@ public class TeclaIME extends InputMethodService
 			break;
 		}
 
-		if (refreshScreen) {
+		if (refreshScreen)
 			mIMEView.invalidateKey(mCapsLockKeyIndex);
-		}
 	}
 
 	public void onText(CharSequence text) {

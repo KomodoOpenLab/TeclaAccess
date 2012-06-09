@@ -48,13 +48,21 @@ public class MorseDictionary {
 		map.put("-----", "0");
 		
 		//special characters
-		map.put("•----•", "\'"); map.put("•--•-•", "@"); map.put("•-•••", "&");
-		map.put("---•••", ":"); map.put("--••--", ","); map.put("•••-••-", "$");
-		map.put("-•••-", "="); map.put("---•", "!"); map.put("-•-•--", "!");
-		map.put("-••••-", "-"); map.put("-•--•", "("); map.put("-•--•-", ")");
-		map.put("•-•-•-", "."); map.put("•-•-•", "+"); map.put("••--••", "?");
-		map.put("•-••-•", "\""); map.put("-•-•-•", ";"); map.put("-••-•", "/");
-		map.put("••--•-", "_");
+		map.put("•-•-•-", "."); map.put("--••--", ","); map.put("•-••--", "!");
+		map.put("-•-•-•", ":"); map.put("•••-•", ";"); map.put("•---•", "@");
+		map.put("-•---", "#"); map.put("-•••-•", "$"); map.put("•--•-•", "%");
+		map.put("-••--", "&"); map.put("•-•••", "*"); map.put("•--••", "+");
+		map.put("---•", "_"); map.put("•--•-", "="); map.put("--••-", "/");
+		map.put("-•••••", "\\"); map.put("•-•--•", "\'"); map.put("--•--", "\"");
+		map.put("•••--•", "("); map.put("-••--•", ")"); map.put("--••-•", ">");
+		//map.put("-•--•-", "<");
+		map.put("-••••-", "-");
+		map.put("••--••", "?");
+		
+		//function keys
+		map.put("•-•-", "↵"); //Enter
+		map.put("-••-•", "DEL"); //Delete
+		
 	}
 	
 	public void setMaxCodeLength(){
