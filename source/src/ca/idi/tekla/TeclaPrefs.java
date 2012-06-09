@@ -341,6 +341,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_TEMP_SHIELD_DISCONNECT)) {
 			if(mPrefTempDisconnect.isChecked()) {
+				mPrefConnectToShield.setEnabled(false);
 				stopSEP();
 				Handler mHandler = new Handler();
 				Runnable mReconnect = new Runnable() {
@@ -348,7 +349,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					@Override
 					public void run() {
 						if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Re-enabling discovery");
-						discoverShield();						
+						discoverShield();
+						mPrefConnectToShield.setEnabled(true);
 					}
 				};
 				
