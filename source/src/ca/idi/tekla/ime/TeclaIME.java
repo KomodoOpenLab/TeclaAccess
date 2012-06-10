@@ -925,8 +925,9 @@ public class TeclaIME extends InputMethodService
 			mSpaceKey.label = sequence;
 		
 		else if (!sequence.equals("") &&
-				 sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) { 
-			mSpaceKey.label = charac + "  " + sequence;
+				 sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
+			//Update the key label according the current character
+			mSpaceKey.label = (mCapsLockState == CAPS_LOCK_OFF ? charac : charac.toUpperCase()) + "  " + sequence;
 		}
 		else
 			mSpaceKey.label = "space";

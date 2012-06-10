@@ -335,7 +335,7 @@
         <TextView
             android:layout_span="6"
             style="@style/tapinstructions"
-            android:text="@string/tapforpunctuation"
+            android:text="@string/tapforsymbols"
             />
     </TableRow>
 </TableLayout>

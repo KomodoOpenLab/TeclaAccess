@@ -78,7 +78,10 @@ public class TeclaKeyboardView extends KeyboardView {
     protected boolean onLongPress(Key key) {
         if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
         		TeclaApp.persistence.isMorseModeEnabled()) {
-            showCheatSheet();
+        	if (cheatsheetDialog != null && cheatsheetDialog.isShowing())
+        		cheatsheetDialog.dismiss();
+        	else
+        		showCheatSheet();
             return true;
         }
         else if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {

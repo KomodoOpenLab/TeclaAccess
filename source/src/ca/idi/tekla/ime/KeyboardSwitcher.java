@@ -203,7 +203,7 @@ public class KeyboardSwitcher {
         switch (mode) {
 
         	case MODE_MORSE:
-        		return new KeyboardId(R.layout.morse_kbd, KEYBOARDMODE_NORMAL, true);
+        		return new KeyboardId(R.xml.morse_kbd, KEYBOARDMODE_NORMAL, true);
             case MODE_TEXT:
             	if (useVoiceInput && scanVariants) {
             		// Using voice input AND scanning variants
