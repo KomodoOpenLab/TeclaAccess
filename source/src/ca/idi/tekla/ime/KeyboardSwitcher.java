@@ -19,6 +19,8 @@ package ca.idi.tekla.ime;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.util.Log;
+
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 

@@ -199,7 +199,6 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public void onCreate() {
-		Log.d(TeclaApp.TAG, CLASS_TAG + "onCreate");
 		super.onCreate();
 		mTeclaMorse = new TeclaMorse(this);
 		
@@ -270,7 +269,6 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public View onCreateInputView() {
-		Log.d(TeclaApp.TAG, CLASS_TAG + "onCreateInputView");
 		mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(
 				R.xml.input, null);
 		mKeyboardSwitcher.setInputView(mIMEView);
@@ -319,7 +317,6 @@ public class TeclaIME extends InputMethodService
 
 	@Override 
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		Log.d(TeclaApp.TAG, CLASS_TAG + "onStartInputView");
 		// In landscape mode, this method gets called without the input view being created.
 		if (mIMEView == null) {
 			return;
@@ -811,6 +808,8 @@ public class TeclaIME extends InputMethodService
 		evaluateNavKbdTimeout();
 	}
 	
+	/*********************** Morse methods ******************************/
+	
 	/**
 	 * Handle key input on the Morse Code keyboard. It has 5 keys and each of
 	 * them does something different.
@@ -957,6 +956,8 @@ public class TeclaIME extends InputMethodService
 		if (refreshScreen)
 			mIMEView.invalidateKey(mCapsLockKeyIndex);
 	}
+	
+	/*******************************************************************/
 
 	public void onText(CharSequence text) {
 		InputConnection ic = getCurrentInputConnection();
@@ -1649,34 +1650,17 @@ public class TeclaIME extends InputMethodService
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 			
-			if (TeclaApp.persistence.isMorseModeEnabled()) {
-				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 1: ");
-					emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
-					//if sound enabled, play dit sound
-				}				
-				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 3: ");
-					emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
-					//if sound enabled, play dah sound
-				}
-				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					Log.d(TeclaApp.TAG, CLASS_TAG + "Received Switch 2: ");
-					emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
-					//if sound enabled, play sound of word
-				}
-				
-			}
-
-			else{
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
 					if (TeclaApp.persistence.isInverseScanningEnabled()) {
 						TeclaApp.highlighter.resumeSelfScanning();
 					} else {
-						selectHighlighted(true);
+						if (TeclaApp.persistence.isMorseModeEnabled() && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
+							//if sound enabled, play dit sound
+						}
+						else {
+							selectHighlighted(true);
+						}
 					}
 				}
 				if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
@@ -1695,8 +1679,22 @@ public class TeclaIME extends InputMethodService
 				}
 
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					TeclaApp.highlighter.stepOut();
+					if (TeclaApp.persistence.isMorseModeEnabled() && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+						//if sound enabled, play sound of word
+					}
+					else {
+						TeclaApp.highlighter.stepOut();
+					}
 				}
+				
+				if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
+					if (TeclaApp.persistence.isMorseModeEnabled() && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
+						//if sound enabled, play dah sound
+					}
+				}
+				
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
 					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
 				}
@@ -1706,7 +1704,6 @@ public class TeclaIME extends InputMethodService
 
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
 						TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
-			}
 		}
 		
 		evaluateNavKbdTimeout();
@@ -2033,9 +2030,6 @@ public class TeclaIME extends InputMethodService
 		} else {
 			showWindow(true);
 			updateInputViewShown();
-			/*if (TeclaApp.persistence.isMorseModeEnabled()) {
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE);
-			}*/
 			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV);

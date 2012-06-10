@@ -23,7 +23,7 @@ public class MorseChart {
 	private int index;
 	private boolean updated = false;
 	
-	public LinearLayout ll;
+	public LinearLayout layout;
 	private LinearLayout ll_save;
 	private TableLayout[] mTableLayout;
 	
@@ -43,9 +43,9 @@ public class MorseChart {
 		
 		llParams.setMargins(0, 0, 25, 0);
 		
-		ll = new LinearLayout(mContext);
-		ll.setLayoutParams(llParams);
-		ll.setOrientation(LinearLayout.HORIZONTAL);
+		layout = new LinearLayout(mContext);
+		layout.setLayoutParams(llParams);
+		layout.setOrientation(LinearLayout.HORIZONTAL);
 	}
 	
 	public void setViews() {
@@ -53,7 +53,7 @@ public class MorseChart {
 		for (int i = 0; i < NB_COLUMNS; i++) {
 			mTableLayout[i] = new TableLayout(mContext);
 			mTableLayout[i].setLayoutParams(tlParams);
-			ll.addView(mTableLayout[i], llParams);
+			layout.addView(mTableLayout[i], llParams);
 			index = 0;
 		}
 	}
@@ -67,7 +67,7 @@ public class MorseChart {
         	updated = true;
         }
         else if (s.equals("")) {
-        	ll.removeAllViews();
+        	layout.removeAllViews();
         	setViews();
         	updated = false;
         }
@@ -81,9 +81,9 @@ public class MorseChart {
 		//Retrieve the child views
 		TableLayout temp[] = new TableLayout[NB_COLUMNS];
 		for (int i = 0; i < NB_COLUMNS; i++)
-			temp[i] = (TableLayout) ll.getChildAt(i);
+			temp[i] = (TableLayout) layout.getChildAt(i);
 		
-		ll.removeAllViews();
+		layout.removeAllViews();
 		
 		//Save the views
 		for (int i = 0; i < NB_COLUMNS; i++)
@@ -92,7 +92,7 @@ public class MorseChart {
 	
 	public void restore() {
 		if (ll_save != null)
-			ll = ll_save;
+			layout = ll_save;
 	}
 	
 	public void fillHUD(LinkedHashMap<String,String> chart) {
@@ -136,7 +136,7 @@ public class MorseChart {
 		else
 			NB_COLUMNS = 5;
 		
-		ll.removeAllViews();
+		layout.removeAllViews();
     	setViews();
     	updated = false;
 	}
