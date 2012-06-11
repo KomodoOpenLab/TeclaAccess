@@ -29,6 +29,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
 import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
@@ -332,20 +333,24 @@ public class TeclaIME extends InputMethodService
 		mCompletions = null;
 		mCapsLock = false;
 		
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
-		}
-		
-		else {
-			switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
-			case EditorInfo.TYPE_CLASS_NUMBER:
-			case EditorInfo.TYPE_CLASS_DATETIME:
+		switch (attribute.inputType&EditorInfo.TYPE_MASK_CLASS) {
+		case EditorInfo.TYPE_CLASS_NUMBER:
+		case EditorInfo.TYPE_CLASS_DATETIME:
+			if (TeclaApp.persistence.isMorseModeEnabled())
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
+			else
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SYMBOLS, attribute.imeOptions);
-				break;
-			case EditorInfo.TYPE_CLASS_PHONE:
+			break;
+		case EditorInfo.TYPE_CLASS_PHONE:
+			if (TeclaApp.persistence.isMorseModeEnabled())
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
+			else
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_PHONE, attribute.imeOptions);
-				break;
-			case EditorInfo.TYPE_CLASS_TEXT:
+			break;
+		case EditorInfo.TYPE_CLASS_TEXT:
+			if (TeclaApp.persistence.isMorseModeEnabled())
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
+			else {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
 				//startPrediction();
 				mPredictionOn = true;
@@ -394,12 +399,16 @@ public class TeclaIME extends InputMethodService
 					mCompletionOn = true && isFullscreenMode();
 				}
 				updateShiftKeyState(attribute);
-				break;
-			case EditorInfo.TYPE_NULL:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, attribute.imeOptions);
-				updateShiftKeyState(attribute);
-				break;
-			default:
+			}
+			break;
+		case EditorInfo.TYPE_NULL:
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, attribute.imeOptions);
+			updateShiftKeyState(attribute);
+			break;
+		default:
+			if (TeclaApp.persistence.isMorseModeEnabled())
+				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
+			else {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
 				updateShiftKeyState(attribute);
 			}
@@ -810,6 +819,26 @@ public class TeclaIME extends InputMethodService
 	
 	/*********************** Morse methods ******************************/
 	
+	private void playMorse(int primaryCode) {
+		if (mSoundOn && !mSilentMode) {
+			// FIXME: Volume and enable should come from UI settings
+			// FIXME: These should be triggered after auto-repeat logic
+			ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_DTMF, 100);
+			int toneType = 0;
+			
+			switch (primaryCode) {
+			case TeclaKeyboard.KEYCODE_MORSE_DIT:
+				toneType = ToneGenerator.TONE_DTMF_1;
+				break;
+			case TeclaKeyboard.KEYCODE_MORSE_DAH:
+				toneType = ToneGenerator.TONE_DTMF_0;
+				break;
+			}
+			Log.d(TeclaApp.TAG, CLASS_TAG + "playMorse()");
+			tone.startTone(toneType, 1000);
+		}
+	}
+	
 	/**
 	 * Handle key input on the Morse Code keyboard. It has 5 keys and each of
 	 * them does something different.
@@ -827,10 +856,14 @@ public class TeclaIME extends InputMethodService
 			
 			if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 
-				if(primaryCode == TeclaKeyboard.KEYCODE_MORSE_DIT)
+				if(primaryCode == TeclaKeyboard.KEYCODE_MORSE_DIT) {
 					mTeclaMorse.addDit();
-				else
+					playMorse(TeclaKeyboard.KEYCODE_MORSE_DIT);
+				}
+				else {
 					mTeclaMorse.addDah();
+					playMorse(TeclaKeyboard.KEYCODE_MORSE_DAH);
+				}
 			}
 			break;
 
@@ -1611,7 +1644,7 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_STOP_SCANNING));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_INPUT_STRING));
 
-		 mLastFullKeyboardMode = KeyboardSwitcher.MODE_TEXT;
+		 mLastFullKeyboardMode = TeclaApp.persistence.isMorseModeEnabled() ? KeyboardSwitcher.MODE_MORSE : KeyboardSwitcher.MODE_TEXT;
 		 mTeclaHandler = new Handler();
 		 mShieldConnected = false;
 		 mRepeating = false;

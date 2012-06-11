@@ -54,7 +54,9 @@ public class MorseDictionary {
 		map.put("-••--", "&"); map.put("•-•••", "*"); map.put("•--••", "+");
 		map.put("---•", "_"); map.put("•--•-", "="); map.put("--••-", "/");
 		map.put("-•••••", "\\"); map.put("•-•--•", "\'"); map.put("--•--", "\"");
-		map.put("•••--•", "("); map.put("-••--•", ")"); map.put("--••-•", ">");
+		map.put("•••--•", "("); map.put("-••--•", ")"); 
+		
+		//map.put("--••-•", ">");
 		//map.put("-•--•-", "<");
 		map.put("-••••-", "-");
 		map.put("••--••", "?");

@@ -149,8 +149,8 @@ public class KeyboardSwitcher {
     void setKeyboardMode(int mode, int imeOptions) {
         mSymbolsModeState = SYMBOLS_MODE_STATE_NONE;
         mPreferSymbols = mode == MODE_SYMBOLS;
-        setKeyboardMode(mode == MODE_SYMBOLS ? MODE_TEXT : mode, imeOptions,
-                mPreferSymbols);
+        setKeyboardMode(mode == MODE_SYMBOLS ? MODE_TEXT : mode, 
+        		imeOptions, mPreferSymbols);
     }
 
     void setKeyboardMode(int mode, int imeOptions, boolean isSymbols) {
