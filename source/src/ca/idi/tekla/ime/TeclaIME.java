@@ -488,6 +488,9 @@ public class TeclaIME extends InputMethodService
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			TeclaApp.highlighter.stopSelfScanning();
 			TeclaApp.highlighter.clear();
+			
+			//if (TeclaApp.persistence.isMorseModeEnabled())
+				//mTeclaMorse.getMorseChart().hide();
 		}
 		if (TRACE) Debug.stopMethodTracing();
 		if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
@@ -858,6 +861,8 @@ public class TeclaIME extends InputMethodService
 						sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
 					} else if (curCharMatch.contentEquals("DEL")) {
 						handleMorseBackspace(false);	
+					} else if (curCharMatch.contentEquals("\\n")) {
+						getCurrentInputConnection().commitText("\n", 1);
 					} else if (curCharMatch.contentEquals("END")) {
 						requestHideSelf(0);
 						mIMEView.closing();
@@ -2049,6 +2054,12 @@ public class TeclaIME extends InputMethodService
 		} else {
 			showWindow(true);
 			updateInputViewShown();
+			
+			/*if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+				mTeclaMorse.getMorseChart().restore();
+				mIMEView.invalidate();
+			}*/
+			
 			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV);

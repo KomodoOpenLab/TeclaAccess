@@ -16,7 +16,7 @@ public class MorseDictionary {
 	}
 	
 	public static void createMapping(LinkedHashMap<String,String> map) {
-		//alphabetic order
+		//Alphabetic order
 		map.put("•-", "a"); map.put("-•••", "b"); map.put("-•-•", "c");
 		map.put("-••", "d"); map.put("•", "e"); map.put("••-•", "f");
 		map.put("--•", "g"); map.put("••••", "h"); map.put("••", "i");
@@ -27,43 +27,26 @@ public class MorseDictionary {
 		map.put("•••-", "v"); map.put("•--", "w");	map.put("-••-", "x");
 		map.put("-•--", "y"); map.put("--••", "z"); 
 		
-		//dit-first letters
-		/*map.put("•", "e"); map.put("••", "i"); map.put("•-", "a");
-		map.put("•••", "s"); map.put("••-", "u"); map.put("•--", "w");
-		map.put("•-•", "r"); map.put("••••", "h"); map.put("•••-", "v");
-		map.put("••-•", "f"); map.put("•--•", "p"); map.put("•---", "j");
-		map.put("•-••", "l"); */
-		
-		//dah-first letters
-		/*map.put("-", "t"); map.put("--", "m"); map.put("-•", "n");
-		map.put("---", "o"); map.put("--•", "g"); map.put("-••", "d");
-		map.put("-•-", "k"); map.put("--••", "z"); map.put("--•-", "q");
-		map.put("-•••", "b"); map.put("-••-", "x"); map.put("-•-•", "c");
-		map.put("-•--", "y");*/
-		
-		//numbers
+		//Numbers
 		map.put("•----", "1"); map.put("••---", "2"); map.put("•••--", "3");
 		map.put("••••-", "4"); map.put("•••••", "5"); map.put("-••••", "6");
 		map.put("--•••", "7"); map.put("---••", "8"); map.put("----•", "9");
 		map.put("-----", "0");
 		
-		//special characters
+		//Special characters
 		map.put("•-•-•-", "."); map.put("--••--", ","); map.put("•-••--", "!");
 		map.put("-•-•-•", ":"); map.put("•••-•", ";"); map.put("•---•", "@");
 		map.put("-•---", "#"); map.put("-•••-•", "$"); map.put("•--•-•", "%");
 		map.put("-••--", "&"); map.put("•-•••", "*"); map.put("•--••", "+");
 		map.put("---•", "_"); map.put("•--•-", "="); map.put("--••-", "/");
 		map.put("-•••••", "\\"); map.put("•-•--•", "\'"); map.put("--•--", "\"");
-		map.put("•••--•", "("); map.put("-••--•", ")"); 
+		map.put("•••--•", "("); map.put("-••--•", ")"); map.put("••--••", "?");
+		map.put("--••-•", ">"); map.put("-•--•-", "<"); map.put("-••••-", "-");
 		
-		//map.put("--••-•", ">");
-		//map.put("-•--•-", "<");
-		map.put("-••••-", "-");
-		map.put("••--••", "?");
-		
-		//function keys
+		//Command keys
 		map.put("•-•-", "↵"); //Enter
-		map.put("-••-•", "DEL"); //Delete
+		map.put("----", "DEL"); //Delete
+		map.put("••••", "\\n"); //New line
 		
 	}
 	

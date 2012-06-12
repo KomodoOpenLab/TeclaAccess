@@ -108,7 +108,12 @@ public class MorseChart {
         	
         	TextView charTV = new TextView(mContext);
         	charTV.setId(200 + index);
-        	charTV.setText(entry.getValue().toUpperCase());
+        	
+        	if (entry.getValue().equals("\\n"))
+        		charTV.setText(entry.getValue());
+        	else
+        		charTV.setText(entry.getValue().toUpperCase());
+        	
         	charTV.setTextSize(16.0f);
         	charTV.setTextColor(0xFF77A8D4);
         	tr.addView(charTV);
