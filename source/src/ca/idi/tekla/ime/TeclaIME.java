@@ -169,6 +169,8 @@ public class TeclaIME extends InputMethodService
 	// Align sound effect volume on music volume
 	private final float FX_VOLUME = -1.0f;
 	private boolean mSilentMode;
+	private ToneGenerator mTone = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80);
+	private int mToneType = ToneGenerator.TONE_CDMA_ABBR_INTERCEPT;
 
 	private String mWordSeparators;
 	private String mSentenceSeparators;
@@ -819,26 +821,6 @@ public class TeclaIME extends InputMethodService
 	
 	/*********************** Morse methods ******************************/
 	
-	private void playMorse(int primaryCode) {
-		if (mSoundOn && !mSilentMode) {
-			// FIXME: Volume and enable should come from UI settings
-			// FIXME: These should be triggered after auto-repeat logic
-			ToneGenerator tone = new ToneGenerator(AudioManager.STREAM_DTMF, 100);
-			int toneType = 0;
-			
-			switch (primaryCode) {
-			case TeclaKeyboard.KEYCODE_MORSE_DIT:
-				toneType = ToneGenerator.TONE_DTMF_1;
-				break;
-			case TeclaKeyboard.KEYCODE_MORSE_DAH:
-				toneType = ToneGenerator.TONE_DTMF_0;
-				break;
-			}
-			Log.d(TeclaApp.TAG, CLASS_TAG + "playMorse()");
-			tone.startTone(toneType, 1000);
-		}
-	}
-	
 	/**
 	 * Handle key input on the Morse Code keyboard. It has 5 keys and each of
 	 * them does something different.
@@ -856,14 +838,10 @@ public class TeclaIME extends InputMethodService
 			
 			if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 
-				if(primaryCode == TeclaKeyboard.KEYCODE_MORSE_DIT) {
+				if(primaryCode == TeclaKeyboard.KEYCODE_MORSE_DIT)
 					mTeclaMorse.addDit();
-					playMorse(TeclaKeyboard.KEYCODE_MORSE_DIT);
-				}
-				else {
+				else
 					mTeclaMorse.addDah();
-					playMorse(TeclaKeyboard.KEYCODE_MORSE_DAH);
-				}
 			}
 			break;
 
@@ -1420,18 +1398,29 @@ public class TeclaIME extends InputMethodService
 			// FIXME: Volume and enable should come from UI settings
 			// FIXME: These should be triggered after auto-repeat logic
 			int sound = AudioManager.FX_KEYPRESS_STANDARD;
+			int duration = 80;
+			
 			switch (primaryCode) {
 			case Keyboard.KEYCODE_DELETE:
 				sound = AudioManager.FX_KEYPRESS_DELETE;
+				mAudioManager.playSoundEffect(sound, FX_VOLUME);
 				break;
 			case KEYCODE_ENTER:
 				sound = AudioManager.FX_KEYPRESS_RETURN;
+				mAudioManager.playSoundEffect(sound, FX_VOLUME);
 				break;
 			case KEYCODE_SPACE:
 				sound = AudioManager.FX_KEYPRESS_SPACEBAR;
+				mAudioManager.playSoundEffect(sound, FX_VOLUME);
+				break;
+				
+			case TeclaKeyboard.KEYCODE_MORSE_DIT:
+				mTone.startTone(mToneType, duration);
+				break;
+			case TeclaKeyboard.KEYCODE_MORSE_DAH:
+				mTone.startTone(mToneType, duration * 3);
 				break;
 			}
-			mAudioManager.playSoundEffect(sound, FX_VOLUME);
 		}
 	}
 
