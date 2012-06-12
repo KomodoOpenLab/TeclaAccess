@@ -21,6 +21,7 @@ package ca.idi.tekla;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tekla.util.FullResetTimeoutDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
@@ -75,6 +76,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
+	private FullResetTimeoutDialog mFullResetTimeoutDialog;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -97,6 +99,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
 		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
+		mFullResetTimeoutDialog = new FullResetTimeoutDialog(this);
+		mFullResetTimeoutDialog.setContentView(R.layout.dialog_full_reset_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
@@ -257,6 +261,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			mAutohideTimeoutDialog.show();
+		}
+		if (preference.getKey().equals(Persistence.PREF_FULL_RESET_TIMEOUT)) {
+			mFullResetTimeoutDialog.show();
 		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}

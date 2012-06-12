@@ -20,17 +20,20 @@ public class Persistence {
 	public static final String PREF_VARIANTS_KEY = "variants_key";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
+	public static final String PREF_FULL_RESET_TIMEOUT = "full_reset_timeout";
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
 	public static final String PREF_SHIELD_ADDRESS = "shield_address";
 	public static final String PREF_FULLSCREEN_SWITCH = "fullscreen_switch";
 	public static final String PREF_SELF_SCANNING = "self_scanning";
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
+	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3; //second
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int MAX_SCAN_DELAY = 3000;
 	public static final int MIN_SCAN_DELAY = 250;
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
+	
 	
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
 	
@@ -103,6 +106,15 @@ public class Persistence {
 
 	public int getNavigationKeyboardTimeout() {
 		return shared_prefs.getInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
+	}
+	
+	public void setFullResetTimeout(long timeout) {
+		prefs_editor.putLong(PREF_FULL_RESET_TIMEOUT, timeout);
+		prefs_editor.commit();
+	}
+	
+	public long getFullResetTimeout() {
+		return shared_prefs.getLong(PREF_FULL_RESET_TIMEOUT,DEFAULT_FULL_RESET_TIMEOUT);
 	}
 
 	public void setConnectToShield(boolean shieldConnect) {
