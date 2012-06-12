@@ -1677,9 +1677,8 @@ public class TeclaIME extends InputMethodService
 					if (TeclaApp.persistence.isInverseScanningEnabled()) {
 						TeclaApp.highlighter.resumeSelfScanning();
 					} else {
-						if (TeclaApp.persistence.isMorseModeEnabled() && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+						if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
 							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
-							//if sound enabled, play dit sound
 						}
 						else {
 							selectHighlighted(true);
@@ -1702,24 +1701,21 @@ public class TeclaIME extends InputMethodService
 				}
 
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					if (TeclaApp.persistence.isMorseModeEnabled() && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
 						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
-						//if sound enabled, play sound of word
 					}
 					else {
 						TeclaApp.highlighter.stepOut();
 					}
 				}
 				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_E3)) {
-					if (TeclaApp.persistence.isMorseModeEnabled() && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
-						//if sound enabled, play dah sound
-					}
-				}
-				
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
-					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
+					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
+					}
+					else {
+						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
+					}
 				}
 				if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
 					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
