@@ -275,6 +275,16 @@
     <!-- Self-scanning delay strings-->
 	<string name="scan_speed">Scanning speed</string>
 	<string name="scan_speed_summary">Adjust the scanning speed</string>
+	
+	<!-- Switch selector strings-->
+	<string name="define_switch_action">Define switch actions</string>
+	<string name="define_switch_action_summary">Customize the actions of each switch</string>
+	<string name="switch_j1">Switch J1 action</string>
+	<string name="switch_j2">Switch J2 action</string>
+	<string name="switch_j3">Switch J3 action</string>
+	<string name="switch_j4">Switch J4 action</string>
+	<string name="switch_e1">Switch E1 action</string>
+	<string name="switch_e2">Switch E2 action</string>
 
 	<!-- Tecla: Scan Speed Dialog -->
 	<string name="dialog_faster">Faster</string>

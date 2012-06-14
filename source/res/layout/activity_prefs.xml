@@ -87,6 +87,54 @@
 			android:summary="@string/autohide_timeout_summary"
 			android:persistent="true"
 			/>
+		
+		<PreferenceScreen
+		    android:key="switch_selector"
+            android:title="@string/define_switch_action"
+            android:summary="@string/define_switch_action_summary">
+				<ListPreference
+					android:key="switch_j1"
+					android:title="@string/switch_j1"
+					android:entries="@array/listArray"
+					android:entryValues="@array/listValues"
+					android:persistent="true"
+				/>
+				<ListPreference
+					android:key="switch_j2"
+					android:title="@string/switch_j2"
+					android:entries="@array/listArray"
+					android:entryValues="@array/listValues"
+					android:persistent="true"
+				/>
+				<ListPreference
+					android:key="switch_j3"
+					android:title="@string/switch_j3"
+					android:entries="@array/listArray"
+					android:entryValues="@array/listValues"
+					android:persistent="true"
+				/>
+				<ListPreference
+					android:key="switch_j4"
+					android:title="@string/switch_j4"
+					android:entries="@array/listArray"
+					android:entryValues="@array/listValues"
+					android:persistent="true"
+				/>
+				<ListPreference
+					android:key="switch_e1"
+					android:title="@string/switch_e1"
+					android:entries="@array/listArray"
+					android:entryValues="@array/listValues"
+					android:persistent="true"
+				/>
+				<ListPreference
+					android:key="switch_e2"
+					android:title="@string/switch_e2"
+					android:entries="@array/listArray"
+					android:entryValues="@array/listValues"
+					android:persistent="true"
+				/>
+		</PreferenceScreen>
     </PreferenceCategory>            
 
     <PreferenceCategory

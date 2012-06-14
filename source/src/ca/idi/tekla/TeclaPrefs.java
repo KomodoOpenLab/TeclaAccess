@@ -35,6 +35,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
@@ -72,7 +73,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
-
+	private PreferenceScreen mSwitchSelectorScreen;
+	private ListPreference mSwitchJ1;
+	private ListPreference mSwitchJ2;
+	private ListPreference mSwitchJ3;
+	private ListPreference mSwitchJ4;
+	private ListPreference mSwitchE1;
+	private ListPreference mSwitchE2;
+	
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -102,6 +110,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mScanSpeedDialog = new ScanSpeedDialog(this);
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
+		mSwitchSelectorScreen = (PreferenceScreen) findPreference(Persistence.PREF_SWITCH_SELECTOR);
+		mSwitchJ1 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J1);
+		mSwitchJ2 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J2);
+		mSwitchJ3 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J3);
+		mSwitchJ4 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J4);
+		mSwitchE1 = (ListPreference) findPreference(Persistence.PREF_SWITCH_E1);
+		mSwitchE2 = (ListPreference) findPreference(Persistence.PREF_SWITCH_E2);
 
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
@@ -142,6 +157,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
 		}
+		
+		//TODO Elyas: Set default switch actions + reset to default button
+		mSwitchJ1.setSummary("Undefined");
+		mSwitchJ2.setSummary("Undefined");
+		mSwitchJ3.setSummary("Undefined");
+		mSwitchJ4.setSummary("Undefined");
+		mSwitchE1.setSummary("Undefined");
+		mSwitchE2.setSummary("Undefined");
 
 		//Tecla Access Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
@@ -303,6 +326,27 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefConnectToShield.setChecked(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
+		}
+		if (key.equals(Persistence.PREF_SWITCH_SELECTOR)) {
+			TeclaApp.getInstance().showToast("Switch selector");
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J1)) {
+			mSwitchJ1.setSummary(mSwitchJ1.getEntry());
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J2)) {
+			mSwitchJ2.setSummary(mSwitchJ2.getEntry());
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J3)) {
+			mSwitchJ3.setSummary(mSwitchJ3.getEntry());
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J4)) {
+			mSwitchJ4.setSummary(mSwitchJ4.getEntry());
+		}
+		if (key.equals(Persistence.PREF_SWITCH_E1)) {
+			mSwitchE1.setSummary(mSwitchE1.getEntry());
+		}
+		if (key.equals(Persistence.PREF_SWITCH_E2)) {
+			mSwitchE2.setSummary(mSwitchE2.getEntry());
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {
 			if (mPrefConnectToShield.isChecked()) {

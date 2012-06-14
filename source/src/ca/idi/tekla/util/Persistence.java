@@ -21,6 +21,15 @@ public class Persistence {
 	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
+	
+	public static final String PREF_SWITCH_SELECTOR = "switch_selector";
+	public static final String PREF_SWITCH_J1 = "switch_j1";
+	public static final String PREF_SWITCH_J2 = "switch_j2";
+	public static final String PREF_SWITCH_J3 = "switch_j3";
+	public static final String PREF_SWITCH_J4 = "switch_j4";
+	public static final String PREF_SWITCH_E1 = "switch_e1";
+	public static final String PREF_SWITCH_E2 = "switch_e2";
+	
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
 	public static final String PREF_SHIELD_ADDRESS = "shield_address";
 	public static final String PREF_FULLSCREEN_SWITCH = "fullscreen_switch";
@@ -104,6 +113,10 @@ public class Persistence {
 
 	public int getNavigationKeyboardTimeout() {
 		return shared_prefs.getInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
+	}
+	
+	public int getSwitchSelector() {
+		return shared_prefs.getInt(PREF_SWITCH_SELECTOR, NEVER_AUTOHIDE);
 	}
 
 	public void setConnectToShield(boolean shieldConnect) {
