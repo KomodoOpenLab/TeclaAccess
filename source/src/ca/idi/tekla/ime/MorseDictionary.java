@@ -7,11 +7,16 @@ public class MorseDictionary {
 	
 	private String CLASS_TAG = "MorseDictionary: ";
 	public static LinkedHashMap<String,String> mMorseChart;
+	public static LinkedHashMap<String,String> mDitFirst;
+	public static LinkedHashMap<String,String> mDahFirst;
+	
 	private static int mMaxCodeLength;
 	
 	public MorseDictionary() {
 		mMorseChart = new LinkedHashMap<String,String>();
 		createMapping(mMorseChart);
+		mDitFirst = initCharts('•');
+		mDahFirst = initCharts('-');
 		setMaxCodeLength();
 	}
 	
@@ -68,7 +73,11 @@ public class MorseDictionary {
 		return mMorseChart.get(key);
 	}
 	
-	public LinkedHashMap<String,String> startsWith(char c) {
+	public LinkedHashMap<String,String> getChartStartsWith(String s) {
+		return s.equals("•") ? mDitFirst : mDahFirst;
+	}
+	
+	public LinkedHashMap<String,String> initCharts(char c) {
 		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
 		Iterator<Entry<String,String>> it = mMorseChart.entrySet().iterator();
 		while (it.hasNext()) {

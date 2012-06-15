@@ -62,7 +62,7 @@ public class MorseChart {
         String s = mTeclaMorse.getCurrentChar();
         if ((s.equals("•") || s.equals("-")) && !updated) {
         	//Populate the HUD according to the 1st typed Morse character
-        	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().startsWith(s.charAt(0));
+        	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().getChartStartsWith(s);
         	fillHUD(map);
         	updated = true;
         }
