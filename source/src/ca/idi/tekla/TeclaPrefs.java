@@ -18,6 +18,8 @@ package ca.idi.tekla;
 
 //FIXME: Tecla Access - Solve backup elsewhere
 //import android.backup.BackupManager;
+import java.util.HashMap;
+
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.sep.SwitchEventProvider;
@@ -80,6 +82,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private ListPreference mSwitchJ4;
 	private ListPreference mSwitchE1;
 	private ListPreference mSwitchE2;
+	private HashMap<String, String> mSwitchMap;
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -159,12 +162,24 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		
 		//TODO Elyas: Set default switch actions + reset to default button
-		mSwitchJ1.setSummary("Undefined");
-		mSwitchJ2.setSummary("Undefined");
-		mSwitchJ3.setSummary("Undefined");
-		mSwitchJ4.setSummary("Undefined");
-		mSwitchE1.setSummary("Undefined");
-		mSwitchE2.setSummary("Undefined");
+		mSwitchJ1.setSummary(mSwitchJ1.getEntry());
+		mSwitchJ2.setSummary(mSwitchJ2.getEntry());
+		mSwitchJ3.setSummary(mSwitchJ3.getEntry());
+		mSwitchJ4.setSummary(mSwitchJ4.getEntry());
+		mSwitchE1.setSummary(mSwitchE1.getEntry());
+		mSwitchE2.setSummary(mSwitchE2.getEntry());
+		
+		//Initialize switch map according to prefs
+		mSwitchMap = TeclaApp.persistence.getSwitchMap();
+		
+		if (mSwitchMap.isEmpty()) {
+			mSwitchMap.put(mSwitchJ1.getKey(), mSwitchJ1.getValue());
+			mSwitchMap.put(mSwitchJ2.getKey(), mSwitchJ2.getValue());
+			mSwitchMap.put(mSwitchJ3.getKey(), mSwitchJ3.getValue());
+			mSwitchMap.put(mSwitchJ4.getKey(), mSwitchJ4.getValue());
+			mSwitchMap.put(mSwitchE1.getKey(), mSwitchE1.getValue());
+			mSwitchMap.put(mSwitchE2.getKey(), mSwitchE2.getValue());
+		}
 
 		//Tecla Access Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
@@ -332,21 +347,33 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1)) {
 			mSwitchJ1.setSummary(mSwitchJ1.getEntry());
+			mSwitchMap.remove(key);
+			mSwitchMap.put(key, mSwitchJ1.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J2)) {
 			mSwitchJ2.setSummary(mSwitchJ2.getEntry());
+			mSwitchMap.remove(key);
+			mSwitchMap.put(key, mSwitchJ2.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J3)) {
 			mSwitchJ3.setSummary(mSwitchJ3.getEntry());
+			mSwitchMap.remove(key);
+			mSwitchMap.put(key, mSwitchJ3.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J4)) {
 			mSwitchJ4.setSummary(mSwitchJ4.getEntry());
+			mSwitchMap.remove(key);
+			mSwitchMap.put(key, mSwitchJ4.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_E1)) {
 			mSwitchE1.setSummary(mSwitchE1.getEntry());
+			mSwitchMap.remove(key);
+			mSwitchMap.put(key, mSwitchE1.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_E2)) {
 			mSwitchE2.setSummary(mSwitchE2.getEntry());
+			mSwitchMap.remove(key);
+			mSwitchMap.put(key, mSwitchE2.getValue());
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {
 			if (mPrefConnectToShield.isChecked()) {

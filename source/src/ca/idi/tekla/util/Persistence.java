@@ -4,6 +4,8 @@
 
 package ca.idi.tekla.util;
 
+import java.util.HashMap;
+
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -43,6 +45,7 @@ public class Persistence {
 	public static final int NEVER_AUTOHIDE = -1;
 	
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
+	private static HashMap<String,String> mSwitchMap;
 	
 	private SharedPreferences shared_prefs;
 	private SharedPreferences.Editor prefs_editor;
@@ -52,6 +55,7 @@ public class Persistence {
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
 		mVariantsShowing = false;
+		mSwitchMap = new HashMap<String,String>();
 		
 	}
 	
@@ -114,10 +118,6 @@ public class Persistence {
 	public int getNavigationKeyboardTimeout() {
 		return shared_prefs.getInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
 	}
-	
-	public int getSwitchSelector() {
-		return shared_prefs.getInt(PREF_SWITCH_SELECTOR, NEVER_AUTOHIDE);
-	}
 
 	public void setConnectToShield(boolean shieldConnect) {
 		prefs_editor.putBoolean(PREF_CONNECT_TO_SHIELD, shieldConnect);
@@ -177,6 +177,10 @@ public class Persistence {
 
 	public int getScanDelay() {
 		return shared_prefs.getInt(PREF_SCAN_DELAY_INT, DEFAULT_SCAN_DELAY);
+	}
+	
+	public HashMap<String,String> getSwitchMap() {
+		return mSwitchMap;
 	}
 
 }

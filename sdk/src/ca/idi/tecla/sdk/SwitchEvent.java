@@ -61,5 +61,15 @@ public class SwitchEvent {
 		}
 		return false;
 	}
+	
+	public String toString() {
+		if (switch_changes == SWITCH_J1) return "switch_j1";
+		if (switch_changes == SWITCH_J2) return "switch_j2";
+		if (switch_changes == SWITCH_J3) return "switch_j3";
+		if (switch_changes == SWITCH_J4) return "switch_j4";
+		if (switch_changes == SWITCH_E1) return "switch_e1";
+		if (switch_changes == SWITCH_E2) return "switch_e2";
+		return null;
+	}
 		
 }

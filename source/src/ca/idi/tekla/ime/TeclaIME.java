@@ -1669,16 +1669,50 @@ public class TeclaIME extends InputMethodService
 
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
+		//FIXME Elyas: when hitting the switches too fast, switchEvent is null
+		String action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
+		Log.d(TeclaApp.TAG, "IME: Switch: " + switchEvent.toString() + ", action: " + action);
+		
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
 			TeclaApp.highlighter.startSelfScanning();
 		} else {
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
-					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
-					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 			
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_J4) || switchEvent.isPressed(SwitchEvent.SWITCH_E1)) {
+			switch(Integer.parseInt(action)) {
+			//TODO Elyas: add separate options for Morse input
+
+			case 1:
+				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
+				}
+				break;
+			
+			case 2:
+				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
+					}
+					else {
+						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
+					}
+				}
+				break;
+				
+			case 3:
+				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+					}
+					else {
+						//FIXME Elyas: no effect
+						TeclaApp.highlighter.stepOut();
+					}
+				}
+				break;
+				
+			case 4:
+				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 					if (TeclaApp.persistence.isInverseScanningEnabled()) {
 						TeclaApp.highlighter.resumeSelfScanning();
 					} else {
@@ -1690,7 +1724,7 @@ public class TeclaIME extends InputMethodService
 						}
 					}
 				}
-				if (switchEvent.isReleased(SwitchEvent.SWITCH_J4) || switchEvent.isReleased(SwitchEvent.SWITCH_E1)) {
+				if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 					if (TeclaApp.persistence.isInverseScanningEnabled()) {
 						if (TeclaApp.persistence.isInverseScanningChanged()) {
 							//Ignore event right after Inverse Scanning is Enabled
@@ -1704,34 +1738,21 @@ public class TeclaIME extends InputMethodService
 						stopRepeatingKey();
 					}
 				}
-
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_J3) || switchEvent.isPressed(SwitchEvent.SWITCH_E2)) {
-					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
-					}
-					else {
-						TeclaApp.highlighter.stepOut();
-					}
-				}
+				break;
 				
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_J2)) {
-					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
-					}
-					else {
-						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
-					}
-				}
-				if (switchEvent.isPressed(SwitchEvent.SWITCH_J1)) {
-					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
-				}
-
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
-						TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
+			default:
+				break;
+			}
+			
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
+			
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
 		}
 		
-		evaluateNavKbdTimeout();
-				
+		evaluateNavKbdTimeout();		
 	}
 	
 	private void emulateMorseKey(int key) {

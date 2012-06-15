@@ -277,7 +277,7 @@
 	<string name="scan_speed_summary">Adjust the scanning speed</string>
 	
 	<!-- Switch selector strings-->
-	<string name="define_switch_action">Define switch actions</string>
+	<string name="define_switch_action">Configure switch actions</string>
 	<string name="define_switch_action_summary">Customize the actions of each switch</string>
 	<string name="switch_j1">Switch J1 action</string>
 	<string name="switch_j2">Switch J2 action</string>
