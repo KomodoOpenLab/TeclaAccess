@@ -49,11 +49,10 @@
     </Row>
     
     <Row android:rowEdgeFlags="bottom">
-        <Key android:codes="-2" android:keyIcon="@drawable/sym_keyboard_numalt"
-                android:popupKeyboard="@xml/kbd_popup_template"
-                android:popupCharacters="_"
-                android:iconPreview="@drawable/sym_keyboard_feedback_numalt"/>
-
+        <Key android:codes="-4" android:keyIcon="@drawable/sym_keyboard_done" 
+			android:iconPreview="@drawable/sym_keyboard_feedback_done"
+			android:keyWidth="20%p" android:keyEdgeFlags="left"/>
+			
         <Key android:codes="48" android:keyIcon="@drawable/sym_keyboard_num0"/>
 
         <Key android:codes="32" android:keyIcon="@drawable/sym_keyboard_space" 
@@ -62,9 +61,13 @@
         <!-- <Key android:codes="10" android:keyIcon="@drawable/sym_keyboard_return"
                 android:keyWidth="20%p"
                 android:keyEdgeFlags="right"/> -->
-		<Key android:codes="-4" android:keyIcon="@drawable/sym_keyboard_done" 
-			android:iconPreview="@drawable/sym_keyboard_feedback_done"
-			android:keyWidth="20%p" android:keyEdgeFlags="right"/>
+        <Key android:codes="-2" android:keyIcon="@drawable/sym_keyboard_numalt"
+                android:popupKeyboard="@xml/kbd_popup_template"
+                android:popupCharacters="_"
+                android:iconPreview="@drawable/sym_keyboard_feedback_numalt"
+                android:keyEdgeFlags="right" />
+        
+		
     </Row>
     
 </Keyboard>

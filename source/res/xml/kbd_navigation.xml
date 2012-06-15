@@ -23,8 +23,8 @@
 	android:verticalGap="0px" android:keyHeight="@dimen/key_height">
 
 	<Row android:keyboardMode="@+id/mode_normal" android:rowEdgeFlags="bottom">
-		<Key android:codes="4" android:keyIcon="@drawable/nav_keyboard_back"
-			android:iconPreview="@drawable/nav_keyboard_feedback_back"
+		<Key android:codes="-4" android:keyIcon="@drawable/sym_keyboard_show"
+			android:iconPreview="@drawable/sym_keyboard_feedback_show"
 			android:keyWidth="15%p" android:keyEdgeFlags="left" />
 		<Key android:codes="19" android:keyIcon="@drawable/nav_keyboard_up"
 			android:iconPreview="@drawable/nav_keyboard_feedback_up"
@@ -39,9 +39,9 @@
 			android:iconPreview="@drawable/nav_keyboard_feedback_right"
 			android:keyWidth="14%p" />
 		<Key android:codes="23" android:keyLabel="OK" android:keyWidth="14%p" />
-		<Key android:codes="-4" android:keyIcon="@drawable/sym_keyboard_show"
-			android:iconPreview="@drawable/sym_keyboard_feedback_show"
-			android:keyWidth="15%p" android:keyEdgeFlags="right" />
+			<Key android:codes="4" android:keyIcon="@drawable/nav_keyboard_back"
+			android:iconPreview="@drawable/nav_keyboard_feedback_back"
+			android:keyWidth="15%p" android:keyEdgeFlags="right"  />
 	</Row>
 
 	<Row android:keyboardMode="@+id/mode_voice" android:rowEdgeFlags="bottom">
