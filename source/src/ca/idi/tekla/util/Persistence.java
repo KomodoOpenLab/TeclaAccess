@@ -24,7 +24,7 @@ public class Persistence {
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	
-	public static final String PREF_SWITCH_SELECTOR = "switch_selector";
+	public static final String PREF_CONFIGURE_INPUT = "configure_input";
 	public static final String PREF_SWITCH_J1 = "switch_j1";
 	public static final String PREF_SWITCH_J2 = "switch_j2";
 	public static final String PREF_SWITCH_J3 = "switch_j3";

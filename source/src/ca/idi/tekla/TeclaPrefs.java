@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
+import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
@@ -75,7 +76,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
-	private PreferenceScreen mSwitchSelectorScreen;
+	private PreferenceScreen mConfigureInputScreen;
 	private ListPreference mSwitchJ1;
 	private ListPreference mSwitchJ2;
 	private ListPreference mSwitchJ3;
@@ -113,7 +114,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mScanSpeedDialog = new ScanSpeedDialog(this);
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
-		mSwitchSelectorScreen = (PreferenceScreen) findPreference(Persistence.PREF_SWITCH_SELECTOR);
+		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mSwitchJ1 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J1);
 		mSwitchJ2 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J2);
 		mSwitchJ3 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J3);
@@ -310,6 +311,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (mPrefMorse.isChecked()) {
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
 			}
+			
 		}
 		
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
@@ -342,8 +344,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
-		if (key.equals(Persistence.PREF_SWITCH_SELECTOR)) {
-			TeclaApp.getInstance().showToast("Switch selector");
+		if (key.equals(Persistence.PREF_CONFIGURE_INPUT)) {
+			TeclaApp.getInstance().showToast("Configure input");
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1)) {
 			mSwitchJ1.setSummary(mSwitchJ1.getEntry());

@@ -89,7 +89,7 @@
 			/>
 		
 		<PreferenceScreen
-		    android:key="switch_selector"
+		    android:key="configure_input"
             android:title="@string/define_switch_action"
             android:summary="@string/define_switch_action_summary">
 				<ListPreference

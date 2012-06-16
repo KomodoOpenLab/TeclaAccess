@@ -277,22 +277,13 @@ public class TeclaIME extends InputMethodService
 		mKeyboardSwitcher.setInputView(mIMEView);
 		mKeyboardSwitcher.makeKeyboards(true);
 		mIMEView.setOnKeyboardActionListener(this);
-
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			mIMEView.setTeclaMorse(mTeclaMorse);
-			mIMEView.setService(this);
+		mIMEView.setTeclaMorse(mTeclaMorse);
+		mIMEView.setService(this);
+		
+		if (TeclaApp.persistence.isMorseModeEnabled())
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, 0);
-			
-			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
-			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
-			
-			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
-			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
-			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
-		}
-		else {
+		else
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-		}
 		
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME view created.");
 		TeclaApp.highlighter.setIMEView(mIMEView);
@@ -323,6 +314,15 @@ public class TeclaIME extends InputMethodService
 		// In landscape mode, this method gets called without the input view being created.
 		if (mIMEView == null) {
 			return;
+		}
+		
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
+			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
+			
+			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
+			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
+			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
 		}
 
 		mKeyboardSwitcher.makeKeyboards(false);
@@ -1669,9 +1669,15 @@ public class TeclaIME extends InputMethodService
 
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
-		//FIXME Elyas: when hitting the switches too fast, switchEvent is null
+		//FIXME Elyas: if typing too fast, or holding a long press for a while, some switch events are null
+		//Temporary fix
+		if (switchEvent.toString() == null) {
+			Log.d(TeclaApp.TAG, "Captured null switch event");
+			return;
+		}
+		
 		String action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
-		Log.d(TeclaApp.TAG, "IME: Switch: " + switchEvent.toString() + ", action: " + action);
+		Log.d(TeclaApp.TAG, "IME: " + switchEvent.toString() + ", action: " + action);
 		
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
@@ -1705,7 +1711,6 @@ public class TeclaIME extends InputMethodService
 						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 					}
 					else {
-						//FIXME Elyas: no effect
 						TeclaApp.highlighter.stepOut();
 					}
 				}
@@ -2148,6 +2153,10 @@ public class TeclaIME extends InputMethodService
 			Key key = mIMEView.getKeyboard().getVariantsKey();
 			key.on = false;
 		}
+	}
+
+	public KeyboardSwitcher getKeyboardSwitcher() {
+		return mKeyboardSwitcher;
 	}
 
 }
