@@ -97,6 +97,7 @@
 					android:title="@string/switch_j1"
 					android:entries="@array/listArray"
 					android:entryValues="@array/listValues"
+					android:defaultValue="1"
 					android:persistent="true"
 				/>
 				<ListPreference
@@ -104,6 +105,7 @@
 					android:title="@string/switch_j2"
 					android:entries="@array/listArray"
 					android:entryValues="@array/listValues"
+					android:defaultValue="2"
 					android:persistent="true"
 				/>
 				<ListPreference
@@ -111,6 +113,7 @@
 					android:title="@string/switch_j3"
 					android:entries="@array/listArray"
 					android:entryValues="@array/listValues"
+					android:defaultValue="3"
 					android:persistent="true"
 				/>
 				<ListPreference
@@ -118,6 +121,7 @@
 					android:title="@string/switch_j4"
 					android:entries="@array/listArray"
 					android:entryValues="@array/listValues"
+					android:defaultValue="4"
 					android:persistent="true"
 				/>
 				<ListPreference
@@ -125,6 +129,7 @@
 					android:title="@string/switch_e1"
 					android:entries="@array/listArray"
 					android:entryValues="@array/listValues"
+					android:defaultValue="4"
 					android:persistent="true"
 				/>
 				<ListPreference
@@ -132,6 +137,13 @@
 					android:title="@string/switch_e2"
 					android:entries="@array/listArray"
 					android:entryValues="@array/listValues"
+					android:defaultValue="3"
+					android:persistent="true"
+				/>
+				<Preference
+					android:key="switch_default"
+					android:title="@string/switch_default"
+					android:summary="@string/switch_default_summary"
 					android:persistent="true"
 				/>
 		</PreferenceScreen>

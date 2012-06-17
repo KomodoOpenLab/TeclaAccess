@@ -22,8 +22,8 @@ import java.util.HashMap;
 
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
-import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
@@ -77,13 +77,15 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private PreferenceScreen mConfigureInputScreen;
-	private ListPreference mSwitchJ1;
-	private ListPreference mSwitchJ2;
-	private ListPreference mSwitchJ3;
-	private ListPreference mSwitchJ4;
-	private ListPreference mSwitchE1;
-	private ListPreference mSwitchE2;
-	private HashMap<String, String> mSwitchMap;
+	private static ListPreference mSwitchJ1;
+	private static ListPreference mSwitchJ2;
+	private static ListPreference mSwitchJ3;
+	private static ListPreference mSwitchJ4;
+	private static ListPreference mSwitchE1;
+	private static ListPreference mSwitchE2;
+	private Preference mSwitchDefault;
+	private DefaultActionsDialog mDefaultActionsDialog;
+	private static HashMap<String, String> mSwitchMap;
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -121,6 +123,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchJ4 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J4);
 		mSwitchE1 = (ListPreference) findPreference(Persistence.PREF_SWITCH_E1);
 		mSwitchE2 = (ListPreference) findPreference(Persistence.PREF_SWITCH_E2);
+		mSwitchDefault = (Preference) findPreference(Persistence.PREF_SWITCH_DEFAULT);
+		mDefaultActionsDialog = new DefaultActionsDialog(this);
+		mDefaultActionsDialog.setContentView(R.layout.reset_default);
 
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
@@ -162,7 +167,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefInverseScanning.setEnabled(false);
 		}
 		
-		//TODO Elyas: Set default switch actions + reset to default button
 		mSwitchJ1.setSummary(mSwitchJ1.getEntry());
 		mSwitchJ2.setSummary(mSwitchJ2.getEntry());
 		mSwitchJ3.setSummary(mSwitchJ3.getEntry());
@@ -172,15 +176,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		
 		//Initialize switch map according to prefs
 		mSwitchMap = TeclaApp.persistence.getSwitchMap();
-		
-		if (mSwitchMap.isEmpty()) {
-			mSwitchMap.put(mSwitchJ1.getKey(), mSwitchJ1.getValue());
-			mSwitchMap.put(mSwitchJ2.getKey(), mSwitchJ2.getValue());
-			mSwitchMap.put(mSwitchJ3.getKey(), mSwitchJ3.getValue());
-			mSwitchMap.put(mSwitchJ4.getKey(), mSwitchJ4.getValue());
-			mSwitchMap.put(mSwitchE1.getKey(), mSwitchE1.getValue());
-			mSwitchMap.put(mSwitchE2.getKey(), mSwitchE2.getValue());
-		}
+		loadSwitchMap();
 
 		//Tecla Access Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
@@ -292,6 +288,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			mAutohideTimeoutDialog.show();
 		}
+		if (preference.getKey().equals(Persistence.PREF_SWITCH_DEFAULT)) {
+			mDefaultActionsDialog.show();
+		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
 
@@ -306,14 +305,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				}
 			}
 		}
-		
 		if (key.equals(Persistence.PREF_MORSE_MODE)) {
 			if (mPrefMorse.isChecked()) {
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
 			}
 			
 		}
-		
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);
@@ -343,9 +340,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefConnectToShield.setChecked(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
-		}
-		if (key.equals(Persistence.PREF_CONFIGURE_INPUT)) {
-			TeclaApp.getInstance().showToast("Configure input");
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1)) {
 			mSwitchJ1.setSummary(mSwitchJ1.getEntry());
@@ -452,6 +446,28 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private void closeDialog() {
 		if (mProgressDialog != null && mProgressDialog.isShowing())
 			mProgressDialog.dismiss();
+	}
+	
+	private static void loadSwitchMap() {
+		if (mSwitchMap.isEmpty()) {
+			mSwitchMap.put(mSwitchJ1.getKey(), mSwitchJ1.getValue());
+			mSwitchMap.put(mSwitchJ2.getKey(), mSwitchJ2.getValue());
+			mSwitchMap.put(mSwitchJ3.getKey(), mSwitchJ3.getValue());
+			mSwitchMap.put(mSwitchJ4.getKey(), mSwitchJ4.getValue());
+			mSwitchMap.put(mSwitchE1.getKey(), mSwitchE1.getValue());
+			mSwitchMap.put(mSwitchE2.getKey(), mSwitchE2.getValue());
+		}
+	}
+	
+	public static void setDefaultSwitchActions() {
+		mSwitchMap.clear();
+		mSwitchJ1.setValueIndex(1);
+		mSwitchJ2.setValueIndex(2);
+		mSwitchJ3.setValueIndex(3);
+		mSwitchJ4.setValueIndex(4);
+		mSwitchE1.setValueIndex(4);
+		mSwitchE2.setValueIndex(3);
+		loadSwitchMap();
 	}
 
 }

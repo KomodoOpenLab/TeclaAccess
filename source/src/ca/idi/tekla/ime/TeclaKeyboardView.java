@@ -274,8 +274,7 @@ public class TeclaKeyboardView extends KeyboardView {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas); 
 
-		//if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
+		if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
 			mMorseChart = mTeclaMorse.getMorseChart();
 			mMorseChart.update();
 			mMorseChart.layout.measure(canvas.getWidth(), canvas.getHeight());

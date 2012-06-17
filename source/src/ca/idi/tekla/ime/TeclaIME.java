@@ -1677,8 +1677,6 @@ public class TeclaIME extends InputMethodService
 		}
 		
 		String action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
-		Log.d(TeclaApp.TAG, "IME: " + switchEvent.toString() + ", action: " + action);
-		
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
@@ -1686,7 +1684,7 @@ public class TeclaIME extends InputMethodService
 		} else {
 			
 			switch(Integer.parseInt(action)) {
-			//TODO Elyas: add separate options for Morse input
+			//TODO Elyas: add separate actions for Morse input
 
 			case 1:
 				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
@@ -1856,7 +1854,8 @@ public class TeclaIME extends InputMethodService
 				mWasShifted = mIMEView.getKeyboard().isShifted();
 				hideSoftIME();
 			} else {
-				if (TeclaApp.persistence.isMorseModeEnabled()) {
+				//isMorseModeEnabled
+				if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
 					mTeclaMorse.getMorseChart().restore();
 					mIMEView.invalidate();
 				}
