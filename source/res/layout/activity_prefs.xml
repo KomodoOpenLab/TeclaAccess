@@ -93,159 +93,155 @@
             android:title="@string/define_switch_action"
             android:summary="@string/define_switch_action_summary">
             
-        	<PreferenceCategory
-            	android:title="@string/tecla_switch_actions_category"
-            	android:key="tecla_switch_actions_settings">
-					<PreferenceScreen
-						android:key="switch_j1"
-						android:title="@string/switch_j1">
-						
-					    <ListPreference
-					        android:key="switch_j1_tecla"
-					        android:title="@string/switch_j1_tecla"
-							android:entries="@array/listArray"
-							android:entryValues="@array/listValues"
-							android:defaultValue="1"
-							android:persistent="true"
-						/>
-						
-					    <ListPreference
-					        android:key="switch_j1_morse"
-					        android:title="@string/switch_j1_morse"
-							android:entries="@array/morseArray"
-							android:entryValues="@array/morseValues"
-							android:defaultValue="1"
-							android:persistent="true"
-						/>
-					</PreferenceScreen>
+				<PreferenceScreen
+					android:key="switch_j1"
+					android:title="@string/switch_j1">
 					
-					<PreferenceScreen
-						android:key="switch_j2"
-						android:title="@string/switch_j2">
+				    <ListPreference
+				        android:key="switch_j1_tecla"
+				        android:title="@string/switch_j1_tecla"
+						android:entries="@array/listArray"
+						android:entryValues="@array/listValues"
+						android:defaultValue="1"
+						android:persistent="true"
+					/>
 						
-					    <ListPreference
-					        android:key="switch_j2_tecla"
-					        android:title="@string/switch_j2_tecla"
-							android:entries="@array/listArray"
-							android:entryValues="@array/listValues"
-							android:defaultValue="2"
-							android:persistent="true"
-						/>
-						
-					    <ListPreference
-					        android:key="switch_j2_morse"
-					        android:title="@string/switch_j2_morse"
-							android:entries="@array/morseArray"
-							android:entryValues="@array/morseValues"
-							android:defaultValue="2"
-							android:persistent="true"
-						/>
-					</PreferenceScreen>
+				    <ListPreference
+				        android:key="switch_j1_morse"
+				        android:title="@string/switch_j1_morse"
+						android:entries="@array/morseArray"
+						android:entryValues="@array/morseValues"
+						android:defaultValue="1"
+						android:persistent="true"
+					/>
+				</PreferenceScreen>
 					
-					<PreferenceScreen
-						android:key="switch_j3"
-						android:title="@string/switch_j3">
+				<PreferenceScreen
+					android:key="switch_j2"
+					android:title="@string/switch_j2">
 						
-					    <ListPreference
-					        android:key="switch_j3_tecla"
-					        android:title="@string/switch_j3_tecla"
-							android:entries="@array/listArray"
-							android:entryValues="@array/listValues"
-							android:defaultValue="3"
-							android:persistent="true"
-						/>
+				    <ListPreference
+				        android:key="switch_j2_tecla"
+				        android:title="@string/switch_j2_tecla"
+						android:entries="@array/listArray"
+						android:entryValues="@array/listValues"
+						android:defaultValue="2"
+						android:persistent="true"
+					/>
 						
-					    <ListPreference
-					        android:key="switch_j3_morse"
-					        android:title="@string/switch_j3_morse"
-							android:entries="@array/morseArray"
-							android:entryValues="@array/morseValues"
-							android:defaultValue="3"
-							android:persistent="true"
-						/>
-					</PreferenceScreen>
+				    <ListPreference
+				        android:key="switch_j2_morse"
+				        android:title="@string/switch_j2_morse"
+						android:entries="@array/morseArray"
+						android:entryValues="@array/morseValues"
+						android:defaultValue="2"
+						android:persistent="true"
+					/>
+				</PreferenceScreen>
 					
-					<PreferenceScreen
-						android:key="switch_j4"
-						android:title="@string/switch_j4">
+				<PreferenceScreen
+					android:key="switch_j3"
+					android:title="@string/switch_j3">
 						
-					    <ListPreference
-					        android:key="switch_j4_tecla"
-					        android:title="@string/switch_j4_tecla"
-							android:entries="@array/listArray"
-							android:entryValues="@array/listValues"
-							android:defaultValue="4"
-							android:persistent="true"
-						/>
+				    <ListPreference
+				        android:key="switch_j3_tecla"
+				        android:title="@string/switch_j3_tecla"
+						android:entries="@array/listArray"
+						android:entryValues="@array/listValues"
+						android:defaultValue="3"
+						android:persistent="true"
+					/>
 						
-					    <ListPreference
-					        android:key="switch_j4_morse"
-					        android:title="@string/switch_j4_morse"
-							android:entries="@array/morseArray"
-							android:entryValues="@array/morseValues"
-							android:defaultValue="0"
-							android:persistent="true"
-						/>
-					</PreferenceScreen>
+				    <ListPreference
+				        android:key="switch_j3_morse"
+				        android:title="@string/switch_j3_morse"
+						android:entries="@array/morseArray"
+						android:entryValues="@array/morseValues"
+						android:defaultValue="3"
+						android:persistent="true"
+					/>
+				</PreferenceScreen>
 					
-					<PreferenceScreen
-						android:key="switch_e1"
-						android:title="@string/switch_e1">
+				<PreferenceScreen
+					android:key="switch_j4"
+					android:title="@string/switch_j4">
 						
-					    <ListPreference
-					        android:key="switch_e1_tecla"
-					        android:title="@string/switch_e1_tecla"
-							android:entries="@array/listArray"
-							android:entryValues="@array/listValues"
-							android:defaultValue="4"
-							android:persistent="true"
-						/>
+				    <ListPreference
+				        android:key="switch_j4_tecla"
+				        android:title="@string/switch_j4_tecla"
+						android:entries="@array/listArray"
+						android:entryValues="@array/listValues"
+						android:defaultValue="4"
+						android:persistent="true"
+					/>
 						
-					    <ListPreference
-					        android:key="switch_e1_morse"
-					        android:title="@string/switch_e1_morse"
-							android:entries="@array/morseArray"
-							android:entryValues="@array/morseValues"
-							android:defaultValue="0"
-							android:persistent="true"
-						/>
-					</PreferenceScreen>
+				    <ListPreference
+				        android:key="switch_j4_morse"
+				        android:title="@string/switch_j4_morse"
+						android:entries="@array/morseArray"
+						android:entryValues="@array/morseValues"
+						android:defaultValue="0"
+						android:persistent="true"
+					/>
+				</PreferenceScreen>
 					
-					<PreferenceScreen
-						android:key="switch_e2"
-						android:title="@string/switch_e2">
+				<PreferenceScreen
+					android:key="switch_e1"
+					android:title="@string/switch_e1">
 						
-					    <ListPreference
-					        android:key="switch_e2_tecla"
-					        android:title="@string/switch_e2_tecla"
-							android:entries="@array/listArray"
-							android:entryValues="@array/listValues"
-							android:defaultValue="3"
-							android:persistent="true"
-						/>
+				    <ListPreference
+				        android:key="switch_e1_tecla"
+				        android:title="@string/switch_e1_tecla"
+						android:entries="@array/listArray"
+						android:entryValues="@array/listValues"
+						android:defaultValue="4"
+						android:persistent="true"
+					/>
 						
-					    <ListPreference
-					        android:key="switch_e2_morse"
-					        android:title="@string/switch_e2_morse"
-							android:entries="@array/morseArray"
-							android:entryValues="@array/morseValues"
-							android:defaultValue="0"
-							android:persistent="true"
-						/>
-					</PreferenceScreen>
+				    <ListPreference
+				        android:key="switch_e1_morse"
+				        android:title="@string/switch_e1_morse"
+						android:entries="@array/morseArray"
+						android:entryValues="@array/morseValues"
+						android:defaultValue="0"
+						android:persistent="true"
+					/>
+				</PreferenceScreen>
 					
-			</PreferenceCategory>
+				<PreferenceScreen
+					android:key="switch_e2"
+					android:title="@string/switch_e2">
+				    
+				    <ListPreference
+				        android:key="switch_e2_tecla"
+					    android:title="@string/switch_e2_tecla"
+					    android:entries="@array/listArray"
+						android:entryValues="@array/listValues"
+						android:defaultValue="3"
+						android:persistent="true"
+					/>
+						
+					<ListPreference
+					    android:key="switch_e2_morse"
+					    android:title="@string/switch_e2_morse"
+					    android:entries="@array/morseArray"
+					    android:entryValues="@array/morseValues"
+					    android:defaultValue="0"
+					    android:persistent="true"
+					/>
+				</PreferenceScreen>
 			
-			<PreferenceCategory
-            	android:title="@string/morse_switch_actions_category"
-            	android:key="morse_switch_actions_settings">
+				<PreferenceCategory
+            		android:title="@string/user_data_category"
+            		android:key="reset_default_settings">
+					
 					<Preference
 						android:key="switch_default"
 						android:title="@string/switch_default"
 						android:summary="@string/switch_default_summary"
 						android:persistent="true"
 					/>
-			</PreferenceCategory>
+				</PreferenceCategory>
 		</PreferenceScreen>
     </PreferenceCategory>            
 

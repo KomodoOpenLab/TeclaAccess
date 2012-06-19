@@ -46,6 +46,7 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.AutoText;
 import android.util.Log;
+import android.widget.BaseAdapter;
 
 public class TeclaPrefs extends PreferenceActivity
 implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -78,6 +79,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private PreferenceScreen mConfigureInputScreen;
+	private BaseAdapter mConfigureInputAdapter;
 	
 	private static SwitchPreference mSwitchJ1;
 	private static SwitchPreference mSwitchJ2;
@@ -120,6 +122,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
+		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
 		
 		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
@@ -361,21 +364,27 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
 			mSwitchJ1.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J2_TECLA) || key.equals(Persistence.PREF_SWITCH_J2_MORSE)) {
 			mSwitchJ2.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J3_TECLA) || key.equals(Persistence.PREF_SWITCH_J3_MORSE)) {
 			mSwitchJ3.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J4_TECLA) || key.equals(Persistence.PREF_SWITCH_J4_MORSE)) {
 			mSwitchJ4.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_SWITCH_E1_TECLA) || key.equals(Persistence.PREF_SWITCH_E1_MORSE)) {
 			mSwitchE1.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_SWITCH_E2_TECLA) || key.equals(Persistence.PREF_SWITCH_E2_MORSE)) {
 			mSwitchE2.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {
 			if (mPrefConnectToShield.isChecked()) {
