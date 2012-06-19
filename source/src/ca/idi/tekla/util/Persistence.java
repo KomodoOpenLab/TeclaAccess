@@ -31,6 +31,21 @@ public class Persistence {
 	public static final String PREF_SWITCH_J4 = "switch_j4";
 	public static final String PREF_SWITCH_E1 = "switch_e1";
 	public static final String PREF_SWITCH_E2 = "switch_e2";
+	
+	public static final String PREF_SWITCH_J1_TECLA = "switch_j1_tecla";
+	public static final String PREF_SWITCH_J2_TECLA = "switch_j2_tecla";
+	public static final String PREF_SWITCH_J3_TECLA = "switch_j3_tecla";
+	public static final String PREF_SWITCH_J4_TECLA = "switch_j4_tecla";
+	public static final String PREF_SWITCH_E1_TECLA = "switch_e1_tecla";
+	public static final String PREF_SWITCH_E2_TECLA = "switch_e2_tecla";
+	
+	public static final String PREF_SWITCH_J1_MORSE = "switch_j1_morse";
+	public static final String PREF_SWITCH_J2_MORSE = "switch_j2_morse";
+	public static final String PREF_SWITCH_J3_MORSE = "switch_j3_morse";
+	public static final String PREF_SWITCH_J4_MORSE = "switch_j4_morse";
+	public static final String PREF_SWITCH_E1_MORSE = "switch_e1_morse";
+	public static final String PREF_SWITCH_E2_MORSE = "switch_e2_morse";
+	
 	public static final String PREF_SWITCH_DEFAULT = "switch_default";
 	
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
@@ -46,7 +61,7 @@ public class Persistence {
 	public static final int NEVER_AUTOHIDE = -1;
 	
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
-	private static HashMap<String,String> mSwitchMap;
+	private static HashMap<String,String[]> mSwitchMap;
 	
 	private SharedPreferences shared_prefs;
 	private SharedPreferences.Editor prefs_editor;
@@ -56,7 +71,7 @@ public class Persistence {
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
 		mVariantsShowing = false;
-		mSwitchMap = new HashMap<String,String>();
+		mSwitchMap = new HashMap<String,String[]>();
 		
 	}
 	
@@ -180,7 +195,7 @@ public class Persistence {
 		return shared_prefs.getInt(PREF_SCAN_DELAY_INT, DEFAULT_SCAN_DELAY);
 	}
 	
-	public HashMap<String,String> getSwitchMap() {
+	public HashMap<String,String[]> getSwitchMap() {
 		return mSwitchMap;
 	}
 

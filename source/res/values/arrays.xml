@@ -16,4 +16,18 @@
    			<item>4</item>
 		</string-array>
 		
+		<string-array name="morseArray">
+		    <item>None</item>
+   			<item>Morse dit</item>
+   			<item>Morse dah</item>
+   			<item>Morse end of char</item>
+		</string-array>
+ 
+		<string-array name="morseValues">
+		    <item>0</item>
+  			<item>1</item>
+   			<item>2</item>
+   			<item>3</item>
+		</string-array>
+		
 	</resources>

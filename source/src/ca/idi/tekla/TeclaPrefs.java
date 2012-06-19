@@ -27,6 +27,7 @@ import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
+import ca.idi.tekla.util.SwitchPreference;
 
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -77,15 +78,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private PreferenceScreen mConfigureInputScreen;
-	private static ListPreference mSwitchJ1;
-	private static ListPreference mSwitchJ2;
-	private static ListPreference mSwitchJ3;
-	private static ListPreference mSwitchJ4;
-	private static ListPreference mSwitchE1;
-	private static ListPreference mSwitchE2;
+	
+	private static SwitchPreference mSwitchJ1;
+	private static SwitchPreference mSwitchJ2;
+	private static SwitchPreference mSwitchJ3;
+	private static SwitchPreference mSwitchJ4;
+	private static SwitchPreference mSwitchE1;
+	private static SwitchPreference mSwitchE2;
+	
 	private Preference mSwitchDefault;
 	private DefaultActionsDialog mDefaultActionsDialog;
-	private static HashMap<String, String> mSwitchMap;
+	private static HashMap<String, String[]> mSwitchMap;
 	
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -117,12 +120,32 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
-		mSwitchJ1 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J1);
-		mSwitchJ2 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J2);
-		mSwitchJ3 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J3);
-		mSwitchJ4 = (ListPreference) findPreference(Persistence.PREF_SWITCH_J4);
-		mSwitchE1 = (ListPreference) findPreference(Persistence.PREF_SWITCH_E1);
-		mSwitchE2 = (ListPreference) findPreference(Persistence.PREF_SWITCH_E2);
+		
+		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_MORSE));
+		
+		mSwitchJ2 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J2), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J2_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J2_MORSE));
+		
+		mSwitchJ3 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J3), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J3_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J3_MORSE));
+		
+		mSwitchJ4 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J4), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J4_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J4_MORSE));
+		
+		mSwitchE1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_E1), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E1_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E1_MORSE));
+		
+		mSwitchE2 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_E2), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_MORSE));
+		
+
 		mSwitchDefault = (Preference) findPreference(Persistence.PREF_SWITCH_DEFAULT);
 		mDefaultActionsDialog = new DefaultActionsDialog(this);
 		mDefaultActionsDialog.setContentView(R.layout.reset_default);
@@ -167,16 +190,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefInverseScanning.setEnabled(false);
 		}
 		
-		mSwitchJ1.setSummary(mSwitchJ1.getEntry());
-		mSwitchJ2.setSummary(mSwitchJ2.getEntry());
-		mSwitchJ3.setSummary(mSwitchJ3.getEntry());
-		mSwitchJ4.setSummary(mSwitchJ4.getEntry());
-		mSwitchE1.setSummary(mSwitchE1.getEntry());
-		mSwitchE2.setSummary(mSwitchE2.getEntry());
+		refreshSwitchesSummary();
 		
 		//Initialize switch map according to prefs
 		mSwitchMap = TeclaApp.persistence.getSwitchMap();
-		loadSwitchMap();
+		updateSwitchMap();
 
 		//Tecla Access Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
@@ -341,35 +359,23 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
-		if (key.equals(Persistence.PREF_SWITCH_J1)) {
-			mSwitchJ1.setSummary(mSwitchJ1.getEntry());
-			mSwitchMap.remove(key);
-			mSwitchMap.put(key, mSwitchJ1.getValue());
+		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
+			mSwitchJ1.onPreferenceChanged(key);
 		}
-		if (key.equals(Persistence.PREF_SWITCH_J2)) {
-			mSwitchJ2.setSummary(mSwitchJ2.getEntry());
-			mSwitchMap.remove(key);
-			mSwitchMap.put(key, mSwitchJ2.getValue());
+		if (key.equals(Persistence.PREF_SWITCH_J2_TECLA) || key.equals(Persistence.PREF_SWITCH_J2_MORSE)) {
+			mSwitchJ2.onPreferenceChanged(key);
 		}
-		if (key.equals(Persistence.PREF_SWITCH_J3)) {
-			mSwitchJ3.setSummary(mSwitchJ3.getEntry());
-			mSwitchMap.remove(key);
-			mSwitchMap.put(key, mSwitchJ3.getValue());
+		if (key.equals(Persistence.PREF_SWITCH_J3_TECLA) || key.equals(Persistence.PREF_SWITCH_J3_MORSE)) {
+			mSwitchJ3.onPreferenceChanged(key);
 		}
-		if (key.equals(Persistence.PREF_SWITCH_J4)) {
-			mSwitchJ4.setSummary(mSwitchJ4.getEntry());
-			mSwitchMap.remove(key);
-			mSwitchMap.put(key, mSwitchJ4.getValue());
+		if (key.equals(Persistence.PREF_SWITCH_J4_TECLA) || key.equals(Persistence.PREF_SWITCH_J4_MORSE)) {
+			mSwitchJ4.onPreferenceChanged(key);
 		}
-		if (key.equals(Persistence.PREF_SWITCH_E1)) {
-			mSwitchE1.setSummary(mSwitchE1.getEntry());
-			mSwitchMap.remove(key);
-			mSwitchMap.put(key, mSwitchE1.getValue());
+		if (key.equals(Persistence.PREF_SWITCH_E1_TECLA) || key.equals(Persistence.PREF_SWITCH_E1_MORSE)) {
+			mSwitchE1.onPreferenceChanged(key);
 		}
-		if (key.equals(Persistence.PREF_SWITCH_E2)) {
-			mSwitchE2.setSummary(mSwitchE2.getEntry());
-			mSwitchMap.remove(key);
-			mSwitchMap.put(key, mSwitchE2.getValue());
+		if (key.equals(Persistence.PREF_SWITCH_E2_TECLA) || key.equals(Persistence.PREF_SWITCH_E2_MORSE)) {
+			mSwitchE2.onPreferenceChanged(key);
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {
 			if (mPrefConnectToShield.isChecked()) {
@@ -448,26 +454,33 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mProgressDialog.dismiss();
 	}
 	
-	private static void loadSwitchMap() {
-		if (mSwitchMap.isEmpty()) {
-			mSwitchMap.put(mSwitchJ1.getKey(), mSwitchJ1.getValue());
-			mSwitchMap.put(mSwitchJ2.getKey(), mSwitchJ2.getValue());
-			mSwitchMap.put(mSwitchJ3.getKey(), mSwitchJ3.getValue());
-			mSwitchMap.put(mSwitchJ4.getKey(), mSwitchJ4.getValue());
-			mSwitchMap.put(mSwitchE1.getKey(), mSwitchE1.getValue());
-			mSwitchMap.put(mSwitchE2.getKey(), mSwitchE2.getValue());
-		}
+	private void refreshSwitchesSummary() {
+		mSwitchJ1.refreshSummaries();
+		mSwitchJ2.refreshSummaries();
+		mSwitchJ3.refreshSummaries();
+		mSwitchJ4.refreshSummaries();
+		mSwitchE1.refreshSummaries();
+		mSwitchE2.refreshSummaries();
+	}
+	
+	private static void updateSwitchMap() {	
+		mSwitchMap.clear();
+		SwitchPreference.addToMap(mSwitchJ1);
+		SwitchPreference.addToMap(mSwitchJ2);
+		SwitchPreference.addToMap(mSwitchJ3);
+		SwitchPreference.addToMap(mSwitchJ4);
+		SwitchPreference.addToMap(mSwitchE1);
+		SwitchPreference.addToMap(mSwitchE2);
 	}
 	
 	public static void setDefaultSwitchActions() {
-		mSwitchMap.clear();
-		mSwitchJ1.setValueIndex(1);
-		mSwitchJ2.setValueIndex(2);
-		mSwitchJ3.setValueIndex(3);
-		mSwitchJ4.setValueIndex(4);
-		mSwitchE1.setValueIndex(4);
-		mSwitchE2.setValueIndex(3);
-		loadSwitchMap();
+		mSwitchJ1.setDefaultValues(1, 1);
+		mSwitchJ2.setDefaultValues(2, 2);
+		mSwitchJ3.setDefaultValues(3, 3);
+		mSwitchJ4.setDefaultValues(4, 0);
+		mSwitchE1.setDefaultValues(4, 0);
+		mSwitchE2.setDefaultValues(3, 0);
+		updateSwitchMap();
 	}
 
 }

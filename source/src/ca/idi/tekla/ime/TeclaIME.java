@@ -262,7 +262,7 @@ public class TeclaIME extends InputMethodService
 		mKeyboardSwitcher.makeKeyboards(true);
 		super.onConfigurationChanged(conf);	
 		
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
+		if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
 			mTeclaMorse.getMorseChart().configChanged(conf);
 			mIMEView.invalidate();
 			updateSpaceKey(true);
@@ -1675,76 +1675,85 @@ public class TeclaIME extends InputMethodService
 			Log.d(TeclaApp.TAG, "Captured null switch event");
 			return;
 		}
-		
-		String action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
+
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
 			TeclaApp.highlighter.startSelfScanning();
 		} else {
 			
-			switch(Integer.parseInt(action)) {
-			//TODO Elyas: add separate actions for Morse input
-
-			case 1:
-				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-					TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
-				}
-				break;
+			String[] action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
 			
-			case 2:
-				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
-					}
-					else {
-						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
-					}
-				}
-				break;
+			if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+				String action_morse = action[1];
+				switch(Integer.parseInt(action_morse)) {
 				
-			case 3:
-				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-					if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-						emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
-					}
-					else {
-						TeclaApp.highlighter.stepOut();
-					}
-				}
-				break;
-				
-			case 4:
-				if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-					if (TeclaApp.persistence.isInverseScanningEnabled()) {
-						TeclaApp.highlighter.resumeSelfScanning();
-					} else {
-						if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+					case 1:
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
-						}
-						else {
+						break;
+						
+					case 2:
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
+						break;
+						
+					case 3:
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+						break;
+					
+					default:
+						break;
+				}
+			}
+			
+			else {
+				String action_tecla = action[0];
+				switch(Integer.parseInt(action_tecla)) {
+
+				case 1:
+					if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
+					break;
+
+				case 2:
+					if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
+					break;
+
+				case 3:
+					if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+						TeclaApp.highlighter.stepOut();
+					break;
+
+				case 4:
+					if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+						if (TeclaApp.persistence.isInverseScanningEnabled()) {
+							TeclaApp.highlighter.resumeSelfScanning();
+						} else {
 							selectHighlighted(true);
 						}
 					}
-				}
-				if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
-					if (TeclaApp.persistence.isInverseScanningEnabled()) {
-						if (TeclaApp.persistence.isInverseScanningChanged()) {
-							//Ignore event right after Inverse Scanning is Enabled
-							stopRepeatingKey();
-							TeclaApp.persistence.unsetInverseScanningChanged();
-							Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+					if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+						if (TeclaApp.persistence.isInverseScanningEnabled()) {
+							if (TeclaApp.persistence.isInverseScanningChanged()) {
+								//Ignore event right after Inverse Scanning is Enabled
+								stopRepeatingKey();
+								TeclaApp.persistence.unsetInverseScanningChanged();
+								Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
+							} else {
+								selectHighlighted(false);
+							}
 						} else {
-							selectHighlighted(false);
+							stopRepeatingKey();
 						}
-					} else {
-						stopRepeatingKey();
 					}
+					break;
+
+				default:
+					break;
 				}
-				break;
-				
-			default:
-				break;
 			}
 			
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
