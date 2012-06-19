@@ -29,7 +29,9 @@ import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
 import ca.idi.tekla.util.SwitchPreference;
 
+import android.app.IntentService;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -328,7 +330,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_MORSE_MODE)) {
 			if (mPrefMorse.isChecked()) {
+				TeclaApp.getInstance().enabledMorseIME();
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
+			}
+			else {
+				TeclaApp.getInstance().disabledMorseIME();
 			}
 			
 		}

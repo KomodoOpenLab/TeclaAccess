@@ -42,6 +42,8 @@ public class TeclaApp extends Application {
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
 	//IME CONSTANTS
+	public static final String ACTION_ENABLE_MORSE = "ca.idi.tekla.ime.action.ENABLE_MORSE";
+	public static final String ACTION_DISABLE_MORSE = "ca.idi.tekla.ime.action.DISABLE_MORSE";
 	public static final String ACTION_SHOW_IME = "ca.idi.tekla.ime.action.SHOW_IME";
 	public static final String ACTION_HIDE_IME = "ca.idi.tekla.ime.action.HIDE_IME";
 	public static final String ACTION_IME_CREATED = "ca.idi.tekla.ime.action.SOFT_IME_CREATED";
@@ -166,6 +168,16 @@ public class TeclaApp extends Application {
 		}
 		
 	};
+	
+	public void enabledMorseIME() {
+		if (DEBUG) Log.d(TAG, "Broadcasting enable morse IME intent...");
+		sendBroadcast(new Intent(ACTION_ENABLE_MORSE));
+	}
+	
+	public void disabledMorseIME() {
+		if (DEBUG) Log.d(TAG, "Broadcasting disable morse IME intent...");
+		sendBroadcast(new Intent(ACTION_DISABLE_MORSE));
+	}
 
 	public void requestHideIMEView() {
 		if (DEBUG) Log.d(TAG, "Broadcasting hide IME intent...");

@@ -316,15 +316,7 @@ public class TeclaIME extends InputMethodService
 			return;
 		}
 		
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
-			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
-			
-			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
-			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
-			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
-		}
-
+		initMorseKeyboard();
 		mKeyboardSwitcher.makeKeyboards(false);
 
 		TextEntryState.newSession(this);
@@ -685,6 +677,14 @@ public class TeclaIME extends InputMethodService
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received input string intent.");
 				typeInputString(input_string);
 			}
+			if (action.equals(TeclaApp.ACTION_ENABLE_MORSE)) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received enable morse intent.");
+				mLastFullKeyboardMode = KeyboardSwitcher.MODE_MORSE;
+			}
+			if (action.equals(TeclaApp.ACTION_DISABLE_MORSE)) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received disable morse intent.");
+				mLastFullKeyboardMode = KeyboardSwitcher.MODE_TEXT;
+			}
 		}
 	};
 	
@@ -937,7 +937,7 @@ public class TeclaIME extends InputMethodService
 		String sequence = mTeclaMorse.getCurrentChar();
 		String charac = mTeclaMorse.morseToChar(sequence);
 		
-		if (charac == null)
+		if (charac == null && sequence.length() > 0)
 			mSpaceKey.label = sequence;
 		
 		else if (!sequence.equals("") &&
@@ -1632,6 +1632,8 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_SHOW_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_HIDE_IME));
+		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_ENABLE_MORSE));
+		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_DISABLE_MORSE));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_START_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_STOP_FS_SWITCH_MODE));
 		registerReceiver(mReceiver, new IntentFilter(Highlighter.ACTION_START_SCANNING));
@@ -1649,6 +1651,17 @@ public class TeclaIME extends InputMethodService
 			TeclaApp.getInstance().queueSplash();
 		}
 
+	}
+	
+	private void initMorseKeyboard() {
+		if (TeclaApp.persistence.isMorseModeEnabled()) {
+			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
+			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
+			
+			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
+			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
+			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
+		}
 	}
 	
 	private void typeInputString(String input_string) {
@@ -1855,7 +1868,7 @@ public class TeclaIME extends InputMethodService
 	private void handleSpecialKey(int keyEventCode) {
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
-				if (TeclaApp.persistence.isMorseModeEnabled()) {
+				if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
 					mTeclaMorse.getMorseChart().hide();
 				}
 				// Closing
@@ -1863,17 +1876,19 @@ public class TeclaIME extends InputMethodService
 				mWasShifted = mIMEView.getKeyboard().isShifted();
 				hideSoftIME();
 			} else {
-				//isMorseModeEnabled
-				if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
-					mTeclaMorse.getMorseChart().restore();
-					mIMEView.invalidate();
-				}
 				// Opening
 				if (mKeyboardSwitcher.isVariants()) {
 					doVariantsExit(keyEventCode);
 				} else {
 					mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode);
 					mIMEView.getKeyboard().setShifted(mWasShifted);
+				}
+				
+				initMorseKeyboard();
+				
+				if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+					mTeclaMorse.getMorseChart().restore();
+					mIMEView.invalidate();
 				}
 				evaluateStartScanning();
 			}
