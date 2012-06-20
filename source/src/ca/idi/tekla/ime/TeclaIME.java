@@ -1790,6 +1790,7 @@ public class TeclaIME extends InputMethodService
 		int[] keyCode = new int[1];
 		keyCode[0] = key;
 		emulateKeyPress(keyCode);
+		playKeyClick(key);
 	}
 	
 	/**
