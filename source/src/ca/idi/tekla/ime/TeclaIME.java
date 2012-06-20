@@ -678,10 +678,16 @@ public class TeclaIME extends InputMethodService
 				typeInputString(input_string);
 			}
 			if (action.equals(TeclaApp.ACTION_ENABLE_MORSE)) {
+				if (TeclaApp.highlighter.isSoftIMEShowing()) {
+					hideSoftIME();
+				}
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received enable morse intent.");
 				mLastFullKeyboardMode = KeyboardSwitcher.MODE_MORSE;
 			}
 			if (action.equals(TeclaApp.ACTION_DISABLE_MORSE)) {
+				if (TeclaApp.highlighter.isSoftIMEShowing()) {
+					hideSoftIME();
+				}
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received disable morse intent.");
 				mLastFullKeyboardMode = KeyboardSwitcher.MODE_TEXT;
 			}
