@@ -115,7 +115,11 @@ public class MorseChart {
         		charTV.setText(entry.getValue().toUpperCase());
         	
         	charTV.setTextSize(16.0f);
-        	charTV.setTextColor(0xFF77A8D4);
+        	if (entry.getValue().equals("DEL") || entry.getValue().equals("↵") || 
+        		entry.getValue().equals("\\n") || entry.getValue().equals("✓"))
+        		charTV.setTextColor(0xFFFA8E4B);
+        	else
+        		charTV.setTextColor(0xFF77A8D4);
         	tr.addView(charTV);
         	
         	TextView morseTV = new TextView(mContext);

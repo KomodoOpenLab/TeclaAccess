@@ -51,7 +51,8 @@ public class MorseDictionary {
 		//Command keys
 		map.put("•-•-", "↵"); //Enter
 		map.put("----", "DEL"); //Delete
-		map.put("••••", "\\n"); //New line
+		map.put("••--", "✓"); //Done (minimizes keyboard)
+		map.put("•-•-•", "\\n"); //New line
 		
 	}
 	

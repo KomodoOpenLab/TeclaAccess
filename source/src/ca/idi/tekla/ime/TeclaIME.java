@@ -867,11 +867,10 @@ public class TeclaIME extends InputMethodService
 						sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
 					} else if (curCharMatch.contentEquals("DEL")) {
 						handleMorseBackspace(false);	
+					} else if (curCharMatch.contentEquals("✓")) {
+						hideSoftIME();
 					} else if (curCharMatch.contentEquals("\\n")) {
 						getCurrentInputConnection().commitText("\n", 1);
-					} else if (curCharMatch.contentEquals("END")) {
-						requestHideSelf(0);
-						mIMEView.closing();
 					} else {
 
 						boolean upperCase = false;
