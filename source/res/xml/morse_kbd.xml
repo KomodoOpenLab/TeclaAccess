@@ -45,6 +45,7 @@
                         android:keyWidth="18%"
                         android:codes="0"/> 
                 <Key
+                        android:keyLabel="space"
                         android:keyWidth="26%"
                         android:codes="562"/>
                 <Key

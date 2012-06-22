@@ -262,7 +262,7 @@ public class TeclaIME extends InputMethodService
 		mKeyboardSwitcher.makeKeyboards(true);
 		super.onConfigurationChanged(conf);	
 		
-		if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+		if (mKeyboardSwitcher.isMorseMode()) {
 			mTeclaMorse.getMorseChart().configChanged(conf);
 			mIMEView.invalidate();
 			updateSpaceKey(true);
@@ -1702,7 +1702,7 @@ public class TeclaIME extends InputMethodService
 			
 			String[] action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
 			
-			if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+			if (mKeyboardSwitcher.isMorseMode()) {
 				String action_morse = action[1];
 				switch(Integer.parseInt(action_morse)) {
 				
@@ -1874,7 +1874,7 @@ public class TeclaIME extends InputMethodService
 	private void handleSpecialKey(int keyEventCode) {
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
-				if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+				if (mKeyboardSwitcher.isMorseMode()) {
 					mTeclaMorse.getMorseChart().hide();
 				}
 				// Closing
@@ -1892,7 +1892,7 @@ public class TeclaIME extends InputMethodService
 				
 				initMorseKeyboard();
 				
-				if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+				if (mKeyboardSwitcher.isMorseMode()) {
 					mTeclaMorse.getMorseChart().restore();
 					mIMEView.invalidate();
 				}
@@ -2110,7 +2110,7 @@ public class TeclaIME extends InputMethodService
 			showWindow(true);
 			updateInputViewShown();
 			
-			/*if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+			/*if (mKeyboardSwitcher.isMorseMode()) {
 				mTeclaMorse.getMorseChart().restore();
 				mIMEView.invalidate();
 			}*/

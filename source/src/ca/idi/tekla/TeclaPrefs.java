@@ -88,7 +88,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private static SwitchPreference mSwitchE1;
 	private static SwitchPreference mSwitchE2;
 	
-	private Preference mSwitchDefault;
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
 	
@@ -148,8 +147,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_MORSE));
 		
-
-		mSwitchDefault = (Preference) findPreference(Persistence.PREF_SWITCH_DEFAULT);
 		mDefaultActionsDialog = new DefaultActionsDialog(this);
 		mDefaultActionsDialog.setContentView(R.layout.reset_default);
 

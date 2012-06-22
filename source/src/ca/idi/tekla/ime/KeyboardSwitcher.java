@@ -364,6 +364,13 @@ public class KeyboardSwitcher {
 		}
 		return false;
     }
+    
+    boolean isMorseMode() {
+		if (mMode == MODE_MORSE) {
+			return true;
+		}
+		return false;
+    }
 
     /**
      * Updates state machine to figure out when to automatically switch back to alpha mode.
