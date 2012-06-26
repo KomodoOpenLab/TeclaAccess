@@ -82,9 +82,8 @@ public class TeclaKeyboardView extends KeyboardView {
         		cheatsheetDialog.dismiss();
         	else
         		showCheatSheet();
-            return true;
-        }
-        else if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {
+            return true;		
+        } else if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
             return true;
         } else if (key.codes[0] == Keyboard.KEYCODE_SHIFT) {
@@ -123,7 +122,6 @@ public class TeclaKeyboardView extends KeyboardView {
 			cheatsheetDialog.setCanceledOnTouchOutside(true);
 			cheatsheetDialog.setContentView(cheatsheet1);
 			cheatsheet1.setOnTouchListener(new OnTouchListener() {
-				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					FixedSizeView fsv = (FixedSizeView) cheatsheet2;
 					fsv.fixedHeight = cheatsheet1.getMeasuredHeight();
@@ -133,7 +131,6 @@ public class TeclaKeyboardView extends KeyboardView {
 				}
 			});
 			cheatsheet2.setOnTouchListener(new OnTouchListener() {
-				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					cheatsheetDialog.setContentView(cheatsheet1);
 					return true;

@@ -40,7 +40,6 @@ public class DefaultActionsDialog extends Dialog
 		mButtonNo.setOnClickListener(this);
 	}
 	
-	@Override
 	public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK ||
 			keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
@@ -51,7 +50,6 @@ public class DefaultActionsDialog extends Dialog
 		return false;
 	}
 
-	@Override
 	public void onClick(View v) {
 		if (v.equals(mButtonYes)) {
 			TeclaPrefs.setDefaultSwitchActions();

@@ -43,7 +43,8 @@
                 <Key
                         android:keyLabel="•"
                         android:keyWidth="18%"
-                        android:codes="0"/> 
+                        android:codes="0"
+                        android:isRepeatable="true"/> 
                 <Key
                         android:keyLabel="space"
                         android:keyWidth="26%"
@@ -51,7 +52,8 @@
                 <Key
                         android:keyLabel="-"
                         android:keyWidth="18%"
-                        android:codes="1"/>
+                        android:codes="1"
+                        android:isRepeatable="true"/>
                 <Key
                         android:keyIcon="@drawable/sym_keyboard_delete"
                         android:isRepeatable="true"

@@ -88,6 +88,7 @@ public class TeclaIME extends InputMethodService
 	private static final int MSG_UPDATE_SUGGESTIONS = 0;
 	private static final int MSG_START_TUTORIAL = 1;
 	private static final int MSG_UPDATE_SHIFT_STATE = 2;
+	private static final int MSG_REPEAT_DIT = 3;
 
 	// How many continuous deletes at which to start deleting at a higher speed.
 	private static final int DELETE_ACCELERATE_AT = 20;
@@ -195,6 +196,9 @@ public class TeclaIME extends InputMethodService
 				break;
 			case MSG_UPDATE_SHIFT_STATE:
 				updateShiftKeyState(getCurrentInputEditorInfo());
+				break;
+			case MSG_REPEAT_DIT:
+				emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
 				break;
 			}
 		}
@@ -316,7 +320,6 @@ public class TeclaIME extends InputMethodService
 			return;
 		}
 		
-		initMorseKeyboard();
 		mKeyboardSwitcher.makeKeyboards(false);
 
 		TextEntryState.newSession(this);
@@ -434,7 +437,8 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-
+		
+		initMorseKeyboard();
 		evaluateNavKbdTimeout();
 	}
 	
@@ -830,6 +834,12 @@ public class TeclaIME extends InputMethodService
 	
 	/*********************** Morse methods ******************************/
 	
+
+	private void postRepeatDit() {
+		mHandler.removeMessages(MSG_REPEAT_DIT);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_REPEAT_DIT), 300);
+	}
+	
 	/**
 	 * Handle key input on the Morse Code keyboard. It has 5 keys and each of
 	 * them does something different.
@@ -838,6 +848,7 @@ public class TeclaIME extends InputMethodService
 	 * @param keyCodes
 	 */
 	public void onKeyMorse(int primaryCode, int[] keyCodes) {
+		initMorseKeyboard();
 		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
 
 		switch (primaryCode) {
@@ -1659,7 +1670,7 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	private void initMorseKeyboard() {
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
+		if (mKeyboardSwitcher.isMorseMode()) {
 			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
 			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
 			
@@ -1684,11 +1695,55 @@ public class TeclaIME extends InputMethodService
 		}
 		
 	};
-
+	
+	private boolean morseThreadRunning = false;
+	private boolean cancelMorseThread = false;
+	
+	
+	private void handleMorseDown(int key) {
+		if (!morseThreadRunning)
+			startMorseThread(key);
+	}
+	
+	private void handleMorseUp() {
+		cancelMorseThread = true;
+	}
+	
+	private void startMorseThread(final int key) {
+		Thread r = new Thread() {
+			
+			public void run() {
+				try {
+					morseThreadRunning = true;
+					while (!cancelMorseThread) {
+						
+						mHandler.post(new Runnable() {
+							public void run() {
+								emulateMorseKey(key);
+							}
+						});
+						
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							throw new RuntimeException("Could not wait between signals.", e);
+						}
+					}
+				}
+				finally {
+					morseThreadRunning = false;
+					cancelMorseThread = false;
+				}
+			}
+		};
+		
+		r.start();
+	}
+	
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
-		//FIXME Elyas: if typing too fast, or holding a long press for a while, some switch events are null
-		//Temporary fix
+		//Emulator issue (temporary fix): if typing too fast, or holding a long press
+		//while in auto-release mode, some switch events are null
 		if (switchEvent.toString() == null) {
 			Log.d(TeclaApp.TAG, "Captured null switch event");
 			return;
@@ -1707,13 +1762,21 @@ public class TeclaIME extends InputMethodService
 				switch(Integer.parseInt(action_morse)) {
 				
 					case 1:
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
-							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+							handleMorseDown(TeclaKeyboard.KEYCODE_MORSE_DIT);
+						}
+						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+							handleMorseUp();
+						}
 						break;
 						
 					case 2:
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
-							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DAH);
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+							handleMorseDown(TeclaKeyboard.KEYCODE_MORSE_DAH);
+						}
+						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+							handleMorseUp();
+						}
 						break;
 						
 					case 3:
@@ -2109,6 +2172,7 @@ public class TeclaIME extends InputMethodService
 		} else {
 			showWindow(true);
 			updateInputViewShown();
+			initMorseKeyboard();
 			
 			/*if (mKeyboardSwitcher.isMorseMode()) {
 				mTeclaMorse.getMorseChart().restore();
