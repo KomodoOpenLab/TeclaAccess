@@ -39,7 +39,6 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.text.AutoText;
 import android.text.ClipboardManager;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.PrintWriterPrinter;
@@ -88,7 +87,6 @@ public class TeclaIME extends InputMethodService
 	private static final int MSG_UPDATE_SUGGESTIONS = 0;
 	private static final int MSG_START_TUTORIAL = 1;
 	private static final int MSG_UPDATE_SHIFT_STATE = 2;
-	private static final int MSG_REPEAT_DIT = 3;
 
 	// How many continuous deletes at which to start deleting at a higher speed.
 	private static final int DELETE_ACCELERATE_AT = 20;
@@ -196,9 +194,6 @@ public class TeclaIME extends InputMethodService
 				break;
 			case MSG_UPDATE_SHIFT_STATE:
 				updateShiftKeyState(getCurrentInputEditorInfo());
-				break;
-			case MSG_REPEAT_DIT:
-				emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_DIT);
 				break;
 			}
 		}
@@ -833,12 +828,6 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	/*********************** Morse methods ******************************/
-	
-
-	private void postRepeatDit() {
-		mHandler.removeMessages(MSG_REPEAT_DIT);
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_REPEAT_DIT), 300);
-	}
 	
 	/**
 	 * Handle key input on the Morse Code keyboard. It has 5 keys and each of
