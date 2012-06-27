@@ -68,13 +68,6 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
-			android:key="morse_mode"
-			android:title="@string/morse_mode"
-			android:summary="@string/morse_mode_summary"
-			android:persistent="true"
-			android:defaultValue="false"
-			/>
-		<CheckBoxPreference
 			android:key="persistent_keyboard"
 			android:title="@string/persistent_keyboard"
 			android:summary="@string/persistent_keyboard_summary"
@@ -243,7 +236,27 @@
 					/>
 				</PreferenceCategory>
 		</PreferenceScreen>
-    </PreferenceCategory>            
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+            android:title="@string/morse_input_category"
+            android:key="morse_input_settings">
+		
+		<CheckBoxPreference
+			android:key="morse_mode"
+			android:title="@string/morse_mode"
+			android:summary="@string/morse_mode_summary"
+			android:persistent="true"
+			android:defaultValue="false"/>
+		
+		<Preference
+			android:key="morse_repeat_int"
+			android:title="@string/mrepeat_frequency"
+			android:summary="@string/mrepeat_frequency_summary"
+			android:persistent="true"
+			/>
+		
+	</PreferenceCategory>
 
     <PreferenceCategory
             android:title="@string/scanning_category"

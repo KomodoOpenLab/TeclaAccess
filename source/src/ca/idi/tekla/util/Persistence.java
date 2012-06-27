@@ -54,9 +54,13 @@ public class Persistence {
 	public static final String PREF_SELF_SCANNING = "self_scanning";
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
+	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
 	public static final int DEFAULT_SCAN_DELAY = 1000;
+	public static final int DEFAULT_REPEAT_FREQ = 750;
 	public static final int MAX_SCAN_DELAY = 3000;
 	public static final int MIN_SCAN_DELAY = 250;
+	public static final int MAX_REPEAT_FREQ = 1000;
+	public static final int MIN_REPEAT_FREQ = 500;
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
 	
@@ -197,6 +201,15 @@ public class Persistence {
 	
 	public HashMap<String,String[]> getSwitchMap() {
 		return mSwitchMap;
+	}
+
+	public void setRepeatFrequency(int delay) {
+		prefs_editor.putInt(PREF_REPEAT_DELAY_INT, delay);
+		prefs_editor.commit();
+	}
+
+	public int getRepeatFrequency() {
+		return shared_prefs.getInt(PREF_REPEAT_DELAY_INT, DEFAULT_REPEAT_FREQ);
 	}
 
 }

@@ -1713,7 +1713,7 @@ public class TeclaIME extends InputMethodService
 						});
 						
 						try {
-							Thread.sleep(1000);
+							Thread.sleep(TeclaApp.persistence.getRepeatFrequency());
 						} catch (InterruptedException e) {
 							throw new RuntimeException("Could not wait between signals.", e);
 						}

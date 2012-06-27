@@ -27,6 +27,7 @@ import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.RepeatFrequencyDialog;
 import ca.idi.tekla.util.ScanSpeedDialog;
 import ca.idi.tekla.util.SwitchPreference;
 
@@ -77,6 +78,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private String mShieldAddress, mShieldName;
 	
 	private ScanSpeedDialog mScanSpeedDialog;
+	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private PreferenceScreen mConfigureInputScreen;
 	private BaseAdapter mConfigureInputAdapter;
@@ -119,6 +121,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
+		mRepeatFrequencyDialog = new RepeatFrequencyDialog(this);
+		mRepeatFrequencyDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
@@ -302,6 +306,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			Preference preference) {
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
+		}
+		if (preference.getKey().equals(Persistence.PREF_REPEAT_DELAY_INT)) {
+			mRepeatFrequencyDialog.show();
 		}
 		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			mAutohideTimeoutDialog.show();
