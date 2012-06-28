@@ -121,8 +121,10 @@ public class TeclaIME extends InputMethodService
 	private TeclaMorse mTeclaMorse;
 	private Keyboard.Key mSpaceKey;
 	private Keyboard.Key mCapsLockKey;
-	int mCapsLockKeyIndex;
-	int mSpaceKeyIndex;
+	private int mCapsLockKeyIndex;
+	private int mSpaceKeyIndex;
+	private int mRepeatedKey;
+	
 
 	private static final int CAPS_LOCK_OFF = 0;
 	private static final int CAPS_LOCK_NEXT = 1;
@@ -1685,49 +1687,37 @@ public class TeclaIME extends InputMethodService
 		
 	};
 	
-	private boolean morseThreadRunning = false;
-	private boolean cancelMorseThread = false;
-	
-	
-	private void handleMorseDown(int key) {
-		if (!morseThreadRunning)
-			startMorseThread(key);
+	public void startRepeating(long delay) {
+		pauseRepeating();
+		mHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
-	private void handleMorseUp() {
-		cancelMorseThread = true;
+	public void startRepeating() {
+		startRepeating(0);
+	}
+
+	public void pauseRepeating() {
+		mHandler.removeCallbacks(mRepeatRunnable);
+		mHandler.removeCallbacks(mStartRepeatRunnable);
 	}
 	
-	private void startMorseThread(final int key) {
-		Thread r = new Thread() {
-			
-			public void run() {
-				try {
-					morseThreadRunning = true;
-					while (!cancelMorseThread) {
-						
-						mHandler.post(new Runnable() {
-							public void run() {
-								emulateMorseKey(key);
-							}
-						});
-						
-						try {
-							Thread.sleep(TeclaApp.persistence.getRepeatFrequency());
-						} catch (InterruptedException e) {
-							throw new RuntimeException("Could not wait between signals.", e);
-						}
-					}
-				}
-				finally {
-					morseThreadRunning = false;
-					cancelMorseThread = false;
-				}
-			}
-		};
-		
-		r.start();
+	public void stopRepeating() {
+		pauseRepeating();
 	}
+	
+	private Runnable mRepeatRunnable = new Runnable() {
+		public void run() {
+			final long start = SystemClock.uptimeMillis();
+			emulateMorseKey(mRepeatedKey);
+			mHandler.postAtTime(this, start + TeclaApp.persistence.getRepeatFrequency());
+		}
+	};
+	
+	private Runnable mStartRepeatRunnable = new Runnable () {
+		public void run() {
+			mHandler.postDelayed(mRepeatRunnable, TeclaApp.persistence.getRepeatFrequency());
+		}
+	};
 	
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
@@ -1752,19 +1742,21 @@ public class TeclaIME extends InputMethodService
 				
 					case 1:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-							handleMorseDown(TeclaKeyboard.KEYCODE_MORSE_DIT);
+							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
+							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
-							handleMorseUp();
+							stopRepeating();
 						}
 						break;
 						
 					case 2:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-							handleMorseDown(TeclaKeyboard.KEYCODE_MORSE_DAH);
+							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
+							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
-							handleMorseUp();
+							stopRepeating();
 						}
 						break;
 						
