@@ -200,7 +200,7 @@ public class TeclaIME extends InputMethodService
 			}
 		}
 	};
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();

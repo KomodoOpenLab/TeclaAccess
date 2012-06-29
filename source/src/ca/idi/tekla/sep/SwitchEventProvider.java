@@ -321,7 +321,9 @@ public class SwitchEventProvider extends Service implements Runnable {
 					// FIXME: Temporal beta implementation for specific user (should turn into a preference)
 					// 4 full scans before calling home
 					TeclaApp.getInstance().postDelayedFullReset(32 * TeclaApp.persistence.getScanDelay());
-				} else {
+				} else if(!TeclaApp.persistence.isMorseModeEnabled()) {
+					//Disables sending a category.HOME intent when
+					//using Morse repeat-on-switch-down
 					TeclaApp.getInstance().postDelayedFullReset(FULL_RESET_TIMEOUT);
 				}
 			}
