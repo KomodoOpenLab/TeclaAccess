@@ -280,7 +280,7 @@
 	<string name="scan_speed_summary">Adjust the scanning speed</string>
 	
     <!-- Morse repeat delay strings-->
-	<string name="mrepeat_frequency">Repeat frequency</string>
+	<string name="mrepeat_frequency">Configure repeat frequency</string>
 	<string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
 	
 	<!-- Switch configuration strings-->

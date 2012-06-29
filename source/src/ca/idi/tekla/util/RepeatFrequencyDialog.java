@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +51,7 @@ public class RepeatFrequencyDialog extends Dialog
 
 	public RepeatFrequencyDialog(Context context) {
 		super(context);
-		setTitle(R.string.mrepeat_frequency_summary);
+		setTitle(R.string.mrepeat_frequency);
 		setOnKeyListener(this);
 	}
 

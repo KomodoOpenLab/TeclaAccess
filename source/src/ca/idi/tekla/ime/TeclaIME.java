@@ -1713,7 +1713,7 @@ public class TeclaIME extends InputMethodService
 		}
 	};
 	
-	private Runnable mStartRepeatRunnable = new Runnable () {
+	private Runnable mStartRepeatRunnable = new Runnable() {
 		public void run() {
 			mHandler.postDelayed(mRepeatRunnable, TeclaApp.persistence.getRepeatFrequency());
 		}

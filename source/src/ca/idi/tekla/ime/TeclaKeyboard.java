@@ -34,8 +34,8 @@ public class TeclaKeyboard extends Keyboard {
 	public static int KEYCODE_VOICE = -202;
 	public static int KEYCODE_VARIANTS = -222;
 	
-    static final int KEYCODE_MORSE_DIT = 0;
-    static final int KEYCODE_MORSE_DAH = 1;
+    static final int KEYCODE_MORSE_DIT = 500;
+    static final int KEYCODE_MORSE_DAH = 501;
     static final int KEYCODE_MORSE_SPACEKEY = 562;
     static final int KEYCODE_MORSE_CAPSKEY = 559;
     static final int KEYCODE_MORSE_DELKEY = 67;
