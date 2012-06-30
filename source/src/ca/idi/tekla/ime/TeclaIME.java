@@ -125,7 +125,7 @@ public class TeclaIME extends InputMethodService
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
 	
-
+	// Morse caps lock key
 	private static final int CAPS_LOCK_OFF = 0;
 	private static final int CAPS_LOCK_NEXT = 1;
 	private static final int CAPS_LOCK_ALL = 2;
@@ -293,10 +293,8 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public View onCreateCandidatesView() {
-		if (TeclaApp.persistence.isMorseModeEnabled()) {
-			//TODO Elyas (should not allow candidates view on Morse keyboard)
-		}
-		else {
+		// No candidates view in Morse mode
+		if (!TeclaApp.persistence.isMorseModeEnabled()) {
 			mKeyboardSwitcher.makeKeyboards(true);
 			mCandidateViewContainer = (CandidateViewContainer) getLayoutInflater().inflate(
 					R.layout.candidates, null);
@@ -829,12 +827,8 @@ public class TeclaIME extends InputMethodService
 		evaluateNavKbdTimeout();
 	}
 	
-	/*********************** Morse methods ******************************/
-	
 	/**
-	 * Handle key input on the Morse Code keyboard. It has 5 keys and each of
-	 * them does something different.
-	 * 
+	 * Handles key input on the Morse Code keyboard
 	 * @param primaryCode
 	 * @param keyCodes
 	 */
@@ -847,6 +841,7 @@ public class TeclaIME extends InputMethodService
 		case TeclaKeyboard.KEYCODE_MORSE_DIT:
 		case TeclaKeyboard.KEYCODE_MORSE_DAH:
 			
+			// Set a limit to the Morse sequence length
 			if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 
 				if(primaryCode == TeclaKeyboard.KEYCODE_MORSE_DIT)
@@ -894,8 +889,6 @@ public class TeclaIME extends InputMethodService
 			clearCharInProgress();
 			break;
 
-			// If there's a character in progress, clear it
-			// otherwise, send through a backspace keypress
 		case TeclaKeyboard.KEYCODE_MORSE_DELKEY:
 			handleMorseBackspace(true);
 			break;
@@ -922,8 +915,14 @@ public class TeclaIME extends InputMethodService
 	private void clearCharInProgress() {
 		mTeclaMorse.clearCharInProgress();
 	}
-	
-	public void handleMorseBackspace(boolean clearEnabled) {
+
+	/**
+	 * Handles the backspace event (Morse keyboard only)
+	 * @param clearEnabled
+	 */
+	private void handleMorseBackspace(boolean clearEnabled) {
+		// If there's a character in progress, clear it
+		// otherwise, send through a backspace keypress
 		if (mTeclaMorse.getCurrentChar().length() > 0 && clearEnabled) {
 			clearCharInProgress();
 		}else {
@@ -940,7 +939,11 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 	
-	public void updateSpaceKey(boolean refreshScreen) {
+	/**
+	 * Updates the state of the Space key (Morse keyboard only)
+	 * @param refreshScreen
+	 */
+	private void updateSpaceKey(boolean refreshScreen) {
 		String sequence = mTeclaMorse.getCurrentChar();
 		String charac = mTeclaMorse.morseToChar(sequence);
 		
@@ -959,7 +962,11 @@ public class TeclaIME extends InputMethodService
 			mIMEView.invalidateKey(mSpaceKeyIndex);
 	}
 	
-	public void updateCapsLockKey(boolean refreshScreen) {
+	/**
+	 * Updates the state of the Caps Lock key (Morse keyboard only)
+	 * @param refreshScreen
+	 */
+	private void updateCapsLockKey(boolean refreshScreen) {
 
 		Context context = this.getApplicationContext();
 		switch (mCapsLockState) {
@@ -980,8 +987,6 @@ public class TeclaIME extends InputMethodService
 		if (refreshScreen)
 			mIMEView.invalidateKey(mCapsLockKeyIndex);
 	}
-	
-	/*******************************************************************/
 
 	public void onText(CharSequence text) {
 		InputConnection ic = getCurrentInputConnection();
@@ -1662,9 +1667,9 @@ public class TeclaIME extends InputMethodService
 	
 	private void initMorseKeyboard() {
 		if (mKeyboardSwitcher.isMorseMode()) {
+			//Initialize Space and Caps Lock key objects
 			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
 			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
-			
 			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
 			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
 			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
@@ -1705,6 +1710,9 @@ public class TeclaIME extends InputMethodService
 		pauseRepeating();
 	}
 	
+	/**
+	 * Runnable used to repeat an occurence of a Morse key
+	 */
 	private Runnable mRepeatRunnable = new Runnable() {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
@@ -1734,9 +1742,11 @@ public class TeclaIME extends InputMethodService
 			TeclaApp.highlighter.startSelfScanning();
 		} else {
 			
+			//Collect the mapped actions of the current switch
 			String[] action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
 			
 			if (mKeyboardSwitcher.isMorseMode()) {
+				//Switches have different actions when Morse keyboard is showing
 				String action_morse = action[1];
 				switch(Integer.parseInt(action_morse)) {
 				
@@ -2154,11 +2164,6 @@ public class TeclaIME extends InputMethodService
 			showWindow(true);
 			updateInputViewShown();
 			initMorseKeyboard();
-			
-			/*if (mKeyboardSwitcher.isMorseMode()) {
-				mTeclaMorse.getMorseChart().restore();
-				mIMEView.invalidate();
-			}*/
 			
 			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {

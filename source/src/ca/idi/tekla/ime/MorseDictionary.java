@@ -5,21 +5,24 @@ import java.util.Map.Entry;
 
 public class MorseDictionary {
 	
-	private String CLASS_TAG = "MorseDictionary: ";
-	public static LinkedHashMap<String,String> mMorseChart;
+	public static LinkedHashMap<String,String> mMorseMap;
 	public static LinkedHashMap<String,String> mDitFirst;
 	public static LinkedHashMap<String,String> mDahFirst;
 	
 	private static int mMaxCodeLength;
 	
 	public MorseDictionary() {
-		mMorseChart = new LinkedHashMap<String,String>();
-		createMapping(mMorseChart);
+		mMorseMap = new LinkedHashMap<String,String>();
+		createMapping(mMorseMap);
 		mDitFirst = initCharts('•');
 		mDahFirst = initCharts('-');
 		setMaxCodeLength();
 	}
 	
+	/**
+	 * Initializes the contents of a Morse map
+	 * @param map
+	 */
 	public static void createMapping(LinkedHashMap<String,String> map) {
 		//Alphabetic order
 		map.put("•-", "a"); map.put("-•••", "b"); map.put("-•-•", "c");
@@ -56,9 +59,12 @@ public class MorseDictionary {
 		
 	}
 	
+	/**
+	 * Sets the maximum code length of the longest Morse sequence
+	 */
 	public void setMaxCodeLength(){
 		int max = 0;
-		for (String key : mMorseChart.keySet()) {
+		for (String key : mMorseMap.keySet()) {
 			if (key.length() > max) {
 				max = key.length();
 			}
@@ -66,21 +72,41 @@ public class MorseDictionary {
 		mMaxCodeLength = max;
 	}
 	
+	/**
+	 * Returns the maximum code length of the longest Morse sequence
+	 * @return
+	 */
 	public int getMaxCodeLength(){
 		return mMaxCodeLength;
 	}
 	
+	/**
+	 * Returns the character corresponding to the Morse sequence
+	 * @param key the Morse sequence to convert into character
+	 * @return
+	 */
 	public String getKey(String key) {
-		return mMorseChart.get(key);
+		return mMorseMap.get(key);
 	}
 	
+	/**
+	 * Used to retrieve one of the dit/dah charts, based on
+	 * the first signal
+	 * @param s
+	 * @return
+	 */
 	public LinkedHashMap<String,String> getChartStartsWith(String s) {
 		return s.equals("•") ? mDitFirst : mDahFirst;
 	}
 	
+	/**
+	 * Initializes a chart based on the first signal
+	 * @param c represents either a dit or a dah
+	 * @return
+	 */
 	public LinkedHashMap<String,String> initCharts(char c) {
 		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
-		Iterator<Entry<String,String>> it = mMorseChart.entrySet().iterator();
+		Iterator<Entry<String,String>> it = mMorseMap.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String,String> entry = it.next();
 			if (entry.getKey().startsWith(Character.toString(c)))
