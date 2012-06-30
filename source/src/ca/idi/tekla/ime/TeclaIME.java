@@ -956,7 +956,7 @@ public class TeclaIME extends InputMethodService
 			mSpaceKey.label = (mCapsLockState == CAPS_LOCK_OFF ? charac : charac.toUpperCase()) + "  " + sequence;
 		}
 		else
-			mSpaceKey.label = "space";
+			mSpaceKey.label = getResources().getString(R.string.morse_space);
 		
 		if (refreshScreen)
 			mIMEView.invalidateKey(mSpaceKeyIndex);

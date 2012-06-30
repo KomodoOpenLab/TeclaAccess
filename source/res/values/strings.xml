@@ -257,6 +257,9 @@
     <string name="tapforsymbols">Tap for symbols</string>
     <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
     
+    <!-- Label for Morse space key.  -->
+    <string name="morse_space">space</string>
+    
     <!-- Option to enable Morse input method -->
 	<string name="morse_mode">Use Morse input method</string>
 	<string name="morse_mode_summary">Enables users to type in Morse</string>
