@@ -21,6 +21,7 @@
    			<item>Morse dit</item>
    			<item>Morse dah</item>
    			<item>Morse end of char</item>
+   			<item>Morse backspace</item>
 		</string-array>
  
 		<string-array name="morseValues">
@@ -28,6 +29,7 @@
   			<item>1</item>
    			<item>2</item>
    			<item>3</item>
+   			<item>4</item>
 		</string-array>
 		
 	</resources>

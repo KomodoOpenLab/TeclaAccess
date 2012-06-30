@@ -809,7 +809,7 @@ public class TeclaIME extends InputMethodService
 			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
-				onKeyMorse(primaryCode, keyCodes);
+				onKeyMorse(primaryCode);
 			} else if (isWordSeparator(primaryCode)) {
 				handleSeparator(primaryCode);
 			} else if (isSpecialKey(primaryCode)) {
@@ -830,9 +830,8 @@ public class TeclaIME extends InputMethodService
 	/**
 	 * Handles key input on the Morse Code keyboard
 	 * @param primaryCode
-	 * @param keyCodes
 	 */
-	public void onKeyMorse(int primaryCode, int[] keyCodes) {
+	public void onKeyMorse(int primaryCode) {
 		initMorseKeyboard();
 		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
 
@@ -1744,6 +1743,7 @@ public class TeclaIME extends InputMethodService
 			
 			//Collect the mapped actions of the current switch
 			String[] action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
+			Log.d(TeclaApp.TAG, switchEvent.toString() + ": " + action[0] + "," + action[1]);
 			
 			if (mKeyboardSwitcher.isMorseMode()) {
 				//Switches have different actions when Morse keyboard is showing
@@ -1774,7 +1774,16 @@ public class TeclaIME extends InputMethodService
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 						break;
-					
+						
+					case 4:
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
+							startRepeating();
+						}
+						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+							stopRepeating();
+						}
+						break;
 					default:
 						break;
 				}

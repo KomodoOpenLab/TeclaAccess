@@ -494,7 +494,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchJ1.setDefaultValues(1, 1);
 		mSwitchJ2.setDefaultValues(2, 2);
 		mSwitchJ3.setDefaultValues(3, 3);
-		mSwitchJ4.setDefaultValues(4, 0);
+		mSwitchJ4.setDefaultValues(4, 4);
 		mSwitchE1.setDefaultValues(4, 0);
 		mSwitchE2.setDefaultValues(3, 0);
 		updateSwitchMap();
