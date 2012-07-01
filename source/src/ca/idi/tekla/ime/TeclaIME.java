@@ -1756,7 +1756,6 @@ public class TeclaIME extends InputMethodService
 					case 1:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
-							mRepeating = false;
 							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
@@ -1767,7 +1766,6 @@ public class TeclaIME extends InputMethodService
 					case 2:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
-							mRepeating = false;
 							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
@@ -1783,7 +1781,6 @@ public class TeclaIME extends InputMethodService
 					case 4:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
-							mRepeating = false;
 							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
