@@ -173,7 +173,7 @@
 				        android:title="@string/switch_j4_morse"
 						android:entries="@array/morseArray"
 						android:entryValues="@array/morseValues"
-						android:defaultValue="0"
+						android:defaultValue="4"
 						android:persistent="true"
 					/>
 				</PreferenceScreen>
