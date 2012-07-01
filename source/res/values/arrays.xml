@@ -22,6 +22,7 @@
    			<item>Morse dah</item>
    			<item>Morse end of char</item>
    			<item>Morse backspace</item>
+   			<item>Hide Morse IME view</item>
 		</string-array>
  
 		<string-array name="morseValues">
@@ -30,6 +31,7 @@
    			<item>2</item>
    			<item>3</item>
    			<item>4</item>
+   			<item>5</item>
 		</string-array>
 		
 	</resources>

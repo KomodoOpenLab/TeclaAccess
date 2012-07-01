@@ -1784,7 +1784,7 @@ public class TeclaIME extends InputMethodService
 						break;
 						
 					case 4:
-						//Sends through a backspace event (repeatable)
+						//Send through a backspace event (repeatable)
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
 							startRepeating();
@@ -1792,6 +1792,12 @@ public class TeclaIME extends InputMethodService
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 							stopRepeating();
 						}
+						break;
+						
+					case 5:
+						//Hide the Morse IME view
+						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+							emulateMorseKey(Keyboard.KEYCODE_DONE);
 						break;
 					default:
 						break;
