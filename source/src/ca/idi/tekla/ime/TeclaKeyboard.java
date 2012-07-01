@@ -96,17 +96,23 @@ public class TeclaKeyboard extends Keyboard {
         return key;
     }
     
-    /**** Morse utility ****/
-    
+    /**
+     * Returns a reference to the Morse space key
+     * (Morse mode only)
+     * @return
+     */
 	public Key getSpaceKey() {
 		return this.mSpaceKey;
 	}
 
+	/**
+	 * Returns a reference to the Morse Caps Lock key
+	 * (Morse mode only)
+	 * @return
+	 */
 	public Key getCapsLockKey() {
 		return this.mCapsLockKey;
 	}
-	
-	/**********************/
     
     void setImeOptions(Resources res, int mode, int options) {
         if (mEnterKey != null) {

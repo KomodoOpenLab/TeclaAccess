@@ -1754,6 +1754,7 @@ public class TeclaIME extends InputMethodService
 				switch(Integer.parseInt(action_morse)) {
 				
 					case 1:
+						//Add a dit to the current Morse sequence (repeatable)
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
 							startRepeating();
@@ -1764,6 +1765,7 @@ public class TeclaIME extends InputMethodService
 						break;
 						
 					case 2:
+						//Add a dah to the current Morse sequence (repeatable)
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
 							startRepeating();
@@ -1774,11 +1776,15 @@ public class TeclaIME extends InputMethodService
 						break;
 						
 					case 3:
+						//Send through a space key event: acts as an end of char signal
+						//if the current sequence represents a valid character, otherwise
+						//adds a simple space
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 						break;
 						
 					case 4:
+						//Sends through a backspace event (repeatable)
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
 							startRepeating();

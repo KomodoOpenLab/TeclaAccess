@@ -30,7 +30,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.View.OnTouchListener;
 
 import java.util.List;
 
@@ -104,8 +103,9 @@ public class TeclaKeyboardView extends KeyboardView {
 		return (TeclaKeyboard) super.getKeyboard();
 	}
 	
-	/*********************************  MORSE  ************************************/
-	
+	/**
+	 * Creates a Morse cheat sheet (Morse mode only)
+	 */
 	public void createCheatSheet() {
 		if (this.cheatsheet1 == null) {
 			this.cheatsheet1 = mIME.getLayoutInflater().inflate(R.layout.cheat_sheet1, null);
@@ -145,17 +145,23 @@ public class TeclaKeyboardView extends KeyboardView {
 		}
 	}
 	
+	/**
+	 * Displays the Morse cheat sheet (Morse mode only)
+	 */
 	public void showCheatSheet() {
 		createCheatSheet();
 		this.cheatsheetDialog.show();
 	}
 	
+	/**
+	 * Dismisses the Morse cheat sheet (Morse mode only)
+	 */
 	public void closeCheatSheet() {
         if (cheatsheetDialog != null) {
                 cheatsheetDialog.dismiss();
         }
 	}
-	/****************************                   *******************************/
+	
 	/****************************  INSTRUMENTATION  *******************************/
 
     static final boolean DEBUG_AUTO_PLAY = false;
@@ -272,6 +278,7 @@ public class TeclaKeyboardView extends KeyboardView {
 		super.onDraw(canvas); 
 
 		if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+			//Update the state of the Morse HUD display
 			mMorseChart = mTeclaMorse.getMorseChart();
 			mMorseChart.update();
 			mMorseChart.layout.measure(canvas.getWidth(), canvas.getHeight());

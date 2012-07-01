@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -21,7 +20,7 @@ public class MorseChart {
 	
 	private int NB_COLUMNS = 5;
 	private int index;
-	private boolean updated = false;
+	private boolean mUpdated = false;
 	
 	public LinearLayout layout;
 	private LinearLayout ll_save;
@@ -48,6 +47,9 @@ public class MorseChart {
 		layout.setOrientation(LinearLayout.HORIZONTAL);
 	}
 	
+	/**
+	 * Initializes the view containers
+	 */
 	public void setViews() {
 		mTableLayout = new TableLayout[NB_COLUMNS];
 		for (int i = 0; i < NB_COLUMNS; i++) {
@@ -58,22 +60,28 @@ public class MorseChart {
 		}
 	}
 	
+	/**
+	 * Updates the state of the HUD according to
+	 * the current Morse sequence
+	 */
 	public void update() {
         String s = mTeclaMorse.getCurrentChar();
-        if ((s.equals("•") || s.equals("-")) && !updated) {
+        if ((s.equals("•") || s.equals("-")) && !mUpdated) {
         	//Populate the HUD according to the 1st typed Morse character
         	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().getChartStartsWith(s);
         	fillHUD(map);
-        	updated = true;
+        	mUpdated = true;
         }
         else if (s.equals("")) {
         	layout.removeAllViews();
         	setViews();
-        	updated = false;
+        	mUpdated = false;
         }
 	}
 	
-	
+	/**
+	 * Hides the HUD display
+	 */
 	public void hide() {
 		ll_save = new LinearLayout(mContext);
 		ll_save.setLayoutParams(llParams);
@@ -90,11 +98,18 @@ public class MorseChart {
 			ll_save.addView(temp[i], llParams);
 	}
 	
+	/**
+	 * Restores the HUD display
+	 */
 	public void restore() {
 		if (ll_save != null)
 			layout = ll_save;
 	}
 	
+	/**
+	 * Populates the HUD with the relevant data
+	 * @param chart
+	 */
 	public void fillHUD(LinkedHashMap<String,String> chart) {
 		Iterator<Entry<String,String>> it = chart.entrySet().iterator();
 		
@@ -135,10 +150,20 @@ public class MorseChart {
 		
 	}
 
+	/**
+	 * Used to equally fill the TableLayouts
+	 * @param v
+	 * @param tlParams
+	 */
 	private void addViewToNextTable(View v, TableLayout.LayoutParams tlParams) {
 		mTableLayout[index % NB_COLUMNS].addView(v, tlParams);
 	}
 	
+	/**
+	 * Used to redraw the HUD when changing device orientation
+	 * (temporal hack)
+	 * @param conf
+	 */
 	public void configChanged(Configuration conf) {
 		if (conf.orientation == conf.ORIENTATION_LANDSCAPE)
 			NB_COLUMNS = 8;
@@ -147,7 +172,7 @@ public class MorseChart {
 		
 		layout.removeAllViews();
     	setViews();
-    	updated = false;
+    	mUpdated = false;
 	}
 	
 }

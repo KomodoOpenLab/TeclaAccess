@@ -13,12 +13,17 @@ public class SwitchPreference {
 	public ListPreference tecla;
 	public ListPreference morse;
 	
+	
 	public SwitchPreference(PreferenceScreen ps, ListPreference teclaPref, ListPreference morsePref) {
 		prefScreen = ps;
 		tecla = teclaPref;
 		morse = morsePref;
 	}
 	
+	/**
+	 * Updates the action mapping of the preference
+	 * @param key
+	 */
 	public void onPreferenceChanged(String key) {
 		HashMap<String,String[]> mSwitchMap = TeclaApp.persistence.getSwitchMap();
 		mSwitchMap.remove(key.substring(0, key.lastIndexOf("_")));
@@ -26,16 +31,29 @@ public class SwitchPreference {
 		this.refreshSummaries();
 	}
 
+	/**
+	 * Resets the values of a switch preference
+	 * @param a index of the Tecla action pref
+	 * @param b index of the Morse action pref
+	 */
 	public void setDefaultValues(int a, int b) {
 		this.tecla.setValueIndex(a);
 		this.morse.setValueIndex(b);
 	}
 
+	/**
+	 * Creates a mapping of a switch and its actions,
+	 * and store it in the map
+	 * @param switchPref
+	 */
 	public static void addToMap(SwitchPreference switchPref) {
 		HashMap<String,String[]> mSwitchMap = TeclaApp.persistence.getSwitchMap();
 		mSwitchMap.put(switchPref.prefScreen.getKey(), new String[]{switchPref.tecla.getValue(), switchPref.morse.getValue()});
 	}
 
+	/**
+	 * Updates the states of the pref summaries
+	 */
 	public void refreshSummaries() {
 		this.tecla.setSummary(this.tecla.getEntry());
 		this.morse.setSummary(this.morse.getEntry());
