@@ -1693,7 +1693,7 @@ public class TeclaIME extends InputMethodService
 	
 	public void startRepeating(long delay) {
 		pauseRepeating();
-		mHandler.postDelayed(mStartRepeatRunnable, delay);
+		mTeclaHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
 	public void startRepeating() {
@@ -1701,8 +1701,8 @@ public class TeclaIME extends InputMethodService
 	}
 
 	public void pauseRepeating() {
-		mHandler.removeCallbacks(mRepeatRunnable);
-		mHandler.removeCallbacks(mStartRepeatRunnable);
+		mTeclaHandler.removeCallbacks(mRepeatRunnable);
+		mTeclaHandler.removeCallbacks(mStartRepeatRunnable);
 	}
 	
 	public void stopRepeating() {
@@ -1716,13 +1716,17 @@ public class TeclaIME extends InputMethodService
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			emulateMorseKey(mRepeatedKey);
-			mHandler.postAtTime(this, start + TeclaApp.persistence.getRepeatFrequency());
+			mTeclaHandler.postAtTime(this, start + TeclaApp.persistence.getRepeatFrequency());
 		}
 	};
 	
+	/**
+	 * Runnable used to start the Morse key repetition process
+	 */
 	private Runnable mStartRepeatRunnable = new Runnable() {
 		public void run() {
-			mHandler.postDelayed(mRepeatRunnable, TeclaApp.persistence.getRepeatFrequency());
+			emulateMorseKey(mRepeatedKey);
+			mTeclaHandler.postDelayed(mRepeatRunnable, TeclaApp.persistence.getRepeatFrequency());
 		}
 	};
 	
@@ -1743,7 +1747,6 @@ public class TeclaIME extends InputMethodService
 			
 			//Collect the mapped actions of the current switch
 			String[] action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
-			Log.d(TeclaApp.TAG, switchEvent.toString() + ": " + action[0] + "," + action[1]);
 			
 			if (mKeyboardSwitcher.isMorseMode()) {
 				//Switches have different actions when Morse keyboard is showing
@@ -1753,6 +1756,7 @@ public class TeclaIME extends InputMethodService
 					case 1:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
+							mRepeating = false;
 							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
@@ -1763,6 +1767,7 @@ public class TeclaIME extends InputMethodService
 					case 2:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
+							mRepeating = false;
 							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
@@ -1778,6 +1783,7 @@ public class TeclaIME extends InputMethodService
 					case 4:
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
+							mRepeating = false;
 							startRepeating();
 						}
 						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
