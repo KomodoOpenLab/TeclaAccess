@@ -5,7 +5,7 @@ import java.util.*;
 import ca.idi.tekla.ime.MorseDictionary;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
+
 
 public class TeclaMorse {
 	
