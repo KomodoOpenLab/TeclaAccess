@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -18,7 +19,7 @@ public class MorseChart {
 	private Context mContext;
 	private TeclaMorse mTeclaMorse;
 	
-	private int NB_COLUMNS = 5;
+	private int NB_COLUMNS;
 	private int index;
 	private boolean mUpdated = false;
 	
@@ -40,6 +41,7 @@ public class MorseChart {
 		mContext = context;
 		mTeclaMorse = teclaMorse;
 		
+		updateColumnsNb();
 		llParams.setMargins(0, 0, 25, 0);
 		
 		layout = new LinearLayout(mContext);
@@ -147,7 +149,6 @@ public class MorseChart {
         	addViewToNextTable(tr, tlParams);
         	index++;
     	}
-		
 	}
 
 	/**
@@ -161,18 +162,28 @@ public class MorseChart {
 	
 	/**
 	 * Used to redraw the HUD when changing device orientation
-	 * (temporal hack)
 	 * @param conf
 	 */
 	public void configChanged(Configuration conf) {
-		if (conf.orientation == conf.ORIENTATION_LANDSCAPE)
-			NB_COLUMNS = 8;
-		else
-			NB_COLUMNS = 5;
-		
+		updateColumnsNb();
 		layout.removeAllViews();
     	setViews();
     	mUpdated = false;
+	}
+	
+	/**
+	 * Updates the NB_COLUMNS variable
+	 */
+	private void updateColumnsNb() {
+		DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
+		
+		//Temporal hack, pending layout configuration for different screen sizes
+		if(dm.densityDpi == DisplayMetrics.DENSITY_LOW)
+			NB_COLUMNS = Math.round(dm.widthPixels / 55);
+		else if(dm.densityDpi == DisplayMetrics.DENSITY_MEDIUM)
+			NB_COLUMNS = Math.round(dm.widthPixels / 67);
+		else
+			NB_COLUMNS = Math.round(dm.widthPixels / 95);
 	}
 	
 }
