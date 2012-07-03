@@ -35,9 +35,14 @@
                 android:rowEdgeFlags="bottom"
                 android:keyHeight="11%">
                 
+             	<Key 	
+                    	android:codes="-4"
+                    	android:keyIcon="@drawable/sym_keyboard_done"
+                    	android:iconPreview="@drawable/sym_keyboard_feedback_done"
+                    	android:keyWidth="12%"
+                    	android:keyEdgeFlags="left"/>
                 <Key
                         android:keyLabel="@string/caps_lock_off"
-                        android:keyEdgeFlags="left"
                         android:codes="559"
                         android:isSticky="true"/>     
                 <Key
@@ -57,13 +62,9 @@
                 <Key
                         android:keyIcon="@drawable/sym_keyboard_delete"
                         android:isRepeatable="true"
-                        android:codes="67"/>
-                <Key 	
-                    	android:codes="-4"
-                    	android:keyIcon="@drawable/sym_keyboard_done"
-                    	android:iconPreview="@drawable/sym_keyboard_feedback_done"
-                    	android:keyWidth="12%"
+                        android:codes="67"
                     	android:keyEdgeFlags="right"/>
+               
         </Row>
 
 </Keyboard>
