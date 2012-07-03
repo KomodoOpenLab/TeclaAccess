@@ -4,8 +4,6 @@
 
 package ca.idi.tekla;
 
-import ca.idi.tekla.util.Highlighter;
-import ca.idi.tekla.util.Persistence;
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -20,13 +18,15 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import ca.idi.tekla.util.Highlighter;
+import ca.idi.tekla.util.Persistence;
 
 public class TeclaApp extends Application {
 
@@ -37,7 +37,7 @@ public class TeclaApp extends Application {
 	/**
 	 * Main debug switch, turns on/off debugging for the whole app
 	 */
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
@@ -88,7 +88,7 @@ public class TeclaApp extends Application {
 	
 	private void init() {
 
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		Log.d(TAG, "TECLA APP STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
 		
 		persistence = new Persistence(this);
@@ -339,14 +339,23 @@ public class TeclaApp extends Application {
 		Intent buttonUp = new Intent(Intent.ACTION_MEDIA_BUTTON);               
 		buttonUp.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
 		sendOrderedBroadcast(buttonUp, "android.permission.CALL_PRIVILEGED");
+		
+		TeclaApp.persistence.isSpeakerphoneEnabled();
+		useSpeakerphone();
 	}
 
 	public void useSpeakerphone() {
+		mAudioManager.setMode(AudioManager.MODE_IN_CALL);
 		mAudioManager.setSpeakerphoneOn(true);
+	}
+	
+	public void stopUsingSpeakerPhone() {
+		mAudioManager.setMode(AudioManager.MODE_NORMAL);
+		mAudioManager.setSpeakerphoneOn(false);
 	}
 
 	public void holdKeyguardLock() {
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Unlocking screen...");
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Acquiring keyguard lock...");
 		mKeyguardLock.disableKeyguard();
 	}
 	
@@ -367,10 +376,11 @@ public class TeclaApp extends Application {
 	 * @param length the number of seconds to hold the wake lock for
 	 */
 	public void holdWakeLock(long length) {
-		if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring wake lock...");
 		if (length > 0) {
+			if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring temporal wake lock...");
 			mWakeLock.acquire(length);
 		} else {
+			if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring wake lock...");
 			mWakeLock.acquire();
 		}
 		pokeUserActivityTimer();

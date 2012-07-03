@@ -113,7 +113,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 	}
 
 	private void init() {
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating SEP...");
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -253,7 +253,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 						try {
 							inByte = mInStream.read();
 							if (TeclaApp.DEBUG) Log.v(TeclaApp.TAG, CLASS_TAG + "Byte received: " +
-									TeclaApp.getInstance().byte2Hex(inByte) + "at " + SystemClock.uptimeMillis());
+									TeclaApp.getInstance().byte2Hex(inByte) + " at " + SystemClock.uptimeMillis());
 							if (inByte != 0xffffffff) { // Work-around for Samsung Galaxy 
 								if (inByte == STATE_PING) {
 									mPingCounter--;
@@ -317,15 +317,8 @@ public class SwitchEventProvider extends Service implements Runnable {
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					// FIXME: Temporal beta implementation for specific user (should turn into a preference)
-					// 4 full scans before calling home
-					TeclaApp.getInstance().postDelayedFullReset(32 * TeclaApp.persistence.getScanDelay());
-				} else if(!TeclaApp.persistence.isMorseModeEnabled()) {
-					//Disables sending a category.HOME intent when
-					//using Morse repeat-on-switch-down
-					TeclaApp.getInstance().postDelayedFullReset(FULL_RESET_TIMEOUT);
-				}
+				long fullResetDelay=TeclaApp.persistence.getFullResetTimeout();
+				TeclaApp.getInstance().postDelayedFullReset(fullResetDelay);
 			}
 			
 		}
@@ -337,7 +330,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 			//Screen should be on
 			//Answering should also unlock
 			TeclaApp.getInstance().answerCall();
-			TeclaApp.getInstance().useSpeakerphone();
 			// Assume phone is not ringing any more
 			mPhoneRinging = false;
 		} else if (!TeclaApp.persistence.isScreenOn()) {
@@ -371,6 +363,7 @@ public class SwitchEventProvider extends Service implements Runnable {
 				Log.e(TeclaApp.TAG, CLASS_TAG + "killSocket: " + e.getMessage());
 				e.printStackTrace();
 			}
+			mBluetoothSocket = null;
 		}
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Socket killed");
 	}
@@ -408,9 +401,9 @@ public class SwitchEventProvider extends Service implements Runnable {
 			teclaShield = mBluetoothAdapter.getRemoteDevice(shieldAddress);
 
 			if (!success) {
+				killSocket();
 				// Try usual method
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating bluetooth serial socket...");
-				killSocket();
 				try {
 					mBluetoothSocket = teclaShield.createRfcommSocketToServiceRecord(SPP_UUID);
 				} catch (IOException e) {

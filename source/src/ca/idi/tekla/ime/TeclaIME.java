@@ -16,6 +16,11 @@
 
 package ca.idi.tekla.ime;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,8 +31,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
+import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Debug;
@@ -55,17 +60,11 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-
+import ca.idi.tecla.sdk.SepManager;
+import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tecla.sdk.SepManager;
-import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
@@ -207,7 +206,7 @@ public class TeclaIME extends InputMethodService
 		mTeclaMorse = new TeclaMorse(this);
 		
 		// Setup Debugging
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
 
 		//setStatusIcon(R.drawable.ime_qwerty);
@@ -247,6 +246,7 @@ public class TeclaIME extends InputMethodService
 		SepManager.stop(this);
 	}
 
+	
 	@Override
 	public void onConfigurationChanged(Configuration conf) {
 		if (!TextUtils.equals(conf.locale.toString(), mLocale)) {
@@ -256,6 +256,13 @@ public class TeclaIME extends InputMethodService
 		if (conf.orientation != mOrientation) {
 			commitTyped(getCurrentInputConnection());
 			mOrientation = conf.orientation;
+			
+			// If the fullscreen switch is enabled, change its size to match screen
+			if(isFullScreenShowing()) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Changing size of fullscreen overlay.");
+				Display display = getDisplay();
+				mSwitchPopup.update(display.getWidth(), display.getHeight());
+			}
 		}
 		if (mKeyboardSwitcher == null) {
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
@@ -658,11 +665,11 @@ public class TeclaIME extends InputMethodService
 				hideSoftIME();
 			}
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
 				startFullScreenSwitchMode(500);
 			}
 			if (action.equals(TeclaApp.ACTION_STOP_FS_SWITCH_MODE)) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
 				stopFullScreenSwitchMode();
 			}
 			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
@@ -776,8 +783,12 @@ public class TeclaIME extends InputMethodService
 	public void onKey(int primaryCode, int[] keyCodes) {
 		long when = SystemClock.uptimeMillis();
 
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
-
+		if (TeclaApp.DEBUG) {
+			if (keyCodes != null && keyCodes.length > 0) {
+				Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
+			}
+		}
+		
 		if (primaryCode != Keyboard.KEYCODE_DELETE || 
 				when > mLastKeyTime + QUICK_PRESS) {
 			mDeleteCount = 0;
@@ -1859,7 +1870,7 @@ public class TeclaIME extends InputMethodService
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 			
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
-					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + "at " + SystemClock.uptimeMillis());
+					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + " at " + SystemClock.uptimeMillis());
 		}
 		
 		evaluateNavKbdTimeout();		
@@ -1897,7 +1908,7 @@ public class TeclaIME extends InputMethodService
 	private void resetNavKbdTimeout() {
 		cancelNavKbdTimeout();
 		int navKbdTimeout = TeclaApp.persistence.getNavigationKeyboardTimeout();
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Timeout in: " + navKbdTimeout + "seconds");
+		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Navigation keyboard timeout in: " + navKbdTimeout + " seconds");
 		if (navKbdTimeout != Persistence.NEVER_AUTOHIDE)
 			mTeclaHandler.postDelayed(hideNavKbdRunnable, navKbdTimeout * 1000);
 	}
@@ -2226,14 +2237,14 @@ public class TeclaIME extends InputMethodService
 	// TODO: Consider moving to TeclaKeyboardView or TeclaKeyboard
 	private void populateVariants (CharSequence keyLabel, CharSequence popupChars) {
 		List<Key> keyList = mIMEView.getKeyboard().getKeys();
-		Key key = keyList.get(0);
+		Key key = keyList.get(1);
 		CharSequence sequence;
 		
 		key.label = keyLabel;
 		key.codes = new int[1];
 		key.codes[0] = (int) keyLabel.charAt(0);
 		for (int i=0; i < popupChars.length(); i++) {
-			key = keyList.get(i+1);
+			key = keyList.get(i+2);
 			sequence = popupChars.subSequence(i, i+1);
 			key.label = sequence;
 			key.codes = new int[1];

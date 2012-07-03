@@ -25,6 +25,7 @@ import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
+import ca.idi.tekla.util.FullResetTimeoutDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.RepeatFrequencyDialog;
@@ -36,6 +37,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -48,6 +52,7 @@ import android.preference.PreferenceScreen;
 import android.text.AutoText;
 import android.util.Log;
 import android.widget.BaseAdapter;
+import android.view.KeyEvent;
 
 public class TeclaPrefs extends PreferenceActivity
 implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -70,11 +75,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private ProgressDialog mProgressDialog;
 	private BluetoothAdapter mBluetoothAdapter;
-	private boolean mShieldFound;
+	private boolean mShieldFound, mConnectionCancelled;
 	private String mShieldAddress, mShieldName;
 	
 	private ScanSpeedDialog mScanSpeedDialog;
@@ -93,11 +99,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
 	
+	private FullResetTimeoutDialog mFullResetTimeoutDialog;
+	
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
+		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		
 		init();
 		
@@ -114,9 +122,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
-		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
+		mAutohideTimeoutDialog.setContentView(R.layout.dialog_timeout);
+		mFullResetTimeoutDialog = new FullResetTimeoutDialog(this);
+		mFullResetTimeoutDialog.setContentView(R.layout.dialog_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
+		mPrefSpeakerPhoneSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_SPEAKERPHONE_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
@@ -176,20 +187,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefVoiceInput.setSummary(R.string.no_voice_input_available);
 		}
 		
-		// If Bluetooth disabled or unsupported disable Shield connection
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-		if (mBluetoothAdapter == null) {
-			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_nosupport);
-			mPrefConnectToShield.setEnabled(false);
-		} else if (!mBluetoothAdapter.isEnabled()) {
-			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_disabled);
-			mPrefConnectToShield.setEnabled(false);
-		} else {
-			mPrefConnectToShield.setSummary(R.string.shield_connect_summary);
-		}
+		updateShieldPreference();
 
 		// If no alternative input selected, disable scanning
 		if (!mPrefConnectToShield.isChecked() && !mPrefFullScreenSwitch.isChecked()) {
+			mPrefSelfScanning.setChecked(false);
+			mPrefInverseScanning.setChecked(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
 		}
@@ -200,8 +203,22 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchMap = TeclaApp.persistence.getSwitchMap();
 		updateSwitchMap();
 
+		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
+		// If Tecla Access IME is not selected disable all alternative input preferences
+		if (!TeclaApp.getInstance().isDefaultIME()) {
+			//Tecla Access is not selected
+			mPrefPersistentKeyboard.setEnabled(false);
+			mPrefAutohideTimeout.setEnabled(false);
+			mPrefFullScreenSwitch.setEnabled(false);
+			mPrefConnectToShield.setEnabled(false);
+			mPrefSelfScanning.setEnabled(false);
+			mPrefInverseScanning.setEnabled(false);
+			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
+		}
+
 		//Tecla Access Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_CONNECTED));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED));
@@ -225,7 +242,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		finish();
+		cancelDialog();
+		// FIXME: Supposed to force a refresh of preference states, but too aggressive?
+		//finish(); 
 	}
 
 	@Override
@@ -238,8 +257,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private void discoverShield() {
 		mShieldFound = false;
-		if (mBluetoothAdapter.isDiscovering())
-			mBluetoothAdapter.cancelDiscovery();
+		mConnectionCancelled = false;
+		cancelDiscovery();
 		mBluetoothAdapter.startDiscovery();
 		showDiscoveryDialog();
 	}
@@ -255,38 +274,48 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if ((dev.getName() != null) && (
 						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_2) ||
 						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_3) )) {
-					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
 					mShieldFound = true;
-					mShieldAddress = dev.getAddress(); 
-					mShieldName = dev.getName();					if (mBluetoothAdapter.isDiscovering())
-						mBluetoothAdapter.cancelDiscovery();
+					mShieldAddress = dev.getAddress();
+					mShieldName = dev.getName();
+					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
+					cancelDiscovery();
 				}
 			}
 
+			if (intent.getAction().equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+				updateShieldPreference();
+			}
+			
 			if (intent.getAction().equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
 				if (mShieldFound) {
 					// Shield found, try to connect
-					if (!mProgressDialog.isShowing())
-						mProgressDialog.show();
+					mProgressDialog.setOnCancelListener(null); //Don't do anything if dialog cancelled
+					mProgressDialog.setOnKeyListener(new OnKeyListener() {
+
+						public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+							return true; //Consume all keys once Shield is found (can't cancel with back key)
+						}
+						
+					});
 					mProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
 							" " + mShieldName);
 					if(!SepManager.start(TeclaPrefs.this, mShieldAddress)) {
-						// Could not connect to switch
-						closeDialog();
+						// Could not connect to Shield
+						dismissDialog();
 						TeclaApp.getInstance().showToast(R.string.couldnt_connect_shield);
 					}
 				} else {
 					// Shield not found
-					closeDialog();
+					dismissDialog();
+					if (!mConnectionCancelled) TeclaApp.getInstance().showToast(R.string.no_shields_inrange);
 					mPrefConnectToShield.setChecked(false);
-					TeclaApp.getInstance().showToast(R.string.no_shields_inrange);
 				}
 			}
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
 				mPrefPersistentKeyboard.setChecked(true);
-				closeDialog();
+				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
@@ -296,7 +325,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
-				closeDialog();
+				dismissDialog();
 			}
 		}
 	};
@@ -315,6 +344,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (preference.getKey().equals(Persistence.PREF_SWITCH_DEFAULT)) {
 			mDefaultActionsDialog.show();
+		}
+		if (preference.getKey().equals(Persistence.PREF_FULL_RESET_TIMEOUT)) {
+			mFullResetTimeoutDialog.show();
 		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
@@ -343,6 +375,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);
+				
 				// Show keyboard immediately
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
@@ -396,21 +429,21 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {
 			if (mPrefConnectToShield.isChecked()) {
-				// Connect to shield but also keep connection alive
+				// Connect to shield
 				discoverShield();
 			} else {
 				// FIXME: Tecla Access - Find out how to disconnect
 				// switch event provider without breaking
 				// connection with other potential clients.
 				// Should perhaps use Binding?
-				closeDialog();
+				dismissDialog();
 				if (!mPrefFullScreenSwitch.isChecked()) {
 					mPrefSelfScanning.setChecked(false);
 					mPrefSelfScanning.setEnabled(false);
 					mPrefInverseScanning.setChecked(false);
 					mPrefInverseScanning.setEnabled(false);
 				}
-				SepManager.stop(getApplicationContext());
+				stopSEP();
 			}
 		}
 		if (key.equals(Persistence.PREF_FULLSCREEN_SWITCH)) {
@@ -437,6 +470,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}
 		}
+		
 		if (key.equals(Persistence.PREF_SELF_SCANNING)) {
 			if (mPrefSelfScanning.isChecked()) {
 				mPrefInverseScanning.setChecked(false);
@@ -455,6 +489,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (mPrefInverseScanning.isChecked()) {
 				mPrefSelfScanning.setChecked(false);
 				TeclaApp.persistence.setInverseScanningChanged();
+			} else {
+				TeclaApp.getInstance().stopScanningTeclaIME();
+				if (!mPrefSelfScanning.isChecked()) {
+					mPrefFullScreenSwitch.setChecked(false);
+					if (!mPrefConnectToShield.isChecked()) {
+						mPrefInverseScanning.setEnabled(false);
+					}
+				}
 			}
 		}
 		//FIXME: Tecla Access - Solve backup elsewhere
@@ -462,13 +504,67 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	}
 
 	private void showDiscoveryDialog() {
-		mProgressDialog = ProgressDialog.show(this, "", 
-				getString(R.string.searching_for_shields), true, true);
+		mProgressDialog.setMessage(getString(R.string.searching_for_shields));
+		mProgressDialog.setOnCancelListener(new OnCancelListener() {
+			public void onCancel(DialogInterface arg0) {
+				cancelDiscovery();
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Tecla Shield discovery cancelled");
+				TeclaApp.getInstance().showToast(R.string.shield_connection_cancelled);
+				mConnectionCancelled = true;
+				//Since we have cancelled the discovery the check state needs to be reset
+				//(triggers onSharedPreferenceChanged)
+				//mPrefConnectToShield.setChecked(false);
+			}
+		});
+		mProgressDialog.show();
 	}
 
-	private void closeDialog() {
-		if (mProgressDialog != null && mProgressDialog.isShowing())
+	/*
+	 * Dismisses progress dialog and triggers it's OnCancelListener
+	 */
+	private void cancelDialog() {
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
+			mProgressDialog.cancel();
+		}
+	}
+
+	/*
+	 * Dismisses progress dialog without triggerint it's OnCancelListener
+	 */
+	private void dismissDialog() {
+		if (mProgressDialog != null && mProgressDialog.isShowing()) {
 			mProgressDialog.dismiss();
+		}
+	}
+
+	/*
+	 * Stops the SEP if it is running
+	 */
+	private void stopSEP() {
+		if (SepManager.isRunning(getApplicationContext())) {
+			SepManager.stop(getApplicationContext());
+		}
+	}
+	
+	private void cancelDiscovery() {
+		if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()) {
+			// Triggers ACTION_DISCOVERY_FINISHED on mReceiver.onReceive
+			mBluetoothAdapter.cancelDiscovery();
+		}
+	}
+	
+	private void updateShieldPreference() {
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (mBluetoothAdapter == null) {
+			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_nosupport);
+			mPrefConnectToShield.setEnabled(false);
+		} else if (!mBluetoothAdapter.isEnabled()) {
+			mPrefConnectToShield.setSummary(R.string.shield_connect_summary_BT_disabled);
+			mPrefConnectToShield.setEnabled(false);
+		} else {
+			mPrefConnectToShield.setSummary(R.string.shield_connect_summary);
+			mPrefConnectToShield.setEnabled(true);
+		}
 	}
 	
 	private void refreshSwitchesSummary() {

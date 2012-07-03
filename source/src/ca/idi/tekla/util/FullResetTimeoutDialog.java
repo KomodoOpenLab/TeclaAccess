@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class NavKbdTimeoutDialog extends Dialog
+public class FullResetTimeoutDialog extends Dialog
 		implements DialogInterface.OnKeyListener,
 		SeekBar.OnSeekBarChangeListener,
 		Button.OnClickListener {
@@ -32,11 +32,11 @@ public class NavKbdTimeoutDialog extends Dialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTitle(R.string.autohide_timeout_dlg_title);
+		setTitle(R.string.fullreset_timeout_dlg_title);
 
-		int timeout = TeclaApp.persistence.getNavigationKeyboardTimeout();
-		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.autohide_strings);
-		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.autohide_values);
+		long timeout = TeclaApp.persistence.getFullResetTimeout();
+		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);
+		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.full_reset_values);
 
 		mSeekBarPos = -1;
 		int value = Persistence.AUTOHIDE_NULL;
@@ -62,7 +62,7 @@ public class NavKbdTimeoutDialog extends Dialog
 		mSeekBar.requestFocus();
 	}
 	
-	public NavKbdTimeoutDialog(Context context) {
+	public FullResetTimeoutDialog(Context context) {
 		super(context);
 		setOnKeyListener(this);
 	}

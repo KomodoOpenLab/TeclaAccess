@@ -35,7 +35,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:orientation="horizontal"
-		android:id="@+id/linearLayout1" android:layout_marginTop="8sp">
+		android:id="@+id/linearLayout2" android:layout_marginTop="8sp">
 		<Button
 			android:id="@+id/speed_dlg_btn_done"
 			android:text="@string/btn_done"
