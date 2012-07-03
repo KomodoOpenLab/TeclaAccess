@@ -437,8 +437,8 @@ public class TeclaIME extends InputMethodService
 		if (mKeyboardSwitcher.isMorseMode()) {
 			mTeclaMorse.getMorseChart().restore();
 			mIMEView.invalidate();
-
 		}
+		
 		evaluateNavKbdTimeout();
 	}
 	
@@ -1780,7 +1780,7 @@ public class TeclaIME extends InputMethodService
 					case 3:
 						//Send through a space key event: acts as an end of char signal
 						//if the current sequence represents a valid character, otherwise
-						//adds a simple space
+						//inserts a simple space
 						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 						break;
