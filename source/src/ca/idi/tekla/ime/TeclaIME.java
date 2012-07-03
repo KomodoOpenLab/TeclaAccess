@@ -1831,14 +1831,14 @@ public class TeclaIME extends InputMethodService
 	// TODO: Consider moving to TeclaKeyboardView or TeclaKeyboard
 	private void populateVariants (CharSequence keyLabel, CharSequence popupChars) {
 		List<Key> keyList = mIMEView.getKeyboard().getKeys();
-		Key key = keyList.get(0);
+		Key key = keyList.get(1);
 		CharSequence sequence;
 		
 		key.label = keyLabel;
 		key.codes = new int[1];
 		key.codes[0] = (int) keyLabel.charAt(0);
 		for (int i=0; i < popupChars.length(); i++) {
-			key = keyList.get(i+1);
+			key = keyList.get(i+2);
 			sequence = popupChars.subSequence(i, i+1);
 			key.label = sequence;
 			key.codes = new int[1];
