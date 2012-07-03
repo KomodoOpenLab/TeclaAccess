@@ -330,7 +330,13 @@ public class TeclaApp extends Application {
 	}
 
 	public void useSpeakerphone() {
+		mAudioManager.setMode(AudioManager.MODE_IN_CALL);
 		mAudioManager.setSpeakerphoneOn(true);
+	}
+	
+	public void stopUsingSpeakerPhone() {
+		mAudioManager.setMode(AudioManager.MODE_NORMAL);
+		mAudioManager.setSpeakerphoneOn(false);
 	}
 
 	public void holdKeyguardLock() {

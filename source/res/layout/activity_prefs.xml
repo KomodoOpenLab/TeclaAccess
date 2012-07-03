@@ -68,6 +68,13 @@
 			android:defaultValue="false"
 			/>
 		<CheckBoxPreference
+			android:key="speakerphone_switch"
+			android:title="@string/speakerphone_switch"
+			android:summary="@string/speakerphone_switch_summary"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
 			android:key="persistent_keyboard"
 			android:title="@string/persistent_keyboard"
 			android:summary="@string/persistent_keyboard_summary"
