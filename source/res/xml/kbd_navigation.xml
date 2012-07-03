@@ -34,6 +34,11 @@
             android:keyIcon="@drawable/sym_keyboard_show"
             android:keyWidth="15%p" />
         <Key
+            android:codes="4"
+            android:iconPreview="@drawable/nav_keyboard_feedback_back"
+            android:keyIcon="@drawable/nav_keyboard_back"
+            android:keyWidth="15%p" />
+        <Key
             android:codes="19"
             android:iconPreview="@drawable/nav_keyboard_feedback_up"
             android:keyIcon="@drawable/nav_keyboard_up"
@@ -56,13 +61,8 @@
         <Key
             android:codes="23"
             android:keyLabel="OK"
-            android:keyWidth="14%p" />
-        <Key
-            android:codes="4"
-            android:iconPreview="@drawable/nav_keyboard_feedback_back"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/nav_keyboard_back"
-            android:keyWidth="15%p" />
+            android:keyWidth="14%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_voice"
