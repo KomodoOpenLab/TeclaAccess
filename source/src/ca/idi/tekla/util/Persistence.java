@@ -165,6 +165,10 @@ public class Persistence {
 		return  isSelfScanningEnabled() || isInverseScanningEnabled();
 	}
 
+	public boolean isSpeakerphoneEnabled() {
+		return shared_prefs.getBoolean(PREF_SPEAKERPHONE_SWITCH, false);
+	}
+
 	public void setScanDelay(int delay) {
 		prefs_editor.putInt(PREF_SCAN_DELAY_INT, delay);
 		prefs_editor.commit();

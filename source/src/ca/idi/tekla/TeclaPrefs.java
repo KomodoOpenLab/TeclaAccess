@@ -283,7 +283,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
-				//TeclaApp.getInstance().useSpeakerphone();
 				mPrefAutohideTimeout.setEnabled(true);
 				
 				// Show keyboard immediately
@@ -354,14 +353,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefAutohideTimeout.setEnabled(true);
 				}
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
-			}
-		}
-		
-		if (key.equals(Persistence.PREF_SPEAKERPHONE_SWITCH)) {
-			if (mPrefSpeakerPhoneSwitch.isChecked()) {				
-				TeclaApp.getInstance().useSpeakerphone();				
-			} else {
-				TeclaApp.getInstance().stopUsingSpeakerPhone();
 			}
 		}
 		
