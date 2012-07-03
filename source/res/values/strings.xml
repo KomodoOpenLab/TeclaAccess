@@ -231,6 +231,10 @@
     <!-- Option to enable fullscreen switch mode -->
 	<string name="fullscreen_switch">Fullscreen switch mode</string>
 	<string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
+	
+    <!-- Option to enable speakerphone switch mode -->
+	<string name="speakerphone_switch">Speakerphone switch mode</string>
+	<string name="speakerphone_switch_summary">Uses the speakerphone rather than hearphones</string>
 
 	<!-- Option to show the UI navigation keyboard on the screen -->
 	<string name="persistent_keyboard">Show navigation keyboard</string>
