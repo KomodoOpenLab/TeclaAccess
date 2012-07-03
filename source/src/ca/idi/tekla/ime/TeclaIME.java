@@ -434,6 +434,11 @@ public class TeclaIME extends InputMethodService
 		}
 		
 		initMorseKeyboard();
+		if (mKeyboardSwitcher.isMorseMode()) {
+			mTeclaMorse.getMorseChart().restore();
+			mIMEView.invalidate();
+
+		}
 		evaluateNavKbdTimeout();
 	}
 	
@@ -479,9 +484,6 @@ public class TeclaIME extends InputMethodService
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			TeclaApp.highlighter.stopSelfScanning();
 			TeclaApp.highlighter.clear();
-			
-			//if (TeclaApp.persistence.isMorseModeEnabled())
-				//mTeclaMorse.getMorseChart().hide();
 		}
 		if (TRACE) Debug.stopMethodTracing();
 		if (mOptionsDialog != null && mOptionsDialog.isShowing()) {
