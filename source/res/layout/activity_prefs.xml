@@ -82,8 +82,8 @@
 			/>
 		<Preference
 			android:key="full_reset_timeout"
-			android:title="@string/full_reset_timeout"
-			android:summary="@string/full_reset_timeout_summary"
+			android:title="@string/fullreset_timeout"
+			android:summary="@string/fullreset_timeout_summary"
 			android:persistent="true"
 			/>
     </PreferenceCategory>            

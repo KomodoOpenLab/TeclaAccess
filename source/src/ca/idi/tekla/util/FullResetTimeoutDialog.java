@@ -32,10 +32,10 @@ public class FullResetTimeoutDialog extends Dialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTitle(R.string.full_reset_timeout_dlg_title);
+		setTitle(R.string.fullreset_timeout_dlg_title);
 
 		long timeout = TeclaApp.persistence.getFullResetTimeout();
-		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.full_reset_strings);
+		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);
 		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.full_reset_values);
 
 		mSeekBarPos = -1;
@@ -45,17 +45,17 @@ public class FullResetTimeoutDialog extends Dialog
 			value = mTimeoutValues[mSeekBarPos];
 		}
 		
-		mMinLabel = (TextView) findViewById(R.id.full_reset_dlg_min_label);
-		mMaxLabel = (TextView) findViewById(R.id.full_reset_dlg_max_label);
-		mTimeoutLabel = (TextView) findViewById(R.id.full_reset_dlg_timeout_label);
+		mMinLabel = (TextView) findViewById(R.id.dlg_min_label);
+		mMaxLabel = (TextView) findViewById(R.id.dlg_max_label);
+		mTimeoutLabel = (TextView) findViewById(R.id.dlg_timeout_label);
 		mMinLabel.setText(mTimeoutStrings[0]);
 		mMaxLabel.setText(mTimeoutStrings[mTimeoutStrings.length - 1]);
 		mTimeoutLabel.setText(mTimeoutStrings[mSeekBarPos]);
 
-		mButton = (Button) findViewById(R.id.full_reset_dlg_btn_done);
+		mButton = (Button) findViewById(R.id.dlg_btn_done);
 		mButton.setOnClickListener(this);
 
-		mSeekBar = (SeekBar) findViewById(R.id.full_reset_dlg_seekbar);
+		mSeekBar = (SeekBar) findViewById(R.id.dlg_seekbar);
 		mSeekBar.setMax(mTimeoutValues.length - 1);
 		mSeekBar.setProgress(mSeekBarPos);
 		mSeekBar.setOnSeekBarChangeListener(this);

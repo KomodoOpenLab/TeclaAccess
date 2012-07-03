@@ -98,9 +98,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
-		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
+		mAutohideTimeoutDialog.setContentView(R.layout.dialog_timeout);
 		mFullResetTimeoutDialog = new FullResetTimeoutDialog(this);
-		mFullResetTimeoutDialog.setContentView(R.layout.dialog_full_reset_timeout);
+		mFullResetTimeoutDialog.setContentView(R.layout.dialog_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);

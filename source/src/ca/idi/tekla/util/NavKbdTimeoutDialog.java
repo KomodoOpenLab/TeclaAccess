@@ -45,17 +45,17 @@ public class NavKbdTimeoutDialog extends Dialog
 			value = mTimeoutValues[mSeekBarPos];
 		}
 		
-		mMinLabel = (TextView) findViewById(R.id.autohide_dlg_min_label);
-		mMaxLabel = (TextView) findViewById(R.id.autohide_dlg_max_label);
-		mTimeoutLabel = (TextView) findViewById(R.id.autohide_dlg_timeout_label);
+		mMinLabel = (TextView) findViewById(R.id.dlg_min_label);
+		mMaxLabel = (TextView) findViewById(R.id.dlg_max_label);
+		mTimeoutLabel = (TextView) findViewById(R.id.dlg_timeout_label);
 		mMinLabel.setText(mTimeoutStrings[0]);
 		mMaxLabel.setText(mTimeoutStrings[mTimeoutStrings.length - 1]);
 		mTimeoutLabel.setText(mTimeoutStrings[mSeekBarPos]);
 
-		mButton = (Button) findViewById(R.id.autohide_dlg_btn_done);
+		mButton = (Button) findViewById(R.id.dlg_btn_done);
 		mButton.setOnClickListener(this);
 
-		mSeekBar = (SeekBar) findViewById(R.id.autohide_dlg_seekbar);
+		mSeekBar = (SeekBar) findViewById(R.id.dlg_seekbar);
 		mSeekBar.setMax(mTimeoutValues.length - 1);
 		mSeekBar.setProgress(mSeekBarPos);
 		mSeekBar.setOnSeekBarChangeListener(this);
