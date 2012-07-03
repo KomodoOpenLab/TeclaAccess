@@ -327,10 +327,19 @@ public class TeclaApp extends Application {
 		Intent buttonUp = new Intent(Intent.ACTION_MEDIA_BUTTON);               
 		buttonUp.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
 		sendOrderedBroadcast(buttonUp, "android.permission.CALL_PRIVILEGED");
+		
+		TeclaApp.persistence.isSpeakerphoneEnabled();
+		useSpeakerphone();
 	}
 
 	public void useSpeakerphone() {
+		mAudioManager.setMode(AudioManager.MODE_IN_CALL);
 		mAudioManager.setSpeakerphoneOn(true);
+	}
+	
+	public void stopUsingSpeakerPhone() {
+		mAudioManager.setMode(AudioManager.MODE_NORMAL);
+		mAudioManager.setSpeakerphoneOn(false);
 	}
 
 	public void holdKeyguardLock() {

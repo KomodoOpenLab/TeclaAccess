@@ -21,6 +21,7 @@ package ca.idi.tekla;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tekla.util.FullResetTimeoutDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.ScanSpeedDialog;
@@ -66,6 +67,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private ProgressDialog mProgressDialog;
@@ -75,6 +77,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private ScanSpeedDialog mScanSpeedDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
+	private FullResetTimeoutDialog mFullResetTimeoutDialog;
 
 	@Override
 	protected void onCreate(Bundle icicle) {
@@ -96,9 +99,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
-		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
+		mAutohideTimeoutDialog.setContentView(R.layout.dialog_timeout);
+		mFullResetTimeoutDialog = new FullResetTimeoutDialog(this);
+		mFullResetTimeoutDialog.setContentView(R.layout.dialog_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
+		mPrefSpeakerPhoneSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_SPEAKERPHONE_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
@@ -258,6 +264,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			mAutohideTimeoutDialog.show();
 		}
+		if (preference.getKey().equals(Persistence.PREF_FULL_RESET_TIMEOUT)) {
+			mFullResetTimeoutDialog.show();
+		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
 
@@ -275,6 +284,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);
+				
 				// Show keyboard immediately
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
@@ -345,6 +355,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}
 		}
+		
 		if (key.equals(Persistence.PREF_SELF_SCANNING)) {
 			if (mPrefSelfScanning.isChecked()) {
 				mPrefInverseScanning.setChecked(false);

@@ -317,13 +317,8 @@ public class SwitchEventProvider extends Service implements Runnable {
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					// FIXME: Temporal beta implementation for specific user (should turn into a preference)
-					// 4 full scans before calling home
-					TeclaApp.getInstance().postDelayedFullReset(32 * TeclaApp.persistence.getScanDelay());
-				} else {
-					TeclaApp.getInstance().postDelayedFullReset(FULL_RESET_TIMEOUT);
-				}
+				long fullResetDelay=TeclaApp.persistence.getFullResetTimeout();
+				TeclaApp.getInstance().postDelayedFullReset(fullResetDelay);
 			}
 			
 		}

@@ -17,21 +17,21 @@
         	android:layout_height="wrap_content"
         	android:layout_width="fill_parent"
         	android:gravity="left"
-        	android:id="@+id/autohide_dlg_min_label" android:layout_weight="1"/>
+        	android:id="@+id/dlg_min_label" android:layout_weight="1"/>
         <TextView
         	android:layout_height="wrap_content"
         	android:layout_width="fill_parent"
         	android:gravity="right"
-        	android:id="@+id/autohide_dlg_max_label" android:layout_weight="1"/>
+        	android:id="@+id/dlg_max_label" android:layout_weight="1"/>
     </LinearLayout>
     <SeekBar
     	android:layout_height="wrap_content"
     	android:layout_width="fill_parent"
-    	android:id="@+id/autohide_dlg_seekbar"
+    	android:id="@+id/dlg_seekbar"
     	/>
 
     <TextView
-        android:id="@+id/autohide_dlg_timeout_label"
+        android:id="@+id/dlg_timeout_label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -42,9 +42,9 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:orientation="horizontal"
-		android:id="@+id/linearLayout1" android:layout_marginTop="8sp">
+		android:id="@+id/linearLayout2" android:layout_marginTop="8sp">
 		<Button
-			android:id="@+id/autohide_dlg_btn_done"
+			android:id="@+id/dlg_btn_done"
 			android:text="@string/btn_done"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"

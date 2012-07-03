@@ -231,6 +231,10 @@
     <!-- Option to enable fullscreen switch mode -->
 	<string name="fullscreen_switch">Fullscreen switch mode</string>
 	<string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
+	
+    <!-- Option to enable speakerphone switch mode -->
+	<string name="speakerphone_switch">Use speakerphone for voice calls</string>
+	<string name="speakerphone_switch_summary">Automatically turn on speakerphone when voice calls start</string>
 
 	<!-- Option to show the UI navigation keyboard on the screen -->
 	<string name="persistent_keyboard">Show navigation keyboard</string>
@@ -250,6 +254,22 @@
 		<item>Never</item>
 	</string-array>
 
+    <!-- Options to set full reset timeout -->
+	<string name="fullreset_timeout">Switch press reset timeout</string>
+	<string name="fullreset_timeout_summary">Adjust the switch press delay before returning to Home</string>
+    <string name="fullreset_timeout_dlg_title">Return to Home after:</string>
+    <string-array name="fullreset_strings">
+		<item>3 seconds</item>
+		<item>6 seconds</item>
+		<item>9 secnds</item>
+		<item>12 seconds</item>
+		<item>16 seconds</item>
+		<item>20 seconds</item>
+		<item>25 seconds</item>
+		<item>32 seconds</item>
+		<item>40 seconds</item>
+	</string-array>
+	
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
 
