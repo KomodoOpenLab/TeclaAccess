@@ -306,6 +306,10 @@
 	<string name="mrepeat_frequency">Configure repeat frequency</string>
 	<string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
 	
+	<!--  Morse switch mode strings -->
+	<string name="morse_switch_mode">Morse switch input method</string>
+	<string name="morse_switch_mode_summary">Select your desired Morse switch input method</string>
+	
 	<!-- Switch configuration strings-->
 	<string name="define_switch_action">Configure switch actions</string>
 	<string name="define_switch_action_summary">Customize the actions of each switch</string>
