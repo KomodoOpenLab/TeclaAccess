@@ -2,9 +2,9 @@
 	<resources>
 		<string-array name="listArray">
 		    <item>None</item>
-   			<item>Move right</item>
-   			<item>Move left</item>
-   			<item>Step out</item>
+   			<item>Highlight next</item>
+   			<item>Highlight previous</item>
+   			<item>Step out / Cancel</item>
    			<item>Select highlighted</item>
 		</string-array>
  

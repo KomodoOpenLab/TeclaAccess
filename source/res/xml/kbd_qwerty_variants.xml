@@ -171,6 +171,12 @@
             android:keyIcon="@drawable/sym_keyboard_done"
             android:keyWidth="15%p" />
         <Key
+            android:codes="-2"
+            android:keyLabel="@string/label_symbol_key"
+            android:keyWidth="20%p"
+            android:popupCharacters="_"
+            android:popupKeyboard="@xml/kbd_popup_template" />
+        <Key
             android:keyLabel=","
             android:keyWidth="10%p" />
         <Key
@@ -186,16 +192,10 @@
             android:popupKeyboard="@xml/popup_punctuation" />
         <Key
             android:codes="10"
+            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
-        <Key
-            android:codes="-2"
-            android:keyEdgeFlags="right"
-            android:keyLabel="@string/label_symbol_key"
-            android:keyWidth="20%p"
-            android:popupCharacters="_"
-            android:popupKeyboard="@xml/kbd_popup_template" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_url"
@@ -206,6 +206,12 @@
             android:keyEdgeFlags="left"
             android:keyIcon="@drawable/sym_keyboard_done"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="-2"
+            android:keyLabel="@string/label_symbol_key"
+            android:keyWidth="20%p"
+            android:popupCharacters="_"
+            android:popupKeyboard="@xml/kbd_popup_template" />
         <!--
              <Key android:keyLabel="@string/popular_domain_0"
                 android:keyOutputText="@string/popular_domain_0"
@@ -227,16 +233,10 @@
             android:popupKeyboard="@xml/popup_punctuation" />
         <Key
             android:codes="10"
+            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
-        <Key
-            android:codes="-2"
-            android:keyEdgeFlags="right"
-            android:keyLabel="@string/label_symbol_key"
-            android:keyWidth="20%p"
-            android:popupCharacters="_"
-            android:popupKeyboard="@xml/kbd_popup_template" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_email"
@@ -247,6 +247,12 @@
             android:keyEdgeFlags="left"
             android:keyIcon="@drawable/sym_keyboard_done"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="-2"
+            android:keyLabel="@string/label_symbol_key"
+            android:keyWidth="20%p"
+            android:popupCharacters="_"
+            android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
             android:keyLabel="\@"
             android:keyWidth="15%p" />
@@ -268,16 +274,10 @@
             android:popupKeyboard="@xml/popup_punctuation" />
         <Key
             android:codes="10"
+            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
-        <Key
-            android:codes="-2"
-            android:keyEdgeFlags="right"
-            android:keyLabel="@string/label_symbol_key"
-            android:keyWidth="20%p"
-            android:popupCharacters="_"
-            android:popupKeyboard="@xml/kbd_popup_template" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_im"
@@ -288,6 +288,13 @@
             android:keyEdgeFlags="left"
             android:keyIcon="@drawable/sym_keyboard_done"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="-2"
+            android:keyLabel="@string/label_symbol_key"
+            android:keyWidth="20%p"
+            android:popupCharacters="_"
+            android:popupKeyboard="@xml/kbd_popup_template"
+            android:state_single="true" />
         <Key
             android:keyLabel=","
             android:keyWidth="10%p" />
@@ -305,16 +312,9 @@
         <Key
             android:keyLabel=":-)"
             android:keyOutputText=":-) "
+            android:keyEdgeFlags="right"
             android:keyWidth="20%p"
             android:popupKeyboard="@xml/popup_smileys" />
-        <Key
-            android:codes="-2"
-            android:keyEdgeFlags="right"
-            android:keyLabel="@string/label_symbol_key"
-            android:keyWidth="20%p"
-            android:popupCharacters="_"
-            android:popupKeyboard="@xml/kbd_popup_template"
-            android:state_single="true" />
     </Row>
 
 </Keyboard>

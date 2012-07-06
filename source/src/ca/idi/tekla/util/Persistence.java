@@ -57,7 +57,7 @@ public class Persistence {
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
 	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
-	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3; //second
+	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3; //seconds
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int DEFAULT_REPEAT_FREQ = 750;
 	public static final int MAX_SCAN_DELAY = 3000;

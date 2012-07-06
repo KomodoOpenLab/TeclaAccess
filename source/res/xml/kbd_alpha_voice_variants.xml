@@ -97,10 +97,9 @@
             android:keyIcon="@drawable/sym_keyboard_done"
             android:keyWidth="14%p" />
         <Key
-            android:codes="@integer/key_voice"
-            android:iconPreview="@drawable/sym_keyboard_feedback_mic"
-            android:keyIcon="@drawable/sym_keyboard_mic"
-            android:keyWidth="13%p" />
+            android:codes="-2"
+            android:keyLabel="@string/label_symbol_key"
+            android:keyWidth="16%p" />
         <Key
             android:keyLabel=","
             android:keyWidth="10%p" />
@@ -121,9 +120,10 @@
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="16%p" />
         <Key
-            android:codes="-2"
+            android:codes="@integer/key_voice"
+            android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyEdgeFlags="right"
-            android:keyLabel="@string/label_symbol_key"
-            android:keyWidth="16%p" />
-    </Row>
+            android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyWidth="13%p" />
+        </Row>
 </Keyboard>

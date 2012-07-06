@@ -27,7 +27,8 @@ public class SwitchPreference {
 	public void onPreferenceChanged(String key) {
 		HashMap<String,String[]> mSwitchMap = TeclaApp.persistence.getSwitchMap();
 		mSwitchMap.remove(key.substring(0, key.lastIndexOf("_")));
-		mSwitchMap.put(key.substring(0, key.lastIndexOf("_")), new String[]{this.tecla.getValue(), this.morse.getValue()});
+		mSwitchMap.put(key.substring(0, key.lastIndexOf("_")), new String[]{this.tecla.getValue(), ""/*this.morse.getValue()*/}); // FIXME: Uncomment when adding morse
+
 		this.refreshSummaries();
 	}
 
@@ -48,7 +49,7 @@ public class SwitchPreference {
 	 */
 	public static void addToMap(SwitchPreference switchPref) {
 		HashMap<String,String[]> mSwitchMap = TeclaApp.persistence.getSwitchMap();
-		mSwitchMap.put(switchPref.prefScreen.getKey(), new String[]{switchPref.tecla.getValue(), switchPref.morse.getValue()});
+		mSwitchMap.put(switchPref.prefScreen.getKey(), new String[]{switchPref.tecla.getValue(), ""/*switchPref.morse.getValue()*/}); // FIXME: Uncomment when adding morse
 	}
 
 	/**
@@ -56,8 +57,8 @@ public class SwitchPreference {
 	 */
 	public void refreshSummaries() {
 		this.tecla.setSummary(this.tecla.getEntry());
-		this.morse.setSummary(this.morse.getEntry());
-		this.prefScreen.setSummary(this.tecla.getEntry() + " / " + this.morse.getEntry());
+//		this.morse.setSummary(this.morse.getEntry()); // FIXME: Uncomment when adding morse
+		this.prefScreen.setSummary(this.tecla.getEntry() /*+ " / " + this.morse.getEntry()*/); // FIXME: Uncomment when adding morse
 	}
 	
 

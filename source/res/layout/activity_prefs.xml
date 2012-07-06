@@ -49,12 +49,12 @@
         android:summary="@string/pref_voice_input_summary"
         android:title="@string/pref_voice_input" />
 
-    <CheckBoxPreference
+    <!-- <CheckBoxPreference
         android:defaultValue="false"
         android:key="speakerphone_switch"
         android:persistent="true"
         android:summary="@string/speakerphone_switch_summary"
-        android:title="@string/speakerphone_switch" />
+        android:title="@string/speakerphone_switch" /> -->
 
     <PreferenceCategory
         android:key="alternative_input_settings"
@@ -69,91 +69,8 @@
         <PreferenceScreen
             android:key="configure_input"
             android:summary="@string/define_switch_action_summary"
+            android:dependency="shield_connect"
             android:title="@string/define_switch_action" >
-
-            <PreferenceScreen
-                android:key="switch_j1"
-                android:title="@string/switch_j1" >
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="1"
-                    android:entries="@array/listArray"
-                    android:entryValues="@array/listValues"
-                    android:key="switch_j1_tecla"
-                    android:persistent="true"
-                    android:title="@string/switch_j1_tecla" />
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="1"
-                    android:entries="@array/morseArray"
-                    android:entryValues="@array/morseValues"
-                    android:key="switch_j1_morse"
-                    android:persistent="true"
-                    android:title="@string/switch_j1_morse" />
-            </PreferenceScreen>
-
-            <PreferenceScreen
-                android:key="switch_j2"
-                android:title="@string/switch_j2" >
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="2"
-                    android:entries="@array/listArray"
-                    android:entryValues="@array/listValues"
-                    android:key="switch_j2_tecla"
-                    android:persistent="true"
-                    android:title="@string/switch_j2_tecla" />
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="2"
-                    android:entries="@array/morseArray"
-                    android:entryValues="@array/morseValues"
-                    android:key="switch_j2_morse"
-                    android:persistent="true"
-                    android:title="@string/switch_j2_morse" />
-            </PreferenceScreen>
-
-            <PreferenceScreen
-                android:key="switch_j3"
-                android:title="@string/switch_j3" >
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="3"
-                    android:entries="@array/listArray"
-                    android:entryValues="@array/listValues"
-                    android:key="switch_j3_tecla"
-                    android:persistent="true"
-                    android:title="@string/switch_j3_tecla" />
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="3"
-                    android:entries="@array/morseArray"
-                    android:entryValues="@array/morseValues"
-                    android:key="switch_j3_morse"
-                    android:persistent="true"
-                    android:title="@string/switch_j3_morse" />
-            </PreferenceScreen>
-
-            <PreferenceScreen
-                android:key="switch_j4"
-                android:title="@string/switch_j4" >
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="4"
-                    android:entries="@array/listArray"
-                    android:entryValues="@array/listValues"
-                    android:key="switch_j4_tecla"
-                    android:persistent="true"
-                    android:title="@string/switch_j4_tecla" />
-
-                <ca.idi.tecla.lib.ListPreference
-                    android:defaultValue="4"
-                    android:entries="@array/morseArray"
-                    android:entryValues="@array/morseValues"
-                    android:key="switch_j4_morse"
-                    android:persistent="true"
-                    android:title="@string/switch_j4_morse" />
-            </PreferenceScreen>
 
             <PreferenceScreen
                 android:key="switch_e1"
@@ -167,13 +84,13 @@
                     android:persistent="true"
                     android:title="@string/switch_e1_tecla" />
 
-                <ca.idi.tecla.lib.ListPreference
+                <!-- <ca.idi.tecla.lib.ListPreference
                     android:defaultValue="0"
                     android:entries="@array/morseArray"
                     android:entryValues="@array/morseValues"
                     android:key="switch_e1_morse"
                     android:persistent="true"
-                    android:title="@string/switch_e1_morse" />
+                    android:title="@string/switch_e1_morse" /> -->
             </PreferenceScreen>
 
             <PreferenceScreen
@@ -188,13 +105,97 @@
                     android:persistent="true"
                     android:title="@string/switch_e2_tecla" />
 
-                <ca.idi.tecla.lib.ListPreference
+                <!-- <ca.idi.tecla.lib.ListPreference
                     android:defaultValue="0"
                     android:entries="@array/morseArray"
                     android:entryValues="@array/morseValues"
                     android:key="switch_e2_morse"
                     android:persistent="true"
-                    android:title="@string/switch_e2_morse" />
+                    android:title="@string/switch_e2_morse" /> -->
+            </PreferenceScreen>
+
+            <PreferenceScreen
+                android:key="switch_j1"
+                android:title="@string/switch_j1" >
+
+                <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="1"
+                    android:entries="@array/listArray"
+                    android:entryValues="@array/listValues"
+                    android:key="switch_j1_tecla"
+                    android:persistent="true"
+                    android:title="@string/switch_j1_tecla" />
+
+                <!-- <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="1"
+                    android:entries="@array/morseArray"
+                    android:entryValues="@array/morseValues"
+                    android:key="switch_j1_morse"
+                    android:persistent="true"
+                    android:title="@string/switch_j1_morse" /> -->
+            </PreferenceScreen>
+
+            <PreferenceScreen
+                android:key="switch_j2"
+                android:title="@string/switch_j2" >
+
+                <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="2"
+                    android:entries="@array/listArray"
+                    android:entryValues="@array/listValues"
+                    android:key="switch_j2_tecla"
+                    android:persistent="true"
+                    android:title="@string/switch_j2_tecla" />
+
+                <!-- <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="2"
+                    android:entries="@array/morseArray"
+                    android:entryValues="@array/morseValues"
+                    android:key="switch_j2_morse"
+                    android:persistent="true"
+                    android:title="@string/switch_j2_morse" /> -->
+            </PreferenceScreen>
+
+            <PreferenceScreen
+                android:key="switch_j3"
+                android:title="@string/switch_j3" >
+
+                <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="3"
+                    android:entries="@array/listArray"
+                    android:entryValues="@array/listValues"
+                    android:key="switch_j3_tecla"
+                    android:persistent="true"
+                    android:title="@string/switch_j3_tecla" />
+
+                <!-- <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="3"
+                    android:entries="@array/morseArray"
+                    android:entryValues="@array/morseValues"
+                    android:key="switch_j3_morse"
+                    android:persistent="true"
+                    android:title="@string/switch_j3_morse" /> -->
+            </PreferenceScreen>
+
+            <PreferenceScreen
+                android:key="switch_j4"
+                android:title="@string/switch_j4" >
+
+                <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="4"
+                    android:entries="@array/listArray"
+                    android:entryValues="@array/listValues"
+                    android:key="switch_j4_tecla"
+                    android:persistent="true"
+                    android:title="@string/switch_j4_tecla" />
+
+                <!-- <ca.idi.tecla.lib.ListPreference
+                    android:defaultValue="4"
+                    android:entries="@array/morseArray"
+                    android:entryValues="@array/morseValues"
+                    android:key="switch_j4_morse"
+                    android:persistent="true"
+                    android:title="@string/switch_j4_morse" /> -->
             </PreferenceScreen>
 
             <PreferenceCategory
@@ -209,11 +210,11 @@
             </PreferenceCategory>
         </PreferenceScreen>
 
-        <Preference
+        <!-- <Preference
             android:key="full_reset_timeout"
             android:persistent="true"
             android:summary="@string/fullreset_timeout_summary"
-            android:title="@string/fullreset_timeout" />
+            android:title="@string/fullreset_timeout" /> -->
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -236,7 +237,7 @@
             android:title="@string/autohide_timeout" />
     </PreferenceCategory>
 
-    <PreferenceCategory
+    <!-- <PreferenceCategory
         android:key="morse_input_settings"
         android:title="@string/morse_input_category" >
 
@@ -252,7 +253,7 @@
             android:persistent="true"
             android:summary="@string/mrepeat_frequency_summary"
             android:title="@string/mrepeat_frequency" />
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 
     <PreferenceCategory
         android:key="scanning_settings"
@@ -290,7 +291,7 @@
             android:summary="@string/quick_fixes_summary"
             android:title="@string/quick_fixes" />
 
-        <CheckBoxPreference
+        <!-- <CheckBoxPreference
             android:defaultValue="@bool/show_suggestions"
             android:enabled="false"
             android:key="show_suggestions"
@@ -305,7 +306,7 @@
             android:key="auto_complete"
             android:persistent="true"
             android:summary="@string/auto_complete_summary"
-            android:title="@string/auto_complete" />
+            android:title="@string/auto_complete" /> -->
     </PreferenceCategory>
 
 </PreferenceScreen>

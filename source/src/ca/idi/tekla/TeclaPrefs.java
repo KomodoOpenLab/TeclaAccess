@@ -175,7 +175,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
-			mPrefMorse.setEnabled(false);
+//			mPrefMorse.setEnabled(false); // FIXME: Uncomment when adding morse
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
 
@@ -235,7 +235,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
 			.removePreference(mQuickFixes);
 		} else {
-			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
+			//FIXME: Enable when adding suggestions
+//			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
 		}
 	}
 
@@ -314,13 +315,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
-				mPrefPersistentKeyboard.setChecked(true);
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
-				mPrefMorse.setEnabled(true);
+//				mPrefMorse.setEnabled(true); // FIXME: Uncomment when adding morse
+				mPrefPersistentKeyboard.setChecked(true);
 			}
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {

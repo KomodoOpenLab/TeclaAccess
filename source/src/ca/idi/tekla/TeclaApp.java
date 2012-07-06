@@ -213,7 +213,7 @@ public class TeclaApp extends Application {
 	
 	public void postDelayedFullReset(long delay) {
 		cancelFullReset();
-		mHandler.postDelayed(mFullResetRunnable, delay);
+		mHandler.postDelayed(mFullResetRunnable, delay * 1000);
 	}
 	
 	public void cancelFullReset() {
