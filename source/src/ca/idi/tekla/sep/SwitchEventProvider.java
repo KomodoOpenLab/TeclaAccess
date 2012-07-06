@@ -317,8 +317,12 @@ public class SwitchEventProvider extends Service implements Runnable {
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {
-				long fullResetDelay=TeclaApp.persistence.getFullResetTimeout();
-				TeclaApp.getInstance().postDelayedFullReset(fullResetDelay);
+				if(!TeclaApp.persistence.isMorseModeEnabled()) {
+					//Disables sending a category.HOME intent when
+					//using Morse repeat-on-switch-down
+					long fullResetDelay=TeclaApp.persistence.getFullResetTimeout();
+					TeclaApp.getInstance().postDelayedFullReset(fullResetDelay);
+				}
 			}
 			
 		}
