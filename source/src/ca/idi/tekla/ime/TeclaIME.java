@@ -129,6 +129,11 @@ public class TeclaIME extends InputMethodService
 	private static final int CAPS_LOCK_NEXT = 1;
 	private static final int CAPS_LOCK_ALL = 2;
 	private Integer mCapsLockState = CAPS_LOCK_OFF;
+	
+	//Morse switch modes
+	private static final int TRIPLE_SWITCH_MODE = 0;
+	private static final int DOUBLE_SWITCH_MODE = 1;
+	private static final int SINGLE_SWITCH_MODE = 2;
 
 	private UserDictionary mUserDictionary;
 	private ContactsDictionary mContactsDictionary;
@@ -1743,6 +1748,75 @@ public class TeclaIME extends InputMethodService
 		}
 	};
 	
+	private Runnable mEndOfCharRunnable = new Runnable() {
+		public void run() {
+			emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+		}
+	};
+	
+	private void evaluateEndOfChar() {
+		if (TeclaApp.persistence.getMorseSwitchMode() == TRIPLE_SWITCH_MODE)
+			return;
+		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
+		mTeclaHandler.postDelayed(mEndOfCharRunnable, 600); //TODO: replace hard-coded value with pref
+	}
+	
+	private void handleMorseSwitch(SwitchEvent switchEvent, int action) {
+		switch(action) {
+
+		case 1:
+			//Add a dit to the current Morse sequence (repeatable)
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
+				startRepeating();
+			}
+			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+				stopRepeating();
+				evaluateEndOfChar();
+			}
+			break;
+
+		case 2:
+			//Add a dah to the current Morse sequence (repeatable)
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
+				startRepeating();
+			}
+			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+				stopRepeating();
+				evaluateEndOfChar();
+			}
+			break;
+
+		case 3:
+			//Send through a space key event: acts as an end of char signal
+			//if the current sequence represents a valid character, otherwise
+			//inserts a simple space
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+				emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+			break;
+
+		case 4:
+			//Send through a backspace event (repeatable)
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
+				startRepeating();
+			}
+			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
+				stopRepeating();
+			}
+			break;
+
+		case 5:
+			//Hide the Morse IME view
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
+				emulateMorseKey(Keyboard.KEYCODE_DONE);
+			break;
+		default:
+			break;
+		}
+	}
+	
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
 		//Emulator issue (temporary fix): if typing too fast, or holding a long press
@@ -1764,57 +1838,7 @@ public class TeclaIME extends InputMethodService
 			if (mKeyboardSwitcher.isMorseMode()) {
 				//Switches have different actions when Morse keyboard is showing
 				String action_morse = action[1];
-				switch(Integer.parseInt(action_morse)) {
-				
-					case 1:
-						//Add a dit to the current Morse sequence (repeatable)
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
-							startRepeating();
-						}
-						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
-							stopRepeating();
-						}
-						break;
-						
-					case 2:
-						//Add a dah to the current Morse sequence (repeatable)
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
-							startRepeating();
-						}
-						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
-							stopRepeating();
-						}
-						break;
-						
-					case 3:
-						//Send through a space key event: acts as an end of char signal
-						//if the current sequence represents a valid character, otherwise
-						//inserts a simple space
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
-							emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
-						break;
-						
-					case 4:
-						//Send through a backspace event (repeatable)
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
-							mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
-							startRepeating();
-						}
-						if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
-							stopRepeating();
-						}
-						break;
-						
-					case 5:
-						//Hide the Morse IME view
-						if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
-							emulateMorseKey(Keyboard.KEYCODE_DONE);
-						break;
-					default:
-						break;
-				}
+				handleMorseSwitch(switchEvent, Integer.parseInt(action_morse));
 			}
 			
 			else {

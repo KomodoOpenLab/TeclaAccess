@@ -37,7 +37,7 @@
 		<string-array name="morse_switch_mode_array">
 		    <item>Triple-switch mode</item>
    			<item>Double-switch mode</item>
-   			<item>Mono-switch mode</item>
+   			<item>Single-switch mode</item>
 		</string-array>
  
 		<string-array name="morse_switch_mode_values">
