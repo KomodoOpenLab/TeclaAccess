@@ -226,7 +226,7 @@
     <string name="shield_connect">Connect to Tecla Shield</string>
     <string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
     <string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
-    <string name="shield_connect_summary">Check to connect to a nearby Tecla Shield</string>
+    <string name="shield_connect_summary">Establishes a connection to a nearby Tecla Shield</string>
 
     <!-- Option to enable fullscreen switch mode -->
     <string name="fullscreen_switch">Fullscreen switch mode</string>
