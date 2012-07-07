@@ -37,7 +37,7 @@ public class TeclaApp extends Application {
 	/**
 	 * Main debug switch, turns on/off debugging for the whole app
 	 */
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
@@ -213,7 +213,7 @@ public class TeclaApp extends Application {
 	
 	public void postDelayedFullReset(long delay) {
 		cancelFullReset();
-		mHandler.postDelayed(mFullResetRunnable, delay * 1000);
+		mHandler.postDelayed(mFullResetRunnable, delay);
 	}
 	
 	public void cancelFullReset() {

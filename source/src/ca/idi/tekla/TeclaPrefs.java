@@ -66,7 +66,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
 
 	private CheckBoxPreference mQuickFixes;
-	private CheckBoxPreference mShowSuggestions;
+//	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
 
@@ -86,6 +86,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private ScanSpeedDialog mScanSpeedDialog;
 	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
+	private FullResetTimeoutDialog mFullResetTimeoutDialog;
 	private PreferenceScreen mConfigureInputScreen;
 	private BaseAdapter mConfigureInputAdapter;
 	
@@ -98,9 +99,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
-	
-	private FullResetTimeoutDialog mFullResetTimeoutDialog;
-	
+		
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -115,7 +114,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		addPreferencesFromResource(R.layout.activity_prefs);
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
-		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
+//		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
@@ -595,6 +594,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE1.setDefaultValues(4, 0);
 		mSwitchE2.setDefaultValues(3, 0);
 		updateSwitchMap();
+		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
 	}
 
 }

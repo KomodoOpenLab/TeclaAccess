@@ -1818,7 +1818,7 @@ public class TeclaIME extends InputMethodService
 			}
 			
 			else {
-				String action_tecla = action[0];
+				String action_tecla = action[0];  //FIXME: Crashing when switch event is sent right after starting SEP
 				switch(Integer.parseInt(action_tecla)) {
 
 				case 1:
