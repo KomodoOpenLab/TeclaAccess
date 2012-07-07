@@ -3,8 +3,8 @@ package ca.idi.tekla.util;
 import java.util.HashMap;
 
 import ca.idi.tekla.TeclaApp;
+import ca.idi.tecla.lib.ListPreference;
 
-import android.preference.ListPreference;
 import android.preference.PreferenceScreen;
 
 public class SwitchPreference {

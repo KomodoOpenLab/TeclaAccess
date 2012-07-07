@@ -72,6 +72,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefPersistentKeyboard;
+	private Preference mPrefMorseSwitchMode;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
@@ -118,6 +119,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
+		mPrefMorseSwitchMode = (ListPreference) findPreference(Persistence.PREF_MORSE_SWITCH_MODE);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);

@@ -262,6 +262,15 @@
             android:summary="@string/morse_mode_summary"
             android:title="@string/morse_mode" />
 
+        <ca.idi.tecla.lib.ListPreference
+            android:defaultValue="0"
+            android:entries="@array/morse_switch_mode_array"
+            android:entryValues="@array/morse_switch_mode_values"
+            android:key="morse_switch_mode"
+            android:persistent="true"
+            android:title="@string/morse_switch_mode" 
+            android:summary="@string/morse_switch_mode_summary"/>
+
         <Preference
             android:key="morse_repeat_int"
             android:persistent="true"

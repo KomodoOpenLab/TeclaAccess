@@ -329,6 +329,7 @@
     <string name="switch_j4_morse">ECU 4 / Right Morse action</string>
     <string name="switch_e1_morse">Switch 1 Morse action</string>
     <string name="switch_e2_morse">Switch 2 Morse action</string>
+
     <string name="switch_default">Restore default actions</string>
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
@@ -343,6 +344,10 @@
     <string name="dialog_slower">Slower</string>
     <string name="btn_done">Done</string>
 
+	<!--  Morse switch mode strings -->
+	<string name="morse_switch_mode">Morse switch input method</string>
+	<string name="morse_switch_mode_summary">Select your desired Morse switch input method</string>
+		
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
     <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
