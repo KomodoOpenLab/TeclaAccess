@@ -32,7 +32,7 @@ public class FullResetTimeoutDialog extends Dialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTitle(R.string.fullreset_timeout_dlg_title);
+		setTitle(R.string.fullreset_timeout);
 
 		long timeout = TeclaApp.persistence.getFullResetTimeout();
 		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);

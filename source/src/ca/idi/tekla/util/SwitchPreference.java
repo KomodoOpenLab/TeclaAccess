@@ -39,7 +39,7 @@ public class SwitchPreference {
 	 */
 	public void setDefaultValues(int a, int b) {
 		this.tecla.setValueIndex(a);
-		this.morse.setValueIndex(b);
+//		this.morse.setValueIndex(b); // FIXME: Uncomment when adding morse
 	}
 
 	/**
