@@ -73,6 +73,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefMorseSwitchMode;
+	private ListPreference mPrefMorseSpeedRatio;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
@@ -121,6 +122,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
 		mPrefMorseSwitchMode = (ListPreference) findPreference(Persistence.PREF_MORSE_SWITCH_MODE);
+		mPrefMorseSpeedRatio = (ListPreference) findPreference(Persistence.PREF_MORSE_SPEED_RATIO);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
@@ -199,6 +201,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefInverseScanning.setEnabled(false);
 		}
 		
+		mPrefMorseSpeedRatio.setSummary(mPrefMorseSpeedRatio.getEntry());
 		refreshSwitchesSummary();
 		
 		//Initialize switch map according to prefs
@@ -404,6 +407,10 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefConnectToShield.setChecked(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
+		}
+		if (key.equals(Persistence.PREF_MORSE_SPEED_RATIO)) {
+			mPrefMorseSpeedRatio.setSummary(mPrefMorseSpeedRatio.getEntry());
+			TeclaApp.persistence.setMorseSpeedRatio(Integer.parseInt((String) mPrefMorseSpeedRatio.getEntry()));
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
 			mSwitchJ1.onPreferenceChanged(key);

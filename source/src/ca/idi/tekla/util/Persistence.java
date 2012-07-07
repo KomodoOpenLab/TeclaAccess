@@ -22,6 +22,7 @@ public class Persistence {
 	public static final String PREF_VARIANTS_KEY = "variants_key";
 	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_MORSE_SWITCH_MODE = "morse_switch_mode";
+	public static final String PREF_MORSE_SPEED_RATIO = "m_speed_ratio";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	
@@ -235,6 +236,15 @@ public class Persistence {
 		//getInt does not work with ListPreference and string type arrays,
 		//so use getString instead
 		return Integer.parseInt(shared_prefs.getString(PREF_MORSE_SWITCH_MODE, DEFAULT_MORSE_SWITCH_MODE));
+	}
+
+	public void setMorseSpeedRatio(int speed) {
+		prefs_editor.putInt(PREF_MORSE_SPEED_RATIO, speed);
+		prefs_editor.commit();
+	}
+	
+	public int getMorseSpeedRatio() {
+		return shared_prefs.getInt(PREF_MORSE_SPEED_RATIO, 100);
 	}
 
 }

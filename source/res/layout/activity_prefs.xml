@@ -249,18 +249,26 @@
 
         <ca.idi.tecla.lib.ListPreference
             android:defaultValue="0"
+            android:key="morse_switch_mode"
             android:entries="@array/morse_switch_mode_array"
             android:entryValues="@array/morse_switch_mode_values"
-            android:key="morse_switch_mode"
             android:persistent="true"
             android:title="@string/morse_switch_mode" 
             android:summary="@string/morse_switch_mode_summary"/>
-
+        
+        <ca.idi.tecla.lib.ListPreference
+            android:defaultValue="0"
+            android:entries="@array/morse_speed_ratio_array"
+            android:entryValues="@array/morse_speed_ratio_values"
+            android:key="m_speed_ratio"
+            android:persistent="true"
+            android:title="@string/morse_speed_ratio" />
+        
         <Preference
             android:key="morse_repeat_int"
             android:persistent="true"
-            android:summary="@string/mrepeat_frequency_summary"
-            android:title="@string/mrepeat_frequency" />
+            android:title="@string/mrepeat_frequency"
+            android:summary="@string/mrepeat_frequency_summary"/>
     </PreferenceCategory>
 
     <PreferenceCategory

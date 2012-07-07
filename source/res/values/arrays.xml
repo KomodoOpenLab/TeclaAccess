@@ -46,4 +46,20 @@
    			<item>2</item>
 		</string-array>
 		
+		<string-array name="morse_speed_ratio_array">
+		    <item>100s</item>
+		    <item>150s</item>
+		    <item>200s</item>
+		    <item>250s</item>
+		    <item>300s</item>
+		</string-array>
+		
+		<string-array name="morse_speed_ratio_values">
+		    <item>0</item>
+		    <item>1</item>
+		    <item>2</item>
+		    <item>3</item>
+		    <item>4</item>
+		</string-array>
+		
 	</resources>

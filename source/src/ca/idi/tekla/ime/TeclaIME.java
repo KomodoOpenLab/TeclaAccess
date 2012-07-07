@@ -1721,6 +1721,7 @@ public class TeclaIME extends InputMethodService
 	public void pauseRepeating() {
 		mTeclaHandler.removeCallbacks(mRepeatRunnable);
 		mTeclaHandler.removeCallbacks(mStartRepeatRunnable);
+		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
 	}
 	
 	public void stopRepeating() {
@@ -1837,8 +1838,7 @@ public class TeclaIME extends InputMethodService
 			
 			if (mKeyboardSwitcher.isMorseMode()) {
 				//Switches have different actions when Morse keyboard is showing
-				String action_morse = action[1];
-				handleMorseSwitch(switchEvent, Integer.parseInt(action_morse));
+				handleMorseSwitch(switchEvent, Integer.parseInt(action[1]));
 			}
 			
 			else {
