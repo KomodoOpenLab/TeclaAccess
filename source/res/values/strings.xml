@@ -257,8 +257,8 @@
 
     <string-array name="switch_actions">
         <item>None</item>
-        <item>Highlight next</item>
-        <item>Highlight previous</item>
+        <item>Step-scan next</item>
+        <item>Step-scan previous</item>
         <item>Step out / Cancel</item>
         <item>Select highlighted</item>
     </string-array>
