@@ -410,7 +410,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_MORSE_SPEED_RATIO)) {
 			mPrefMorseSpeedRatio.setSummary(mPrefMorseSpeedRatio.getEntry());
-			TeclaApp.persistence.setMorseSpeedRatio(Integer.parseInt((String) mPrefMorseSpeedRatio.getEntry()));
+			TeclaApp.persistence.setMorseSpeedRatio(mPrefMorseSpeedRatio.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
 			mSwitchJ1.onPreferenceChanged(key);

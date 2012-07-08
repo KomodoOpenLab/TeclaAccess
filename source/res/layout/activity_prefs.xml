@@ -257,10 +257,10 @@
             android:summary="@string/morse_switch_mode_summary"/>
         
         <ca.idi.tecla.lib.ListPreference
-            android:defaultValue="0"
+            android:defaultValue="100"
             android:entries="@array/morse_speed_ratio_array"
             android:entryValues="@array/morse_speed_ratio_values"
-            android:key="m_speed_ratio"
+            android:key="morse_speed_ratio"
             android:persistent="true"
             android:title="@string/morse_speed_ratio" />
         
