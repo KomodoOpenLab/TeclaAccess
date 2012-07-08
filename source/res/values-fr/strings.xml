@@ -115,7 +115,7 @@
 	<string name="connecting_tecla_shield">Connexion au Tecla Shield</string>
 	<string name="couldnt_connect_shield">Impossible de se connecter au Tecla Shield</string>
 	<string name="no_shields_inrange">Pas de Tecla Shield à portée</string>
-	<string name="searching_for_shields">Recherche de Tecla Shields. Merci de patienter...</string>
+	<string name="searching_for_shields">Recherche de Tecla Shields. Merci de patienter…</string>
 	<string name="fullscreen_enabled">Interrupteur en mode plein écran activé</string>
 	<string name="fullscreen_disabled">Interrupteur en mode plein écran désactivé</string>
 	<string name="tecla_notselected">Le clavier Tecla n\'est pas sélectionné !</string>
@@ -123,9 +123,9 @@
 	<string name="shield_disconnected">Tecla Shield déconnecté</string>
 	<string name="no_voice_input_available">Aucune application de reconnaissance vocale disponible !</string>
 	<string name="no_voice_actions_installed">Voice Actions n\'est pas installé !</string>
-	<string name="sep_label">Tecla shield...</string>
+	<string name="sep_label">Tecla shield…</string>
 	<string name="voice_input">Entrée vocale Tecla</string>
-	<string name="configuring_tecla">Configuration de Tecla...</string>
+	<string name="configuring_tecla">Configuration de Tecla…</string>
 	<string-array name="prediction_modes">
 	  <item>Aucun</item>
 	  <item>Basique</item>

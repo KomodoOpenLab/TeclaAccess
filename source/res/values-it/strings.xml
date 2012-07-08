@@ -115,7 +115,7 @@
 	<string name="connecting_tecla_shield">Connessione a Tecla Shield</string>
 	<string name="couldnt_connect_shield">Impossibile connettersi a Tecla Shield</string>
 	<string name="no_shields_inrange">Nessun Tecla Shield nelle vicinanze</string>
-	<string name="searching_for_shields">Ricerca del Tecla Shield. Attendere prego...</string>
+	<string name="searching_for_shields">Ricerca del Tecla Shield. Attendere prego…</string>
 	<string name="fullscreen_enabled">Sensore a schermo intero abilitato</string>
 	<string name="fullscreen_disabled">Sensore a schermo intero disabilitato</string>
 	<string name="tecla_notselected">Tastiera Tecla non selezionata!</string>
@@ -125,7 +125,7 @@
 	<string name="no_voice_actions_installed">Voice Actions non è installato!</string>
 	<string name="sep_label">Provider di eventi di interruttore</string>
 	<string name="voice_input">Controllo vocale Tecla</string>
-	<string name="configuring_tecla">Configurazione di Tecla...</string>
+	<string name="configuring_tecla">Configurazione di Tecla…</string>
 	<string-array name="prediction_modes">
 		<item>"Nessuna"</item>
 		<item>"Base"</item>

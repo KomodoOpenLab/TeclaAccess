@@ -6,7 +6,6 @@ package ca.idi.tekla.util;
 
 import java.util.HashMap;
 
-import android.R;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -15,7 +15,7 @@
 		android:id="@+id/linearLayout1">
         <TextView
         	android:layout_height="wrap_content"
-        	android:layout_width="fill_parent"
+        	android:layout_width="0dp"
         	android:text="@string/dialog_confirm_reset"
         	android:gravity="center"
         	android:id="@+id/txtView1" android:layout_weight="1"/>
@@ -25,7 +25,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
 		android:orientation="horizontal"
-		android:id="@+id/linearLayout1" android:layout_marginTop="8sp">
+		android:id="@+id/linearLayout2" android:layout_marginTop="8sp">
 		<Button
 			android:id="@+id/default_dlg_btn_yes"
 			android:text="@string/btn_yes"
