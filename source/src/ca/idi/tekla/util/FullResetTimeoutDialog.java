@@ -32,9 +32,13 @@ public class FullResetTimeoutDialog extends Dialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+	}
+	
+	@Override
+	protected void onStart() {
 		setTitle(R.string.fullreset_timeout);
 
-		long timeout = TeclaApp.persistence.getFullResetTimeout();
+		int timeout = TeclaApp.persistence.getFullResetTimeout();
 		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);
 		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.full_reset_values);
 
@@ -60,8 +64,9 @@ public class FullResetTimeoutDialog extends Dialog
 		mSeekBar.setProgress(mSeekBarPos);
 		mSeekBar.setOnSeekBarChangeListener(this);
 		mSeekBar.requestFocus();
+		super.onStart();
 	}
-	
+
 	public FullResetTimeoutDialog(Context context) {
 		super(context);
 		setOnKeyListener(this);

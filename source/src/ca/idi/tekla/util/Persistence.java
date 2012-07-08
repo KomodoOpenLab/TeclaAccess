@@ -58,8 +58,8 @@ public class Persistence {
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
 	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
-	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3; //milliseconds
 	public static final String DEFAULT_MORSE_SWITCH_MODE = "0";
+	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int DEFAULT_REPEAT_FREQ = 750;
 	public static final int MAX_SCAN_DELAY = 3000;
@@ -146,13 +146,13 @@ public class Persistence {
 		return shared_prefs.getInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
 	}
 	
-	public void setFullResetTimeout(long timeout) {
-		prefs_editor.putLong(PREF_FULL_RESET_TIMEOUT, timeout);
+	public void setFullResetTimeout(int timeout) {
+		prefs_editor.putInt(PREF_FULL_RESET_TIMEOUT, timeout);
 		prefs_editor.commit();
 	}
 	
-	public long getFullResetTimeout() {
-		return shared_prefs.getLong(PREF_FULL_RESET_TIMEOUT,DEFAULT_FULL_RESET_TIMEOUT);
+	public int getFullResetTimeout() {
+		return shared_prefs.getInt(PREF_FULL_RESET_TIMEOUT,DEFAULT_FULL_RESET_TIMEOUT);
 	}
 
 	public void setConnectToShield(boolean shieldConnect) {

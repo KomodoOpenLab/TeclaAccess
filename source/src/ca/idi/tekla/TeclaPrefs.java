@@ -62,7 +62,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	 */
 	private static final String CLASS_TAG = "Prefs: ";
 	private static final String QUICK_FIXES_KEY = "quick_fixes";
-	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
+//	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
 	private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
 
 	private CheckBoxPreference mQuickFixes;
@@ -589,6 +589,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	}
 	
 	public static void setDefaultSwitchActions() {
+		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
 		mSwitchJ1.setDefaultValues(1, 1);
 		mSwitchJ2.setDefaultValues(2, 2);
 		mSwitchJ3.setDefaultValues(3, 3);
@@ -596,7 +597,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE1.setDefaultValues(4, 0);
 		mSwitchE2.setDefaultValues(3, 0);
 		updateSwitchMap();
-		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
 	}
 
 }
