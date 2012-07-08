@@ -200,10 +200,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		
 		refreshSwitchesSummary();
 		
-		//Initialize switch map according to prefs
-		mSwitchMap = TeclaApp.persistence.getSwitchMap();
-		updateSwitchMap();
-
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
 		if (!TeclaApp.getInstance().isDefaultIME()) {
@@ -578,25 +574,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE2.refreshSummaries();
 	}
 	
-	private static void updateSwitchMap() {	
-		mSwitchMap.clear();
-		SwitchPreference.addToMap(mSwitchJ1);
-		SwitchPreference.addToMap(mSwitchJ2);
-		SwitchPreference.addToMap(mSwitchJ3);
-		SwitchPreference.addToMap(mSwitchJ4);
-		SwitchPreference.addToMap(mSwitchE1);
-		SwitchPreference.addToMap(mSwitchE2);
-	}
-	
 	public static void setDefaultSwitchActions() {
 		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
-		mSwitchJ1.setDefaultValues(1, 1);
-		mSwitchJ2.setDefaultValues(2, 2);
-		mSwitchJ3.setDefaultValues(3, 3);
-		mSwitchJ4.setDefaultValues(4, 4);
-		mSwitchE1.setDefaultValues(4, 0);
-		mSwitchE2.setDefaultValues(3, 0);
-		updateSwitchMap();
+		mSwitchJ1.setValues(1, 1);
+		mSwitchJ2.setValues(2, 2);
+		mSwitchJ3.setValues(3, 3);
+		mSwitchJ4.setValues(4, 4);
+		mSwitchE1.setValues(4, 0);
+		mSwitchE2.setValues(3, 0);
 	}
 
 }
