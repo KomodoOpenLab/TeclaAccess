@@ -62,11 +62,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	 */
 	private static final String CLASS_TAG = "Prefs: ";
 	private static final String QUICK_FIXES_KEY = "quick_fixes";
-	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
+//	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
 	private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
 
 	private CheckBoxPreference mQuickFixes;
-	private CheckBoxPreference mShowSuggestions;
+//	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
 
@@ -88,6 +88,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private ScanSpeedDialog mScanSpeedDialog;
 	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
+	private FullResetTimeoutDialog mFullResetTimeoutDialog;
 	private PreferenceScreen mConfigureInputScreen;
 	private BaseAdapter mConfigureInputAdapter;
 	
@@ -100,9 +101,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
-	
-	private FullResetTimeoutDialog mFullResetTimeoutDialog;
-	
+		
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -117,7 +116,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		addPreferencesFromResource(R.layout.activity_prefs);
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
-		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
+//		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
@@ -179,7 +178,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
-			mPrefMorse.setEnabled(false);
+//			mPrefMorse.setEnabled(false); // FIXME: Uncomment when adding morse
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
 
@@ -204,10 +203,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefMorseSpeedRatio.setSummary(mPrefMorseSpeedRatio.getEntry());
 		refreshSwitchesSummary();
 		
-		//Initialize switch map according to prefs
-		mSwitchMap = TeclaApp.persistence.getSwitchMap();
-		updateSwitchMap();
-
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
 		if (!TeclaApp.getInstance().isDefaultIME()) {
@@ -240,7 +235,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
 			.removePreference(mQuickFixes);
 		} else {
-			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
+			//FIXME: Enable when adding suggestions
+//			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
 		}
 	}
 
@@ -319,13 +315,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
-				mPrefPersistentKeyboard.setChecked(true);
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
-				mPrefMorse.setEnabled(true);
+//				mPrefMorse.setEnabled(true); // FIXME: Uncomment when adding morse
+				mPrefPersistentKeyboard.setChecked(true);
 			}
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
@@ -585,24 +581,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE2.refreshSummaries();
 	}
 	
-	private static void updateSwitchMap() {	
-		mSwitchMap.clear();
-		SwitchPreference.addToMap(mSwitchJ1);
-		SwitchPreference.addToMap(mSwitchJ2);
-		SwitchPreference.addToMap(mSwitchJ3);
-		SwitchPreference.addToMap(mSwitchJ4);
-		SwitchPreference.addToMap(mSwitchE1);
-		SwitchPreference.addToMap(mSwitchE2);
-	}
-	
 	public static void setDefaultSwitchActions() {
-		mSwitchJ1.setDefaultValues(1, 1);
-		mSwitchJ2.setDefaultValues(2, 2);
-		mSwitchJ3.setDefaultValues(3, 3);
-		mSwitchJ4.setDefaultValues(4, 4);
-		mSwitchE1.setDefaultValues(4, 0);
-		mSwitchE2.setDefaultValues(3, 0);
-		updateSwitchMap();
+		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
+		mSwitchJ1.setValues(1, 1);
+		mSwitchJ2.setValues(2, 2);
+		mSwitchJ3.setValues(3, 3);
+		mSwitchJ4.setValues(4, 4);
+		mSwitchE1.setValues(4, 0);
+		mSwitchE2.setValues(3, 0);
 	}
 
 }

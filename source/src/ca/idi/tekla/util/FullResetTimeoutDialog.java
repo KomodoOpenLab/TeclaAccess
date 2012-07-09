@@ -32,14 +32,18 @@ public class FullResetTimeoutDialog extends Dialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTitle(R.string.fullreset_timeout_dlg_title);
+	}
+	
+	@Override
+	protected void onStart() {
+		setTitle(R.string.fullreset_timeout);
 
-		long timeout = TeclaApp.persistence.getFullResetTimeout();
+		int timeout = TeclaApp.persistence.getFullResetTimeout();
 		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);
 		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.full_reset_values);
 
 		mSeekBarPos = -1;
-		int value = Persistence.AUTOHIDE_NULL;
+		int value = Persistence.FULLRESET_NULL;
 		while (value != timeout  && mSeekBarPos < (mTimeoutValues.length - 1)) {
 			mSeekBarPos++;
 			value = mTimeoutValues[mSeekBarPos];
@@ -60,8 +64,9 @@ public class FullResetTimeoutDialog extends Dialog
 		mSeekBar.setProgress(mSeekBarPos);
 		mSeekBar.setOnSeekBarChangeListener(this);
 		mSeekBar.requestFocus();
+		super.onStart();
 	}
-	
+
 	public FullResetTimeoutDialog(Context context) {
 		super(context);
 		setOnKeyListener(this);
@@ -80,7 +85,7 @@ public class FullResetTimeoutDialog extends Dialog
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 		mTimeoutLabel.setText(mTimeoutStrings[progress]);
-		TeclaApp.persistence.setNavigationKeyboardTimeout(mTimeoutValues[progress]);
+		TeclaApp.persistence.setFullResetTimeout(mTimeoutValues[progress]);
 	}
 
 	public void onStartTrackingTouch(SeekBar seekBar) {

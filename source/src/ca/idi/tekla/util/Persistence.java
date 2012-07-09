@@ -59,9 +59,9 @@ public class Persistence {
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
 	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
-	public static final String DEFAULT_MORSE_SWITCH_MODE = "0";
 	public static final String DEFAULT_MORSE_SPEED_RATIO = "100";
-	public static final long DEFAULT_FULL_RESET_TIMEOUT = 3; //second
+	public static final String DEFAULT_MORSE_SWITCH_MODE = "0";
+	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int DEFAULT_REPEAT_FREQ = 750;
 	public static final int MAX_SCAN_DELAY = 3000;
@@ -69,6 +69,7 @@ public class Persistence {
 	public static final int MAX_REPEAT_FREQ = 1000;
 	public static final int MIN_REPEAT_FREQ = 500;
 	public static final int AUTOHIDE_NULL = -999;
+	public static final int FULLRESET_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
 	
 	
@@ -147,13 +148,13 @@ public class Persistence {
 		return shared_prefs.getInt(PREF_AUTOHIDE_TIMEOUT, NEVER_AUTOHIDE);
 	}
 	
-	public void setFullResetTimeout(long timeout) {
-		prefs_editor.putLong(PREF_FULL_RESET_TIMEOUT, timeout);
+	public void setFullResetTimeout(int timeout) {
+		prefs_editor.putInt(PREF_FULL_RESET_TIMEOUT, timeout);
 		prefs_editor.commit();
 	}
 	
-	public long getFullResetTimeout() {
-		return shared_prefs.getLong(PREF_FULL_RESET_TIMEOUT,DEFAULT_FULL_RESET_TIMEOUT);
+	public int getFullResetTimeout() {
+		return shared_prefs.getInt(PREF_FULL_RESET_TIMEOUT,DEFAULT_FULL_RESET_TIMEOUT);
 	}
 
 	public void setConnectToShield(boolean shieldConnect) {
@@ -221,6 +222,25 @@ public class Persistence {
 	}
 	
 	public HashMap<String,String[]> getSwitchMap() {
+		mSwitchMap.clear();
+		mSwitchMap.put(PREF_SWITCH_J1,
+				new String[]{shared_prefs.getString(PREF_SWITCH_J1_TECLA, "1"),
+				"0"/*shared_prefs.getString(PREF_SWITCH_J1_MORSE, "1")*/});
+		mSwitchMap.put(PREF_SWITCH_J2,
+				new String[]{shared_prefs.getString(PREF_SWITCH_J2_TECLA, "2"),
+				"0"/*shared_prefs.getString(PREF_SWITCH_J2_MORSE, "2")*/});
+		mSwitchMap.put(PREF_SWITCH_J3,
+				new String[]{shared_prefs.getString(PREF_SWITCH_J3_TECLA, "3"),
+				"0"/*shared_prefs.getString(PREF_SWITCH_J3_MORSE, "3")*/});
+		mSwitchMap.put(PREF_SWITCH_J4,
+				new String[]{shared_prefs.getString(PREF_SWITCH_J4_TECLA, "4"),
+				"0"/*shared_prefs.getString(PREF_SWITCH_J4_MORSE, "4")*/});
+		mSwitchMap.put(PREF_SWITCH_E1,
+				new String[]{shared_prefs.getString(PREF_SWITCH_E1_TECLA, "4"),
+				"0"/*shared_prefs.getString(PREF_SWITCH_E1_MORSE, "0")*/});
+		mSwitchMap.put(PREF_SWITCH_E2,
+				new String[]{shared_prefs.getString(PREF_SWITCH_E2_TECLA, "3"),
+				"0"/*shared_prefs.getString(PREF_SWITCH_E2_MORSE, "0")*/});
 		return mSwitchMap;
 	}
 

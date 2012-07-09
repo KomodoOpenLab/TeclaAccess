@@ -33,16 +33,6 @@
    			<item>4</item>
    			<item>5</item>
 		</string-array>
-				
-		<string-array name="morse_switch_mode_array">
-		    <item>Triple-switch mode</item>
-   			<item>Double-switch mode</item>
-		</string-array>
- 
-		<string-array name="morse_switch_mode_values">
-		    <item>0</item>
-  			<item>1</item>
-		</string-array>
 		
 		<string-array name="morse_speed_ratio_array">
 		    <item>75 ms</item>
@@ -60,4 +50,25 @@
 		    <item>250</item>
 		</string-array>
 		
-	</resources>
+
+    <string-array name="switch_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string-array name="morse_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="morse_switch_mode_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

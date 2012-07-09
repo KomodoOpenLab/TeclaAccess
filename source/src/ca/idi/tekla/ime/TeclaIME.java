@@ -1834,15 +1834,15 @@ public class TeclaIME extends InputMethodService
 		} else {
 			
 			//Collect the mapped actions of the current switch
-			String[] action = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
+			String[] switchActions = TeclaApp.persistence.getSwitchMap().get(switchEvent.toString());
 			
 			if (mKeyboardSwitcher.isMorseMode()) {
 				//Switches have different actions when Morse keyboard is showing
-				handleMorseSwitch(switchEvent, Integer.parseInt(action[1]));
+				handleMorseSwitch(switchEvent, Integer.parseInt(switchActions[1]));
 			}
 			
 			else {
-				String action_tecla = action[0];
+				String action_tecla = switchActions[0];  //FIXME: Null pointer exception when switch event is sent right after starting SEP
 				switch(Integer.parseInt(action_tecla)) {
 
 				case 1:

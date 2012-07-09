@@ -172,6 +172,12 @@
             android:keyIcon="@drawable/sym_keyboard_done"
             android:keyWidth="15%p" />
         <Key
+            android:codes="-2"
+            android:keyLabel="@string/label_alpha_key"
+            android:keyWidth="20%p"
+            android:popupCharacters="_"
+            android:popupKeyboard="@xml/kbd_popup_template" />
+        <Key
             android:keyLabel=","
             android:keyWidth="10%p"
             android:popupCharacters="‚„"
@@ -188,15 +194,9 @@
         <Key
             android:codes="10"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
+            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
-        <Key
-            android:codes="-2"
-            android:keyEdgeFlags="right"
-            android:keyLabel="@string/label_alpha_key"
-            android:keyWidth="20%p"
-            android:popupCharacters="_"
-            android:popupKeyboard="@xml/kbd_popup_template" />
     </Row>
 
 </Keyboard>

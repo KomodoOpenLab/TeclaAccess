@@ -35,9 +35,7 @@ public class DefaultActionsDialog extends Dialog
 	}
 	
 	public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK ||
-			keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
-			keyCode == KeyEvent.KEYCODE_ENTER) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			dismiss();
 			return true;
 		}
