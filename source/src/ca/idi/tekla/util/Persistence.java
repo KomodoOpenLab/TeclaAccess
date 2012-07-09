@@ -225,22 +225,22 @@ public class Persistence {
 		mSwitchMap.clear();
 		mSwitchMap.put(PREF_SWITCH_J1,
 				new String[]{shared_prefs.getString(PREF_SWITCH_J1_TECLA, "1"),
-				"0", shared_prefs.getString(PREF_SWITCH_J1_MORSE, "1")});
+				shared_prefs.getString(PREF_SWITCH_J1_MORSE, "1")});
 		mSwitchMap.put(PREF_SWITCH_J2,
 				new String[]{shared_prefs.getString(PREF_SWITCH_J2_TECLA, "2"),
-				"0", shared_prefs.getString(PREF_SWITCH_J2_MORSE, "2")});
+				shared_prefs.getString(PREF_SWITCH_J2_MORSE, "2")});
 		mSwitchMap.put(PREF_SWITCH_J3,
 				new String[]{shared_prefs.getString(PREF_SWITCH_J3_TECLA, "3"),
-				"0", shared_prefs.getString(PREF_SWITCH_J3_MORSE, "3")});
+				shared_prefs.getString(PREF_SWITCH_J3_MORSE, "3")});
 		mSwitchMap.put(PREF_SWITCH_J4,
 				new String[]{shared_prefs.getString(PREF_SWITCH_J4_TECLA, "4"),
-				"0", shared_prefs.getString(PREF_SWITCH_J4_MORSE, "4")});
+				shared_prefs.getString(PREF_SWITCH_J4_MORSE, "4")});
 		mSwitchMap.put(PREF_SWITCH_E1,
 				new String[]{shared_prefs.getString(PREF_SWITCH_E1_TECLA, "4"),
-				"0", shared_prefs.getString(PREF_SWITCH_E1_MORSE, "0")});
+				shared_prefs.getString(PREF_SWITCH_E1_MORSE, "0")});
 		mSwitchMap.put(PREF_SWITCH_E2,
 				new String[]{shared_prefs.getString(PREF_SWITCH_E2_TECLA, "3"),
-				"0", shared_prefs.getString(PREF_SWITCH_E2_MORSE, "0")});
+				shared_prefs.getString(PREF_SWITCH_E2_MORSE, "0")});
 		return mSwitchMap;
 	}
 
