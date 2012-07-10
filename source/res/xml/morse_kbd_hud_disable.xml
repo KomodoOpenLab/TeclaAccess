@@ -26,11 +26,6 @@
 
         
         <Row
-                android:keyWidth="100%"
-                android:rowEdgeFlags="top"
-                android:keyHeight="30%"/>
-        
-        <Row
                 android:keyWidth="13%"
                 android:rowEdgeFlags="bottom"
                 android:keyHeight="11%">

@@ -62,15 +62,16 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	 */
 	private static final String CLASS_TAG = "Prefs: ";
 	private static final String QUICK_FIXES_KEY = "quick_fixes";
-//	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
+	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
 	private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
 
 	private CheckBoxPreference mQuickFixes;
-//	private CheckBoxPreference mShowSuggestions;
+	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
 
 	private CheckBoxPreference mPrefMorse;
+	private CheckBoxPreference mPrefMorseHUD;
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefMorseSwitchMode;
 	private ListPreference mPrefMorseSpeedRatio;
@@ -116,10 +117,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		addPreferencesFromResource(R.layout.activity_prefs);
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
-//		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
+		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
+		mPrefMorseHUD = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_SHOW_HUD);
 		mPrefMorseSwitchMode = (ListPreference) findPreference(Persistence.PREF_MORSE_SWITCH_MODE);
 		mPrefMorseSpeedRatio = (ListPreference) findPreference(Persistence.PREF_MORSE_SPEED_RATIO);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
@@ -178,7 +180,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
-//			mPrefMorse.setEnabled(false); // FIXME: Uncomment when adding morse
+			mPrefMorse.setEnabled(false);
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
 
@@ -320,7 +322,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
-//				mPrefMorse.setEnabled(true); // FIXME: Uncomment when adding morse
+				mPrefMorse.setEnabled(true);
 				mPrefPersistentKeyboard.setChecked(true);
 			}
 

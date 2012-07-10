@@ -277,7 +277,8 @@ public class TeclaKeyboardView extends KeyboardView {
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas); 
 
-		if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+		if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE &&
+				TeclaApp.persistence.isMorseHudEnabled()) {
 			//Update the state of the Morse HUD display
 			mMorseChart = mTeclaMorse.getMorseChart();
 			mMorseChart.update();

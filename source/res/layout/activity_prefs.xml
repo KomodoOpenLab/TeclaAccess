@@ -247,6 +247,13 @@
             android:persistent="true"
             android:summary="@string/morse_mode_summary"
             android:title="@string/morse_mode" />
+        
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="morse_show_hud"
+            android:persistent="true"
+            android:summary="@string/morse_show_hud_summary"
+            android:title="@string/morse_show_hud" />
 
         <ca.idi.tecla.lib.ListPreference
             android:defaultValue="0"

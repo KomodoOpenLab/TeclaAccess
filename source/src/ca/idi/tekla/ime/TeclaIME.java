@@ -446,7 +446,7 @@ public class TeclaIME extends InputMethodService
 		}
 		
 		initMorseKeyboard();
-		if (mKeyboardSwitcher.isMorseMode()) {
+		if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			mTeclaMorse.getMorseChart().restore();
 			mIMEView.invalidate();
 		}
@@ -1989,7 +1989,7 @@ public class TeclaIME extends InputMethodService
 	private void handleSpecialKey(int keyEventCode) {
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
-				if (mKeyboardSwitcher.isMorseMode()) {
+				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 					mTeclaMorse.getMorseChart().hide();
 				}
 				// Closing
@@ -2007,7 +2007,7 @@ public class TeclaIME extends InputMethodService
 				
 				initMorseKeyboard();
 				
-				if (mKeyboardSwitcher.isMorseMode()) {
+				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 					mTeclaMorse.getMorseChart().restore();
 					mIMEView.invalidate();
 				}

@@ -288,6 +288,10 @@
     <!-- Option to enable Morse input method -->
     <string name="morse_mode">Use Morse input method</string>
     <string name="morse_mode_summary">Enables users to type in Morse</string>
+    
+    <!-- Option to enable Morse HUD display -->
+    <string name="morse_show_hud">Show Morse HUD</string>
+    <string name="morse_show_hud_summary">Displays a chart showing the Morse key/value set</string>
 
     <!-- Category title for Morse settings -->
     <string name="morse_input_category">Morse settings</string>

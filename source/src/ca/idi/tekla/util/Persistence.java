@@ -21,6 +21,7 @@ public class Persistence {
 	public static final String PREF_VARIANTS = "variants";
 	public static final String PREF_VARIANTS_KEY = "variants_key";
 	public static final String PREF_MORSE_MODE = "morse_mode";
+	public static final String PREF_MORSE_SHOW_HUD = "morse_show_hud";
 	public static final String PREF_MORSE_SWITCH_MODE = "morse_switch_mode";
 	public static final String PREF_MORSE_SPEED_RATIO = "morse_speed_ratio";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
@@ -178,6 +179,10 @@ public class Persistence {
 	
 	public boolean isMorseModeEnabled() {
 		return shared_prefs.getBoolean(PREF_MORSE_MODE, false);
+	}
+	
+	public boolean isMorseHudEnabled() {
+		return shared_prefs.getBoolean(PREF_MORSE_SHOW_HUD, true);
 	}
 
 	public boolean isFullscreenSwitchEnabled() {
