@@ -372,7 +372,7 @@
 	<string name="morse_switch_mode_summary">Select your desired Morse switch input method</string>
 	
 	<!-- Morse speed ratio strings -->
-	<string name="morse_speed_ratio">Configure Morse speed ratio</string>
+	<string name="morse_time_unit">Configure Morse code time unit</string>
 	
 	<!-- Switch configuration strings-->
 	<string name="define_switch_action">Configure switch actions</string>

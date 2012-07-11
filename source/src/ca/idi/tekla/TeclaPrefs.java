@@ -74,7 +74,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefMorseHUD;
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefMorseSwitchMode;
-	private ListPreference mPrefMorseSpeedRatio;
+	private ListPreference mPrefMorseTimeUnit;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
@@ -123,7 +123,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
 		mPrefMorseHUD = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_SHOW_HUD);
 		mPrefMorseSwitchMode = (ListPreference) findPreference(Persistence.PREF_MORSE_SWITCH_MODE);
-		mPrefMorseSpeedRatio = (ListPreference) findPreference(Persistence.PREF_MORSE_SPEED_RATIO);
+		mPrefMorseTimeUnit = (ListPreference) findPreference(Persistence.PREF_MORSE_TIME_UNIT);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
@@ -202,7 +202,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefInverseScanning.setEnabled(false);
 		}
 		
-		mPrefMorseSpeedRatio.setSummary(mPrefMorseSpeedRatio.getEntry());
+		mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
 		refreshSwitchesSummary();
 		
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
@@ -406,9 +406,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().requestHideIMEView();
 			}
 		}
-		if (key.equals(Persistence.PREF_MORSE_SPEED_RATIO)) {
-			mPrefMorseSpeedRatio.setSummary(mPrefMorseSpeedRatio.getEntry());
-			TeclaApp.persistence.setMorseSpeedRatio(mPrefMorseSpeedRatio.getValue());
+		if (key.equals(Persistence.PREF_MORSE_TIME_UNIT)) {
+			mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
+			TeclaApp.persistence.setMorseTimeUnit(mPrefMorseTimeUnit.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
 			mSwitchJ1.onPreferenceChanged(key);

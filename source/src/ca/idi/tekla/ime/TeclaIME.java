@@ -1432,7 +1432,7 @@ public class TeclaIME extends InputMethodService
 			// FIXME: Volume and enable should come from UI settings
 			// FIXME: These should be triggered after auto-repeat logic
 			int sound = AudioManager.FX_KEYPRESS_STANDARD;
-			int duration = TeclaApp.persistence.getMorseSpeedRatio();
+			int duration = TeclaApp.persistence.getMorseTimeUnit();
 			
 			switch (primaryCode) {
 			case Keyboard.KEYCODE_DELETE:
@@ -1759,7 +1759,7 @@ public class TeclaIME extends InputMethodService
 		if (TeclaApp.persistence.getMorseSwitchMode() == TRIPLE_SWITCH_MODE)
 			return;
 		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
-		mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseSpeedRatio());
+		mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseTimeUnit());
 	}
 	
 	private void handleMorseSwitch(SwitchEvent switchEvent, int action) {

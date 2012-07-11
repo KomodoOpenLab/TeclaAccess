@@ -23,7 +23,7 @@ public class Persistence {
 	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_MORSE_SHOW_HUD = "morse_show_hud";
 	public static final String PREF_MORSE_SWITCH_MODE = "morse_switch_mode";
-	public static final String PREF_MORSE_SPEED_RATIO = "morse_speed_ratio";
+	public static final String PREF_MORSE_TIME_UNIT = "morse_time_unit";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
 	
@@ -60,7 +60,7 @@ public class Persistence {
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
 	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
-	public static final String DEFAULT_MORSE_SPEED_RATIO = "100";
+	public static final String DEFAULT_MORSE_TIME_UNIT = "100";
 	public static final String DEFAULT_MORSE_SWITCH_MODE = "0";
 	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
 	public static final int DEFAULT_SCAN_DELAY = 1000;
@@ -264,15 +264,15 @@ public class Persistence {
 		return Integer.parseInt(shared_prefs.getString(PREF_MORSE_SWITCH_MODE, DEFAULT_MORSE_SWITCH_MODE));
 	}
 
-	public void setMorseSpeedRatio(String speed) {
-		prefs_editor.putString(PREF_MORSE_SPEED_RATIO, speed);
+	public void setMorseTimeUnit(String speed) {
+		prefs_editor.putString(PREF_MORSE_TIME_UNIT, speed);
 		prefs_editor.commit();
 	}
 	
-	public int getMorseSpeedRatio() {
+	public int getMorseTimeUnit() {
 		//getInt does not work with ListPreference and string type arrays,
 		//so use getString instead
-		return Integer.parseInt(shared_prefs.getString(PREF_MORSE_SPEED_RATIO, DEFAULT_MORSE_SPEED_RATIO));
+		return Integer.parseInt(shared_prefs.getString(PREF_MORSE_TIME_UNIT, DEFAULT_MORSE_TIME_UNIT));
 	}
 
 }
