@@ -35,7 +35,6 @@ public class MorseChart {
 	
 	private LinearLayout.LayoutParams llParams = new LinearLayout.LayoutParams(
 			LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
 	
 	public MorseChart(Context context, TeclaMorse teclaMorse) {
 		mContext = context;
@@ -52,7 +51,7 @@ public class MorseChart {
 	/**
 	 * Initializes the view containers
 	 */
-	public void setViews() {
+	private void setViews() {
 		mTableLayout = new TableLayout[NB_COLUMNS];
 		for (int i = 0; i < NB_COLUMNS; i++) {
 			mTableLayout[i] = new TableLayout(mContext);
@@ -69,15 +68,24 @@ public class MorseChart {
 	public void update() {
         String s = mTeclaMorse.getCurrentChar();
         if ((s.equals("•") || s.equals("-")) && !mUpdated) {
+        	layout.removeAllViews();
+        	setViews();
+        	mUpdated = true;
+        	
         	//Populate the HUD according to the 1st typed Morse character
         	LinkedHashMap<String,String> map = mTeclaMorse.getMorseDictionary().getChartStartsWith(s);
         	fillHUD(map);
-        	mUpdated = true;
         }
         else if (s.equals("")) {
         	layout.removeAllViews();
         	setViews();
         	mUpdated = false;
+        	
+        	//Show hints and command sequences
+        	LinkedHashMap<String,String> commands = mTeclaMorse.getMorseDictionary().getCommandsSet();
+        	fillHUD(commands);
+        	
+        	
         }
 	}
 	
@@ -112,7 +120,7 @@ public class MorseChart {
 	 * Populates the HUD with the relevant data
 	 * @param chart
 	 */
-	public void fillHUD(LinkedHashMap<String,String> chart) {
+	private void fillHUD(LinkedHashMap<String,String> chart) {
 		Iterator<Entry<String,String>> it = chart.entrySet().iterator();
 		
     	while (it.hasNext()) {
@@ -133,7 +141,8 @@ public class MorseChart {
         	
         	charTV.setTextSize(16.0f);
         	if (entry.getValue().equals("DEL") || entry.getValue().equals("↵") || 
-        		entry.getValue().equals("\\n") || entry.getValue().equals("✓"))
+        		entry.getValue().equals("\\n") || entry.getValue().equals("✓") ||
+        		entry.getValue().equals("SP"))
         		charTV.setTextColor(0xFFFA8E4B);
         	else
         		charTV.setTextColor(0xFF77A8D4);

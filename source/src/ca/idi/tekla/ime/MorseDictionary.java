@@ -52,11 +52,11 @@ public class MorseDictionary {
 		map.put("--••-•", ">"); map.put("-•--•-", "<"); map.put("-••••-", "-");
 		
 		//Command keys
-		map.put("•-•-", "↵"); //Enter
+		map.put("••--", "SP"); //Space ⎵
 		map.put("----", "DEL"); //Delete
-		map.put("••--", "✓"); //Done (minimizes keyboard)
 		map.put("•-•-•", "\\n"); //New line
-		
+		map.put("•-•-", "↵"); //Enter
+		map.put("-•-••", "✓"); //Done (minimizes keyboard)
 	}
 	
 	/**
@@ -113,6 +113,16 @@ public class MorseDictionary {
 				map.put(entry.getKey(), entry.getValue());
 		}
 		
+		return map;
+	}
+
+	public LinkedHashMap<String, String> getCommandsSet() {
+		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
+		map.put("••--", "SP"); //Space
+		map.put("----", "DEL"); //Delete
+		map.put("•-•-•", "\\n"); //New line
+		map.put("•-•-", "↵"); //Enter
+		map.put("-•-••", "✓"); //Done (minimizes keyboard)
 		return map;
 	}
 	

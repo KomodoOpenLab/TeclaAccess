@@ -239,7 +239,7 @@
 
         <TextView
             style="@style/code"
-            android:text="• • - -" />  
+            android:text="- • - • •" />  
               
         <TextView
             style="@style/symbol"
