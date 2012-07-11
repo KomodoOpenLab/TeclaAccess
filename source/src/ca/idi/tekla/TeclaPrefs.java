@@ -375,6 +375,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			}
 			
 		}
+		if (key.equals(Persistence.PREF_MORSE_SHOW_HUD)) {
+			//Reset IME
+			TeclaApp.getInstance().requestHideIMEView();
+			TeclaApp.getInstance().requestShowIMEView();
+		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);
