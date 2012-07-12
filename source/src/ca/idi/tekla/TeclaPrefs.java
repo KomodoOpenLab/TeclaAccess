@@ -183,6 +183,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefMorse.setEnabled(false);
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
+		
+		//If Morse pref is disabled, also disable all of the other prefs in the same category
+		if (!mPrefMorse.isChecked()) {
+			mPrefMorseHUD.setEnabled(false);
+			mPrefMorseSwitchMode.setEnabled(false);
+			mPrefMorseTimeUnit.setEnabled(false);
+		}
 
 		// If no voice apps available, disable voice input
 		if (!(TeclaApp.getInstance().isVoiceInputSupported() && 
@@ -367,11 +374,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_MORSE_MODE)) {
 			if (mPrefMorse.isChecked()) {
+				mPrefMorseHUD.setEnabled(true);
+				mPrefMorseSwitchMode.setEnabled(true);
+				mPrefMorseTimeUnit.setEnabled(true);
 				TeclaApp.getInstance().enabledMorseIME();
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
 			}
 			else {
 				TeclaApp.getInstance().disabledMorseIME();
+				mPrefMorseHUD.setEnabled(false);
+				mPrefMorseSwitchMode.setEnabled(false);
+				mPrefMorseTimeUnit.setEnabled(false);
 			}
 			
 		}
