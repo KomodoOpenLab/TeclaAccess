@@ -32,6 +32,7 @@ public class Highlighter {
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
 	private int mLastKeyCounter, mLastRowCounter;
+	private int mInactiveScans,mStartScanKeyCounter;
 	private boolean mWasShowingVariants;
 	private TeclaKeyboardView mIMEView;
 	private Handler mHandler;
@@ -129,6 +130,7 @@ public class Highlighter {
 		}
 		int fromIndex = keyboard.getRowStart(mScanRowCounter);
 		int toIndex = keyboard.getRowEnd(mScanRowCounter);
+		mStartScanKeyCounter = fromIndex;
 		if (mScanDepth == Highlighter.DEPTH_KEY) {
 			if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
 			if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
@@ -210,6 +212,13 @@ public class Highlighter {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
 			move(Highlighter.HIGHLIGHT_NEXT);
+			if(mScanKeyCounter==mStartScanKeyCounter)	mInactiveScans++;
+			if(mInactiveScans==2 && getScanDepth()==Highlighter.DEPTH_KEY)
+			{
+				mInactiveScans=0;
+				stepOut();
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "No activity.Stepping out...");
+			}
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}
 	};
@@ -248,6 +257,8 @@ public class Highlighter {
 			}
 		}
 		restoreHighlight();
+		mStartScanKeyCounter=mScanKeyCounter;	// Counter to check which key
+		mInactiveScans=0;	// Counter to check number of eventless self scan
 	}
 
 	private boolean shouldDelayKey(int keyCode) {
