@@ -865,6 +865,7 @@ public class TeclaIME extends InputMethodService
 					mTeclaMorse.addDit();
 				else
 					mTeclaMorse.addDah();
+				evaluateEndOfChar();
 			}
 			break;
 
@@ -1844,7 +1845,7 @@ public class TeclaIME extends InputMethodService
 			}
 			
 			else {
-				String action_tecla = switchActions[0];  //FIXME: Null pointer exception when switch event is sent right after starting SEP
+				String action_tecla = switchActions[0];
 				switch(Integer.parseInt(action_tecla)) {
 
 				case 1:
