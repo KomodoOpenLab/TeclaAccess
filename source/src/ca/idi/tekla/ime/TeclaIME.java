@@ -820,6 +820,10 @@ public class TeclaIME extends InputMethodService
 		case Keyboard.KEYCODE_MODE_CHANGE:
 			changeKeyboardMode();
 			break;
+		case TeclaKeyboardView.KEYCODE_STEP_OUT:
+			TeclaApp.highlighter.stepOut();
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Hidden key.Stepping out...");
+			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
 				onKeyMorse(primaryCode);
