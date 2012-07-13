@@ -183,13 +183,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefMorse.setEnabled(false);
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
 		}
-		
-		//If Morse pref is disabled, also disable all of the other prefs in the same category
-		if (!mPrefMorse.isChecked()) {
-			mPrefMorseHUD.setEnabled(false);
-			mPrefMorseKeyMode.setEnabled(false);
-			mPrefMorseTimeUnit.setEnabled(false);
-		}
 
 		// If no voice apps available, disable voice input
 		if (!(TeclaApp.getInstance().isVoiceInputSupported() && 
@@ -222,7 +215,15 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefConnectToShield.setEnabled(false);
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
+			mPrefMorse.setEnabled(false);
 			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
+		}
+		
+		//If Morse mode is disabled, also disable all of the other prefs in the same category
+		if (!mPrefMorse.isEnabled() || (mPrefMorse.isEnabled() && !mPrefMorse.isChecked())) {
+			mPrefMorseHUD.setEnabled(false);
+			mPrefMorseKeyMode.setEnabled(false);
+			mPrefMorseTimeUnit.setEnabled(false);
 		}
 
 		//Tecla Access Intents & Intent Filters
