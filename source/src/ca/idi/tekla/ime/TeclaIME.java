@@ -131,9 +131,9 @@ public class TeclaIME extends InputMethodService
 	private Integer mCapsLockState = CAPS_LOCK_OFF;
 	
 	//Morse key modes
-	private static final int TRIPLE_KEY_MODE = 0;
-	private static final int DOUBLE_KEY_MODE = 1;
-	private static final int SINGLE_KEY_MODE = 2;
+	public static final int TRIPLE_KEY_MODE = 0;
+	public static final int DOUBLE_KEY_MODE = 1;
+	public static final int SINGLE_KEY_MODE = 2;
 
 	private UserDictionary mUserDictionary;
 	private ContactsDictionary mContactsDictionary;
@@ -1717,8 +1717,11 @@ public class TeclaIME extends InputMethodService
 		mTeclaHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
-	public void startRepeating() {
-		startRepeating(0);
+	public void evaluateRepeating() {
+		if (TeclaApp.persistence.getMorseKeyMode() == TRIPLE_KEY_MODE)
+			startRepeating(0);
+		else
+			emulateMorseKey(mRepeatedKey);
 	}
 
 	public void pauseRepeating() {
@@ -1772,7 +1775,7 @@ public class TeclaIME extends InputMethodService
 			//Add a dit to the current Morse sequence (repeatable)
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
-				startRepeating();
+				evaluateRepeating();
 			}
 			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 				stopRepeating();
@@ -1784,7 +1787,7 @@ public class TeclaIME extends InputMethodService
 			//Add a dah to the current Morse sequence (repeatable)
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
-				startRepeating();
+				evaluateRepeating();
 			}
 			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 				stopRepeating();
@@ -1804,7 +1807,7 @@ public class TeclaIME extends InputMethodService
 			//Send through a backspace event (repeatable)
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
-				startRepeating();
+				evaluateRepeating();
 			}
 			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 				stopRepeating();

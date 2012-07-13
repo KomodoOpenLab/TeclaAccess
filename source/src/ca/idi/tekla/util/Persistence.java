@@ -59,7 +59,7 @@ public class Persistence {
 	public static final String PREF_SELF_SCANNING = "self_scanning";
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
-	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
+	public static final String PREF_MORSE_REPEAT_INT = "morse_repeat_int";
 	public static final String DEFAULT_MORSE_TIME_UNIT = "100";
 	public static final String DEFAULT_MORSE_KEY_MODE = "0";
 	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
@@ -250,12 +250,12 @@ public class Persistence {
 	}
 
 	public void setRepeatFrequency(int delay) {
-		prefs_editor.putInt(PREF_REPEAT_DELAY_INT, delay);
+		prefs_editor.putInt(PREF_MORSE_REPEAT_INT, delay);
 		prefs_editor.commit();
 	}
 
 	public int getRepeatFrequency() {
-		return shared_prefs.getInt(PREF_REPEAT_DELAY_INT, DEFAULT_REPEAT_FREQ);
+		return shared_prefs.getInt(PREF_MORSE_REPEAT_INT, DEFAULT_REPEAT_FREQ);
 	}
 	
 	public int getMorseKeyMode() {

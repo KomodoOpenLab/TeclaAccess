@@ -23,6 +23,7 @@ import java.util.HashMap;
 import ca.idi.tecla.lib.ListPreference;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
+import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.FullResetTimeoutDialog;
@@ -69,12 +70,15 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
-
+	
+	//Morse preferences
 	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefMorseHUD;
-	private CheckBoxPreference mPrefPersistentKeyboard;
-	private Preference mPrefMorseKeyMode;
+	private ListPreference mPrefMorseKeyMode;
 	private ListPreference mPrefMorseTimeUnit;
+	private Preference mPrefMorseRepeat;
+	
+	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
@@ -124,6 +128,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefMorseHUD = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_SHOW_HUD);
 		mPrefMorseKeyMode = (ListPreference) findPreference(Persistence.PREF_MORSE_KEY_MODE);
 		mPrefMorseTimeUnit = (ListPreference) findPreference(Persistence.PREF_MORSE_TIME_UNIT);
+		mPrefMorseRepeat = (Preference) findPreference(Persistence.PREF_MORSE_REPEAT_INT);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
@@ -224,6 +229,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefMorseHUD.setEnabled(false);
 			mPrefMorseKeyMode.setEnabled(false);
 			mPrefMorseTimeUnit.setEnabled(false);
+			mPrefMorseRepeat.setEnabled(false);
+		}
+		
+		if (mPrefMorse.isEnabled() && mPrefMorse.isChecked()) {
+			enableKeyModePrefs();
 		}
 
 		//Tecla Access Intents & Intent Filters
@@ -347,7 +357,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
 		}
-		if (preference.getKey().equals(Persistence.PREF_REPEAT_DELAY_INT)) {
+		if (preference.getKey().equals(Persistence.PREF_MORSE_REPEAT_INT)) {
 			mRepeatFrequencyDialog.show();
 		}
 		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
@@ -375,9 +385,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		if (key.equals(Persistence.PREF_MORSE_MODE)) {
 			if (mPrefMorse.isChecked()) {
+				enableKeyModePrefs();
 				mPrefMorseHUD.setEnabled(true);
 				mPrefMorseKeyMode.setEnabled(true);
-				mPrefMorseTimeUnit.setEnabled(true);
 				TeclaApp.getInstance().enabledMorseIME();
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
 			}
@@ -386,6 +396,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefMorseHUD.setEnabled(false);
 				mPrefMorseKeyMode.setEnabled(false);
 				mPrefMorseTimeUnit.setEnabled(false);
+				mPrefMorseRepeat.setEnabled(false);
 			}
 			
 		}
@@ -393,6 +404,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			//Reset IME
 			TeclaApp.getInstance().requestHideIMEView();
 			TeclaApp.getInstance().requestShowIMEView();
+		}
+		if (key.equals(Persistence.PREF_MORSE_KEY_MODE)) {
+			enableKeyModePrefs();
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
@@ -543,6 +557,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			}
 		});
 		mProgressDialog.show();
+	}
+	
+	private void enableKeyModePrefs() {
+		if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.TRIPLE_KEY_MODE) {
+			mPrefMorseTimeUnit.setEnabled(false);
+			mPrefMorseRepeat.setEnabled(true);
+		}
+		else {
+			mPrefMorseTimeUnit.setEnabled(true);
+			mPrefMorseRepeat.setEnabled(false);
+		}
 	}
 
 	/*
