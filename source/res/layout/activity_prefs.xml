@@ -265,7 +265,7 @@
             android:summary="@string/morse_key_mode_summary"/>
         
         <ca.idi.tecla.lib.ListPreference
-            android:defaultValue="100"
+            android:defaultValue="150"
             android:entries="@array/morse_time_unit_array"
             android:entryValues="@array/morse_time_unit_values"
             android:key="morse_time_unit"
