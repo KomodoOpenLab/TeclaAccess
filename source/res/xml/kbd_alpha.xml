@@ -50,6 +50,10 @@
         <Key
             android:keyEdgeFlags="right"
             android:keyLabel="j" />
+        <Key
+            android:codes="-7"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_normal" >
         <Key
@@ -70,10 +74,14 @@
         <Key android:keyLabel="q" />
         <Key android:keyLabel="r" />
         <Key
-            android:keyEdgeFlags="right"
             android:keyLabel="s"
             android:popupCharacters="@string/alternates_for_s"
             android:popupKeyboard="@xml/kbd_popup_template" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_voice" >
         <Key
@@ -94,10 +102,14 @@
         <Key android:keyLabel="q" />
         <Key android:keyLabel="r" />
         <Key
-            android:keyEdgeFlags="right"
             android:keyLabel="s"
             android:popupCharacters="@string/alternates_for_s"
             android:popupKeyboard="@xml/kbd_popup_template" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_variants" >
         <Key
@@ -124,8 +136,12 @@
             android:codes="@integer/key_variants"
             android:isModifier="true"
             android:isSticky="true"
-            android:keyEdgeFlags="right"
             android:keyLabel="áž" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -153,9 +169,13 @@
             android:codes="-5"
             android:iconPreview="@drawable/sym_keyboard_feedback_delete"
             android:isRepeatable="true"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_delete"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_normal"
@@ -187,9 +207,13 @@
         <Key
             android:codes="10"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_voice"
@@ -226,9 +250,13 @@
         <Key
             android:codes="@integer/key_voice"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_mic"
             android:keyWidth="13%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_variants"
@@ -260,9 +288,13 @@
         <Key
             android:codes="10"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
 
 </Keyboard>

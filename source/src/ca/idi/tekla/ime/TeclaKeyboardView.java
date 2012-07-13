@@ -50,6 +50,9 @@ public class TeclaKeyboardView extends KeyboardView {
 
     static final int KEYCODE_OPTIONS = -100;
     static final int KEYCODE_SHIFT_LONGPRESS = -101;
+    
+    // Keycode for stepping out self scanning
+    static final int KEYCODE_STEP_OUT = -7;
 
     private Keyboard mPhoneKeyboard;
 
