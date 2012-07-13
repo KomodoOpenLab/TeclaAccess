@@ -52,7 +52,7 @@
             android:keyLabel="j" />
         <Key
             android:codes="-7"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_normal" >
@@ -80,7 +80,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_voice" >
@@ -108,7 +108,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_variants" >
@@ -140,7 +140,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -174,7 +174,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -212,7 +212,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -255,7 +255,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -293,7 +293,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
 

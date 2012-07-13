@@ -54,7 +54,7 @@
                 android:popupCharacters="@string/alternates_for_o"
         />
         <Key android:codes="112" android:keyLabel="p"/>
-        <Key android:codes="-7" android:keyEdgeFlags="right" android:keyLabel="" android:keyWidth="0%p" />
+        <Key android:codes="-7" android:keyEdgeFlags="right" android:keyLabel=" " android:keyWidth="0%p" />
     </Row>
     
     <Row>
@@ -71,7 +71,7 @@
         <Key android:codes="107" android:keyLabel="k"/>
         <Key android:codes="108" android:keyLabel="l"/>
         <Key android:codes="109" android:keyLabel="m"/>
-        <Key android:codes="-7" android:keyEdgeFlags="right" android:keyLabel="" android:keyWidth="0%p" />
+        <Key android:codes="-7" android:keyEdgeFlags="right" android:keyLabel=" " android:keyWidth="0%p" />
     </Row>
     
     <Row>
@@ -96,7 +96,7 @@
                 android:keyWidth="15%p" 
                 android:iconPreview="@drawable/sym_keyboard_feedback_delete"
                 android:isRepeatable="true"/>
-        <Key android:codes="-7" android:keyEdgeFlags="right" android:keyLabel="" android:keyWidth="0%p" />
+        <Key android:codes="-7" android:keyEdgeFlags="right" android:keyLabel=" " android:keyWidth="0%p" />
     </Row><Row
         android:keyboardMode="@+id/mode_normal"
         android:rowEdgeFlags="bottom" >
@@ -129,7 +129,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -169,7 +169,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
         </Row>
 

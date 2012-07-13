@@ -52,7 +52,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -84,7 +84,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -118,7 +118,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row android:rowEdgeFlags="bottom" >
@@ -159,7 +159,7 @@
         <Key
             android:codes="-7"
             android:keyEdgeFlags="right"
-            android:keyLabel=""
+            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
 
