@@ -73,7 +73,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefMorseHUD;
 	private CheckBoxPreference mPrefPersistentKeyboard;
-	private Preference mPrefMorseSwitchMode;
+	private Preference mPrefMorseKeyMode;
 	private ListPreference mPrefMorseTimeUnit;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
@@ -122,7 +122,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
 		mPrefMorseHUD = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_SHOW_HUD);
-		mPrefMorseSwitchMode = (ListPreference) findPreference(Persistence.PREF_MORSE_SWITCH_MODE);
+		mPrefMorseKeyMode = (ListPreference) findPreference(Persistence.PREF_MORSE_KEY_MODE);
 		mPrefMorseTimeUnit = (ListPreference) findPreference(Persistence.PREF_MORSE_TIME_UNIT);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
@@ -187,7 +187,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		//If Morse pref is disabled, also disable all of the other prefs in the same category
 		if (!mPrefMorse.isChecked()) {
 			mPrefMorseHUD.setEnabled(false);
-			mPrefMorseSwitchMode.setEnabled(false);
+			mPrefMorseKeyMode.setEnabled(false);
 			mPrefMorseTimeUnit.setEnabled(false);
 		}
 
@@ -375,7 +375,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (key.equals(Persistence.PREF_MORSE_MODE)) {
 			if (mPrefMorse.isChecked()) {
 				mPrefMorseHUD.setEnabled(true);
-				mPrefMorseSwitchMode.setEnabled(true);
+				mPrefMorseKeyMode.setEnabled(true);
 				mPrefMorseTimeUnit.setEnabled(true);
 				TeclaApp.getInstance().enabledMorseIME();
 				TeclaApp.getInstance().showToast(R.string.morse_enabled);
@@ -383,7 +383,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			else {
 				TeclaApp.getInstance().disabledMorseIME();
 				mPrefMorseHUD.setEnabled(false);
-				mPrefMorseSwitchMode.setEnabled(false);
+				mPrefMorseKeyMode.setEnabled(false);
 				mPrefMorseTimeUnit.setEnabled(false);
 			}
 			

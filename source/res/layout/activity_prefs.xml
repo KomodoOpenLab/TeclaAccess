@@ -257,12 +257,12 @@
 
         <ca.idi.tecla.lib.ListPreference
             android:defaultValue="0"
-            android:key="morse_switch_mode"
-            android:entries="@array/morse_switch_mode_array"
-            android:entryValues="@array/morse_switch_mode_values"
+            android:key="morse_key_mode"
+            android:entries="@array/morse_key_mode_array"
+            android:entryValues="@array/morse_key_mode_values"
             android:persistent="true"
-            android:title="@string/morse_switch_mode" 
-            android:summary="@string/morse_switch_mode_summary"/>
+            android:title="@string/morse_key_mode" 
+            android:summary="@string/morse_key_mode_summary"/>
         
         <ca.idi.tecla.lib.ListPreference
             android:defaultValue="100"

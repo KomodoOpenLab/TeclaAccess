@@ -130,10 +130,10 @@ public class TeclaIME extends InputMethodService
 	private static final int CAPS_LOCK_ALL = 2;
 	private Integer mCapsLockState = CAPS_LOCK_OFF;
 	
-	//Morse switch modes
-	private static final int TRIPLE_SWITCH_MODE = 0;
-	private static final int DOUBLE_SWITCH_MODE = 1;
-	private static final int SINGLE_SWITCH_MODE = 2;
+	//Morse key modes
+	private static final int TRIPLE_KEY_MODE = 0;
+	private static final int DOUBLE_KEY_MODE = 1;
+	private static final int SINGLE_KEY_MODE = 2;
 
 	private UserDictionary mUserDictionary;
 	private ContactsDictionary mContactsDictionary;
@@ -1759,7 +1759,7 @@ public class TeclaIME extends InputMethodService
 	};
 	
 	private void evaluateEndOfChar() {
-		if (TeclaApp.persistence.getMorseSwitchMode() == TRIPLE_SWITCH_MODE)
+		if (TeclaApp.persistence.getMorseKeyMode() == TRIPLE_KEY_MODE)
 			return;
 		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
 		mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseTimeUnit());

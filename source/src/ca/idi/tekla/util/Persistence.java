@@ -22,7 +22,7 @@ public class Persistence {
 	public static final String PREF_VARIANTS_KEY = "variants_key";
 	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_MORSE_SHOW_HUD = "morse_show_hud";
-	public static final String PREF_MORSE_SWITCH_MODE = "morse_switch_mode";
+	public static final String PREF_MORSE_KEY_MODE = "morse_key_mode";
 	public static final String PREF_MORSE_TIME_UNIT = "morse_time_unit";
 	public static final String PREF_PERSISTENT_KEYBOARD = "persistent_keyboard";
 	public static final String PREF_AUTOHIDE_TIMEOUT = "autohide_timeout";
@@ -61,7 +61,7 @@ public class Persistence {
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
 	public static final String PREF_REPEAT_DELAY_INT = "morse_repeat_int";
 	public static final String DEFAULT_MORSE_TIME_UNIT = "100";
-	public static final String DEFAULT_MORSE_SWITCH_MODE = "0";
+	public static final String DEFAULT_MORSE_KEY_MODE = "0";
 	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int DEFAULT_REPEAT_FREQ = 750;
@@ -258,10 +258,10 @@ public class Persistence {
 		return shared_prefs.getInt(PREF_REPEAT_DELAY_INT, DEFAULT_REPEAT_FREQ);
 	}
 	
-	public int getMorseSwitchMode() {
+	public int getMorseKeyMode() {
 		//getInt does not work with ListPreference and string type arrays,
 		//so use getString instead
-		return Integer.parseInt(shared_prefs.getString(PREF_MORSE_SWITCH_MODE, DEFAULT_MORSE_SWITCH_MODE));
+		return Integer.parseInt(shared_prefs.getString(PREF_MORSE_KEY_MODE, DEFAULT_MORSE_KEY_MODE));
 	}
 
 	public void setMorseTimeUnit(String speed) {
