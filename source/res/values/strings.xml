@@ -283,19 +283,30 @@
     <string name="tapforsymbols">Tap for symbols</string>
     <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
 
-    <!-- Label for Morse space key. -->
+    <!-- Label for Morse space keyboard key. -->
     <string name="morse_space">space</string>
-
-    <!-- Option to enable Morse input method -->
-    <string name="morse_mode">Use Morse input method</string>
-    <string name="morse_mode_summary">Enables users to type in Morse</string>
-    
-    <!-- Option to enable Morse HUD display -->
-    <string name="morse_show_hud">Show Morse HUD</string>
-    <string name="morse_show_hud_summary">Displays a chart showing the Morse key/value set above the keyboard</string>
 
     <!-- Category title for Morse settings -->
     <string name="morse_input_category">Morse settings</string>
+    
+    <!-- Option to enable Morse input method -->
+    <string name="morse_mode">Enable Morse input</string>
+    <string name="morse_mode_summary">Provides a Morse input method that replaces the standard keyboard</string>
+    
+    <!-- Option to enable Morse HUD display -->
+    <string name="morse_show_hud">Show Morse HUD</string>
+    <string name="morse_show_hud_summary">Displays a chart of Morse keys/values above the keyboard</string>
+    
+    <!-- Morse key mode strings -->
+	<string name="morse_key_mode">Morse input method</string>
+	<string name="morse_key_mode_summary">Select your desired Morse input method</string>
+	
+	<!-- Morse speed ratio strings -->
+	<string name="morse_time_unit">Configure Morse time unit</string>
+	
+	<!-- Morse repeat delay strings -->
+    <string name="mrepeat_frequency">Configure repeat frequency</string>
+    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
 
     <!-- Options to set full reset timeout -->
     <string name="fullreset_timeout">Long press reset delay</string>
@@ -312,6 +323,16 @@
         <item>32 seconds</item>
         <item>40 seconds</item>
     </string-array>
+    
+    <!-- Tecla: Reset Actions Dialog -->
+    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+
+    <!-- Tecla: Scan Speed Dialog -->
+    <string name="dialog_faster">Faster</string>
+    <string name="dialog_slower">Slower</string>
+    <string name="btn_done">Done</string>
 
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
@@ -327,10 +348,6 @@
     <!-- Self-scanning delay strings -->
     <string name="scan_speed">Scanning speed</string>
     <string name="scan_speed_summary">Adjust the scanning speed</string>
-
-    <!-- Morse repeat delay strings -->
-    <string name="mrepeat_frequency">Configure repeat frequency</string>
-    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
 
     <!-- Switch configuration strings -->
     <string name="define_switch_action">Configure switch actions</string>
@@ -354,65 +371,10 @@
     <string name="switch_e1_morse">Switch 1 Morse action</string>
     <string name="switch_e2_morse">Switch 2 Morse action</string>
 
+    <!-- Reset switch actions strings -->
     <string name="switch_default">Restore default actions</string>
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
-
-    <!-- Tecla: Reset Actions Dialog -->
-    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
-    <string name="btn_yes">Yes</string>
-    <string name="btn_no">No</string>
-
-    <!-- Tecla: Scan Speed Dialog -->
-    <string name="dialog_faster">Faster</string>
-    <string name="dialog_slower">Slower</string>
-    <string name="btn_done">Done</string>
-
-	<!--  Morse key mode strings -->
-	<string name="morse_key_mode">Morse input method</string>
-	<string name="morse_key_mode_summary">Select your desired Morse input method</string>
-	
-	<!-- Morse speed ratio strings -->
-	<string name="morse_time_unit">Configure Morse code time unit</string>
-	
-	<!-- Switch configuration strings-->
-	<string name="define_switch_action">Configure switch actions</string>
-	<string name="define_switch_action_summary">Customize the actions of each switch</string>
-	<string name="switch_j1">Switch J1 commands</string>
-	<string name="switch_j2">Switch J2 commands</string>
-	<string name="switch_j3">Switch J3 commands</string>
-	<string name="switch_j4">Switch J4 commands</string>
-	<string name="switch_e1">Switch E1 commands</string>
-	<string name="switch_e2">Switch E2 commands</string>
-	
-	<string name="switch_j1_tecla">Switch J1 Tecla action</string>
-	<string name="switch_j2_tecla">Switch J2 Tecla action</string>
-	<string name="switch_j3_tecla">Switch J3 Tecla action</string>
-	<string name="switch_j4_tecla">Switch J4 Tecla action</string>
-	<string name="switch_e1_tecla">Switch E1 Tecla action</string>
-	<string name="switch_e2_tecla">Switch E2 Tecla action</string>
-	
-	<string name="switch_j1_morse">Switch J1 Morse action</string>
-	<string name="switch_j2_morse">Switch J2 Morse action</string>
-	<string name="switch_j3_morse">Switch J3 Morse action</string>
-	<string name="switch_j4_morse">Switch J4 Morse action</string>
-	<string name="switch_e1_morse">Switch E1 Morse action</string>
-	<string name="switch_e2_morse">Switch E2 Morse action</string>
-	
-	<string name="switch_default">Restore default actions</string>
-	<string name="switch_default_summary">Reset switch actions to default values</string>
-	<string name="user_data_category">User data</string>
-	
-	
-	<!-- Tecla: Reset Actions Dialog -->
-	<string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
-	<string name="btn_yes">Yes</string>
-	<string name="btn_no">No</string>
-
-	<!-- Tecla: Scan Speed Dialog -->
-	<string name="dialog_faster">Faster</string>
-	<string name="dialog_slower">Slower</string>
-	<string name="btn_done">Done</string>
 
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
