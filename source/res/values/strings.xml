@@ -273,6 +273,7 @@
     <string-array name="morse_key_mode_array">
         <item>Triple-key mode</item>
         <item>Double-key mode</item>
+        <item>Single-key mode</item>
     </string-array>
     
     <!-- Morse cheat sheet -->

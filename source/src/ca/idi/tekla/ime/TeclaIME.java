@@ -123,6 +123,7 @@ public class TeclaIME extends InputMethodService
 	private int mCapsLockKeyIndex;
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
+	private long mMorseStartTime;
 	
 	// Morse caps lock key
 	private static final int CAPS_LOCK_OFF = 0;
@@ -1712,16 +1713,29 @@ public class TeclaIME extends InputMethodService
 		
 	};
 	
+	private void startTimer() {
+		mMorseStartTime = System.currentTimeMillis();
+	}
+	
 	public void startRepeating(long delay) {
 		pauseRepeating();
 		mTeclaHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
 	public void evaluateRepeating() {
-		if (TeclaApp.persistence.getMorseKeyMode() == TRIPLE_KEY_MODE)
+		switch(TeclaApp.persistence.getMorseKeyMode()) {
+		case TRIPLE_KEY_MODE:
 			startRepeating(0);
-		else
+			break;
+			
+		case DOUBLE_KEY_MODE:
 			emulateMorseKey(mRepeatedKey);
+			break;
+			
+		case SINGLE_KEY_MODE:
+			startTimer();
+			break;
+		}
 	}
 
 	public void pauseRepeating() {
@@ -1764,6 +1778,20 @@ public class TeclaIME extends InputMethodService
 	private void evaluateEndOfChar() {
 		if (TeclaApp.persistence.getMorseKeyMode() == TRIPLE_KEY_MODE)
 			return;
+		
+		if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
+			long duration = System.currentTimeMillis() - mMorseStartTime;
+			
+			if (duration < TeclaApp.persistence.getMorseTimeUnit()) {
+				mTeclaMorse.addDit();
+				playKeyClick(TeclaKeyboard.KEYCODE_MORSE_DIT); //FIXME scale audio duration
+			}
+			else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3) {
+				mTeclaMorse.addDah();
+				playKeyClick(TeclaKeyboard.KEYCODE_MORSE_DAH); //FIXME scale audio duration
+			}
+		}
+		
 		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
 		mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseTimeUnit());
 	}
