@@ -207,6 +207,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefInverseScanning.setEnabled(false);
 		}
 		
+		mPrefMorseKeyMode.setSummary(mPrefMorseKeyMode.getEntry());
 		mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
 		refreshSwitchesSummary();
 		
@@ -406,7 +407,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			TeclaApp.getInstance().requestShowIMEView();
 		}
 		if (key.equals(Persistence.PREF_MORSE_KEY_MODE)) {
+			mPrefMorseKeyMode.setSummary(mPrefMorseKeyMode.getEntry());
 			enableKeyModePrefs();
+		}
+		if (key.equals(Persistence.PREF_MORSE_TIME_UNIT)) {
+			mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
+			TeclaApp.persistence.setMorseTimeUnit(mPrefMorseTimeUnit.getValue());
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
@@ -438,10 +444,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefConnectToShield.setChecked(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
-		}
-		if (key.equals(Persistence.PREF_MORSE_TIME_UNIT)) {
-			mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
-			TeclaApp.persistence.setMorseTimeUnit(mPrefMorseTimeUnit.getValue());
 		}
 		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
 			mSwitchJ1.onPreferenceChanged(key);
