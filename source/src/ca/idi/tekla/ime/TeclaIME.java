@@ -176,7 +176,7 @@ public class TeclaIME extends InputMethodService
 	private final float FX_VOLUME = -1.0f;
 	private boolean mSilentMode;
 	private ToneGenerator mTone = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80);
-	private int mToneType = ToneGenerator.TONE_CDMA_ABBR_INTERCEPT;
+	private int mToneType = ToneGenerator.TONE_CDMA_DIAL_TONE_LITE;
 
 	private String mWordSeparators;
 	private String mSentenceSeparators;
@@ -1734,6 +1734,7 @@ public class TeclaIME extends InputMethodService
 			
 		case SINGLE_KEY_MODE:
 			startTimer();
+			mTone.startTone(mToneType);
 			break;
 		}
 	}
@@ -1780,16 +1781,14 @@ public class TeclaIME extends InputMethodService
 			return;
 		
 		if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
+			mTone.stopTone();
 			long duration = System.currentTimeMillis() - mMorseStartTime;
 			
-			if (duration < TeclaApp.persistence.getMorseTimeUnit()) {
+			if (duration < TeclaApp.persistence.getMorseTimeUnit())
 				mTeclaMorse.addDit();
-				playKeyClick(TeclaKeyboard.KEYCODE_MORSE_DIT); //FIXME scale audio duration
-			}
-			else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3) {
+			
+			else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
 				mTeclaMorse.addDah();
-				playKeyClick(TeclaKeyboard.KEYCODE_MORSE_DAH); //FIXME scale audio duration
-			}
 		}
 		
 		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);

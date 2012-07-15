@@ -36,7 +36,6 @@ public class FullResetTimeoutDialog extends Dialog
 	
 	@Override
 	protected void onStart() {
-		setTitle(R.string.fullreset_timeout);
 
 		int timeout = TeclaApp.persistence.getFullResetTimeout();
 		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);
@@ -70,6 +69,7 @@ public class FullResetTimeoutDialog extends Dialog
 	public FullResetTimeoutDialog(Context context) {
 		super(context);
 		setOnKeyListener(this);
+		setTitle(R.string.fullreset_timeout);
 	}
 
 	public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {

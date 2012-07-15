@@ -4,8 +4,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import ca.idi.tekla.R;
+
 import android.content.Context;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -136,6 +139,10 @@ public class MorseChart {
         	
         	if (entry.getValue().equals("\\n"))
         		charTV.setText(entry.getValue());
+        	else if (entry.getValue().equals("SP")) {
+        		Resources res = mContext.getResources();
+        		charTV.setBackgroundDrawable(res.getDrawable(R.drawable.sym_keyboard_space_2));
+        	}
         	else
         		charTV.setText(entry.getValue().toUpperCase());
         	
