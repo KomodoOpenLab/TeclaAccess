@@ -143,7 +143,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mScanSpeedDialog = new ScanSpeedDialog(this);
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
 		mRepeatFrequencyDialog = new RepeatFrequencyDialog(this);
-		mRepeatFrequencyDialog.setContentView(R.layout.dialog_scan_speed);
+		mRepeatFrequencyDialog.setContentView(R.layout.dialog_timeout);
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();

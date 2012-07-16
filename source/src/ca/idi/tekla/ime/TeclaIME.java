@@ -1766,7 +1766,9 @@ public class TeclaIME extends InputMethodService
 	private Runnable mStartRepeatRunnable = new Runnable() {
 		public void run() {
 			emulateMorseKey(mRepeatedKey);
-			mTeclaHandler.postDelayed(mRepeatRunnable, TeclaApp.persistence.getRepeatFrequency());
+			int frequency = TeclaApp.persistence.getRepeatFrequency();
+			if (frequency != Persistence.NEVER_REPEAT)
+				mTeclaHandler.postDelayed(mRepeatRunnable, frequency);
 		}
 	};
 	

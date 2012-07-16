@@ -9,6 +9,7 @@
 		<item>60</item>
 		<item>-1</item>
 	</integer-array>
+	
 	<integer-array name="full_reset_values">
 		<item>3</item>
 		<item>6</item>
@@ -19,5 +20,20 @@
 		<item>25</item>
 		<item>32</item>
 		<item>40</item>
+	</integer-array>
+	
+	<integer-array name="repeat_frequency_values">
+		<item>-1</item>
+		<item>1000</item>
+		<item>950</item>
+		<item>900</item>
+		<item>850</item>
+		<item>800</item>
+		<item>750</item>
+		<item>700</item>
+		<item>650</item>
+		<item>600</item>
+		<item>550</item>
+		<item>500</item>
 	</integer-array>
 </resources>

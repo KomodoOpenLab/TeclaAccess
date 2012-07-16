@@ -72,6 +72,7 @@ public class Persistence {
 	public static final int AUTOHIDE_NULL = -999;
 	public static final int FULLRESET_NULL = -999;
 	public static final int NEVER_AUTOHIDE = -1;
+	public static final int NEVER_REPEAT = -1;
 	
 	
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
