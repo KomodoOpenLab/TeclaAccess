@@ -298,9 +298,6 @@
     <string name="tapforsymbols">Tap for symbols</string>
     <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
 
-    <!-- Label for Morse space keyboard key. -->
-    <string name="morse_space">space</string>
-
     <!-- Category title for Morse settings -->
     <string name="morse_input_category">Morse settings</string>
     

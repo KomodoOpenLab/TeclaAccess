@@ -975,9 +975,14 @@ public class TeclaIME extends InputMethodService
 				 sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 			//Update the key label according the current character
 			mSpaceKey.label = (mCapsLockState == CAPS_LOCK_OFF ? charac : charac.toUpperCase()) + "  " + sequence;
+			mSpaceKey.icon = null;
 		}
-		else
-			mSpaceKey.label = getResources().getString(R.string.morse_space);
+		else {
+			//Icon should take precedence over label, but it is not the case,
+			//so set label to null
+			mSpaceKey.label = null;
+			mSpaceKey.icon = TeclaApp.getInstance().getResources().getDrawable(R.drawable.sym_keyboard_space);
+		}
 		
 		if (refreshScreen)
 			mIMEView.invalidateKey(mSpaceKeyIndex);
