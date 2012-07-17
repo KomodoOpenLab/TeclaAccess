@@ -229,6 +229,24 @@ public class Highlighter {
 		
 	};
 	
+	/*
+	 * Runnable used to step out with hidden key
+	 */
+	public void externalstepOut()
+	{
+		Runnable mScanRunnable = new Runnable() {
+			
+			public void run() {
+				mInactiveScans = 0;
+				pauseSelfScanning();
+				stepOut();
+				resumeSelfScanning();
+				Log.d(TeclaApp.TAG,CLASS_TAG + "Hidden Key pressed");	
+			}	
+		}; 
+		mHandler.postDelayed(mScanRunnable,TeclaApp.persistence.getScanDelay());
+	}
+	
 	/**
 	 * Runnable used only to start auto scan. It resets highlighting before calling the self scanning methods.
 	 */
