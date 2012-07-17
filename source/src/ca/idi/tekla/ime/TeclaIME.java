@@ -1428,8 +1428,8 @@ public class TeclaIME extends InputMethodService
 			mSilentMode = (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL);
 		}
 	}
-
-	private void playKeyClick(int primaryCode) {
+	
+	private void checkRingerMode() {
 		// if mAudioManager is null, we don't have the ringer state yet
 		// mAudioManager will be set by updateRingerMode
 		if (mAudioManager == null) {
@@ -1437,6 +1437,10 @@ public class TeclaIME extends InputMethodService
 				updateRingerMode();
 			}
 		}
+	}
+
+	private void playKeyClick(int primaryCode) {
+		checkRingerMode();
 		if (mSoundOn && !mSilentMode) {
 			// FIXME: Volume and enable should come from UI settings
 			// FIXME: These should be triggered after auto-repeat logic
@@ -1739,7 +1743,9 @@ public class TeclaIME extends InputMethodService
 			
 		case SINGLE_KEY_MODE:
 			startTimer();
-			mTone.startTone(mToneType);
+			checkRingerMode();
+			if (mSoundOn && !mSilentMode)
+				mTone.startTone(mToneType);
 			break;
 		}
 	}
