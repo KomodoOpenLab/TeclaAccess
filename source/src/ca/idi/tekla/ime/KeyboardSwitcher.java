@@ -201,9 +201,18 @@ public class KeyboardSwitcher {
         switch (mode) {
 
         	case MODE_MORSE:
-        		if (TeclaApp.persistence.isMorseHudEnabled())
-        			return new KeyboardId(R.xml.morse_kbd_hud_enable, KEYBOARDMODE_NORMAL, true);
-    			return new KeyboardId(R.xml.morse_kbd_hud_disable, KEYBOARDMODE_NORMAL, true);
+        		if (TeclaApp.persistence.isMorseHudEnabled()) {
+        			if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE)
+        				return new KeyboardId(R.xml.morse_kbd_single_key_hud, KEYBOARDMODE_NORMAL, true);
+        			else
+        				return new KeyboardId(R.xml.morse_kbd_hud, KEYBOARDMODE_NORMAL, true);
+        		}
+        		else {
+        			if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE)
+        				return new KeyboardId(R.xml.morse_kbd_single_key_no_hud, KEYBOARDMODE_NORMAL, true);
+        			else
+        				return new KeyboardId(R.xml.morse_kbd_no_hud, KEYBOARDMODE_NORMAL, true);
+        		}
             case MODE_TEXT:
             	if (useVoiceInput && scanVariants) {
             		// Using voice input AND scanning variants
