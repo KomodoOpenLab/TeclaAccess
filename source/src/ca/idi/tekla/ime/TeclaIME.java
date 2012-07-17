@@ -821,7 +821,7 @@ public class TeclaIME extends InputMethodService
 			changeKeyboardMode();
 			break;
 		case TeclaKeyboardView.KEYCODE_STEP_OUT:
-			TeclaApp.highlighter.stepOut();
+			TeclaApp.highlighter.externalstepOut();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Hidden key.Stepping out...");
 			break;
 		default:
