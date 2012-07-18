@@ -1814,7 +1814,6 @@ public class TeclaIME extends InputMethodService
 	
 	private Runnable mEndOfCharRunnable = new Runnable() {
 		public void run() {
-			emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 			handleMorseSpaceKey();
 		}
 	};
