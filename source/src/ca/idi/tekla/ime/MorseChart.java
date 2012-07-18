@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
 import ca.idi.tekla.R;
+import ca.idi.tekla.TeclaApp;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -70,7 +71,8 @@ public class MorseChart {
 	 */
 	public void update() {
         String s = mTeclaMorse.getCurrentChar();
-        if ((s.equals("•") || s.equals("-")) && !mUpdated) {
+        if ((s.equals("•") || s.equals("-")) && !mUpdated && 
+        		TeclaApp.persistence.getMorseKeyMode() != TeclaIME.SINGLE_KEY_MODE) {
         	layout.removeAllViews();
         	setViews();
         	mUpdated = true;
