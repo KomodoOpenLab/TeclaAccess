@@ -1418,7 +1418,7 @@ public class TeclaIME extends InputMethodService
 	public void onPress(int primaryCode) {
 		if (primaryCode == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY) {
 			if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
-				evaluateRepeating();
+				evaluateMorsePress();
 			}
 		}
 		else {
@@ -1749,7 +1749,7 @@ public class TeclaIME extends InputMethodService
 		mTeclaHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
-	public void evaluateRepeating() {
+	public void evaluateMorsePress() {
 		switch(TeclaApp.persistence.getMorseKeyMode()) {
 		case TRIPLE_KEY_MODE:
 			startRepeating(0);
@@ -1837,7 +1837,7 @@ public class TeclaIME extends InputMethodService
 			//Add a dit to the current Morse sequence (repeatable)
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DIT;
-				evaluateRepeating();
+				evaluateMorsePress();
 			}
 			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 				stopRepeating();
@@ -1849,7 +1849,7 @@ public class TeclaIME extends InputMethodService
 			//Add a dah to the current Morse sequence (repeatable)
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DAH;
-				evaluateRepeating();
+				evaluateMorsePress();
 			}
 			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 				stopRepeating();
@@ -1869,7 +1869,7 @@ public class TeclaIME extends InputMethodService
 			//Send through a backspace event (repeatable)
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 				mRepeatedKey = TeclaKeyboard.KEYCODE_MORSE_DELKEY;
-				evaluateRepeating();
+				evaluateMorsePress();
 			}
 			if (switchEvent.isReleased(switchEvent.getSwitchChanges())) {
 				stopRepeating();
