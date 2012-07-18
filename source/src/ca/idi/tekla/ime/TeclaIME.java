@@ -852,8 +852,6 @@ public class TeclaIME extends InputMethodService
 	 */
 	public void onKeyMorse(int primaryCode) {
 		initMorseKeyboard();
-		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
-
 		switch (primaryCode) {
 
 		case TeclaKeyboard.KEYCODE_MORSE_DIT:
@@ -873,41 +871,8 @@ public class TeclaIME extends InputMethodService
 			// Space button ends the current ditdah sequence
 			// Space twice in a row sends through a standard space character
 		case TeclaKeyboard.KEYCODE_MORSE_SPACEKEY:
-			if (mTeclaMorse.getCurrentChar().length() == 0) {
-				getCurrentInputConnection().commitText(" ", 1);
-			}
-			else {
-				if (curCharMatch != null) {
-
-					if (curCharMatch.contentEquals("↵")) {
-						sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
-					} else if (curCharMatch.contentEquals("DEL")) {
-						handleMorseBackspace(false);	
-					} else if (curCharMatch.contentEquals("✓")) {
-						hideSoftIME();
-					} else if (curCharMatch.contentEquals("SP")) {
-						getCurrentInputConnection().commitText(" ", 1);
-					} else if (curCharMatch.contentEquals("\\n")) {
-						getCurrentInputConnection().commitText("\n", 1);
-					} else {
-
-						boolean upperCase = false;
-						if (mCapsLockState == CAPS_LOCK_NEXT) {
-							upperCase = true;
-							mCapsLockState = CAPS_LOCK_OFF;
-							updateCapsLockKey(true);
-						} else if (mCapsLockState == CAPS_LOCK_ALL) {
-							upperCase = true;
-						}
-						if (upperCase) {
-							curCharMatch = curCharMatch.toUpperCase();
-						}
-
-						getCurrentInputConnection().commitText(curCharMatch, curCharMatch.length());
-					}
-				}
-			}
-			clearCharInProgress();
+			if (TeclaApp.persistence.getMorseKeyMode() != SINGLE_KEY_MODE)
+				handleMorseSpaceKey();
 			break;
 
 		case TeclaKeyboard.KEYCODE_MORSE_DELKEY:
@@ -935,6 +900,46 @@ public class TeclaIME extends InputMethodService
 	
 	private void clearCharInProgress() {
 		mTeclaMorse.clearCharInProgress();
+	}
+	
+	private void handleMorseSpaceKey() {
+		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
+		
+		if (mTeclaMorse.getCurrentChar().length() == 0) {
+			getCurrentInputConnection().commitText(" ", 1);
+		}
+		else {
+			if (curCharMatch != null) {
+
+				if (curCharMatch.contentEquals("↵")) {
+					sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER);
+				} else if (curCharMatch.contentEquals("DEL")) {
+					handleMorseBackspace(false);	
+				} else if (curCharMatch.contentEquals("✓")) {
+					hideSoftIME();
+				} else if (curCharMatch.contentEquals("SP")) {
+					getCurrentInputConnection().commitText(" ", 1);
+				} else if (curCharMatch.contentEquals("\\n")) {
+					getCurrentInputConnection().commitText("\n", 1);
+				} else {
+
+					boolean upperCase = false;
+					if (mCapsLockState == CAPS_LOCK_NEXT) {
+						upperCase = true;
+						mCapsLockState = CAPS_LOCK_OFF;
+						updateCapsLockKey(true);
+					} else if (mCapsLockState == CAPS_LOCK_ALL) {
+						upperCase = true;
+					}
+					if (upperCase) {
+						curCharMatch = curCharMatch.toUpperCase();
+					}
+
+					getCurrentInputConnection().commitText(curCharMatch, curCharMatch.length());
+				}
+			}
+		}
+		clearCharInProgress();
 	}
 
 	/**
@@ -1411,11 +1416,24 @@ public class TeclaIME extends InputMethodService
 	}
 
 	public void onPress(int primaryCode) {
-		vibrate();
-		playKeyClick(primaryCode);
+		if (primaryCode == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY) {
+			if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
+				evaluateRepeating();
+			}
+		}
+		else {
+			vibrate();
+			playKeyClick(primaryCode);
+		}
 	}
 
 	public void onRelease(int primaryCode) {
+		if (primaryCode == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY) {
+			if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
+				stopRepeating();
+				evaluateEndOfChar();
+			}
+		}
 		//vibrate();
 	}
 
@@ -1749,6 +1767,17 @@ public class TeclaIME extends InputMethodService
 			break;
 		}
 	}
+	
+	private void handleSingleKeyUp() {
+		mTone.stopTone();
+		long duration = System.currentTimeMillis() - mMorseStartTime;
+		
+		if (duration < TeclaApp.persistence.getMorseTimeUnit())
+			mTeclaMorse.addDit();
+		
+		else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
+			mTeclaMorse.addDah();
+	}
 
 	public void pauseRepeating() {
 		mTeclaHandler.removeCallbacks(mRepeatRunnable);
@@ -1786,6 +1815,7 @@ public class TeclaIME extends InputMethodService
 	private Runnable mEndOfCharRunnable = new Runnable() {
 		public void run() {
 			emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+			handleMorseSpaceKey();
 		}
 	};
 	
@@ -1794,14 +1824,7 @@ public class TeclaIME extends InputMethodService
 			return;
 		
 		if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
-			mTone.stopTone();
-			long duration = System.currentTimeMillis() - mMorseStartTime;
-			
-			if (duration < TeclaApp.persistence.getMorseTimeUnit())
-				mTeclaMorse.addDit();
-			
-			else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
-				mTeclaMorse.addDah();
+			handleSingleKeyUp();
 		}
 		
 		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);

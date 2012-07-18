@@ -76,7 +76,7 @@ public class TeclaKeyboardView extends KeyboardView {
     @Override
     protected boolean onLongPress(Key key) {
         if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
-        		TeclaApp.persistence.isMorseModeEnabled()) {
+        		TeclaApp.persistence.getMorseKeyMode() != TeclaIME.SINGLE_KEY_MODE) {
         	if (cheatsheetDialog != null && cheatsheetDialog.isShowing())
         		cheatsheetDialog.dismiss();
         	else
