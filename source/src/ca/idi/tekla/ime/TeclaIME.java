@@ -1777,6 +1777,9 @@ public class TeclaIME extends InputMethodService
 		
 		else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
 			mTeclaMorse.addDah();
+		
+		updateSpaceKey(true);
+		mIMEView.invalidate();
 	}
 
 	public void pauseRepeating() {
@@ -1815,6 +1818,8 @@ public class TeclaIME extends InputMethodService
 	private Runnable mEndOfCharRunnable = new Runnable() {
 		public void run() {
 			handleMorseSpaceKey();
+			updateSpaceKey(true);
+			mIMEView.invalidate();
 		}
 	};
 	
