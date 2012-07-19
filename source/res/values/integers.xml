@@ -22,6 +22,17 @@
 		<item>40</item>
 	</integer-array>
 	
+	<integer-array name="morse_time_unit_values">
+	    <item>75</item>
+	    <item>100</item>
+	    <item>125</item>
+	    <item>150</item>
+	    <item>175</item>
+	    <item>200</item>
+	    <item>225</item>
+	    <item>250</item>
+	</integer-array>
+	
 	<integer-array name="repeat_frequency_values">
 		<item>-1</item>
 		<item>1000</item>

@@ -263,10 +263,7 @@
             android:persistent="true"
             android:title="@string/morse_key_mode"/>
         
-        <ca.idi.tecla.lib.ListPreference
-            android:defaultValue="150"
-            android:entries="@array/morse_time_unit_array"
-            android:entryValues="@array/morse_time_unit_values"
+        <Preference
             android:key="morse_time_unit"
             android:persistent="true"
             android:title="@string/morse_time_unit"/>

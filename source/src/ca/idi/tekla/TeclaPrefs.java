@@ -27,6 +27,7 @@ import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.FullResetTimeoutDialog;
+import ca.idi.tekla.util.MorseTimeUnitDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.RepeatFrequencyDialog;
@@ -75,7 +76,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefMorseHUD;
 	private ListPreference mPrefMorseKeyMode;
-	private ListPreference mPrefMorseTimeUnit;
+	private Preference mPrefMorseTimeUnit;
 	private Preference mPrefMorseRepeat;
 	
 	private CheckBoxPreference mPrefPersistentKeyboard;
@@ -91,6 +92,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private String mShieldAddress, mShieldName;
 	
 	private ScanSpeedDialog mScanSpeedDialog;
+	private MorseTimeUnitDialog mMorseTimeUnitDialog;
 	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private FullResetTimeoutDialog mFullResetTimeoutDialog;
@@ -127,7 +129,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
 		mPrefMorseHUD = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_SHOW_HUD);
 		mPrefMorseKeyMode = (ListPreference) findPreference(Persistence.PREF_MORSE_KEY_MODE);
-		mPrefMorseTimeUnit = (ListPreference) findPreference(Persistence.PREF_MORSE_TIME_UNIT);
+		mPrefMorseTimeUnit = (Preference) findPreference(Persistence.PREF_MORSE_TIME_UNIT);
 		mPrefMorseRepeat = (Preference) findPreference(Persistence.PREF_MORSE_REPEAT_INT);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
@@ -142,6 +144,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
+		mMorseTimeUnitDialog = new MorseTimeUnitDialog(this);
+		mMorseTimeUnitDialog.setContentView(R.layout.dialog_timeout);
 		mRepeatFrequencyDialog = new RepeatFrequencyDialog(this);
 		mRepeatFrequencyDialog.setContentView(R.layout.dialog_timeout);
 		mProgressDialog = new ProgressDialog(this);
@@ -208,7 +212,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 		
 		mPrefMorseKeyMode.setSummary(mPrefMorseKeyMode.getEntry());
-		mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
+		mPrefMorseTimeUnit.setSummary(TeclaApp.persistence.getMorseTimeUnit() + " ms");
 		refreshSwitchesSummary();
 		
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
@@ -358,6 +362,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
 		}
+		if (preference.getKey().equals(Persistence.PREF_MORSE_TIME_UNIT)) {
+			mMorseTimeUnitDialog.show();
+		}
 		if (preference.getKey().equals(Persistence.PREF_MORSE_REPEAT_INT)) {
 			mRepeatFrequencyDialog.show();
 		}
@@ -411,8 +418,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			enableKeyModePrefs();
 		}
 		if (key.equals(Persistence.PREF_MORSE_TIME_UNIT)) {
-			mPrefMorseTimeUnit.setSummary(mPrefMorseTimeUnit.getEntry());
-			TeclaApp.persistence.setMorseTimeUnit(mPrefMorseTimeUnit.getValue());
+			mPrefMorseTimeUnit.setSummary(mMorseTimeUnitDialog.getLabel());
 		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
