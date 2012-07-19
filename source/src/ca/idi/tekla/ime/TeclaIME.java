@@ -1771,12 +1771,15 @@ public class TeclaIME extends InputMethodService
 	private void handleSingleKeyUp() {
 		mTone.stopTone();
 		long duration = System.currentTimeMillis() - mMorseStartTime;
-		
-		if (duration < TeclaApp.persistence.getMorseTimeUnit())
-			mTeclaMorse.addDit();
-		
-		else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
-			mTeclaMorse.addDah();
+
+		if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
+			if (duration < TeclaApp.persistence.getMorseTimeUnit()) {
+				mTeclaMorse.addDit();
+			}
+
+			else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
+				mTeclaMorse.addDah();
+		}
 		
 		updateSpaceKey(true);
 		mIMEView.invalidate();
