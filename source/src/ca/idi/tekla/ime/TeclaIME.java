@@ -135,6 +135,9 @@ public class TeclaIME extends InputMethodService
 	public static final int TRIPLE_KEY_MODE = 0;
 	public static final int DOUBLE_KEY_MODE = 1;
 	public static final int SINGLE_KEY_MODE = 2;
+	
+	//Morse typing error margin (single-key mode)
+	private static final float ERROR_MARGIN = 1.15f;
 
 	private UserDictionary mUserDictionary;
 	private ContactsDictionary mContactsDictionary;
@@ -1773,11 +1776,11 @@ public class TeclaIME extends InputMethodService
 		long duration = System.currentTimeMillis() - mMorseStartTime;
 
 		if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
-			if (duration < TeclaApp.persistence.getMorseTimeUnit()) {
+			if (duration < TeclaApp.persistence.getMorseTimeUnit() * ERROR_MARGIN) {
 				mTeclaMorse.addDit();
 			}
 
-			else if (duration < TeclaApp.persistence.getMorseTimeUnit() * 3)
+			else if (duration < (TeclaApp.persistence.getMorseTimeUnit() * 3) * ERROR_MARGIN)
 				mTeclaMorse.addDah();
 		}
 		
