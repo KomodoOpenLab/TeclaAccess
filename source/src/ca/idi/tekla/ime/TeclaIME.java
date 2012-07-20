@@ -178,7 +178,7 @@ public class TeclaIME extends InputMethodService
 	// Align sound effect volume on music volume
 	private final float FX_VOLUME = -1.0f;
 	private boolean mSilentMode;
-	private ToneGenerator mTone = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 80);
+	private ToneGenerator mTone = new ToneGenerator(AudioManager.STREAM_DTMF, 100);
 	private int mToneType = ToneGenerator.TONE_CDMA_DIAL_TONE_LITE;
 
 	private String mWordSeparators;
