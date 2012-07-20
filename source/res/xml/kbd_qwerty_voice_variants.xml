@@ -68,8 +68,12 @@
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
             android:codes="112"
-            android:keyEdgeFlags="right"
             android:keyLabel="p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -114,8 +118,12 @@
             android:codes="@integer/key_variants"
             android:isModifier="true"
             android:isSticky="true"
-            android:keyEdgeFlags="right"
             android:keyLabel="áž" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -157,9 +165,13 @@
             android:codes="-5"
             android:iconPreview="@drawable/sym_keyboard_feedback_delete"
             android:isRepeatable="true"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_delete"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_normal"
@@ -197,10 +209,14 @@
             android:keyWidth="16%p" />
         <Key
             android:codes="@integer/key_voice"
-            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
             android:keyWidth="13%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_url"
@@ -242,10 +258,14 @@
             android:keyWidth="16%p" />
         <Key
             android:codes="@integer/key_voice"
-            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
             android:keyWidth="13%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_email"
@@ -288,10 +308,14 @@
             android:keyWidth="16%p" />
         <Key
             android:codes="@integer/key_voice"
-            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
             android:keyWidth="13%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_im"
@@ -329,10 +353,14 @@
             android:popupKeyboard="@xml/popup_smileys" />
         <Key
             android:codes="@integer/key_voice"
-            android:keyEdgeFlags="right"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
             android:keyWidth="13%p" />
+        <Key
+            android:codes="-7"
+            android:keyEdgeFlags="right"
+            android:keyLabel=" "
+            android:keyWidth="0%p" />
     </Row>
 
 </Keyboard>
