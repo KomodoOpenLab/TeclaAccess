@@ -1771,21 +1771,26 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 	
-	private void handleSingleKeyUp() {
+	private boolean handleSingleKeyUp() {
+		boolean addedDitDah = false;
 		mTone.stopTone();
 		long duration = System.currentTimeMillis() - mMorseStartTime;
 
 		if (mTeclaMorse.getCurrentChar().length() < mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
 			if (duration < TeclaApp.persistence.getMorseTimeUnit() * ERROR_MARGIN) {
 				mTeclaMorse.addDit();
+				addedDitDah = true;
 			}
 
-			else if (duration < (TeclaApp.persistence.getMorseTimeUnit() * 3) * ERROR_MARGIN)
+			else if (duration < (TeclaApp.persistence.getMorseTimeUnit() * 3) * ERROR_MARGIN) {
 				mTeclaMorse.addDah();
+				addedDitDah = true;
+			}
 		}
 		
 		updateSpaceKey(true);
 		mIMEView.invalidate();
+		return addedDitDah;
 	}
 
 	public void pauseRepeating() {
@@ -1830,15 +1835,22 @@ public class TeclaIME extends InputMethodService
 	};
 	
 	private void evaluateEndOfChar() {
-		if (TeclaApp.persistence.getMorseKeyMode() == TRIPLE_KEY_MODE)
-			return;
-		
-		if (TeclaApp.persistence.getMorseKeyMode() == SINGLE_KEY_MODE) {
-			handleSingleKeyUp();
+		switch (TeclaApp.persistence.getMorseKeyMode()) {
+		case TRIPLE_KEY_MODE:
+			break;
+
+		case DOUBLE_KEY_MODE:
+			mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
+			mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseTimeUnit());
+			break;
+
+		case SINGLE_KEY_MODE:
+			if (handleSingleKeyUp() == true) {
+				mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
+				mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseTimeUnit());
+			}
+			break;
 		}
-		
-		mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
-		mTeclaHandler.postDelayed(mEndOfCharRunnable, 3 * TeclaApp.persistence.getMorseTimeUnit());
 	}
 	
 	private void handleMorseSwitch(SwitchEvent switchEvent, int action) {
