@@ -27,7 +27,7 @@ public class MorseTimeUnitDialog extends Dialog
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(R.string.morse_time_unit);
+		setTitle(R.string.morse_time_unit_dlg_title);
 		
 		int timeUnit = TeclaApp.persistence.getMorseTimeUnit();
 		mRepeatStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.morse_time_unit_array);
