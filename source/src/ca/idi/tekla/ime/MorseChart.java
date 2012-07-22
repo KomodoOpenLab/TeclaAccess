@@ -141,7 +141,7 @@ public class MorseChart {
         	
         	if (entry.getValue().equals("\\n"))
         		charTV.setText(entry.getValue());
-        	else if (entry.getValue().equals("SP")) {
+        	else if (entry.getValue().equals("space")) {
         		Resources res = mContext.getResources();
         		charTV.setBackgroundDrawable(res.getDrawable(R.drawable.sym_keyboard_space_2));
         	}
@@ -151,8 +151,8 @@ public class MorseChart {
         	charTV.setTextSize(16.0f);
         	if (entry.getValue().equals("DEL") || entry.getValue().equals("↵") || 
         		entry.getValue().equals("\\n") || entry.getValue().equals("✓") ||
-        		entry.getValue().equals("SP") || entry.getValue().equals("ABC") ||
-        		entry.getValue().equals("Back"))
+        		entry.getValue().equals("space") || entry.getValue().equals("⇪") ||
+        		entry.getValue().equals("↶"))
         		charTV.setTextColor(0xFFFA8E4B);
         	else
         		charTV.setTextColor(0xFF77A8D4);

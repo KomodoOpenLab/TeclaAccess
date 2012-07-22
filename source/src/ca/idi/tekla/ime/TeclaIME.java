@@ -917,11 +917,11 @@ public class TeclaIME extends InputMethodService
 					handleMorseBackspace(false);	
 				} else if (curCharMatch.contentEquals("✓")) {
 					hideSoftIME();
-				} else if (curCharMatch.contentEquals("SP")) {
+				} else if (curCharMatch.contentEquals("space")) {
 					getCurrentInputConnection().commitText(" ", 1);
-				} else if (curCharMatch.contentEquals("ABC")) {
+				} else if (curCharMatch.contentEquals("⇪")) {
 					handleMorseCapskey();
-				} else if (curCharMatch.contentEquals("Back")) {
+				} else if (curCharMatch.contentEquals("↶")) {
 					handleSpecialKey(KeyEvent.KEYCODE_BACK);
 				} else if (curCharMatch.contentEquals("\\n")) {
 					getCurrentInputConnection().commitText("\n", 1);

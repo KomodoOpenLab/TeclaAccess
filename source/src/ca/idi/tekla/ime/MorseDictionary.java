@@ -52,13 +52,13 @@ public class MorseDictionary {
 		map.put("--••-•", ">"); map.put("-•--•-", "<"); map.put("-••••-", "-");
 		
 		//Command keys
-		map.put("••--", "SP"); //Space ⎵
-		map.put("----", "DEL"); //Delete
-		map.put("•-•-•", "\\n"); //New line
-		map.put("•-•-", "↵"); //Enter
 		map.put("-•-••", "✓"); //Done (minimizes keyboard)
-		map.put("••--•", "ABC"); //Toggle caps lock
-		map.put("-•••-", "Back"); //Back key
+		map.put("••--", "space"); //Space ⎵
+		map.put("•-•-", "↵"); //Enter
+		map.put("••--•", "⇪"); //Toggle caps lock
+		map.put("----", "DEL"); //Delete
+		map.put("-•••-", "↶"); //Back key
+		map.put("•-•-•", "\\n"); //New line
 	}
 	
 	/**
@@ -120,13 +120,13 @@ public class MorseDictionary {
 
 	public LinkedHashMap<String, String> getCommandsSet() {
 		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
-		map.put("••--", "SP"); //Space
-		map.put("----", "DEL"); //Delete
-		map.put("•-•-•", "\\n"); //New line
-		map.put("•-•-", "↵"); //Enter
 		map.put("-•-••", "✓"); //Done (minimizes keyboard)
-		map.put("••--•", "ABC"); //Toggle caps lock
-		map.put("-•••-", "Back"); //Back key
+		map.put("•-•-", "↵"); //Enter
+		map.put("••--", "space"); //Space
+		map.put("••--•", "⇪"); //Toggle caps lock
+		map.put("----", "DEL"); //Delete
+		map.put("-•••-", "↶"); //Back key
+		map.put("•-•-•", "\\n"); //New line
 		return map;
 	}
 	
