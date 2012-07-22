@@ -281,9 +281,9 @@ public class TeclaIME extends InputMethodService
 		
 		if (mKeyboardSwitcher.isMorseMode()) {
 			mTeclaMorse.getMorseChart().configChanged(conf);
-			mIMEView.invalidate();
 			updateSpaceKey(true);
 			updateCapsLockKey(true);
+			mIMEView.invalidate();
 		}
 	}
 
@@ -909,6 +909,9 @@ public class TeclaIME extends InputMethodService
 		mTeclaMorse.clearCharInProgress();
 	}
 	
+	/**
+	 * Handles the space / end-of-character event (Morse keyboard only)
+	 */	
 	private void handleMorseSpaceKey() {
 		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
 		
@@ -1747,6 +1750,7 @@ public class TeclaIME extends InputMethodService
 		
 	};
 	
+	//Used to track the duration of a single-key press 
 	private void startTimer() {
 		mMorseStartTime = System.currentTimeMillis();
 	}
@@ -1756,6 +1760,9 @@ public class TeclaIME extends InputMethodService
 		mTeclaHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
+	/**
+	 * Evalutes a Morse key press, based on the current key mode
+	 */
 	public void evaluateMorsePress() {
 		switch(TeclaApp.persistence.getMorseKeyMode()) {
 		case TRIPLE_KEY_MODE:
@@ -1768,6 +1775,7 @@ public class TeclaIME extends InputMethodService
 			
 		case SINGLE_KEY_MODE:
 			startTimer();
+			//Play audio feedback while key is pressed
 			checkRingerMode();
 			if (mSoundOn && !mSilentMode)
 				mTone.startTone(mToneType);
@@ -1775,6 +1783,10 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 	
+	/**
+	 * Handles a Morse key-up event in single-key mode
+	 * @return true if a dit/dah has been added, false otherwise
+	 */
 	private boolean handleSingleKeyUp() {
 		boolean addedDitDah = false;
 		mTone.stopTone();
@@ -1830,6 +1842,9 @@ public class TeclaIME extends InputMethodService
 		}
 	};
 	
+	/**
+	 * Runnable used to process a Morse end-of-character event
+	 */
 	private Runnable mEndOfCharRunnable = new Runnable() {
 		public void run() {
 			handleMorseSpaceKey();
@@ -1838,6 +1853,9 @@ public class TeclaIME extends InputMethodService
 		}
 	};
 	
+	/**
+	 * Evalutes the Morse end-of-character event, based on the current key mode
+	 */
 	private void evaluateEndOfChar() {
 		switch (TeclaApp.persistence.getMorseKeyMode()) {
 		case TRIPLE_KEY_MODE:
@@ -1857,6 +1875,11 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 	
+	/**
+	 * Handler of Morse switch events
+	 * @param switchEvent
+	 * @param action
+	 */
 	private void handleMorseSwitch(SwitchEvent switchEvent, int action) {
 		switch(action) {
 
@@ -1885,9 +1908,7 @@ public class TeclaIME extends InputMethodService
 			break;
 
 		case 3:
-			//Send through a space key event: acts as an end of char signal
-			//if the current sequence represents a valid character, otherwise
-			//inserts a simple space
+			//Send through a space key event
 			if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 				emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 			break;
@@ -1913,6 +1934,10 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 	
+	/**
+	 * Switch events are processed here
+	 * @param switchEvent
+	 */
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
 		//Emulator issue (temporary fix): if typing too fast, or holding a long press
