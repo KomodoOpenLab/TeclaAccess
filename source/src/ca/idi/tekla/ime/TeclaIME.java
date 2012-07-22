@@ -1019,20 +1019,15 @@ public class TeclaIME extends InputMethodService
 	 * @param refreshScreen
 	 */
 	private void updateCapsLockKey(boolean refreshScreen) {
-
-		Context context = this.getApplicationContext();
 		switch (mCapsLockState) {
 		case CAPS_LOCK_OFF:
 			mCapsLockKey.on = false;
-			mCapsLockKey.label = context.getText(R.string.caps_lock_off);
 			break;
 		case CAPS_LOCK_NEXT:
 			mCapsLockKey.on = false;
-			mCapsLockKey.label = context.getText(R.string.caps_lock_next);
 			break;
 		case CAPS_LOCK_ALL:
 			mCapsLockKey.on = true;
-			mCapsLockKey.label = context.getText(R.string.caps_lock_all);
 			break;
 		}
 

@@ -39,7 +39,8 @@
                 android:keyWidth="55%"/>
             <Key
                 android:codes="559"
-                android:keyLabel="@string/caps_lock_off"
+                android:iconPreview="@drawable/sym_keyboard_feedback_shift"
+                android:keyIcon="@drawable/sym_keyboard_shift"
                 android:isSticky="true"/>
             <Key
                 android:codes="67"
