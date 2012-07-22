@@ -887,17 +887,7 @@ public class TeclaIME extends InputMethodService
 			break;
 
 		case TeclaKeyboard.KEYCODE_MORSE_CAPSKEY:
-			switch (mCapsLockState) {
-			case CAPS_LOCK_OFF:
-				mCapsLockState = CAPS_LOCK_NEXT;
-				break;
-			case CAPS_LOCK_NEXT:
-				mCapsLockState = CAPS_LOCK_ALL;
-				break;
-			default:
-				mCapsLockState = CAPS_LOCK_OFF;
-			}
-			updateCapsLockKey(true);
+			handleMorseCapskey();
 			break;
 		}
 
@@ -929,6 +919,10 @@ public class TeclaIME extends InputMethodService
 					hideSoftIME();
 				} else if (curCharMatch.contentEquals("SP")) {
 					getCurrentInputConnection().commitText(" ", 1);
+				} else if (curCharMatch.contentEquals("ABC")) {
+					handleMorseCapskey();
+				} else if (curCharMatch.contentEquals("Back")) {
+					handleSpecialKey(KeyEvent.KEYCODE_BACK);
 				} else if (curCharMatch.contentEquals("\\n")) {
 					getCurrentInputConnection().commitText("\n", 1);
 				} else {
@@ -973,6 +967,23 @@ public class TeclaIME extends InputMethodService
 				updateCapsLockKey(true);
 			}
 		}
+	}
+	
+	/**
+	 * Handles the capslock key (Morse keyboard only)
+	 */
+	private void handleMorseCapskey() {
+		switch (mCapsLockState) {
+		case CAPS_LOCK_OFF:
+			mCapsLockState = CAPS_LOCK_NEXT;
+			break;
+		case CAPS_LOCK_NEXT:
+			mCapsLockState = CAPS_LOCK_ALL;
+			break;
+		default:
+			mCapsLockState = CAPS_LOCK_OFF;
+		}
+		updateCapsLockKey(true);
 	}
 	
 	/**

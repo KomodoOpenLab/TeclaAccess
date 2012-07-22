@@ -57,6 +57,8 @@ public class MorseDictionary {
 		map.put("•-•-•", "\\n"); //New line
 		map.put("•-•-", "↵"); //Enter
 		map.put("-•-••", "✓"); //Done (minimizes keyboard)
+		map.put("••--•", "ABC"); //Toggle caps lock
+		map.put("-•••-", "Back"); //Back key
 	}
 	
 	/**
@@ -123,6 +125,8 @@ public class MorseDictionary {
 		map.put("•-•-•", "\\n"); //New line
 		map.put("•-•-", "↵"); //Enter
 		map.put("-•-••", "✓"); //Done (minimizes keyboard)
+		map.put("••--•", "ABC"); //Toggle caps lock
+		map.put("-•••-", "Back"); //Back key
 		return map;
 	}
 	

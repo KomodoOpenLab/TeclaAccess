@@ -151,7 +151,8 @@ public class MorseChart {
         	charTV.setTextSize(16.0f);
         	if (entry.getValue().equals("DEL") || entry.getValue().equals("↵") || 
         		entry.getValue().equals("\\n") || entry.getValue().equals("✓") ||
-        		entry.getValue().equals("SP"))
+        		entry.getValue().equals("SP") || entry.getValue().equals("ABC") ||
+        		entry.getValue().equals("Back"))
         		charTV.setTextColor(0xFFFA8E4B);
         	else
         		charTV.setTextColor(0xFF77A8D4);
