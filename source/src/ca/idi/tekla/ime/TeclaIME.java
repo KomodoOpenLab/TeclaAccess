@@ -86,6 +86,7 @@ public class TeclaIME extends InputMethodService
 	private static final int MSG_UPDATE_SUGGESTIONS = 0;
 	private static final int MSG_START_TUTORIAL = 1;
 	private static final int MSG_UPDATE_SHIFT_STATE = 2;
+	private static final int UPDATE_SHIFT_DELAY = 300;
 
 	// How many continuous deletes at which to start deleting at a higher speed.
 	private static final int DELETE_ACCELERATE_AT = 20;
@@ -465,25 +466,29 @@ public class TeclaIME extends InputMethodService
 
 		super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd,
 				candidatesStart, candidatesEnd);
-		// If the current selection in the text view changes, we should
-		// clear whatever candidate text we have.
-		if (mComposing.length() > 0 && mPredicting && (newSelStart != candidatesEnd
-				|| newSelEnd != candidatesEnd)) {
-			mComposing.setLength(0);
-			mPredicting = false;
-			updateSuggestions();
-			TextEntryState.reset();
-			InputConnection ic = getCurrentInputConnection();
-			if (ic != null) {
-				ic.finishComposingText();
-			}
-		} else if (!mPredicting && !mJustAccepted
-				&& TextEntryState.getState() == TextEntryState.STATE_ACCEPTED_DEFAULT) {
-			TextEntryState.reset();
-		}
-		mJustAccepted = false;
-		postUpdateShiftKeyState();
 
+		if (mKeyboardSwitcher.isMorseMode()) {
+			postUpdateShiftKeyState(0);
+		} else {
+			// If the current selection in the text view changes, we should
+			// clear whatever candidate text we have.
+			if (mComposing.length() > 0 && mPredicting && (newSelStart != candidatesEnd
+					|| newSelEnd != candidatesEnd)) {
+				mComposing.setLength(0);
+				mPredicting = false;
+				updateSuggestions();
+				TextEntryState.reset();
+				InputConnection ic = getCurrentInputConnection();
+				if (ic != null) {
+					ic.finishComposingText();
+				}
+			} else if (!mPredicting && !mJustAccepted
+					&& TextEntryState.getState() == TextEntryState.STATE_ACCEPTED_DEFAULT) {
+				TextEntryState.reset();
+			}
+			mJustAccepted = false;
+			postUpdateShiftKeyState(UPDATE_SHIFT_DELAY);
+		}
 	}
 
 	@Override
@@ -717,9 +722,9 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 
-	private void postUpdateShiftKeyState() {
+	private void postUpdateShiftKeyState(int delay) {
 		mHandler.removeMessages(MSG_UPDATE_SHIFT_STATE);
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_UPDATE_SHIFT_STATE), 300);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_UPDATE_SHIFT_STATE), delay);
 	}
 
 	public void updateShiftKeyState(EditorInfo attr) {
@@ -958,10 +963,9 @@ public class TeclaIME extends InputMethodService
 
 			//Update the key label according the current character
 			if (mIMEView.getKeyboard().isShifted()) {
-				mSpaceKey.label = charac.toUpperCase() + "  " + sequence;
-			} else {
-				mSpaceKey.label = charac + "  " + sequence;
+				charac = charac.toUpperCase();
 			}
+			mSpaceKey.label = charac + "  " + sequence;
 			mSpaceKey.icon = null;
 		}
 		else {
@@ -1008,7 +1012,7 @@ public class TeclaIME extends InputMethodService
 		} else {
 			deleteChar = true;
 		}
-		postUpdateShiftKeyState();
+		postUpdateShiftKeyState(UPDATE_SHIFT_DELAY);
 		TextEntryState.backspace();
 		if (TextEntryState.getState() == TextEntryState.STATE_UNDO_COMMIT) {
 			revertLastWord(deleteChar);
