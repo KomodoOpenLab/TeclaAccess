@@ -1479,7 +1479,11 @@ public class TeclaIME extends InputMethodService
 			// FIXME: Volume and enable should come from UI settings
 			// FIXME: These should be triggered after auto-repeat logic
 			int sound = AudioManager.FX_KEYPRESS_STANDARD;
-			int duration = TeclaApp.persistence.getMorseTimeUnit();
+			int duration;
+			if (TeclaApp.persistence.getMorseKeyMode() == TRIPLE_KEY_MODE)
+				duration = 100;
+			else
+				duration = TeclaApp.persistence.getMorseTimeUnit();
 			
 			switch (primaryCode) {
 			case Keyboard.KEYCODE_DELETE:

@@ -266,7 +266,7 @@
         <Preference
             android:key="morse_time_unit"
             android:persistent="true"
-            android:title="@string/morse_time_unit"/>
+            android:title="@string/morse_time_unit_title"/>
         
         <Preference
             android:key="morse_repeat_int"

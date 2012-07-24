@@ -310,7 +310,7 @@
 	<string name="morse_key_mode">Morse input method</string>
 	
 	<!-- Morse speed ratio strings -->
-	<string name="morse_time_unit">Morse time unit</string>
+	<string name="morse_time_unit_title">Morse time unit</string>
 	<string name="morse_time_unit_dlg_title">Select your Morse time unit</string>
 	
 	<!-- Morse repeat delay strings -->
