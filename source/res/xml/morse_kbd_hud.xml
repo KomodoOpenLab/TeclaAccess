@@ -54,9 +54,10 @@
                 android:keyWidth="18%"
                 android:isRepeatable="true"/>
             <Key
-                android:codes="559"
+                android:codes="-1"
                 android:iconPreview="@drawable/sym_keyboard_feedback_shift"
                 android:keyIcon="@drawable/sym_keyboard_shift"
+                android:isModifier="true"
                 android:isSticky="true"/>
             <Key
                 android:codes="67"

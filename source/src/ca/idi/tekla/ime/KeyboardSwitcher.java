@@ -56,8 +56,8 @@ public class KeyboardSwitcher {
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
     private static final int SYMBOLS_MODE_STATE_SYMBOL = 2;
     
-    TeclaKeyboardView mIMEView;
-    TeclaIME mContext;
+    private TeclaKeyboardView mIMEView;
+    private TeclaIME mContext;
     
     private KeyboardId mSymbolsId;
     private KeyboardId mSymbolsShiftedId;
@@ -368,17 +368,11 @@ public class KeyboardSwitcher {
     }
 
     boolean isNavigation() {
-		if (mMode == MODE_NAV) {
-			return true;
-		}
-		return false;
+    	return mMode == MODE_NAV;
     }
-    
+
     boolean isMorseMode() {
-		if (mMode == MODE_MORSE) {
-			return true;
-		}
-		return false;
+    	return mMode == MODE_MORSE; 
     }
 
     /**

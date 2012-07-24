@@ -37,7 +37,6 @@ public class TeclaKeyboard extends Keyboard {
     static final int KEYCODE_MORSE_DIT = 500;
     static final int KEYCODE_MORSE_DAH = 501;
     static final int KEYCODE_MORSE_SPACEKEY = 562;
-    static final int KEYCODE_MORSE_CAPSKEY = 559;
     static final int KEYCODE_MORSE_DELKEY = 67;
     
     private Drawable mShiftLockIcon;
@@ -47,7 +46,6 @@ public class TeclaKeyboard extends Keyboard {
     private Key mShiftKey;
     private Key mEnterKey;
     private Key mSpaceKey;
-	private Key mCapsLockKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
     private static final int SHIFT_LOCKED = 2;
@@ -90,9 +88,6 @@ public class TeclaKeyboard extends Keyboard {
         else if (key.codes[0] == KEYCODE_MORSE_SPACEKEY) {
 			mSpaceKey = key;
         }
-        else if (key.codes[0] == KEYCODE_MORSE_CAPSKEY) {
-        	mCapsLockKey = key;
-        }
         return key;
     }
     
@@ -103,15 +98,6 @@ public class TeclaKeyboard extends Keyboard {
      */
 	public Key getSpaceKey() {
 		return this.mSpaceKey;
-	}
-
-	/**
-	 * Returns a reference to the Morse Caps Lock key
-	 * (Morse mode only)
-	 * @return
-	 */
-	public Key getCapsLockKey() {
-		return this.mCapsLockKey;
 	}
     
     void setImeOptions(Resources res, int mode, int options) {

@@ -119,17 +119,9 @@ public class TeclaIME extends InputMethodService
 	// Morse variables	
 	private TeclaMorse mTeclaMorse;
 	private Keyboard.Key mSpaceKey;
-	private Keyboard.Key mCapsLockKey;
-	private int mCapsLockKeyIndex;
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
 	private long mMorseStartTime;
-	
-	// Morse caps lock key
-	private static final int CAPS_LOCK_OFF = 0;
-	private static final int CAPS_LOCK_NEXT = 1;
-	private static final int CAPS_LOCK_ALL = 2;
-	private Integer mCapsLockState = CAPS_LOCK_OFF;
 	
 	//Morse key modes
 	public static final int TRIPLE_KEY_MODE = 0;
@@ -282,7 +274,6 @@ public class TeclaIME extends InputMethodService
 		if (mKeyboardSwitcher.isMorseMode()) {
 			mTeclaMorse.getMorseChart().configChanged(conf);
 			updateSpaceKey(true);
-			updateCapsLockKey(true);
 			mIMEView.invalidate();
 		}
 	}
@@ -810,6 +801,8 @@ public class TeclaIME extends InputMethodService
 			break;
 		case Keyboard.KEYCODE_SHIFT:
 			handleShift();
+			if (mKeyboardSwitcher.isMorseMode())
+				updateSpaceKey(true);
 			break;
 		case Keyboard.KEYCODE_CANCEL:
 			if (mOptionsDialog == null || !mOptionsDialog.isShowing()) {
@@ -875,8 +868,6 @@ public class TeclaIME extends InputMethodService
 			}
 			break;
 
-			// Space button ends the current ditdah sequence
-			// Space twice in a row sends through a standard space character
 		case TeclaKeyboard.KEYCODE_MORSE_SPACEKEY:
 			if (TeclaApp.persistence.getMorseKeyMode() != SINGLE_KEY_MODE)
 				handleMorseSpaceKey();
@@ -884,10 +875,6 @@ public class TeclaIME extends InputMethodService
 
 		case TeclaKeyboard.KEYCODE_MORSE_DELKEY:
 			handleMorseBackspace(true);
-			break;
-
-		case TeclaKeyboard.KEYCODE_MORSE_CAPSKEY:
-			handleMorseCapskey();
 			break;
 		}
 
@@ -920,22 +907,15 @@ public class TeclaIME extends InputMethodService
 				} else if (curCharMatch.contentEquals("space")) {
 					getCurrentInputConnection().commitText(" ", 1);
 				} else if (curCharMatch.contentEquals("⇪")) {
-					handleMorseCapskey();
+					int[] shift = {Keyboard.KEYCODE_SHIFT};
+					emulateKeyPress(shift);
 				} else if (curCharMatch.contentEquals("↶")) {
 					handleSpecialKey(KeyEvent.KEYCODE_BACK);
 				} else if (curCharMatch.contentEquals("\\n")) {
 					getCurrentInputConnection().commitText("\n", 1);
 				} else {
 
-					boolean upperCase = false;
-					if (mCapsLockState == CAPS_LOCK_NEXT) {
-						upperCase = true;
-						mCapsLockState = CAPS_LOCK_OFF;
-						updateCapsLockKey(true);
-					} else if (mCapsLockState == CAPS_LOCK_ALL) {
-						upperCase = true;
-					}
-					if (upperCase) {
+					if (mIMEView.getKeyboard().isShifted()) {
 						curCharMatch = curCharMatch.toUpperCase();
 					}
 
@@ -959,31 +939,7 @@ public class TeclaIME extends InputMethodService
 			sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
 			clearCharInProgress();
 			updateSpaceKey(true);
-
-			if (mCapsLockState == CAPS_LOCK_NEXT) {
-				// If you've hit delete and you were in caps_next state,
-				// then caps_off
-				mCapsLockState = CAPS_LOCK_OFF;
-				updateCapsLockKey(true);
-			}
 		}
-	}
-	
-	/**
-	 * Handles the capslock key (Morse keyboard only)
-	 */
-	private void handleMorseCapskey() {
-		switch (mCapsLockState) {
-		case CAPS_LOCK_OFF:
-			mCapsLockState = CAPS_LOCK_NEXT;
-			break;
-		case CAPS_LOCK_NEXT:
-			mCapsLockState = CAPS_LOCK_ALL;
-			break;
-		default:
-			mCapsLockState = CAPS_LOCK_OFF;
-		}
-		updateCapsLockKey(true);
 	}
 	
 	/**
@@ -993,14 +949,19 @@ public class TeclaIME extends InputMethodService
 	private void updateSpaceKey(boolean refreshScreen) {
 		String sequence = mTeclaMorse.getCurrentChar();
 		String charac = mTeclaMorse.morseToChar(sequence);
-		
+
 		if (charac == null && sequence.length() > 0)
 			mSpaceKey.label = sequence;
-		
+
 		else if (!sequence.equals("") &&
-				 sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
+				sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
+
 			//Update the key label according the current character
-			mSpaceKey.label = (mCapsLockState == CAPS_LOCK_OFF ? charac : charac.toUpperCase()) + "  " + sequence;
+			if (mIMEView.getKeyboard().isShifted()) {
+				mSpaceKey.label = charac.toUpperCase() + "  " + sequence;
+			} else {
+				mSpaceKey.label = charac + "  " + sequence;
+			}
 			mSpaceKey.icon = null;
 		}
 		else {
@@ -1009,30 +970,9 @@ public class TeclaIME extends InputMethodService
 			mSpaceKey.label = null;
 			mSpaceKey.icon = TeclaApp.getInstance().getResources().getDrawable(R.drawable.sym_keyboard_space);
 		}
-		
-		if (refreshScreen)
-			mIMEView.invalidateKey(mSpaceKeyIndex);
-	}
-	
-	/**
-	 * Updates the state of the Caps Lock key (Morse keyboard only)
-	 * @param refreshScreen
-	 */
-	private void updateCapsLockKey(boolean refreshScreen) {
-		switch (mCapsLockState) {
-		case CAPS_LOCK_OFF:
-			mCapsLockKey.on = false;
-			break;
-		case CAPS_LOCK_NEXT:
-			mCapsLockKey.on = false;
-			break;
-		case CAPS_LOCK_ALL:
-			mCapsLockKey.on = true;
-			break;
-		}
 
 		if (refreshScreen)
-			mIMEView.invalidateKey(mCapsLockKeyIndex);
+			mIMEView.invalidateKey(mSpaceKeyIndex);
 	}
 
 	public void onText(CharSequence text) {
@@ -1735,12 +1675,10 @@ public class TeclaIME extends InputMethodService
 	
 	private void initMorseKeyboard() {
 		if (mKeyboardSwitcher.isMorseMode()) {
-			//Initialize Space and Caps Lock key objects
+			//Initialize Space key object
 			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
-			mCapsLockKey = mIMEView.getKeyboard().getCapsLockKey();
 			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
 			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
-			mCapsLockKeyIndex = keys.indexOf(mCapsLockKey);
 		}
 	}
 	
@@ -2103,8 +2041,7 @@ public class TeclaIME extends InputMethodService
 		return (keycode == TeclaKeyboard.KEYCODE_MORSE_DIT)
 				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_DAH)
 				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY)
-				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_DELKEY)
-				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_CAPSKEY);
+				|| (keycode == TeclaKeyboard.KEYCODE_MORSE_DELKEY);
 	}
 
 	private boolean isSpecialKey(int keycode) {
