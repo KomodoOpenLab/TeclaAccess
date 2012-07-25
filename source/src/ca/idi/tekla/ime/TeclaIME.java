@@ -274,7 +274,7 @@ public class TeclaIME extends InputMethodService
 		
 		if (mKeyboardSwitcher.isMorseMode()) {
 			mTeclaMorse.getMorseChart().configChanged(conf);
-			updateSpaceKey(true);
+			updateSpaceKey();
 			mIMEView.invalidate();
 		}
 	}
@@ -440,8 +440,7 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-		
-		initMorseKeyboard();
+
 		if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			mTeclaMorse.getMorseChart().restore();
 			mIMEView.invalidate();
@@ -468,7 +467,8 @@ public class TeclaIME extends InputMethodService
 				candidatesStart, candidatesEnd);
 
 		if (mKeyboardSwitcher.isMorseMode()) {
-			postUpdateShiftKeyState(0);
+			//postUpdateShiftKeyState(0);
+			updateShiftKeyState(getCurrentInputEditorInfo());
 		} else {
 			// If the current selection in the text view changes, we should
 			// clear whatever candidate text we have.
@@ -807,7 +807,7 @@ public class TeclaIME extends InputMethodService
 		case Keyboard.KEYCODE_SHIFT:
 			handleShift();
 			if (mKeyboardSwitcher.isMorseMode())
-				updateSpaceKey(true);
+				updateSpaceKey();
 			break;
 		case Keyboard.KEYCODE_CANCEL:
 			if (mOptionsDialog == null || !mOptionsDialog.isShowing()) {
@@ -856,7 +856,6 @@ public class TeclaIME extends InputMethodService
 	 * @param primaryCode
 	 */
 	public void onKeyMorse(int primaryCode) {
-		initMorseKeyboard();
 		switch (primaryCode) {
 
 		case TeclaKeyboard.KEYCODE_MORSE_DIT:
@@ -883,7 +882,7 @@ public class TeclaIME extends InputMethodService
 			break;
 		}
 
-		updateSpaceKey(true);
+		updateSpaceKey();
 		mIMEView.invalidate();
 	}
 	
@@ -943,24 +942,24 @@ public class TeclaIME extends InputMethodService
 		}else {
 			sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL);
 			clearCharInProgress();
-			updateSpaceKey(true);
+			updateSpaceKey();
 		}
 	}
 	
 	/**
 	 * Updates the state of the Space key (Morse keyboard only)
-	 * @param refreshScreen
 	 */
-	private void updateSpaceKey(boolean refreshScreen) {
+	private void updateSpaceKey() {
 		String sequence = mTeclaMorse.getCurrentChar();
 		String charac = mTeclaMorse.morseToChar(sequence);
+		mSpaceKey = mIMEView.getKeyboard().getMorseSpaceKey();
+		mSpaceKeyIndex = mIMEView.getKeyboard().getMorseSpaceKeyIndex();
 
 		if (charac == null && sequence.length() > 0)
 			mSpaceKey.label = sequence;
 
 		else if (!sequence.equals("") &&
 				sequence.length() <= mTeclaMorse.getMorseDictionary().getMaxCodeLength()) {
-
 			//Update the key label according the current character
 			if (mIMEView.getKeyboard().isShifted()) {
 				charac = charac.toUpperCase();
@@ -968,15 +967,15 @@ public class TeclaIME extends InputMethodService
 			mSpaceKey.label = charac + "  " + sequence;
 			mSpaceKey.icon = null;
 		}
+		
 		else {
-			//Icon should take precedence over label, but it is not the case,
+			//Icon should take precedence over label, but it does not work,
 			//so set label to null
 			mSpaceKey.label = null;
 			mSpaceKey.icon = TeclaApp.getInstance().getResources().getDrawable(R.drawable.sym_keyboard_space);
 		}
 
-		if (refreshScreen)
-			mIMEView.invalidateKey(mSpaceKeyIndex);
+		mIMEView.invalidateKey(mSpaceKeyIndex);
 	}
 
 	public void onText(CharSequence text) {
@@ -1677,15 +1676,6 @@ public class TeclaIME extends InputMethodService
 
 	}
 	
-	private void initMorseKeyboard() {
-		if (mKeyboardSwitcher.isMorseMode()) {
-			//Initialize Space key object
-			mSpaceKey = mIMEView.getKeyboard().getSpaceKey();
-			List<Keyboard.Key> keys = mIMEView.getKeyboard().getKeys();
-			mSpaceKeyIndex = keys.indexOf(mSpaceKey);
-		}
-	}
-	
 	private void typeInputString(String input_string) {
 		Log.d(TeclaApp.TAG, CLASS_TAG + "Received input string: " + input_string);
 		mVoiceInputString = input_string;
@@ -1756,7 +1746,7 @@ public class TeclaIME extends InputMethodService
 			}
 		}
 		
-		updateSpaceKey(true);
+		updateSpaceKey();
 		mIMEView.invalidate();
 		return addedDitDah;
 	}
@@ -1800,7 +1790,7 @@ public class TeclaIME extends InputMethodService
 	private Runnable mEndOfCharRunnable = new Runnable() {
 		public void run() {
 			handleMorseSpaceKey();
-			updateSpaceKey(true);
+			updateSpaceKey();
 			mIMEView.invalidate();
 		}
 	};
@@ -1973,8 +1963,7 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	private void emulateMorseKey(int key) {
-		int[] keyCode = new int[1];
-		keyCode[0] = key;
+		int[] keyCode = {key};
 		emulateKeyPress(keyCode);
 		playKeyClick(key);
 	}
@@ -2075,8 +2064,6 @@ public class TeclaIME extends InputMethodService
 					mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode);
 					mIMEView.getKeyboard().setShifted(mWasShifted);
 				}
-				
-				initMorseKeyboard();
 				
 				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 					mTeclaMorse.getMorseChart().restore();
@@ -2295,7 +2282,6 @@ public class TeclaIME extends InputMethodService
 		} else {
 			showWindow(true);
 			updateInputViewShown();
-			initMorseKeyboard();
 			
 			// Fixes https://github.com/jorgesilva/TeclaAccess/issues/3
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {

@@ -45,7 +45,6 @@ public class TeclaKeyboard extends Keyboard {
     private Drawable mOldShiftPreviewIcon;
     private Key mShiftKey;
     private Key mEnterKey;
-    private Key mSpaceKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
     private static final int SHIFT_LOCKED = 2;
@@ -85,20 +84,8 @@ public class TeclaKeyboard extends Keyboard {
         if (key.codes[0] == 10) {
             mEnterKey = key;
         }
-        else if (key.codes[0] == KEYCODE_MORSE_SPACEKEY) {
-			mSpaceKey = key;
-        }
         return key;
     }
-    
-    /**
-     * Returns a reference to the Morse space key
-     * (Morse mode only)
-     * @return
-     */
-	public Key getSpaceKey() {
-		return this.mSpaceKey;
-	}
     
     void setImeOptions(Resources res, int mode, int options) {
         if (mEnterKey != null) {
@@ -361,6 +348,14 @@ public class TeclaKeyboard extends Keyboard {
 	
 	public Key getVariantsKey() {
 		return getKeyFromCode(TeclaKeyboard.KEYCODE_VARIANTS);
+	}
+	
+	public Key getMorseSpaceKey() {
+		return getKeyFromCode(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+	}
+	
+	public int getMorseSpaceKeyIndex() {
+		return getKeyIndexFromKeyCode(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 	}
 
 	private void customInit() {
