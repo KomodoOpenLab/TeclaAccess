@@ -1712,7 +1712,8 @@ public class TeclaIME extends InputMethodService
 			break;
 			
 		case DOUBLE_KEY_MODE:
-			emulateMorseKey(mRepeatedKey);
+			int[] key = {mRepeatedKey};
+			emulateKeyPress(key);
 			break;
 			
 		case SINGLE_KEY_MODE:
@@ -1767,7 +1768,8 @@ public class TeclaIME extends InputMethodService
 	private Runnable mRepeatRunnable = new Runnable() {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
-			emulateMorseKey(mRepeatedKey);
+			int[] key = {mRepeatedKey};
+			emulateKeyPress(key);
 			mTeclaHandler.postAtTime(this, start + TeclaApp.persistence.getRepeatFrequency());
 		}
 	};
@@ -1777,7 +1779,8 @@ public class TeclaIME extends InputMethodService
 	 */
 	private Runnable mStartRepeatRunnable = new Runnable() {
 		public void run() {
-			emulateMorseKey(mRepeatedKey);
+			int[] key = {mRepeatedKey};
+			emulateKeyPress(key);
 			int frequency = TeclaApp.persistence.getRepeatFrequency();
 			if (frequency != Persistence.NEVER_REPEAT)
 				mTeclaHandler.postDelayed(mRepeatRunnable, frequency);
@@ -1851,8 +1854,10 @@ public class TeclaIME extends InputMethodService
 
 		case 3:
 			//Send through a space key event
-			if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
-				emulateMorseKey(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+				int[] key = {TeclaKeyboard.KEYCODE_MORSE_SPACEKEY};
+				emulateKeyPress(key);
+			}
 			break;
 
 		case 4:
@@ -1868,8 +1873,10 @@ public class TeclaIME extends InputMethodService
 
 		case 5:
 			//Hide the Morse IME view
-			if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
-				emulateMorseKey(Keyboard.KEYCODE_DONE);
+			if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
+				int[] key = {Keyboard.KEYCODE_DONE};
+				emulateKeyPress(key);
+			}
 			break;
 		default:
 			break;
@@ -1960,12 +1967,6 @@ public class TeclaIME extends InputMethodService
 		}
 		
 		evaluateNavKbdTimeout();		
-	}
-	
-	private void emulateMorseKey(int key) {
-		int[] keyCode = {key};
-		emulateKeyPress(keyCode);
-		playKeyClick(key);
 	}
 	
 	/**
@@ -2138,6 +2139,8 @@ public class TeclaIME extends InputMethodService
 	private void emulateKeyPress(int[] key_codes) {
 		// Process key as if it had been pressed
 		onKey(key_codes[0], key_codes);
+		if (mKeyboardSwitcher.isMorseMode())
+			playKeyClick(key_codes[0]);
 	}
 
 
