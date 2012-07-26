@@ -894,10 +894,13 @@ public class TeclaIME extends InputMethodService
 	 * Handles the space / end-of-character event (Morse keyboard only)
 	 */	
 	private void handleMorseSpaceKey() {
-		String curCharMatch = mTeclaMorse.morseToChar(mTeclaMorse.getCurrentChar());
+		String currentChar = mTeclaMorse.getCurrentChar();
+		String curCharMatch = mTeclaMorse.morseToChar(currentChar);
+		clearCharInProgress();
 		
-		if (mTeclaMorse.getCurrentChar().length() == 0) {
+		if (currentChar.length() == 0) {
 			getCurrentInputConnection().commitText(" ", 1);
+			
 		}
 		else {
 			if (curCharMatch != null) {
@@ -907,7 +910,8 @@ public class TeclaIME extends InputMethodService
 				} else if (curCharMatch.contentEquals("DEL")) {
 					handleMorseBackspace(false);	
 				} else if (curCharMatch.contentEquals("✓")) {
-					hideSoftIME();
+					updateSpaceKey();
+					handleSpecialKey(Keyboard.KEYCODE_DONE);
 				} else if (curCharMatch.contentEquals("space")) {
 					getCurrentInputConnection().commitText(" ", 1);
 				} else if (curCharMatch.contentEquals("⇪")) {
@@ -927,7 +931,6 @@ public class TeclaIME extends InputMethodService
 				}
 			}
 		}
-		clearCharInProgress();
 	}
 
 	/**
@@ -954,6 +957,9 @@ public class TeclaIME extends InputMethodService
 		String charac = mTeclaMorse.morseToChar(sequence);
 		mSpaceKey = mIMEView.getKeyboard().getMorseSpaceKey();
 		mSpaceKeyIndex = mIMEView.getKeyboard().getMorseSpaceKeyIndex();
+		
+		if (mSpaceKey == null)
+			return;
 
 		if (charac == null && sequence.length() > 0)
 			mSpaceKey.label = sequence;
