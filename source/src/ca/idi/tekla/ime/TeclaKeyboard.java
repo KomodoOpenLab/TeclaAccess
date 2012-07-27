@@ -357,6 +357,10 @@ public class TeclaKeyboard extends Keyboard {
 	public int getMorseSpaceKeyIndex() {
 		return getKeyIndexFromKeyCode(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
 	}
+	
+	public int getShiftKeyIndex() {
+		return getKeyIndexFromKeyCode(Keyboard.KEYCODE_SHIFT);
+	}
 
 	private void customInit() {
 		Key key = getVariantsKey();

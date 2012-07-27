@@ -806,8 +806,9 @@ public class TeclaIME extends InputMethodService
 			break;
 		case Keyboard.KEYCODE_SHIFT:
 			handleShift();
-			if (mKeyboardSwitcher.isMorseMode())
+			if (mKeyboardSwitcher.isMorseMode()) {
 				updateSpaceKey();
+			}
 			break;
 		case Keyboard.KEYCODE_CANCEL:
 			if (mOptionsDialog == null || !mOptionsDialog.isShowing()) {
@@ -1040,6 +1041,7 @@ public class TeclaIME extends InputMethodService
 		} else {
 			mKeyboardSwitcher.toggleShift();
 		}
+		mIMEView.invalidateKey(mIMEView.getKeyboard().getShiftKeyIndex());
 	}
 
 	private void handleCharacter(int primaryCode, int[] keyCodes) {
