@@ -26,11 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
@@ -38,7 +34,6 @@ import android.view.WindowManager;
 import java.util.List;
 
 import ca.idi.tekla.R;
-import ca.idi.tekla.TeclaApp;
 
 public class TeclaKeyboardView extends KeyboardView {
 
@@ -47,7 +42,6 @@ public class TeclaKeyboardView extends KeyboardView {
 	private TeclaIME mIME;
 	
 	private Dialog cheatsheetDialog;
-	
 
     static final int KEYCODE_OPTIONS = -100;
     static final int KEYCODE_SHIFT_LONGPRESS = -101;
@@ -125,20 +119,30 @@ public class TeclaKeyboardView extends KeyboardView {
 			lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
 			lp.y = 160;
 			window.setAttributes(lp);
+			window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
 		}
 	}
 	
 	public void updateHUD() {
+		//TODO optimize showing/dismissal of dialog
 		createCheatSheet();
 		String s = mTeclaMorse.getCurrentChar();
-		if (s.equals("•"))
+		if (s.equals("•")) {
+			closeCheatSheet();
 			cheatsheetDialog.setContentView(R.layout.dit_table);
-		else if (s.equals("-"))
+			showCheatSheet();
+		}
+		else if (s.equals("-")) {
+			closeCheatSheet();
 			cheatsheetDialog.setContentView(R.layout.dah_table);
-		else if (s.equals(""))
-			cheatsheetDialog.setContentView(R.layout.utility_table);
-		showCheatSheet();
+			showCheatSheet();
+		}
+		else if (s.equals("")) {
+			closeCheatSheet();
+			cheatsheetDialog.setContentView(R.layout.utility_table); 
+			showCheatSheet();
+		}
 	}
 	
 	/**

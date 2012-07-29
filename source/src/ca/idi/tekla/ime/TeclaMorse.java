@@ -12,11 +12,11 @@ public class TeclaMorse {
 	private MorseDictionary mMorseDictionary;
 	private LinkedHashMap<String, String> mCandidates;
 	private static StringBuilder mCurrentChar;
-	private static MorseChart mMorseChart;
+	//private static MorseChart mMorseChart;
 	
 	
 	public TeclaMorse(Context context) {
-		mMorseChart = new MorseChart(context, this);
+		//mMorseChart = new MorseChart(context, this);
 		mCurrentChar = new StringBuilder();
 		mMorseDictionary = new MorseDictionary();
 		mCandidates = new LinkedHashMap<String,String>();
@@ -82,9 +82,9 @@ public class TeclaMorse {
 	 * Returns the Morse chart used for the HUD display
 	 * @return
 	 */
-	public MorseChart getMorseChart() {
+	/*public MorseChart getMorseChart() {
 		return mMorseChart;
-	}
+	}*/
 	
 	/**
 	 * Add a dit to the current char sequence

@@ -273,7 +273,7 @@ public class TeclaIME extends InputMethodService
 		super.onConfigurationChanged(conf);	
 		
 		if (mKeyboardSwitcher.isMorseMode()) {
-			mTeclaMorse.getMorseChart().configChanged(conf);
+			//mTeclaMorse.getMorseChart().configChanged(conf);
 			updateSpaceKey();
 			mIMEView.invalidate();
 		}
@@ -442,8 +442,7 @@ public class TeclaIME extends InputMethodService
 		}
 
 		if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-			mTeclaMorse.getMorseChart().restore();
-			mIMEView.invalidate();
+			mIMEView.updateHUD();
 		}
 		
 		evaluateNavKbdTimeout();
@@ -2060,7 +2059,7 @@ public class TeclaIME extends InputMethodService
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
 				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-					mTeclaMorse.getMorseChart().hide();
+					mIMEView.closeCheatSheet();
 				}
 				// Closing
 				mLastFullKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
@@ -2076,8 +2075,7 @@ public class TeclaIME extends InputMethodService
 				}
 				
 				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-					mTeclaMorse.getMorseChart().restore();
-					mIMEView.invalidate();
+					mIMEView.updateHUD();
 				}
 				evaluateStartScanning();
 			}
