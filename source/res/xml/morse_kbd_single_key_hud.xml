@@ -24,11 +24,6 @@
         android:verticalGap="0px">
         
         <Row
-            android:rowEdgeFlags="top"
-            android:keyWidth="100%"
-            android:keyHeight="10%"/>
-        
-        <Row
             android:keyWidth="15%"
             android:rowEdgeFlags="bottom"
             android:keyHeight="11%">

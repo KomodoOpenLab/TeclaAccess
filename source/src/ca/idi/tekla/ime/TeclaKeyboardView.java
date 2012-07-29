@@ -34,6 +34,7 @@ import android.view.WindowManager;
 import java.util.List;
 
 import ca.idi.tekla.R;
+import ca.idi.tekla.TeclaApp;
 
 public class TeclaKeyboardView extends KeyboardView {
 
@@ -125,23 +126,24 @@ public class TeclaKeyboardView extends KeyboardView {
 	}
 	
 	public void updateHUD() {
-		//TODO optimize showing/dismissal of dialog
-		createCheatSheet();
-		String s = mTeclaMorse.getCurrentChar();
-		if (s.equals("•")) {
-			closeCheatSheet();
-			cheatsheetDialog.setContentView(R.layout.dit_table);
-			showCheatSheet();
-		}
-		else if (s.equals("-")) {
-			closeCheatSheet();
-			cheatsheetDialog.setContentView(R.layout.dah_table);
-			showCheatSheet();
-		}
-		else if (s.equals("")) {
-			closeCheatSheet();
-			cheatsheetDialog.setContentView(R.layout.utility_table); 
-			showCheatSheet();
+		if (TeclaApp.persistence.isMorseHudEnabled()) {
+			createCheatSheet();
+			String s = mTeclaMorse.getCurrentChar();
+			if (s.equals("•")) {
+				closeCheatSheet();
+				cheatsheetDialog.setContentView(R.layout.dit_table);
+				showCheatSheet();
+			}
+			else if (s.equals("-")) {
+				closeCheatSheet();
+				cheatsheetDialog.setContentView(R.layout.dah_table);
+				showCheatSheet();
+			}
+			else if (s.equals("")) {
+				closeCheatSheet();
+				cheatsheetDialog.setContentView(R.layout.utility_table); 
+				showCheatSheet();
+			}
 		}
 	}
 	

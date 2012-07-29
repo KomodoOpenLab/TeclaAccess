@@ -441,9 +441,9 @@ public class TeclaIME extends InputMethodService
 			evaluateStartScanning();
 		}
 
-		if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
+		/*if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			mIMEView.updateHUD();
-		}
+		}*/
 		
 		evaluateNavKbdTimeout();
 	}
