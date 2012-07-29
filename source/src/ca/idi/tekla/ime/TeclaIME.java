@@ -273,7 +273,6 @@ public class TeclaIME extends InputMethodService
 		super.onConfigurationChanged(conf);	
 		
 		if (mKeyboardSwitcher.isMorseMode()) {
-			//mTeclaMorse.getMorseChart().configChanged(conf);
 			updateSpaceKey();
 			mIMEView.invalidate();
 		}

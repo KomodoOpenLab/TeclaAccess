@@ -38,7 +38,6 @@ import ca.idi.tekla.TeclaApp;
 
 public class TeclaKeyboardView extends KeyboardView {
 
-	
 	private TeclaMorse mTeclaMorse;
 	private TeclaIME mIME;
 	
