@@ -126,7 +126,7 @@ public class TeclaKeyboardView extends KeyboardView {
 	}
 	
 	public void updateHUD() {
-		if (TeclaApp.persistence.isMorseHudEnabled()) {
+		if (mIME.mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			createCheatSheet();
 			String s = mTeclaMorse.getCurrentChar();
 			if (s.equals("•")) {
@@ -145,6 +145,8 @@ public class TeclaKeyboardView extends KeyboardView {
 				showCheatSheet();
 			}
 		}
+		else
+			closeCheatSheet();
 	}
 	
 	/**
