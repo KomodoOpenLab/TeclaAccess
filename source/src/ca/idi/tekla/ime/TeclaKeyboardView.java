@@ -26,8 +26,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -40,12 +44,9 @@ public class TeclaKeyboardView extends KeyboardView {
 
 	
 	private TeclaMorse mTeclaMorse;
-	private MorseChart mMorseChart;
 	private TeclaIME mIME;
 	
 	private Dialog cheatsheetDialog;
-	private View cheatsheet1;
-    private View cheatsheet2;
 	
 
     static final int KEYCODE_OPTIONS = -100;
@@ -78,14 +79,15 @@ public class TeclaKeyboardView extends KeyboardView {
 
     @Override
     protected boolean onLongPress(Key key) {
-        if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
+        /*if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
         		TeclaApp.persistence.getMorseKeyMode() != TeclaIME.SINGLE_KEY_MODE) {
         	if (cheatsheetDialog != null && cheatsheetDialog.isShowing())
         		cheatsheetDialog.dismiss();
         	else
         		showCheatSheet();
             return true;		
-        } else if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {
+        } else*/ 
+    	if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
             return true;
         } else if (key.codes[0] == Keyboard.KEYCODE_SHIFT) {
@@ -110,49 +112,39 @@ public class TeclaKeyboardView extends KeyboardView {
 	 * Creates a Morse cheat sheet (Morse mode only)
 	 */
 	public void createCheatSheet() {
-		if (this.cheatsheet1 == null) {
-			this.cheatsheet1 = mIME.getLayoutInflater().inflate(R.layout.cheat_sheet1, null);
-		}
-		if (this.cheatsheet2 == null) {
-			this.cheatsheet2 = mIME.getLayoutInflater().inflate(R.layout.cheat_sheet2, null);
-		}
 		if (this.cheatsheetDialog == null) {
 			this.cheatsheetDialog = new Dialog(mIME);
-
 			cheatsheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			cheatsheetDialog.setCancelable(false);
+			cheatsheetDialog.setCanceledOnTouchOutside(false);
 
-			cheatsheetDialog.setCancelable(true);
-			cheatsheetDialog.setCanceledOnTouchOutside(true);
-			cheatsheetDialog.setContentView(cheatsheet1);
-			cheatsheet1.setOnTouchListener(new OnTouchListener() {
-				public boolean onTouch(View v, MotionEvent event) {
-					FixedSizeView fsv = (FixedSizeView) cheatsheet2;
-					fsv.fixedHeight = cheatsheet1.getMeasuredHeight();
-					fsv.fixedWidth = cheatsheet1.getMeasuredWidth();
-					cheatsheetDialog.setContentView(cheatsheet2);
-					return true;
-				}
-			});
-			cheatsheet2.setOnTouchListener(new OnTouchListener() {
-				public boolean onTouch(View v, MotionEvent event) {
-					cheatsheetDialog.setContentView(cheatsheet1);
-					return true;
-				}
-			});
 			Window window = this.cheatsheetDialog.getWindow();
+			window.setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
 			lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+			lp.y = 160;
 			window.setAttributes(lp);
-			window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
 		}
+	}
+	
+	public void updateHUD() {
+		createCheatSheet();
+		String s = mTeclaMorse.getCurrentChar();
+		if (s.equals("•"))
+			cheatsheetDialog.setContentView(R.layout.dit_table);
+		else if (s.equals("-"))
+			cheatsheetDialog.setContentView(R.layout.dah_table);
+		else if (s.equals(""))
+			cheatsheetDialog.setContentView(R.layout.utility_table);
+		showCheatSheet();
 	}
 	
 	/**
 	 * Displays the Morse cheat sheet (Morse mode only)
 	 */
 	public void showCheatSheet() {
-		createCheatSheet();
 		this.cheatsheetDialog.show();
 	}
 	
@@ -278,16 +270,6 @@ public class TeclaKeyboardView extends KeyboardView {
     
 	@Override
 	public void onDraw(Canvas canvas) {
-		super.onDraw(canvas); 
-
-		if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE &&
-				TeclaApp.persistence.isMorseHudEnabled()) {
-			//Update the state of the Morse HUD display
-			mMorseChart = mTeclaMorse.getMorseChart();
-			mMorseChart.update();
-			mMorseChart.layout.measure(canvas.getWidth(), canvas.getHeight());
-			mMorseChart.layout.layout(0, 0, canvas.getWidth(), canvas.getHeight());
-			mMorseChart.layout.draw(canvas);  
-		}
+		super.onDraw(canvas);
 	}
 }

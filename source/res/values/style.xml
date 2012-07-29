@@ -19,25 +19,25 @@
         <item name="android:gravity">left</item>
     </style>
     <style name="code" parent="@style/code_nopadding">
-        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginRight">12dp</item>
     </style>
-        <style name="cheatsheettable">
-            <item name="android:layout_margin">20dp</item>
+    <style name="cheatsheettable">
+        <!-- <item name="android:layout_margin">20dp</item> -->
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-        </style>
+        <item name="android:layout_gravity">center</item>   
+    </style>
     <style name="cheatsheetrow">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginLeft">20dp</item>
-        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
     </style>
     <style name="cheatsheettoprow" parent="@style/cheatsheetrow">
-        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginTop">14dp</item>
     </style>
     <style name="cheatsheetbottomrow" parent="@style/cheatsheetrow">
-        <item name="android:layout_marginBottom">20dp</item>
-    </style>
+        <item name="android:layout_marginBottom">14dp</item>
+    </style> 
 </resources>

@@ -885,6 +885,7 @@ public class TeclaIME extends InputMethodService
 
 		updateSpaceKey();
 		mIMEView.invalidate();
+		mIMEView.updateHUD();
 	}
 	
 	private void clearCharInProgress() {
