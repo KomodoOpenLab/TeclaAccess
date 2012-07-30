@@ -10,7 +10,7 @@ Getting Involved
 There are many ways to contribute to the [Tecla Access App for Android](https://play.google.com/store/apps/details?id=ca.idi.tekla). Here are some ideas:
 
 ### Code
-In order to start contributing code to the Tecla Access project, follow the steps outlined in the ['Contributing Code' page](https://github.com/jorgesilva/TeclaAccess/wiki/Contributing-Code) at https://github.com/jorgesilva/TeclaAccess/wiki/Contributing-Code
+In order to start contributing code to the Tecla Access project, follow the steps outlined in the ['Contributing Code' page](https://github.com/idrc/TeclaAccess/wiki/Contributing-Code) at https://github.com/idrc/TeclaAccess/wiki/Contributing-Code
 
 ### Review
 
