@@ -41,7 +41,7 @@ public class TeclaKeyboardView extends KeyboardView {
 	private TeclaMorse mTeclaMorse;
 	private TeclaIME mIME;
 	
-	private Dialog cheatsheetDialog;
+	private Dialog mHudDialog;
 	
 	private final int DIT_TABLE = 0;
 	private final int DAH_TABLE = 1;
@@ -112,13 +112,13 @@ public class TeclaKeyboardView extends KeyboardView {
 	 * Creates a Morse cheat sheet (Morse mode only)
 	 */
 	public void createCheatSheet() {
-		if (this.cheatsheetDialog == null) {
-			this.cheatsheetDialog = new Dialog(mIME);
-			cheatsheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-			cheatsheetDialog.setCancelable(false);
-			cheatsheetDialog.setCanceledOnTouchOutside(false);
+		if (mHudDialog == null) {
+			mHudDialog = new Dialog(mIME);
+			mHudDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			mHudDialog.setCancelable(false);
+			mHudDialog.setCanceledOnTouchOutside(false);
 
-			Window window = this.cheatsheetDialog.getWindow();
+			Window window = mHudDialog.getWindow();
 			window.setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
@@ -130,46 +130,40 @@ public class TeclaKeyboardView extends KeyboardView {
 		}
 	}
 	
-	public void updateHUD() {
+	public void updateHud() {
 		if (mIME.mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			createCheatSheet();
 			String s = mTeclaMorse.getCurrentChar();
+			
 			if (s.equals("•")) {
-				closeCheatSheet();
-				cheatsheetDialog.setContentView(R.layout.dit_table);
+				dismissHud();
 				mCurrentTable = DIT_TABLE;
-				showCheatSheet();
+				mHudDialog.setContentView(R.layout.dit_table);
+				mHudDialog.show();
 			}
 			else if (s.equals("-")) {
-				closeCheatSheet();
-				cheatsheetDialog.setContentView(R.layout.dah_table);
+				dismissHud();
 				mCurrentTable = DAH_TABLE;
-				showCheatSheet();
+				mHudDialog.setContentView(R.layout.dah_table);
+				mHudDialog.show();
 			}
 			else if (mCurrentTable != UTIL_TABLE && s.equals("")) {
-				closeCheatSheet();
-				cheatsheetDialog.setContentView(R.layout.utility_table); 
+				dismissHud();
 				mCurrentTable = UTIL_TABLE;
-				showCheatSheet();
+				mHudDialog.setContentView(R.layout.utility_table);
+				mHudDialog.show();
 			}
 		}
 		else
-			closeCheatSheet();
-	}
-	
-	/**
-	 * Displays the Morse cheat sheet (Morse mode only)
-	 */
-	public void showCheatSheet() {
-		this.cheatsheetDialog.show();
+			dismissHud();
 	}
 	
 	/**
 	 * Dismisses the Morse cheat sheet (Morse mode only)
 	 */
-	public void closeCheatSheet() {
-        if (cheatsheetDialog != null) {
-                cheatsheetDialog.dismiss();
+	public void dismissHud() {
+        if (mHudDialog != null) {
+                mHudDialog.dismiss();
         }
 	}
 	

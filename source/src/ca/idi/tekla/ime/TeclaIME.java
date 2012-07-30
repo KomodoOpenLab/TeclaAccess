@@ -884,7 +884,7 @@ public class TeclaIME extends InputMethodService
 
 		updateSpaceKey();
 		mIMEView.invalidate();
-		mIMEView.updateHUD();
+		mIMEView.updateHud();
 	}
 	
 	private void clearCharInProgress() {
@@ -2059,7 +2059,7 @@ public class TeclaIME extends InputMethodService
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
 				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-					mIMEView.closeCheatSheet();
+					mIMEView.dismissHud();
 				}
 				// Closing
 				mLastFullKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
@@ -2075,7 +2075,7 @@ public class TeclaIME extends InputMethodService
 				}
 				
 				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-					mIMEView.updateHUD();
+					mIMEView.updateHud();
 				}
 				evaluateStartScanning();
 			}
