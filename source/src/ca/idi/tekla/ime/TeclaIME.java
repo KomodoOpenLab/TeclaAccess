@@ -440,6 +440,7 @@ public class TeclaIME extends InputMethodService
 			evaluateStartScanning();
 		}
 
+		//TODO prevent HUD from appearing above NAV keyboard (right after minimizing Morse kbd)
 		/*if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			mIMEView.updateHUD();
 		}*/

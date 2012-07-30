@@ -42,6 +42,12 @@ public class TeclaKeyboardView extends KeyboardView {
 	private TeclaIME mIME;
 	
 	private Dialog cheatsheetDialog;
+	
+	private final int DIT_TABLE = 0;
+	private final int DAH_TABLE = 1;
+	private final int UTIL_TABLE = 2;
+	private int mCurrentTable;
+	
 
     static final int KEYCODE_OPTIONS = -100;
     static final int KEYCODE_SHIFT_LONGPRESS = -101;
@@ -131,16 +137,19 @@ public class TeclaKeyboardView extends KeyboardView {
 			if (s.equals("•")) {
 				closeCheatSheet();
 				cheatsheetDialog.setContentView(R.layout.dit_table);
+				mCurrentTable = DIT_TABLE;
 				showCheatSheet();
 			}
 			else if (s.equals("-")) {
 				closeCheatSheet();
 				cheatsheetDialog.setContentView(R.layout.dah_table);
+				mCurrentTable = DAH_TABLE;
 				showCheatSheet();
 			}
-			else if (s.equals("")) {
+			else if (mCurrentTable != UTIL_TABLE && s.equals("")) {
 				closeCheatSheet();
 				cheatsheetDialog.setContentView(R.layout.utility_table); 
+				mCurrentTable = UTIL_TABLE;
 				showCheatSheet();
 			}
 		}
