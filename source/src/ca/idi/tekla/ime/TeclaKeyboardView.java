@@ -22,12 +22,10 @@ import android.graphics.Canvas;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Gravity;
@@ -132,29 +130,35 @@ public class TeclaKeyboardView extends KeyboardView {
 			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
 		}
 	}
-	
+
 	public void updateHud() {
 		if (mIME.mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			createCheatSheet();
 			String s = mTeclaMorse.getCurrentChar();
-			
-			if (s.equals("•")) {
-				dismissHud();
-				mCurrentTable = DIT_TABLE;
-				mHudDialog.setContentView(R.layout.dit_table);
-				mHudDialog.show();
-			}
-			else if (s.equals("-")) {
-				dismissHud();
-				mCurrentTable = DAH_TABLE;
-				mHudDialog.setContentView(R.layout.dah_table);
-				mHudDialog.show();
-			}
-			else if (mCurrentTable != UTIL_TABLE && s.equals("")) {
-				dismissHud();
-				mCurrentTable = UTIL_TABLE;
+
+			if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE) {
 				mHudDialog.setContentView(R.layout.utility_table);
 				mHudDialog.show();
+			} else {
+
+				if (s.equals("•")) {
+					dismissHud();
+					mCurrentTable = DIT_TABLE;
+					mHudDialog.setContentView(R.layout.dit_table);
+					mHudDialog.show();
+				}
+				else if (s.equals("-")) {
+					dismissHud();
+					mCurrentTable = DAH_TABLE;
+					mHudDialog.setContentView(R.layout.dah_table);
+					mHudDialog.show();
+				}
+				else if (mCurrentTable != UTIL_TABLE && s.equals("")) {
+					dismissHud();
+					mCurrentTable = UTIL_TABLE;
+					mHudDialog.setContentView(R.layout.utility_table);
+					mHudDialog.show();
+				}
 			}
 		}
 		else
