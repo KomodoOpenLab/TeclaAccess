@@ -22,12 +22,15 @@ import android.graphics.Canvas;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -123,7 +126,7 @@ public class TeclaKeyboardView extends KeyboardView {
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
 			lp.type = WindowManager.LayoutParams.TYPE_TOAST;
-			lp.y = 160;
+			lp.gravity = Gravity.BOTTOM;
 			window.setAttributes(lp);
 			window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);

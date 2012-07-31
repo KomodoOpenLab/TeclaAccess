@@ -270,11 +270,16 @@ public class TeclaIME extends InputMethodService
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
 		}
 		mKeyboardSwitcher.makeKeyboards(true);
-		super.onConfigurationChanged(conf);	
+
+		if (mKeyboardSwitcher.isMorseMode())
+			mIMEView.dismissHud();
+		
+		super.onConfigurationChanged(conf);
 		
 		if (mKeyboardSwitcher.isMorseMode()) {
 			updateSpaceKey();
 			mIMEView.invalidate();
+			mIMEView.updateHud();
 		}
 	}
 
