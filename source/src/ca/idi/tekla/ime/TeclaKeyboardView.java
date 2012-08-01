@@ -134,13 +134,13 @@ public class TeclaKeyboardView extends KeyboardView {
 	public void updateHud() {
 		if (mIME.mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
 			createCheatSheet();
-			String s = mTeclaMorse.getCurrentChar();
 
 			if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE) {
 				mHudDialog.setContentView(R.layout.utility_table);
 				mHudDialog.show();
-			} else {
-
+			}
+			else {
+				String s = mTeclaMorse.getCurrentChar();
 				if (s.equals("•")) {
 					dismissHud();
 					mCurrentTable = DIT_TABLE;

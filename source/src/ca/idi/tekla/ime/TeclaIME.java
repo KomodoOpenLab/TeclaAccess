@@ -327,6 +327,11 @@ public class TeclaIME extends InputMethodService
 			return;
 		}
 		
+		//TODO prevent HUD from appearing above NAV keyboard (right after minimizing Morse kbd)
+		/*if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
+			mIMEView.updateHud();
+		}*/
+		
 		mKeyboardSwitcher.makeKeyboards(false);
 
 		TextEntryState.newSession(this);
@@ -444,11 +449,6 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-
-		//TODO prevent HUD from appearing above NAV keyboard (right after minimizing Morse kbd)
-		/*if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-			mIMEView.updateHUD();
-		}*/
 		
 		evaluateNavKbdTimeout();
 	}
@@ -568,6 +568,10 @@ public class TeclaIME extends InputMethodService
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
+			if (mKeyboardSwitcher.isMorseMode()) {
+				mIMEView.dismissHud();
+				hideSoftIME();
+			}
 			// FIXME: Tecla - Prevent soft input method from consuming the back key
 			/*if (event.getRepeatCount() == 0 && mInputView != null) {
                     if (mInputView.handleBack()) {
@@ -2102,6 +2106,12 @@ public class TeclaIME extends InputMethodService
 					key.on = true;
 				}
 				mIMEView.invalidateAllKeys();
+			}
+		} else if (keyEventCode == KeyEvent.KEYCODE_BACK) {
+			if (mKeyboardSwitcher.isMorseMode()) {
+				mIMEView.dismissHud();
+				hideSoftIME();
+				keyDownUp(keyEventCode);
 			}
 		} else {
 			keyDownUp(keyEventCode);
