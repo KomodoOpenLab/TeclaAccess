@@ -928,6 +928,7 @@ public class TeclaIME extends InputMethodService
 					int[] shift = {Keyboard.KEYCODE_SHIFT};
 					emulateKeyPress(shift);
 				} else if (curCharMatch.contentEquals("↶")) {
+					updateSpaceKey();
 					handleSpecialKey(KeyEvent.KEYCODE_BACK);
 				} else if (curCharMatch.contentEquals("\\n")) {
 					getCurrentInputConnection().commitText("\n", 1);
