@@ -675,6 +675,8 @@ public class TeclaIME extends InputMethodService
 			}
 			if (action.equals(TeclaApp.ACTION_HIDE_IME)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received hide IME intent.");
+				if (mKeyboardSwitcher.isMorseMode())
+					mIMEView.dismissHud();
 				hideSoftIME();
 			}
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
@@ -694,22 +696,22 @@ public class TeclaIME extends InputMethodService
 				evaluateStartScanning();
 			}
 			if (action.equals(TeclaApp.ACTION_INPUT_STRING)) {
-				String input_string = intent.getExtras().getString(TeclaApp.EXTRA_INPUT_STRING);
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received input string intent.");
+				String input_string = intent.getExtras().getString(TeclaApp.EXTRA_INPUT_STRING);
 				typeInputString(input_string);
 			}
 			if (action.equals(TeclaApp.ACTION_ENABLE_MORSE)) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received enable morse intent.");
 				if (TeclaApp.highlighter.isSoftIMEShowing()) {
 					hideSoftIME();
 				}
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received enable morse intent.");
 				mLastFullKeyboardMode = KeyboardSwitcher.MODE_MORSE;
 			}
 			if (action.equals(TeclaApp.ACTION_DISABLE_MORSE)) {
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received disable morse intent.");
 				if (TeclaApp.highlighter.isSoftIMEShowing()) {
 					hideSoftIME();
 				}
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received disable morse intent.");
 				mLastFullKeyboardMode = KeyboardSwitcher.MODE_TEXT;
 			}
 		}
