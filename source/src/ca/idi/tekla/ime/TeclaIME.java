@@ -448,6 +448,13 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	@Override
+	public void onStartInput(EditorInfo attribute, boolean restarting) {
+		super.onStartInput(attribute, restarting);
+		if (TeclaApp.highlighter.isSoftIMEShowing())
+			mIMEView.updateHud();
+	}
+	
+	@Override
 	public void onFinishInput() {
 		super.onFinishInput();
 
