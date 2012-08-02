@@ -279,7 +279,6 @@ public class TeclaIME extends InputMethodService
 		if (mKeyboardSwitcher.isMorseMode()) {
 			updateSpaceKey();
 			mIMEView.invalidate();
-			mIMEView.updateHud();
 		}
 	}
 
@@ -326,11 +325,6 @@ public class TeclaIME extends InputMethodService
 		if (mIMEView == null) {
 			return;
 		}
-		
-		//TODO prevent HUD from appearing above NAV keyboard (right after minimizing Morse kbd)
-		/*if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-			mIMEView.updateHud();
-		}*/
 		
 		mKeyboardSwitcher.makeKeyboards(false);
 

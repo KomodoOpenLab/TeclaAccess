@@ -124,10 +124,11 @@ public class TeclaKeyboardView extends KeyboardView {
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
 			lp.type = WindowManager.LayoutParams.TYPE_TOAST;
+			//lp.type = WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG;
 			lp.gravity = Gravity.BOTTOM;
 			window.setAttributes(lp);
 			window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 		}
 	}
 
