@@ -411,10 +411,9 @@ public class TeclaIME extends InputMethodService
 		default:
 			if (TeclaApp.persistence.isMorseModeEnabled())
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_MORSE, attribute.imeOptions);
-			else {
+			else
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_TEXT, attribute.imeOptions);
-				updateShiftKeyState(attribute);
-			}
+			updateShiftKeyState(attribute);
 		}
 		mIMEView.closing();
 		mComposing.setLength(0);
@@ -450,8 +449,10 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 		super.onStartInput(attribute, restarting);
-		if (TeclaApp.highlighter.isSoftIMEShowing())
+		if (TeclaApp.highlighter.isSoftIMEShowing()) {
+			updateShiftKeyState(getCurrentInputEditorInfo());
 			mIMEView.updateHud();
+		}
 	}
 	
 	@Override

@@ -35,9 +35,9 @@
         <item name="android:layout_marginRight">10dp</item>
     </style>
     <style name="cheatsheettoprow" parent="@style/cheatsheetrow">
-        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:layout_marginTop">12dp</item>
     </style>
     <style name="cheatsheetbottomrow" parent="@style/cheatsheetrow">
-        <item name="android:layout_marginBottom">14dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
     </style> 
 </resources>

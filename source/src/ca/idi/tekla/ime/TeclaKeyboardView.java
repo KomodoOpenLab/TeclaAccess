@@ -26,6 +26,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Gravity;
@@ -118,16 +120,16 @@ public class TeclaKeyboardView extends KeyboardView {
 			mHudDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 			mHudDialog.setCancelable(false);
 			mHudDialog.setCanceledOnTouchOutside(false);
-
+			
+			DisplayMetrics dm = getResources().getDisplayMetrics();
 			Window window = mHudDialog.getWindow();
 			window.setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
 			lp.type = WindowManager.LayoutParams.TYPE_TOAST;
-			//lp.type = WindowManager.LayoutParams.TYPE_INPUT_METHOD_DIALOG;
 			lp.gravity = Gravity.BOTTOM;
+			lp.y = (int) Math.round(dm.heightPixels * 0.09f);
 			window.setAttributes(lp);
-			window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 		}
 	}
