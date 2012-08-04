@@ -86,6 +86,7 @@ public class TeclaIME extends InputMethodService
 	private static final int MSG_UPDATE_SUGGESTIONS = 0;
 	private static final int MSG_START_TUTORIAL = 1;
 	private static final int MSG_UPDATE_SHIFT_STATE = 2;
+	private static final int MSG_UPDATE_HUD = 3;
 	private static final int UPDATE_SHIFT_DELAY = 300;
 
 	// How many continuous deletes at which to start deleting at a higher speed.
@@ -197,6 +198,9 @@ public class TeclaIME extends InputMethodService
 				break;
 			case MSG_UPDATE_SHIFT_STATE:
 				updateShiftKeyState(getCurrentInputEditorInfo());
+				break;
+			case MSG_UPDATE_HUD:
+				mIMEView.updateHud();
 				break;
 			}
 		}
@@ -450,9 +454,10 @@ public class TeclaIME extends InputMethodService
 	public void onStartInput(EditorInfo attribute, boolean restarting) {
 		super.onStartInput(attribute, restarting);
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
-			updateShiftKeyState(getCurrentInputEditorInfo());
 			mIMEView.updateHud();
 		}
+		else
+			postUpdateHud(100);
 	}
 	
 	@Override
@@ -473,7 +478,6 @@ public class TeclaIME extends InputMethodService
 				candidatesStart, candidatesEnd);
 
 		if (mKeyboardSwitcher.isMorseMode()) {
-			//postUpdateShiftKeyState(0);
 			updateShiftKeyState(getCurrentInputEditorInfo());
 		} else {
 			// If the current selection in the text view changes, we should
@@ -499,6 +503,7 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public void hideWindow() {
+		mIMEView.dismissHud();
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			TeclaApp.highlighter.stopSelfScanning();
 			TeclaApp.highlighter.clear();
@@ -570,10 +575,6 @@ public class TeclaIME extends InputMethodService
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			if (mKeyboardSwitcher.isMorseMode()) {
-				mIMEView.dismissHud();
-				hideSoftIME();
-			}
 			// FIXME: Tecla - Prevent soft input method from consuming the back key
 			/*if (event.getRepeatCount() == 0 && mInputView != null) {
                     if (mInputView.handleBack()) {
@@ -732,6 +733,11 @@ public class TeclaIME extends InputMethodService
 			}
 			updateSuggestions();
 		}
+	}
+	
+	private void postUpdateHud(int delay) {
+		mHandler.removeMessages(MSG_UPDATE_HUD);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_UPDATE_HUD), delay);
 	}
 
 	private void postUpdateShiftKeyState(int delay) {
@@ -2114,7 +2120,6 @@ public class TeclaIME extends InputMethodService
 			}
 		} else if (keyEventCode == KeyEvent.KEYCODE_BACK) {
 			if (mKeyboardSwitcher.isMorseMode()) {
-				mIMEView.dismissHud();
 				hideSoftIME();
 				keyDownUp(keyEventCode);
 			}
