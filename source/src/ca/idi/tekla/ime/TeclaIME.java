@@ -321,7 +321,6 @@ public class TeclaIME extends InputMethodService
 
 	@Override 
 	public void onStartInputView(EditorInfo attribute, boolean restarting) {
-		Log.d("Tecla", "onStartInputView");
 		// In landscape mode, this method gets called without the input view being created.
 		if (mIMEView == null) {
 			return;
@@ -445,7 +444,6 @@ public class TeclaIME extends InputMethodService
 		}
 		
 		mIMEView.updateHud();
-		
 		evaluateNavKbdTimeout();
 	}
 	
