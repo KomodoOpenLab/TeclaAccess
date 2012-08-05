@@ -241,6 +241,7 @@ public class TeclaIME extends InputMethodService
 
 	@Override public void onDestroy() {
 		super.onDestroy();
+		mIMEView.dismissHud();
 		mUserDictionary.close();
 		mContactsDictionary.close();
 		unregisterReceiver(mReceiver);
@@ -621,6 +622,8 @@ public class TeclaIME extends InputMethodService
 		if (shouldShowIME() && !mIsNavKbdTimedOut) {
 			showIMEView();
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
+				mIMEView.dismissHud();
+				mIMEView.updateHudTable();
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 				evaluateStartScanning();
 			}
@@ -2060,9 +2063,6 @@ public class TeclaIME extends InputMethodService
 	private void handleSpecialKey(int keyEventCode) {
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
-				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-					mIMEView.dismissHud();
-				}
 				// Closing
 				mLastFullKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
 				mWasShifted = mIMEView.getKeyboard().isShifted();
@@ -2076,9 +2076,7 @@ public class TeclaIME extends InputMethodService
 					mIMEView.getKeyboard().setShifted(mWasShifted);
 				}
 				
-				if (mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-					mIMEView.updateHud();
-				}
+				mIMEView.updateHud();
 				evaluateStartScanning();
 			}
 		} else if (keyEventCode == TeclaKeyboard.KEYCODE_VOICE) {

@@ -44,10 +44,11 @@ public class TeclaKeyboardView extends KeyboardView {
 	private TeclaIME mIME;
 	
 	private Dialog mHudDialog;
-	
-	private final int DIT_TABLE = 0;
-	private final int DAH_TABLE = 1;
-	private final int UTIL_TABLE = 2;
+
+	private final int NOT_UPDATED = 0;
+	private final int DIT_TABLE = 1;
+	private final int DAH_TABLE = 2;
+	private final int UTIL_TABLE = 3;
 	private int mCurrentTable;
 	
 
@@ -125,7 +126,8 @@ public class TeclaKeyboardView extends KeyboardView {
 			window.setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
-			lp.type = WindowManager.LayoutParams.TYPE_TOAST;
+			lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
+			//lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
 			lp.gravity = Gravity.BOTTOM;
 			lp.y = (int) Math.round(dm.heightPixels * 0.09f);
 			window.setAttributes(lp);
@@ -165,6 +167,10 @@ public class TeclaKeyboardView extends KeyboardView {
 		}
 		else
 			dismissHud();
+	}
+	
+	public void updateHudTable() {
+		mCurrentTable = NOT_UPDATED;
 	}
 	
 	/**
