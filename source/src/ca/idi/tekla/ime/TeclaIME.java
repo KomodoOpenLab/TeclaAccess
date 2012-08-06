@@ -86,6 +86,7 @@ public class TeclaIME extends InputMethodService
 	private static final int MSG_UPDATE_SUGGESTIONS = 0;
 	private static final int MSG_START_TUTORIAL = 1;
 	private static final int MSG_UPDATE_SHIFT_STATE = 2;
+	private static final int MSG_UPDATE_HUD = 3;
 	private static final int UPDATE_SHIFT_DELAY = 300;
 
 	// How many continuous deletes at which to start deleting at a higher speed.
@@ -198,6 +199,9 @@ public class TeclaIME extends InputMethodService
 			case MSG_UPDATE_SHIFT_STATE:
 				updateShiftKeyState(getCurrentInputEditorInfo());
 				break;
+			case MSG_UPDATE_HUD:
+				mIMEView.updateHud();
+				break;
 			}
 		}
 	};
@@ -241,8 +245,11 @@ public class TeclaIME extends InputMethodService
 
 	@Override public void onDestroy() {
 		super.onDestroy();
-		mIMEView.dismissHud();
-		mIMEView.updateHudTable();
+		
+		if (mIMEView != null) {
+			mIMEView.dismissHud();
+			mIMEView.updateHudTable();
+		}
 		mUserDictionary.close();
 		mContactsDictionary.close();
 		unregisterReceiver(mReceiver);
@@ -445,7 +452,13 @@ public class TeclaIME extends InputMethodService
 			evaluateStartScanning();
 		}
 		
-		mIMEView.updateHud();
+		// Workaround to avoid force close
+		// when activity has not started yet
+		if (!TeclaApp.highlighter.isSoftIMEShowing())
+			postUpdateHud(50);
+		else
+			mIMEView.updateHud();
+		
 		evaluateNavKbdTimeout();
 	}
 	
@@ -725,6 +738,11 @@ public class TeclaIME extends InputMethodService
 			}
 			updateSuggestions();
 		}
+	}
+	
+	private void postUpdateHud(int delay) {
+		mHandler.removeMessages(MSG_UPDATE_HUD);
+		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_UPDATE_HUD), delay);		
 	}
 
 	private void postUpdateShiftKeyState(int delay) {
