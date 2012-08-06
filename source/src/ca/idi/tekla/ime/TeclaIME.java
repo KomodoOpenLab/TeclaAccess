@@ -242,6 +242,7 @@ public class TeclaIME extends InputMethodService
 	@Override public void onDestroy() {
 		super.onDestroy();
 		mIMEView.dismissHud();
+		mIMEView.updateHudTable();
 		mUserDictionary.close();
 		mContactsDictionary.close();
 		unregisterReceiver(mReceiver);
@@ -491,7 +492,6 @@ public class TeclaIME extends InputMethodService
 
 	@Override
 	public void hideWindow() {
-		mIMEView.dismissHud();
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			TeclaApp.highlighter.stopSelfScanning();
 			TeclaApp.highlighter.clear();
@@ -619,6 +619,8 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public void onWindowHidden() {
 		super.onWindowHidden();
+		mIMEView.dismissHud();
+		mIMEView.updateHudTable();
 		if (shouldShowIME() && !mIsNavKbdTimedOut) {
 			showIMEView();
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
