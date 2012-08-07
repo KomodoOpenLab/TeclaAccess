@@ -203,15 +203,15 @@ public class KeyboardSwitcher {
         	case MODE_MORSE:
         		if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE) {
         			if (TeclaApp.persistence.isMorseHudEnabled())
-        				return new KeyboardId(R.layout.morse_kbd_single_key_hud, KEYBOARDMODE_NORMAL, true);
+        				return new KeyboardId(R.xml.morse_kbd_single_key_hud, KEYBOARDMODE_NORMAL, true);
         			else
-        				return new KeyboardId(R.layout.morse_kbd_single_key_nohud, KEYBOARDMODE_NORMAL, true);
+        				return new KeyboardId(R.xml.morse_kbd_single_key_nohud, KEYBOARDMODE_NORMAL, true);
         		}
         		else {
         			if (TeclaApp.persistence.isMorseHudEnabled())
-        				return new KeyboardId(R.layout.morse_kbd_hud, KEYBOARDMODE_NORMAL, true);
+        				return new KeyboardId(R.xml.morse_kbd_hud, KEYBOARDMODE_NORMAL, true);
         			else
-        				return new KeyboardId(R.layout.morse_kbd_nohud, KEYBOARDMODE_NORMAL, true);
+        				return new KeyboardId(R.xml.morse_kbd_nohud, KEYBOARDMODE_NORMAL, true);
         		}
         		
             case MODE_TEXT:

@@ -19,6 +19,7 @@ package ca.idi.tekla.ime;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
@@ -124,11 +125,12 @@ public class TeclaKeyboardView extends KeyboardView {
 			DisplayMetrics dm = getResources().getDisplayMetrics();
 			Window window = mHudDialog.getWindow();
 			window.setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			window.setBackgroundDrawable(new ColorDrawable(0));
 			WindowManager.LayoutParams lp = window.getAttributes();
 			lp.token = this.getWindowToken();
 			lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
 			lp.gravity = Gravity.BOTTOM;
-			lp.y = (int) (Math.round(dm.heightPixels * 0.12f) / dm.density);
+			lp.y = (int) (Math.round(dm.heightPixels * 0.15f) / dm.density);
 			window.setAttributes(lp);
 			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 		}
