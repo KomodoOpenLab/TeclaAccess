@@ -10,7 +10,7 @@
             android:text="(" />
 
         <TextView
-            style="@style/code_nopadding"
+            style="@style/code"
             android:text="• • • - - •" />
         
         <TextView
@@ -18,7 +18,7 @@
             android:text="," />
 
         <TextView
-            style="@style/code"
+            style="@style/code_nopadding"
             android:text="- - • • - -" />
     </TableRow>
 
@@ -29,7 +29,7 @@
             android:text=")" />
 
         <TextView
-            style="@style/code_nopadding"
+            style="@style/code"
             android:text="- • • - - •" />
         
         <TextView
@@ -37,7 +37,7 @@
             android:text=":" />
 
         <TextView
-            style="@style/code"
+            style="@style/code_nopadding"
             android:text="- • - • - •" />
     </TableRow>
 
@@ -162,7 +162,7 @@
             android:text="-" />
 
         <TextView
-            style="@style/code_nopadding"
+            style="@style/code"
             android:text="- • • • • -" />
 
         <TextView
@@ -181,7 +181,7 @@
             android:text=">" />
 
         <TextView
-            style="@style/code_nopadding"
+            style="@style/code"
             android:text="- - • • - •" />
 
         <TextView
@@ -192,25 +192,6 @@
             style="@style/code_nopadding"
             android:text="- • - - • -" />
     </TableRow> 
-    
-    <TableRow style="@style/cheatsheetrow" >
-        
-        <TextView
-            style="@style/symbol"
-            android:text="" />
-
-        <TextView
-            style="@style/code"
-            android:text="" />  
-              
-        <TextView
-            style="@style/symbol"
-            android:text="" />
-
-        <TextView
-            style="@style/code"
-            android:text="" />
-    </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
         
@@ -227,7 +208,7 @@
             android:text="Del" />
 
         <TextView
-            style="@style/code"
+            style="@style/code_nopadding"
             android:text="- - - -" />
     </TableRow>
     
@@ -247,7 +228,7 @@
 
         <TextView
             android:id="@+id/newline_code"
-            style="@style/code"
+            style="@style/code_nopadding"
             android:text="• - • - •" />
     </TableRow>
 
