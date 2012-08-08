@@ -56,6 +56,10 @@ public class TeclaKeyboardView extends KeyboardView {
     
     // Keycode for repeat locking navigation keys
     static final int KEYCODE_REPEAT_LOCK = -8;
+    
+ // Keycode for showing and hiding secondary navigation keyboard
+    static final int KEYCODE_SHOW_SECNAV_VOICE = -9;
+    static final int KEYCODE_HIDE_SECNAV_VOICE = -10;
 
     private Keyboard mPhoneKeyboard;
 

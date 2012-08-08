@@ -834,6 +834,12 @@ public class TeclaIME extends InputMethodService
 			mRepeating=true;
 			mRepeatingKey= 0;
 			break;
+		case TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE:
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SECNAV_VOICE,0);
+			break;
+		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
+			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
 				onKeyMorse(primaryCode);
