@@ -19,7 +19,6 @@ package ca.idi.tekla.ime;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.ColorDrawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.inputmethodservice.Keyboard.Key;
@@ -27,12 +26,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
-import android.view.ViewGroup.LayoutParams;
-import android.view.Gravity;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View;
 
 import java.util.List;
 
@@ -44,14 +39,7 @@ public class TeclaKeyboardView extends KeyboardView {
 	private TeclaMorse mTeclaMorse;
 	private TeclaIME mIME;
 	
-	private Dialog mHudDialog;
-
-	private final int NOT_UPDATED = 0;
-	private final int DIT_TABLE = 1;
-	private final int DAH_TABLE = 2;
-	private final int UTIL_TABLE = 3;
-	private int mCurrentTable;
-	
+	//private Dialog mHudDialog;
 
     static final int KEYCODE_OPTIONS = -100;
     static final int KEYCODE_SHIFT_LONGPRESS = -101;
@@ -115,7 +103,7 @@ public class TeclaKeyboardView extends KeyboardView {
 	/**
 	 * Creates a Morse cheat sheet (Morse mode only)
 	 */
-	public void createCheatSheet() {
+	/*public void createCheatSheet() {
 		if (mHudDialog == null) {
 			mHudDialog = new Dialog(mIME);
 			mHudDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -134,54 +122,30 @@ public class TeclaKeyboardView extends KeyboardView {
 			window.setAttributes(lp);
 			window.addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
 		}
-	}
-
-	public void updateHud() {
-		if (mIME.mKeyboardSwitcher.isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-			createCheatSheet();
-
-			if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE) {
-				mHudDialog.setContentView(R.layout.utility_table);
-				mHudDialog.show();
-			}
-			else {
-				String s = mTeclaMorse.getCurrentChar();
-				if (s.equals("•")) {
-					dismissHud();
-					mCurrentTable = DIT_TABLE;
-					mHudDialog.setContentView(R.layout.dit_table);
-					mHudDialog.show();
-				}
-				else if (s.equals("-")) {
-					dismissHud();
-					mCurrentTable = DAH_TABLE;
-					mHudDialog.setContentView(R.layout.dah_table);
-					mHudDialog.show();
-				}
-				else if (mCurrentTable != UTIL_TABLE && s.equals("")) {
-					dismissHud();
-					mCurrentTable = UTIL_TABLE;
-					mHudDialog.setContentView(R.layout.utility_table);
-					mHudDialog.show();
-				}
-			}
-		}
-		else
-			dismissHud();
-	}
+	}	*/
 	
-	public void updateHudTable() {
-		mCurrentTable = NOT_UPDATED;
+	
+	private View updateHud() {
+		String s = mTeclaMorse.getCurrentChar();
+		View v = null;
+		
+		if (s.startsWith("•"))
+			v = mIME.getLayoutInflater().inflate(R.layout.dit_table, null);
+		else if (s.startsWith("-"))
+			v = mIME.getLayoutInflater().inflate(R.layout.dah_table, null);
+		else if (s.equals("")) 
+			v = mIME.getLayoutInflater().inflate(R.layout.utility_table, null);
+		return v;
 	}
 	
 	/**
 	 * Dismisses the Morse cheat sheet (Morse mode only)
 	 */
-	public void dismissHud() {
+	/*public void dismissHud() {
         if (mHudDialog != null) {
                 mHudDialog.dismiss();
         }
-	}
+	}*/
 	
 	/****************************  INSTRUMENTATION  *******************************/
 
@@ -297,5 +261,14 @@ public class TeclaKeyboardView extends KeyboardView {
 	@Override
 	public void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+		
+		if (mIME.getKeyboardSwitcher().isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
+			View a = updateHud();
+			if (a != null) {
+				a.measure(canvas.getWidth(), canvas.getHeight());
+				a.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+				a.draw(canvas);
+			}
+		}
 	}
 }

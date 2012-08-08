@@ -86,7 +86,6 @@ public class TeclaIME extends InputMethodService
 	private static final int MSG_UPDATE_SUGGESTIONS = 0;
 	private static final int MSG_START_TUTORIAL = 1;
 	private static final int MSG_UPDATE_SHIFT_STATE = 2;
-	private static final int MSG_UPDATE_HUD = 3;
 	private static final int UPDATE_SHIFT_DELAY = 300;
 
 	// How many continuous deletes at which to start deleting at a higher speed.
@@ -199,9 +198,6 @@ public class TeclaIME extends InputMethodService
 			case MSG_UPDATE_SHIFT_STATE:
 				updateShiftKeyState(getCurrentInputEditorInfo());
 				break;
-			case MSG_UPDATE_HUD:
-				mIMEView.updateHud();
-				break;
 			}
 		}
 	};
@@ -245,11 +241,6 @@ public class TeclaIME extends InputMethodService
 
 	@Override public void onDestroy() {
 		super.onDestroy();
-		
-		if (mIMEView != null) {
-			mIMEView.dismissHud();
-			mIMEView.updateHudTable();
-		}
 		mUserDictionary.close();
 		mContactsDictionary.close();
 		unregisterReceiver(mReceiver);
@@ -279,9 +270,6 @@ public class TeclaIME extends InputMethodService
 			mKeyboardSwitcher = new KeyboardSwitcher(this);
 		}
 		mKeyboardSwitcher.makeKeyboards(true);
-
-		if (mKeyboardSwitcher.isMorseMode())
-			mIMEView.dismissHud();
 		
 		super.onConfigurationChanged(conf);
 		
@@ -451,14 +439,7 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-		
-		// Workaround to avoid force close
-		// when activity has not started yet
-		if (!TeclaApp.highlighter.isSoftIMEShowing())
-			postUpdateHud(50);
-		else
-			mIMEView.updateHud();
-		
+
 		evaluateNavKbdTimeout();
 	}
 	
@@ -632,13 +613,9 @@ public class TeclaIME extends InputMethodService
 	@Override
 	public void onWindowHidden() {
 		super.onWindowHidden();
-		mIMEView.dismissHud();
-		mIMEView.updateHudTable();
 		if (shouldShowIME() && !mIsNavKbdTimedOut) {
 			showIMEView();
 			if (TeclaApp.highlighter.isSoftIMEShowing()) {
-				mIMEView.dismissHud();
-				mIMEView.updateHudTable();
 				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 				evaluateStartScanning();
 			}
@@ -683,8 +660,6 @@ public class TeclaIME extends InputMethodService
 			}
 			if (action.equals(TeclaApp.ACTION_HIDE_IME)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received hide IME intent.");
-				if (mKeyboardSwitcher.isMorseMode())
-					mIMEView.dismissHud();
 				hideSoftIME();
 			}
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
@@ -738,11 +713,6 @@ public class TeclaIME extends InputMethodService
 			}
 			updateSuggestions();
 		}
-	}
-	
-	private void postUpdateHud(int delay) {
-		mHandler.removeMessages(MSG_UPDATE_HUD);
-		mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_UPDATE_HUD), delay);		
 	}
 
 	private void postUpdateShiftKeyState(int delay) {
@@ -908,7 +878,6 @@ public class TeclaIME extends InputMethodService
 
 		updateSpaceKey();
 		mIMEView.invalidate();
-		mIMEView.updateHud();
 	}
 	
 	private void clearCharInProgress() {
@@ -2096,7 +2065,6 @@ public class TeclaIME extends InputMethodService
 					mIMEView.getKeyboard().setShifted(mWasShifted);
 				}
 				
-				mIMEView.updateHud();
 				evaluateStartScanning();
 			}
 		} else if (keyEventCode == TeclaKeyboard.KEYCODE_VOICE) {
