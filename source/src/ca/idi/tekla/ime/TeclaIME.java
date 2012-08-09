@@ -157,7 +157,7 @@ public class TeclaIME extends InputMethodService
 	
 	// Keycode of the key which is on repeat
 	private int mRepeatingKey;
-	private boolean isAutoRepeating;
+	private boolean wasAutoRepeating;
 	
 	// Indicates whether the suggestion strip is to be on in landscape
 	private boolean mJustAccepted;
@@ -831,8 +831,15 @@ public class TeclaIME extends InputMethodService
 			break;
 		case TeclaKeyboardView.KEYCODE_REPEAT_LOCK:
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Enabling repeat");
+			if(mRepeating)
+			{
+				mRepeating=false;
+			}
+			else
+			{
 			mRepeating=true;
 			mRepeatingKey= 0;
+			}
 			break;
 		case TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE:
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SECNAV_VOICE,0);
@@ -846,14 +853,14 @@ public class TeclaIME extends InputMethodService
 			} else if (isWordSeparator(primaryCode)) {
 				handleSeparator(primaryCode);
 			} else if (isSpecialKey(primaryCode)) {
-				isAutoRepeating = false;
+				wasAutoRepeating = false;
 				if(mRepeating)
 				{
 					if (mRepeatingKey == 0) {
 						 mRepeatingKey = primaryCode;
 						 handleRepeatedKey(mRepeatingKey);
 					}
-					if (! isAutoRepeating)
+					if (! wasAutoRepeating)
 					{
 						mRepeating=false;
 						mRepeatingKey = 0;
@@ -2000,8 +2007,8 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void handleRepeatedKey(int keyEventCode) {
-		if ((keyEventCode>=KeyEvent.KEYCODE_DPAD_UP) && (keyEventCode<=KeyEvent.KEYCODE_DPAD_RIGHT)) {	
-			isAutoRepeating = true;
+		wasAutoRepeating = true;
+		if ((keyEventCode>=KeyEvent.KEYCODE_DPAD_UP) && (keyEventCode<=KeyEvent.KEYCODE_DPAD_CENTER)) {	
 			mTeclaHandler.post(mRepeatKeyRunnable);
 			}
 	}
