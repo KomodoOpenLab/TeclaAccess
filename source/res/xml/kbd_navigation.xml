@@ -63,7 +63,7 @@
             android:keyLabel="OK"
             android:keyWidth="13%p" />
         <Key
-            android:codes="-8"
+            android:codes="@integer/key_repeat_lock"
             android:iconPreview="@drawable/nav_keyboard_feedback_repeat"
             android:keyIcon="@drawable/nav_keyboard_repeat"
             android:keyEdgeFlags="right"
