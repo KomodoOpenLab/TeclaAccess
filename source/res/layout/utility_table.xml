@@ -7,7 +7,7 @@
         style="@style/cheatsheettoprow" >
 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="A" />
 
         <TextView
@@ -15,7 +15,7 @@
             android:text="•-" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="H" />
 
         <TextView
@@ -23,7 +23,7 @@
             android:text="••••" />
                 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="O" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:text="---" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="V" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:text="•••-" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="✓" />
 
         <TextView
@@ -50,7 +50,7 @@
     <TableRow style="@style/cheatsheetrow" >
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="B" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:text="-•••" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="I" />
 
         <TextView
@@ -66,7 +66,7 @@
             android:text="••" />
                 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="P" />
 
         <TextView
@@ -74,7 +74,7 @@
             android:text="•--•" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="W" />
 
         <TextView
@@ -82,7 +82,7 @@
             android:text="•--" />
                         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:background="@drawable/sym_keyboard_delete_3" />
 
         <TextView
@@ -94,7 +94,7 @@
     <TableRow style="@style/cheatsheetrow" >
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="C" />
 
         <TextView
@@ -102,7 +102,7 @@
             android:text="-•-•" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="J" />
 
         <TextView
@@ -110,7 +110,7 @@
             android:text="•---" />
                
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="Q" />
 
         <TextView
@@ -118,7 +118,7 @@
             android:text="--•-" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="X" />
 
         <TextView
@@ -126,7 +126,7 @@
             android:text="-••-" />
            
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:background="@drawable/sym_keyboard_space_3"/>
 
         <TextView
@@ -137,7 +137,7 @@
     <TableRow style="@style/cheatsheetrow" >
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="D" />
 
         <TextView
@@ -145,7 +145,7 @@
             android:text="-••" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="K" />
 
         <TextView
@@ -153,7 +153,7 @@
             android:text="-•-" />
                
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="R" />
 
         <TextView
@@ -161,7 +161,7 @@
             android:text="•-•" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="Y" />
 
         <TextView
@@ -169,7 +169,7 @@
             android:text="-•--" />
                       
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="↵" />
 
         <TextView
@@ -180,7 +180,7 @@
     <TableRow style="@style/cheatsheetrow" >
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="E" />
 
         <TextView
@@ -188,7 +188,7 @@
             android:text="•" />  
             
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="L" />
 
         <TextView
@@ -196,7 +196,7 @@
             android:text="•-••" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="S" />
 
         <TextView
@@ -204,7 +204,7 @@
             android:text="•••" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="Z" />
 
         <TextView
@@ -212,7 +212,7 @@
             android:text="--••" />
                 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="\\n" />
 
         <TextView
@@ -223,7 +223,7 @@
     <TableRow style="@style/cheatsheetrow" >
 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="F" />
 
         <TextView
@@ -231,7 +231,7 @@
             android:text="••-•" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="M" />
 
         <TextView
@@ -239,7 +239,7 @@
             android:text="--" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="T" />
 
         <TextView
@@ -247,7 +247,7 @@
             android:text="-" />    
                 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="." />
 
         <TextView
@@ -255,7 +255,7 @@
             android:text="•-•-•-" />
                 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="⇪" />
 
         <TextView
@@ -267,7 +267,7 @@
     <TableRow style="@style/cheatsheetbottomrow" >
 
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="G" />
 
         <TextView
@@ -275,7 +275,7 @@
             android:text="--•" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="N" />
 
         <TextView
@@ -283,7 +283,7 @@
             android:text="-•" />
         
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="U" />
 
         <TextView
@@ -291,7 +291,7 @@
             android:text="••-" />
                                  
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="," />
 
         <TextView
@@ -299,7 +299,7 @@
             android:text="--••--" />
                             
         <TextView
-            style="@style/symbol"
+            style="@style/clr_symbol"
             android:text="↶" />
 
         <TextView
