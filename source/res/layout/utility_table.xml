@@ -5,15 +5,39 @@
     <TableRow
         android:id="@+id/tableRow1"
         style="@style/cheatsheettoprow" >
-        
+
         <TextView
             style="@style/symbol"
-            android:text="." />
+            android:text="A" />
 
         <TextView
             style="@style/code"
-            android:text="•-•-•-" />
+            android:text="•-" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="H" />
+
+        <TextView
+            style="@style/code"
+            android:text="••••" />
                 
+        <TextView
+            style="@style/symbol"
+            android:text="O" />
+
+        <TextView
+            style="@style/code"
+            android:text="---" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="V" />
+
+        <TextView
+            style="@style/code"
+            android:text="•••-" />
+        
         <TextView
             style="@style/symbol"
             android:text="✓" />
@@ -24,15 +48,39 @@
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
-                 
+        
         <TextView
             style="@style/symbol"
-            android:text="," />
+            android:text="B" />
 
         <TextView
             style="@style/code"
-            android:text="--••--" />             
+            android:text="-•••" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="I" />
+
+        <TextView
+            style="@style/code"
+            android:text="••" />
                 
+        <TextView
+            style="@style/symbol"
+            android:text="P" />
+
+        <TextView
+            style="@style/code"
+            android:text="•--•" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="W" />
+
+        <TextView
+            style="@style/code"
+            android:text="•--" />
+                        
         <TextView
             style="@style/symbol"
             android:background="@drawable/sym_keyboard_delete_3" />
@@ -47,12 +95,36 @@
         
         <TextView
             style="@style/symbol"
-            android:text="'" />
+            android:text="C" />
 
         <TextView
             style="@style/code"
-            android:text="•-•--•" />
-                
+            android:text="-•-•" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="J" />
+
+        <TextView
+            style="@style/code"
+            android:text="•---" />
+               
+        <TextView
+            style="@style/symbol"
+            android:text="Q" />
+
+        <TextView
+            style="@style/code"
+            android:text="--•-" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="X" />
+
+        <TextView
+            style="@style/code"
+            android:text="-••-" />
+           
         <TextView
             style="@style/symbol"
             android:background="@drawable/sym_keyboard_space_3"/>
@@ -63,15 +135,39 @@
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
-
+        
         <TextView
             style="@style/symbol"
-            android:text="(" />
+            android:text="D" />
 
         <TextView
             style="@style/code"
-            android:text="•••--•" />
-                
+            android:text="-••" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="K" />
+
+        <TextView
+            style="@style/code"
+            android:text="-•-" />
+               
+        <TextView
+            style="@style/symbol"
+            android:text="R" />
+
+        <TextView
+            style="@style/code"
+            android:text="•-•" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="Y" />
+
+        <TextView
+            style="@style/code"
+            android:text="-•--" />
+                      
         <TextView
             style="@style/symbol"
             android:text="↵" />
@@ -82,14 +178,38 @@
     </TableRow>
 
     <TableRow style="@style/cheatsheetrow" >
-    
+        
         <TextView
             style="@style/symbol"
-            android:text=")" />
+            android:text="E" />
 
         <TextView
             style="@style/code"
-            android:text="-••--•" />
+            android:text="•" />  
+            
+        <TextView
+            style="@style/symbol"
+            android:text="L" />
+
+        <TextView
+            style="@style/code"
+            android:text="•-••" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="S" />
+
+        <TextView
+            style="@style/code"
+            android:text="•••" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="Z" />
+
+        <TextView
+            style="@style/code"
+            android:text="--••" />
                 
         <TextView
             style="@style/symbol"
@@ -104,11 +224,35 @@
 
         <TextView
             style="@style/symbol"
-            android:text="-" />
+            android:text="F" />
 
         <TextView
             style="@style/code"
-            android:text="-••••-" />
+            android:text="••-•" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="M" />
+
+        <TextView
+            style="@style/code"
+            android:text="--" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="T" />
+
+        <TextView
+            style="@style/code"
+            android:text="-" />    
+                
+        <TextView
+            style="@style/symbol"
+            android:text="." />
+
+        <TextView
+            style="@style/code"
+            android:text="•-•-•-" />
                 
         <TextView
             style="@style/symbol"
@@ -124,12 +268,36 @@
 
         <TextView
             style="@style/symbol"
-            android:text="_" />
+            android:text="G" />
 
         <TextView
             style="@style/code"
-            android:text="---•" />
-                    
+            android:text="--•" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="N" />
+
+        <TextView
+            style="@style/code"
+            android:text="-•" />
+        
+        <TextView
+            style="@style/symbol"
+            android:text="U" />
+
+        <TextView
+            style="@style/code"
+            android:text="••-" />
+                                 
+        <TextView
+            style="@style/symbol"
+            android:text="," />
+
+        <TextView
+            style="@style/code"
+            android:text="--••--" />
+                            
         <TextView
             style="@style/symbol"
             android:text="↶" />
@@ -140,3 +308,5 @@
     </TableRow>
 
 </TableLayout>
+
+
