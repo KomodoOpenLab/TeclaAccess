@@ -175,7 +175,7 @@ public class TeclaDesktopClient implements Runnable {
 	    			if(client!=null)
 	    				client.close();
 	    			connectionstatus=false;
-	    			
+	    			Log.v("dictation","Disconnected");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -207,7 +207,7 @@ public class TeclaDesktopClient implements Runnable {
 				
 				multisock=new MulticastSocket(PORTNUMBER);
 				
-				multisock.setSoTimeout(0);			
+				multisock.setSoTimeout(60000*10);			
 				
 				multisock.joinGroup(InetAddress.getByName("225.0.0.0"));
 				

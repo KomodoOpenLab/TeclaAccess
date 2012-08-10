@@ -861,8 +861,10 @@ public class TeclaIME extends InputMethodService
 			//toggle the mSendToPC lock
 			mSendToPC=!mSendToPC;
 			if(mSendToPC && TeclaApp.connect_to_desktop)
-				ConnectToDesktop();
-			Log.v("dictation","keycode hide for send to PC");
+				new Thread(wificonnector).start();
+			else if(TeclaApp.desktop != null &&!mSendToPC && TeclaApp.desktop.isConnected()){
+				TeclaApp.desktop.disconnect();
+			}
 			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
@@ -1815,8 +1817,15 @@ public class TeclaIME extends InputMethodService
 			Log.d(TeclaApp.TAG, "Captured null switch event");
 			return;
 		}
-
+		
 		cancelNavKbdTimeout();
+		if(TeclaApp.desktop!=null&& mSendToPC && TeclaApp.desktop.isConnected() && TeclaApp.sendflag )
+		{
+			TeclaApp.desktop.send_switch_event((byte)switchEvent.getSwitchStates());
+			return;
+		
+		}
+		
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
 			TeclaApp.highlighter.startSelfScanning();
@@ -2399,6 +2408,38 @@ public class TeclaIME extends InputMethodService
 				String rec=TeclaApp.desktop.receive();
 				if(rec!=null&&rec.equals("ping")){
 					wifi_ping_count=0;
+				}
+			}
+		}
+		
+	};
+	
+	private Runnable wificonnector=new Runnable(){
+
+		public void run() {
+			// TODO Auto-generated method stub
+			Log.v("dictation","Started WiFiConnector");
+			if(TeclaApp.desktop!= null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			while( mSendToPC){
+				if(mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected())
+				{
+				Log.v("dictation","attempting connection");
+				TeclaApp.desktop.connect();
+				
+				if(TeclaApp.desktop.isConnected()){
+					Log.v("dictation","connected to Desktop");
+					new Thread(wifipinger).start();
+					new Thread(wifireceiver).start();
+				}
+				}
+				else{
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
