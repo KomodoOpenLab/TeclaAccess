@@ -38,6 +38,7 @@
     <integer name="key_voice">-202</integer>
     <integer name="key_variants">-222</integer>
     <integer name="key_custom">-232</integer>
+    <integer name="key_repeat_lock">-8</integer>
     <integer name="show_secnav_kbd">-9</integer>
     <integer name="hide_secnav_kbd">-10</integer>
 </resources>
