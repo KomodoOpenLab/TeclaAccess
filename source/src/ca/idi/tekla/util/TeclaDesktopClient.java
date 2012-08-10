@@ -9,6 +9,8 @@ import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
 
+import ca.idi.tekla.TeclaApp;
+
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -25,7 +27,7 @@ public class TeclaDesktopClient implements Runnable {
 	
 	DatagramPacket pack;
 	
-	String password;
+	
 	
 	ObjectInputStream in;
 	ObjectOutputStream out;
@@ -42,11 +44,10 @@ public class TeclaDesktopClient implements Runnable {
 	
 	public static final String echomessage="TeclaShield";
 	
-	public TeclaDesktopClient(Context context,String password_){
+	public TeclaDesktopClient(Context context){
 		
 		wifiman=(WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-		locker=connectionstatus=false;
-		password=password_;		
+		locker=connectionstatus=false;	
 		
 	}
 	
@@ -100,7 +101,7 @@ public class TeclaDesktopClient implements Runnable {
 				out.flush();
 				
 				
-				send(password);
+				send(TeclaApp.password);
 				
 				
 				in=new ObjectInputStream(client.getInputStream());
@@ -111,7 +112,7 @@ public class TeclaDesktopClient implements Runnable {
 				
 				Log.v("connection",""+result);
 				if(result!=null && result.equals("Success")){
-					Log.v("connection","accepted");
+					
 					connectionstatus=true;
 				}
 				
@@ -138,6 +139,7 @@ public class TeclaDesktopClient implements Runnable {
 	    			
 	    		}
 	    	}catch (IOException e){
+	    		disconnect();
 	    		e.printStackTrace();
 	    	}
 	    }
@@ -150,6 +152,7 @@ public class TeclaDesktopClient implements Runnable {
 	    		return data;
 	    	  		
 	    	}catch (IOException e){
+	    		disconnect();
 	    		e.printStackTrace();
 	    		return null;
 	    	}
@@ -172,6 +175,7 @@ public class TeclaDesktopClient implements Runnable {
 	    			if(client!=null)
 	    				client.close();
 	    			connectionstatus=false;
+	    			
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -265,9 +269,16 @@ public class TeclaDesktopClient implements Runnable {
 		public boolean isConnected(){
 			return connectionstatus;
 		}
-		public void setPassword(String password_){
-			password=password_;
+		public void send_dictation_data(String text){
+			send("dictate:"+text);
 		}
+		public void send_switch_event(byte b){
+			send("command:"+b);
+		}
+		public void send_keypress_event(int keycode){
+			send("keypress:"+keycode);
+		}
+		
 		
 }
 
