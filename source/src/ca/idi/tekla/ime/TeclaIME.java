@@ -60,6 +60,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
@@ -68,6 +69,7 @@ import ca.idi.tekla.TeclaPrefs;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.TeclaDesktopClient;
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
@@ -151,6 +153,8 @@ public class TeclaIME extends InputMethodService
 	private boolean mAutoCap;
 	private boolean mQuickFixes;
 	private boolean mShowSuggestions;
+	
+	
 	private int     mCorrectionMode;
 	private int     mOrientation;
 	
@@ -180,6 +184,10 @@ public class TeclaIME extends InputMethodService
 	private String mWordSeparators;
 	private String mSentenceSeparators;
 
+	private boolean mSendToPC;
+	
+	private int wifi_ping_count=0;
+	
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -240,6 +248,10 @@ public class TeclaIME extends InputMethodService
 		mSuggest.setAutoDictionary(mAutoDictionary);
 		mWordSeparators = getResources().getString(R.string.word_separators);
 		mSentenceSeparators = getResources().getString(R.string.sentence_separators);
+	}
+	
+	private void initDesktop(){
+		mSendToPC=false;
 	}
 
 	@Override public void onDestroy() {
@@ -846,6 +858,13 @@ public class TeclaIME extends InputMethodService
 			break;
 		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
+			//toggle the mSendToPC lock
+			mSendToPC=!mSendToPC;
+			if(mSendToPC && TeclaApp.connect_to_desktop)
+				new Thread(wificonnector).start();
+			else if(TeclaApp.desktop != null &&!mSendToPC && TeclaApp.desktop.isConnected()){
+				TeclaApp.desktop.disconnect();
+			}
 			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
@@ -1791,12 +1810,22 @@ public class TeclaIME extends InputMethodService
 
 		//Emulator issue (temporary fix): if typing too fast, or holding a long press
 		//while in auto-release mode, some switch events are null
+		
+		
+		
 		if (switchEvent.toString() == null) {
 			Log.d(TeclaApp.TAG, "Captured null switch event");
 			return;
 		}
-
+		
 		cancelNavKbdTimeout();
+		if(TeclaApp.desktop!=null&& mSendToPC && TeclaApp.desktop.isConnected() && TeclaApp.sendflag )
+		{
+			TeclaApp.desktop.send_switch_event((byte)switchEvent.getSwitchStates());
+			return;
+		
+		}
+		
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
 			TeclaApp.highlighter.startSelfScanning();
@@ -2325,5 +2354,96 @@ public class TeclaIME extends InputMethodService
 	public KeyboardSwitcher getKeyboardSwitcher() {
 		return mKeyboardSwitcher;
 	}
+	
+	public void ConnectToDesktop(){
+		Log.v("dictation","started connecting");
+		if(TeclaApp.desktop ==null)
+		TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+		
+		
+		if(!TeclaApp.desktop.isConnected()&&TeclaApp.connect_to_desktop)
+		new Thread(desktopsearcher).start();
+	}
+	Runnable desktopsearcher=new Runnable(){
 
+		public void run() {
+			// TODO Auto-generated method stub
+			Log.v("dictation","attempting connection");
+			TeclaApp.desktop.connect();
+			
+			if(TeclaApp.desktop.isConnected()){
+				Log.v("dictation","connected to Desktop");
+				new Thread(wifipinger).start();
+				new Thread(wifireceiver).start();
+			}
+		}
+		
+	};
+	private Runnable wifipinger=new Runnable(){
+
+		public void run() {
+			// TODO Auto-generated method stub
+			while(TeclaApp.desktop.isConnected()){
+			TeclaApp.desktop.send("ping");
+			try {
+				Thread.sleep(1000*2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			wifi_ping_count++;
+				if(wifi_ping_count>5){
+					TeclaApp.desktop.disconnect();
+				}
+			}
+		}
+	
+	};
+	private Runnable wifireceiver=new Runnable(){
+		
+		public void run() {
+			// TODO Auto-generated method stub
+			while(TeclaApp.desktop.isConnected())
+			{
+				String rec=TeclaApp.desktop.receive();
+				if(rec!=null&&rec.equals("ping")){
+					wifi_ping_count=0;
+				}
+			}
+		}
+		
+	};
+	
+	private Runnable wificonnector=new Runnable(){
+
+		public void run() {
+			// TODO Auto-generated method stub
+			Log.v("dictation","Started WiFiConnector");
+			if(TeclaApp.desktop!= null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			while( mSendToPC){
+				if(mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected())
+				{
+				Log.v("dictation","attempting connection");
+				TeclaApp.desktop.connect();
+				
+				if(TeclaApp.desktop.isConnected()){
+					Log.v("dictation","connected to Desktop");
+					new Thread(wifipinger).start();
+					new Thread(wifireceiver).start();
+				}
+				}
+				else{
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+	};
 }
+

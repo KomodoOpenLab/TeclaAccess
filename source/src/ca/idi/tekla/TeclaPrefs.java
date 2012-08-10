@@ -32,6 +32,7 @@ import ca.idi.tekla.util.RepeatFrequencyDialog;
 import ca.idi.tekla.util.ScanSpeedDialog;
 import ca.idi.tekla.util.SwitchPreference;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -46,13 +47,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.AutoText;
 import android.util.Log;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.view.KeyEvent;
+import android.view.View;
 
 public class TeclaPrefs extends PreferenceActivity
 implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -98,6 +104,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private static SwitchPreference mSwitchE1;
 	private static SwitchPreference mSwitchE2;
 	
+	private static CheckBoxPreference mConnectToPC;
+	private static CheckBoxPreference mShieldRelay;
+	private static Preference setPasswordLaunch;
+	
+	
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
 		
@@ -106,7 +117,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		super.onCreate(icicle);
 
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
-		
 		init();
 		
 	}
@@ -139,6 +149,26 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
 		
+		//Desktop 
+		final TeclaPrefs pref=this;	
+		mConnectToPC=(CheckBoxPreference)findPreference(Persistence.CONNECT_TO_PC);
+		mShieldRelay=(CheckBoxPreference)findPreference(Persistence.SEND_SHIELD_EVENTS);
+		setPasswordLaunch=(Preference)findPreference(Persistence.SET_PASSWORD);
+		TeclaApp.sendflag=mShieldRelay.isChecked();
+		TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
+		setPasswordLaunch.setDefaultValue("Tecla123");
+		TeclaApp.password=setPasswordLaunch.getSharedPreferences().getString(Persistence.SET_PASSWORD, "Tecla123");
+		Log.v("set password",""+setPasswordLaunch);
+		setPasswordLaunch.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			public boolean onPreferenceClick(Preference arg0) {
+				// TODO Auto-generated method stub
+				TeclaPrefs.createPreferenceDialog(pref);
+				return true;
+			}
+	
+		});
+		//
 		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_MORSE));
@@ -497,6 +527,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				}
 			}
 		}
+		if(key.equals(Persistence.SEND_SHIELD_EVENTS)){
+			TeclaApp.sendflag=mShieldRelay.isChecked();
+		}
+		if(key.equals(Persistence.CONNECT_TO_PC)){
+			TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
+		}
 		//FIXME: Tecla Access - Solve backup elsewhere
 		//(new BackupManager(getApplicationContext())).dataChanged();
 	}
@@ -583,5 +619,33 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE1.setValues(4, 0);
 		mSwitchE2.setValues(3, 0);
 	}
-
+	
+	public static void createPreferenceDialog(Context context){
+		final Dialog passworddialog=new Dialog(context);
+		passworddialog.setContentView(R.layout.passworddialog);
+		final EditText psswdtext=(EditText)passworddialog.findViewById(R.id.passwordtext);
+		Button save=(Button)passworddialog.findViewById(R.id.savebutton);
+		Button cancel=(Button)passworddialog.findViewById(R.id.cancelbutton);
+		
+		psswdtext.setText(setPasswordLaunch.getSharedPreferences().getString(Persistence.SET_PASSWORD, "Tecla123"));
+		
+		save.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				TeclaApp.password=psswdtext.getText().toString();
+				setPasswordLaunch.getEditor().putString(Persistence.SET_PASSWORD, TeclaApp.password).commit();
+				passworddialog.dismiss();
+			}
+		});
+		cancel.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				passworddialog.dismiss();
+			}
+		});
+		passworddialog.show();
+	}
+	
 }
