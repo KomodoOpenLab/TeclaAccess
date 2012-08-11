@@ -13,7 +13,8 @@
     </style>
     <style name="tapinstructions" parent="@style/symbol">
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
     </style>
     <style name="code_nopadding" parent="@android:style/TextAppearance.Small">
         <item name="android:layout_width">wrap_content</item>
@@ -38,9 +39,9 @@
         <item name="android:layout_marginRight">20dp</item>
     </style>
     <style name="cheatsheettoprow" parent="@style/cheatsheetrow">
-        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginTop">8dp</item>
     </style>
     <style name="cheatsheetbottomrow" parent="@style/cheatsheetrow">
-        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginBottom">0dp</item>
     </style> 
 </resources>
