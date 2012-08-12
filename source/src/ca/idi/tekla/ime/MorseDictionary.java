@@ -1,21 +1,16 @@
 package ca.idi.tekla.ime;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 public class MorseDictionary {
 	
 	public static LinkedHashMap<String,String> mMorseMap;
-	public static LinkedHashMap<String,String> mDitFirst;
-	public static LinkedHashMap<String,String> mDahFirst;
 	
 	private static int mMaxCodeLength;
 	
 	public MorseDictionary() {
 		mMorseMap = new LinkedHashMap<String,String>();
 		createMapping(mMorseMap);
-		mDitFirst = initCharts('•');
-		mDahFirst = initCharts('-');
 		setMaxCodeLength();
 	}
 	
@@ -52,11 +47,13 @@ public class MorseDictionary {
 		map.put("--••-•", ">"); map.put("-•--•-", "<"); map.put("-••••-", "-");
 		
 		//Command keys
+		map.put("-•-••", "✓"); //Done (minimizes keyboard)
+		map.put("••--", "space"); //Space ⎵
 		map.put("•-•-", "↵"); //Enter
+		map.put("••--•", "⇪"); //Toggle caps lock
 		map.put("----", "DEL"); //Delete
-		map.put("••--", "✓"); //Done (minimizes keyboard)
+		map.put("-•••-", "↶"); //Back key
 		map.put("•-•-•", "\\n"); //New line
-		
 	}
 	
 	/**
@@ -88,33 +85,4 @@ public class MorseDictionary {
 	public String getKey(String key) {
 		return mMorseMap.get(key);
 	}
-	
-	/**
-	 * Used to retrieve one of the dit/dah charts, based on
-	 * the first signal
-	 * @param s
-	 * @return
-	 */
-	public LinkedHashMap<String,String> getChartStartsWith(String s) {
-		return s.equals("•") ? mDitFirst : mDahFirst;
-	}
-	
-	/**
-	 * Initializes a chart based on the first signal
-	 * @param c represents either a dit or a dah
-	 * @return
-	 */
-	public LinkedHashMap<String,String> initCharts(char c) {
-		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
-		Iterator<Entry<String,String>> it = mMorseMap.entrySet().iterator();
-		while (it.hasNext()) {
-			Entry<String,String> entry = it.next();
-			if (entry.getKey().startsWith(Character.toString(c)))
-				map.put(entry.getKey(), entry.getValue());
-		}
-		
-		return map;
-	}
-	
-	
 }
