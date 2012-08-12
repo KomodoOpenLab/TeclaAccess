@@ -293,7 +293,7 @@
     
     <!-- Morse cheat sheet -->
     <string name="tapforsymbols">Tap for symbols</string>
-    <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
+    <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
 
     <!-- Category title for Morse settings -->
     <string name="morse_input_category">Morse settings</string>
