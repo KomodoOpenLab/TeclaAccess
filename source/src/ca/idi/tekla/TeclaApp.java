@@ -27,6 +27,7 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.TeclaDesktopClient;
 
 public class TeclaApp extends Application {
 
@@ -71,7 +72,13 @@ public class TeclaApp extends Application {
 	private static TeclaApp instance;
 	public static Persistence persistence;
 	public static Highlighter highlighter;
-
+	
+	public static String password="Tecla123";
+	public static boolean sendflag=false,connect_to_desktop=false;
+	
+	public static TeclaDesktopClient desktop;
+	
+	
 	public TeclaApp() {
         instance = this;
     }
@@ -93,6 +100,8 @@ public class TeclaApp extends Application {
 		
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
+		desktop=new TeclaDesktopClient(this);
+		
 
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		mWakeLock = mPowerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK |
