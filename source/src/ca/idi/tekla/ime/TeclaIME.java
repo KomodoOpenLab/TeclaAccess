@@ -1699,18 +1699,22 @@ public class TeclaIME extends InputMethodService
 		mMorseStartTime = System.currentTimeMillis();
 	}
 	
-	public void startRepeating(long delay) {
+	/**
+	 * Starts the Morse repeat runnable
+	 * @param delay
+	 */
+	public void evaluateRepeating(long delay) {
 		pauseRepeating();
 		mTeclaHandler.postDelayed(mStartRepeatRunnable, delay);
 	}
 	
 	/**
-	 * Evalutes a Morse key press, based on the current key mode
+	 * Evaluates a Morse key press, based on the current key mode
 	 */
 	public void evaluateMorsePress() {
 		switch(TeclaApp.persistence.getMorseKeyMode()) {
 		case TRIPLE_KEY_MODE:
-			startRepeating(0);
+			evaluateRepeating(0);
 			break;
 			
 		case DOUBLE_KEY_MODE:
@@ -1754,6 +1758,9 @@ public class TeclaIME extends InputMethodService
 		return addedDitDah;
 	}
 
+	/**
+	 * Pauses Morse repeating process
+	 */
 	public void pauseRepeating() {
 		mTeclaHandler.removeCallbacks(mRepeatRunnable);
 		mTeclaHandler.removeCallbacks(mStartRepeatRunnable);

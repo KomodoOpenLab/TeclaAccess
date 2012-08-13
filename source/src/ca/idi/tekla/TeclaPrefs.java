@@ -567,6 +567,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mProgressDialog.show();
 	}
 	
+	/*
+	 * Enables / disables prefs based on current Morse mode
+	 */
 	private void enableKeyModePrefs() {
 		if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.TRIPLE_KEY_MODE) {
 			mPrefMorseTimeUnit.setEnabled(false);
@@ -626,6 +629,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 	}
 	
+	/*
+	 * Updates display of preference summaries
+	 */
 	private void refreshSwitchesSummary() {
 		mSwitchJ1.refreshSummaries();
 		mSwitchJ2.refreshSummaries();
@@ -635,6 +641,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE2.refreshSummaries();
 	}
 	
+	/*
+	 * Resets switch actions to default values
+	 */
 	public static void setDefaultSwitchActions() {
 		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
 		mSwitchJ1.setValues(1, 1);

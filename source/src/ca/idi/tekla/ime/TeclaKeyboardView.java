@@ -164,6 +164,10 @@ public class TeclaKeyboardView extends KeyboardView {
         }
 	}
 	
+	/**
+	 * Updates the Morse HUD according to the current sequence
+	 * @return
+	 */
 	private View updateHud() {
 		String s = mTeclaMorse.getCurrentChar();
 		View v = null;
@@ -293,11 +297,11 @@ public class TeclaKeyboardView extends KeyboardView {
 		super.onDraw(canvas);
 		
 		if (mIME.getKeyboardSwitcher().isMorseMode() && TeclaApp.persistence.isMorseHudEnabled()) {
-			View a = updateHud();
-			if (a != null) {
-				a.measure(canvas.getWidth(), canvas.getHeight());
-				a.layout(0, 0, canvas.getWidth(), canvas.getHeight());
-				a.draw(canvas);
+			View hud = updateHud();
+			if (hud != null) {
+				hud.measure(canvas.getWidth(), canvas.getHeight());
+				hud.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+				hud.draw(canvas);
 			}
 		}
 	}
