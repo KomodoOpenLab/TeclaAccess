@@ -60,6 +60,10 @@ public class TeclaKeyboardView extends KeyboardView {
  // Keycode for showing and hiding secondary navigation keyboard
     static final int KEYCODE_SHOW_SECNAV_VOICE = -9;
     static final int KEYCODE_HIDE_SECNAV_VOICE = -10;
+    
+ // Keycode for send to pc and voice dictation
+    static final int KEYCODE_SEND_TO_PC = -11;
+    static final int KEYCODE_DICTATION = -12;
 
     private Keyboard mPhoneKeyboard;
 

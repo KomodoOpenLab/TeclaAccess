@@ -41,4 +41,7 @@
     <integer name="key_repeat_lock">-8</integer>
     <integer name="show_secnav_kbd">-9</integer>
     <integer name="hide_secnav_kbd">-10</integer>
+    <integer name="key_sendto_pc">-11</integer>
+    <integer name="key_dictation">-12</integer>
+    
 </resources>

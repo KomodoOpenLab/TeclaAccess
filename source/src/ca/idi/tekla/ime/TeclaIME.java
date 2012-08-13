@@ -847,6 +847,12 @@ public class TeclaIME extends InputMethodService
 		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 			break;
+		case TeclaKeyboardView.KEYCODE_SEND_TO_PC:
+			//TODO: Add send to pc handling here
+			break;
+		case TeclaKeyboardView.KEYCODE_DICTATION:
+			//TODO: Add dictation actions here
+			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
 				onKeyMorse(primaryCode);
