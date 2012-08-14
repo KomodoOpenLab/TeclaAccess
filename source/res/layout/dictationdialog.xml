@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+     >
+ 
+   
+  
+ <RelativeLayout 
+     android:layout_height="wrap_content"
+     android:layout_width="fill_parent"
+     android:id="@+id/rl2"
+     android:layout_alignParentBottom="true"
+     >
+     <Button 
+     	android:layout_height="wrap_content"
+     	android:layout_width="wrap_content"
+     	android:id="@+id/button_next_window"
+     	android:text="Next_Window"
+     	android:layout_marginLeft="50dp"
+         />
+     <Button 
+        android:layout_height="wrap_content"
+     	android:layout_width="wrap_content"
+     	android:id="@+id/button_next_field"
+     	android:text=" Next Field"
+     	android:layout_alignParentRight="true"
+     	android:layout_marginRight="50dp"
+     	
+         />
+ </RelativeLayout>
+    <ListView 
+     android:id="@+id/resultlist"
+     android:persistentDrawingCache="scrolling"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:layout_above="@id/rl2"
+     /> 
+
+</RelativeLayout>
