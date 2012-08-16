@@ -230,7 +230,13 @@
         </PreferenceScreen>
 
         <CheckBoxPreference
-            android:defaultValue="false"
+			android:key="shield_temp_disconnect"
+			android:title="@string/shield_temp_disconnect"
+			android:summary="@string/shield_temp_disconnect_summary"
+			android:persistent="true"
+			android:defaultValue="false"
+			/>
+		<CheckBoxPreference
             android:key="fullscreen_switch"
             android:persistent="true"
             android:summary="@string/fullscreen_switch_summary"
