@@ -37,11 +37,13 @@ public class TeclaApp extends Application {
 	/**
 	 * Main debug switch, turns on/off debugging for the whole app
 	 */
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
 	//IME CONSTANTS
+	public static final String ACTION_ENABLE_MORSE = "ca.idi.tekla.ime.action.ENABLE_MORSE";
+	public static final String ACTION_DISABLE_MORSE = "ca.idi.tekla.ime.action.DISABLE_MORSE";
 	public static final String ACTION_SHOW_IME = "ca.idi.tekla.ime.action.SHOW_IME";
 	public static final String ACTION_HIDE_IME = "ca.idi.tekla.ime.action.HIDE_IME";
 	public static final String ACTION_IME_CREATED = "ca.idi.tekla.ime.action.SOFT_IME_CREATED";
@@ -166,6 +168,16 @@ public class TeclaApp extends Application {
 		}
 		
 	};
+	
+	public void enabledMorseIME() {
+		if (DEBUG) Log.d(TAG, "Broadcasting enable morse IME intent...");
+		sendBroadcast(new Intent(ACTION_ENABLE_MORSE));
+	}
+	
+	public void disabledMorseIME() {
+		if (DEBUG) Log.d(TAG, "Broadcasting disable morse IME intent...");
+		sendBroadcast(new Intent(ACTION_DISABLE_MORSE));
+	}
 
 	public void requestHideIMEView() {
 		if (DEBUG) Log.d(TAG, "Broadcasting hide IME intent...");
@@ -201,7 +213,7 @@ public class TeclaApp extends Application {
 	
 	public void postDelayedFullReset(long delay) {
 		cancelFullReset();
-		mHandler.postDelayed(mFullResetRunnable, delay);
+		mHandler.postDelayed(mFullResetRunnable, delay * 1000);
 	}
 	
 	public void cancelFullReset() {
@@ -327,10 +339,19 @@ public class TeclaApp extends Application {
 		Intent buttonUp = new Intent(Intent.ACTION_MEDIA_BUTTON);               
 		buttonUp.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
 		sendOrderedBroadcast(buttonUp, "android.permission.CALL_PRIVILEGED");
+		
+		TeclaApp.persistence.isSpeakerphoneEnabled();
+		useSpeakerphone();
 	}
 
 	public void useSpeakerphone() {
+		mAudioManager.setMode(AudioManager.MODE_IN_CALL);
 		mAudioManager.setSpeakerphoneOn(true);
+	}
+	
+	public void stopUsingSpeakerPhone() {
+		mAudioManager.setMode(AudioManager.MODE_NORMAL);
+		mAudioManager.setSpeakerphoneOn(false);
 	}
 
 	public void holdKeyguardLock() {

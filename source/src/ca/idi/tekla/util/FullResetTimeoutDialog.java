@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class NavKbdTimeoutDialog extends Dialog
+public class FullResetTimeoutDialog extends Dialog
 		implements DialogInterface.OnKeyListener,
 		SeekBar.OnSeekBarChangeListener,
 		Button.OnClickListener {
@@ -32,14 +32,18 @@ public class NavKbdTimeoutDialog extends Dialog
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTitle(R.string.autohide_timeout_dlg_title);
+	}
+	
+	@Override
+	protected void onStart() {
+		setTitle(R.string.fullreset_timeout);
 
-		int timeout = TeclaApp.persistence.getNavigationKeyboardTimeout();
-		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.autohide_strings);
-		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.autohide_values);
+		int timeout = TeclaApp.persistence.getFullResetTimeout();
+		mTimeoutStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.fullreset_strings);
+		mTimeoutValues = TeclaApp.getInstance().getResources().getIntArray(R.array.full_reset_values);
 
 		mSeekBarPos = -1;
-		int value = Persistence.AUTOHIDE_NULL;
+		int value = Persistence.FULLRESET_NULL;
 		while (value != timeout  && mSeekBarPos < (mTimeoutValues.length - 1)) {
 			mSeekBarPos++;
 			value = mTimeoutValues[mSeekBarPos];
@@ -60,9 +64,10 @@ public class NavKbdTimeoutDialog extends Dialog
 		mSeekBar.setProgress(mSeekBarPos);
 		mSeekBar.setOnSeekBarChangeListener(this);
 		mSeekBar.requestFocus();
+		super.onStart();
 	}
-	
-	public NavKbdTimeoutDialog(Context context) {
+
+	public FullResetTimeoutDialog(Context context) {
 		super(context);
 		setOnKeyListener(this);
 	}
@@ -80,7 +85,7 @@ public class NavKbdTimeoutDialog extends Dialog
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
 		mTimeoutLabel.setText(mTimeoutStrings[progress]);
-		TeclaApp.persistence.setNavigationKeyboardTimeout(mTimeoutValues[progress]);
+		TeclaApp.persistence.setFullResetTimeout(mTimeoutValues[progress]);
 	}
 
 	public void onStartTrackingTouch(SeekBar seekBar) {

@@ -86,11 +86,9 @@ public class SwitchEventProvider extends Service implements Runnable {
 
 	// VARIABLES FOR SWITCH PROCESSING
 	// TODO: This variable should be used when new Shield versions are available
-	private int mShieldVersion;
 	private int mPrevSwitchStates, mSwitchStates;
 	private boolean mPhoneRinging;
 	private static final long DEBOUNCE_TIMEOUT = 20; // milliseconds
-	private static final long FULL_RESET_TIMEOUT = 3000; // milliseconds
 
 	private NotificationManager mNotificationManager;
 	private Boolean mIsBroadcasting, mServiceStarted;
@@ -127,7 +125,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 		mIsBroadcasting = false;
 		mPhoneRinging = false;
 		mPrevSwitchStates = STATE_DEFAULT;
-		mShieldVersion = NULL_SHIELD_VERSION;
 		mServiceStarted = false;
 		
 		mShyCounter = 0;
@@ -300,9 +297,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 		public void run() {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Filtered switch event received");
 			TeclaApp.getInstance().cancelFullReset();
-			//FIXME: This is a temporal work-around for compatibility with older Shield versions
-			//TODO: Deprecated, safe to remove in subsequent builds
-			//if (mShieldVersion < 2) mSwitchStates ^= 0x30;
 			
 			int switchChanges = mPrevSwitchStates ^ mSwitchStates; // Sets bits of switch states that changed
 
@@ -317,12 +311,11 @@ public class SwitchEventProvider extends Service implements Runnable {
 			handleSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != STATE_DEFAULT) {
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					// FIXME: Temporal beta implementation for specific user (should turn into a preference)
-					// 4 full scans before calling home
-					TeclaApp.getInstance().postDelayedFullReset(32 * TeclaApp.persistence.getScanDelay());
-				} else {
-					TeclaApp.getInstance().postDelayedFullReset(FULL_RESET_TIMEOUT);
+				if(!TeclaApp.persistence.isMorseModeEnabled()) {
+					//Disables sending a category.HOME intent when
+					//using Morse repeat-on-switch-down
+					long fullResetDelay=TeclaApp.persistence.getFullResetTimeout();
+					TeclaApp.getInstance().postDelayedFullReset(fullResetDelay);
 				}
 			}
 			
@@ -436,10 +429,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 			if (!success) {
 				killSocket(); //Still no success, kill socket
 				Log.i(TeclaApp.TAG, CLASS_TAG + "Could not open socket");
-			} else {
-				// TODO: Assign Shield version here, version 1 is deprecated
-				//mShieldVersion = teclaShield.getName().startsWith(PREFIX_SHIELD_V1)? 1:2;
-				mShieldVersion = 2;
 			}
 		} else {
 			Log.w(TeclaApp.TAG, CLASS_TAG + "Can't open socket. Bluetooth is disabled.");

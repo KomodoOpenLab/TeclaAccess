@@ -39,6 +39,7 @@ public class KeyboardSwitcher {
     public static final int MODE_1X8 = 13;
     public static final int MODE_1X9 = 14;
     public static final int MODE_1X10 = 15;
+    public static final int MODE_MORSE = 16;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -54,7 +55,7 @@ public class KeyboardSwitcher {
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
     private static final int SYMBOLS_MODE_STATE_SYMBOL = 2;
-
+    
     TeclaKeyboardView mIMEView;
     TeclaIME mContext;
     
@@ -78,11 +79,11 @@ public class KeyboardSwitcher {
         mKeyboards = new HashMap<KeyboardId, TeclaKeyboard>();
         mSymbolsId = new KeyboardId(R.xml.kbd_symbols);
         mSymbolsShiftedId = new KeyboardId(R.xml.kbd_symbols_shift);
-    }
-
+    }    
+    
     void setInputView(TeclaKeyboardView imeView) {
         mIMEView = imeView;
-    }
+    } 
     
     void makeKeyboards(boolean forceCreate) {
         if (forceCreate) mKeyboards.clear();
@@ -146,8 +147,8 @@ public class KeyboardSwitcher {
     void setKeyboardMode(int mode, int imeOptions) {
         mSymbolsModeState = SYMBOLS_MODE_STATE_NONE;
         mPreferSymbols = mode == MODE_SYMBOLS;
-        setKeyboardMode(mode == MODE_SYMBOLS ? MODE_TEXT : mode, imeOptions,
-                mPreferSymbols);
+        setKeyboardMode(mode == MODE_SYMBOLS ? MODE_TEXT : mode, 
+        		imeOptions, mPreferSymbols);
     }
 
     void setKeyboardMode(int mode, int imeOptions, boolean isSymbols) {
@@ -198,6 +199,9 @@ public class KeyboardSwitcher {
         }
 
         switch (mode) {
+
+        	case MODE_MORSE:
+        		return new KeyboardId(R.xml.morse_kbd, KEYBOARDMODE_NORMAL, true);
             case MODE_TEXT:
             	if (useVoiceInput && scanVariants) {
             		// Using voice input AND scanning variants
@@ -354,6 +358,13 @@ public class KeyboardSwitcher {
 
     boolean isNavigation() {
 		if (mMode == MODE_NAV) {
+			return true;
+		}
+		return false;
+    }
+    
+    boolean isMorseMode() {
+		if (mMode == MODE_MORSE) {
 			return true;
 		}
 		return false;

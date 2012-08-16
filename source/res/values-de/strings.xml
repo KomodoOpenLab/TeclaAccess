@@ -115,7 +115,7 @@
 	<string name="connecting_tecla_shield">Mit Tecla Schild verbinden</string>
 	<string name="couldnt_connect_shield">Konnte keine Verbindung zu Tecla Shield aufbauen</string>
 	<string name="no_shields_inrange">Kein Tecla Shields in Reichweite</string>
-	<string name="searching_for_shields">Suche nach Tecla Shields. Bitte warten...</string>
+	<string name="searching_for_shields">Suche nach Tecla Shields. Bitte warten…</string>
 	<string name="fullscreen_enabled">Vollbild-Modus aktiviert</string>
 	<string name="fullscreen_disabled">Vollbild-Modus deaktiviert</string>
 	<string name="tecla_notselected">Tecla Tastatur ist nicht ausgewählt!</string>
@@ -125,7 +125,7 @@
 	<string name="no_voice_actions_installed">Sprachsteuerung ist nicht installiert!</string>
 	<string name="sep_label">Ändere Ereignisanbieter</string>
 	<string name="voice_input">Tecla Spracheingabe</string>
-	<string name="configuring_tecla">Konfigurieren von Tecla...</string>
+	<string name="configuring_tecla">Konfigurieren von Tecla…</string>
 	<string-array name="prediction_modes">
 	  <item>"Keine"</item>
 	  <item>"Standard"</item>

@@ -115,7 +115,7 @@
 	<string name="connecting_tecla_shield">Ansluter till Tecla Shield</string>
 	<string name="couldnt_connect_shield">Kunde inte ansluta till Tecla Shield</string>
 	<string name="no_shields_inrange">Inga Tecla Shields inom räckhåll</string>
-	<string name="searching_for_shields">Söker efter Tecla Shileds. Vänligen vänta...</string>
+	<string name="searching_for_shields">Söker efter Tecla Shileds. Vänligen vänta…</string>
 	<string name="fullscreen_enabled">Helskärmskontakt aktiverad</string>
 	<string name="fullscreen_disabled">Helskärmskontakt inte aktiverad</string>
 	<string name="tecla_notselected">Teclas tangentbord är inte aktiverat!</string>
@@ -125,7 +125,7 @@
 	<string name="no_voice_actions_installed">Röståtgärd är inte installerad!</string>
 	<string name="sep_label">Typ av externt styrsätt</string>
 	<string name="voice_input">Tecla röststyrning</string>
-	<string name="configuring_tecla">Konfigurera Tecla...</string>
+	<string name="configuring_tecla">Konfigurera Tecla…</string>
 	<string-array name="prediction_modes">
 		<item>"Inget"</item>
 		<item>"Grundinställningar"</item>

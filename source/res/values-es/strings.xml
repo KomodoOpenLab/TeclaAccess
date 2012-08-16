@@ -115,7 +115,7 @@
 	<string name="connecting_tecla_shield">Conectando al Tecla Shield</string>
 	<string name="couldnt_connect_shield">No se puede conectar el Tecla Shield</string>
 	<string name="no_shields_inrange">No hay ningún Tecla Shield en el radio de alcance</string>
-	<string name="searching_for_shields">Buscando Tecla Shields. Espere por favor...</string>
+	<string name="searching_for_shields">Buscando Tecla Shields. Espere por favor…</string>
 	<string name="fullscreen_enabled">Interruptor de pantalla completa activado</string>
 	<string name="fullscreen_disabled">Interruptor de pantalla completa desactivado</string>
 	<string name="tecla_notselected">¡El teclado Tecla no esta seleccionado!</string>
@@ -125,7 +125,7 @@
 	<string name="no_voice_actions_installed">¡Acciones de voz no está instalado!</string>
 	<string name="sep_label">Proveedor de eventos de interruptor</string>
 	<string name="voice_input">Entrada de voz de Tecla</string>
-	<string name="configuring_tecla">Configurando Tecla...</string>
+	<string name="configuring_tecla">Configurando Tecla…</string>
 	<string-array name="prediction_modes">
 		<item>"Ninguno"</item>
 		<item>"Básico"</item>

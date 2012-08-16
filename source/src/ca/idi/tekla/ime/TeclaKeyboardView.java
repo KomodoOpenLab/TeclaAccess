@@ -16,6 +16,7 @@
 
 package ca.idi.tekla.ime;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.inputmethodservice.Keyboard;
@@ -26,13 +27,32 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import java.util.List;
 
+import ca.idi.tekla.R;
+import ca.idi.tekla.TeclaApp;
+
 public class TeclaKeyboardView extends KeyboardView {
+
+	
+	private TeclaMorse mTeclaMorse;
+	private MorseChart mMorseChart;
+	private TeclaIME mIME;
+	
+	private Dialog cheatsheetDialog;
+	private View cheatsheet1;
+    private View cheatsheet2;
+	
 
     static final int KEYCODE_OPTIONS = -100;
     static final int KEYCODE_SHIFT_LONGPRESS = -101;
+    
+    // Keycode for stepping out self scanning
+    static final int KEYCODE_STEP_OUT = -7;
 
     private Keyboard mPhoneKeyboard;
 
@@ -47,10 +67,25 @@ public class TeclaKeyboardView extends KeyboardView {
     public void setPhoneKeyboard(Keyboard phoneKeyboard) {
         mPhoneKeyboard = phoneKeyboard;
     }
+    
+	public void setTeclaMorse(TeclaMorse tm) {
+		mTeclaMorse = tm;
+	}
+	
+	public void setService(TeclaIME service) {
+		mIME = service;
+	}
 
     @Override
     protected boolean onLongPress(Key key) {
-        if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {
+        if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
+        		TeclaApp.persistence.isMorseModeEnabled()) {
+        	if (cheatsheetDialog != null && cheatsheetDialog.isShowing())
+        		cheatsheetDialog.dismiss();
+        	else
+        		showCheatSheet();
+            return true;		
+        } else if (key.codes[0] == Keyboard.KEYCODE_MODE_CHANGE) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
             return true;
         } else if (key.codes[0] == Keyboard.KEYCODE_SHIFT) {
@@ -70,7 +105,66 @@ public class TeclaKeyboardView extends KeyboardView {
 	public TeclaKeyboard getKeyboard() {
 		return (TeclaKeyboard) super.getKeyboard();
 	}
+	
+	/**
+	 * Creates a Morse cheat sheet (Morse mode only)
+	 */
+	public void createCheatSheet() {
+		if (this.cheatsheet1 == null) {
+			this.cheatsheet1 = mIME.getLayoutInflater().inflate(R.layout.cheat_sheet1, null);
+		}
+		if (this.cheatsheet2 == null) {
+			this.cheatsheet2 = mIME.getLayoutInflater().inflate(R.layout.cheat_sheet2, null);
+		}
+		if (this.cheatsheetDialog == null) {
+			this.cheatsheetDialog = new Dialog(mIME);
 
+			cheatsheetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+			cheatsheetDialog.setCancelable(true);
+			cheatsheetDialog.setCanceledOnTouchOutside(true);
+			cheatsheetDialog.setContentView(cheatsheet1);
+			cheatsheet1.setOnTouchListener(new OnTouchListener() {
+				public boolean onTouch(View v, MotionEvent event) {
+					FixedSizeView fsv = (FixedSizeView) cheatsheet2;
+					fsv.fixedHeight = cheatsheet1.getMeasuredHeight();
+					fsv.fixedWidth = cheatsheet1.getMeasuredWidth();
+					cheatsheetDialog.setContentView(cheatsheet2);
+					return true;
+				}
+			});
+			cheatsheet2.setOnTouchListener(new OnTouchListener() {
+				public boolean onTouch(View v, MotionEvent event) {
+					cheatsheetDialog.setContentView(cheatsheet1);
+					return true;
+				}
+			});
+			Window window = this.cheatsheetDialog.getWindow();
+			WindowManager.LayoutParams lp = window.getAttributes();
+			lp.token = this.getWindowToken();
+			lp.type = WindowManager.LayoutParams.TYPE_APPLICATION_ATTACHED_DIALOG;
+			window.setAttributes(lp);
+			window.addFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+		}
+	}
+	
+	/**
+	 * Displays the Morse cheat sheet (Morse mode only)
+	 */
+	public void showCheatSheet() {
+		createCheatSheet();
+		this.cheatsheetDialog.show();
+	}
+	
+	/**
+	 * Dismisses the Morse cheat sheet (Morse mode only)
+	 */
+	public void closeCheatSheet() {
+        if (cheatsheetDialog != null) {
+                cheatsheetDialog.dismiss();
+        }
+	}
+	
 	/****************************  INSTRUMENTATION  *******************************/
 
     static final boolean DEBUG_AUTO_PLAY = false;
@@ -181,4 +275,18 @@ public class TeclaKeyboardView extends KeyboardView {
             }
         }
     }
+    
+	@Override
+	public void onDraw(Canvas canvas) {
+		super.onDraw(canvas); 
+
+		if (mIME.getKeyboardSwitcher().getKeyboardMode() == KeyboardSwitcher.MODE_MORSE) {
+			//Update the state of the Morse HUD display
+			mMorseChart = mTeclaMorse.getMorseChart();
+			mMorseChart.update();
+			mMorseChart.layout.measure(canvas.getWidth(), canvas.getHeight());
+			mMorseChart.layout.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+			mMorseChart.layout.draw(canvas);  
+		}
+	}
 }

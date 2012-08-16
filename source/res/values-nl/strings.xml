@@ -101,23 +101,18 @@
 	<string name="shield_connect_summary_BT_nosupport">Bluetooth is niet ondersteund</string>
 	<string name="shield_connect_summary_BT_disabled">Bluetooth is uitgeschakeld</string>
 	<string name="shield_connect_summary">Kies een beschikbaar Tecla Shield</string>
-	<string name="shield_mac"></string>
 	<string name="fullscreen_switch">Volledig scherm schakelaar instelling</string>
 	<string name="fullscreen_switch_summary">Gebruikt het volledige scherm als één enkele schakelaar</string>
     <string name="scanning_category">Scaninstellingen</string>
 	<string name="self_scanning">Activeer zelf-scanning</string>
 	<string name="self_scanning_summary">Scant het toetsenbord automatisch</string>
-	<string name="scan_delay">Zelf-scanning vertraging</string>
-	<string name="scan_delay_summary">Verandert de zelf-scanning snelheid</string>
-	<string name="scan_delay_dialog_message">Voer een nieuwe vertraging in in milliseconden:</string>
-	<string name="scan_delay_default_value">750</string>
 	<string name="sep_label">Schakelaar aanbieder</string>
 	<string name="shield_connected">Tecla Shield verbonden</string>
 	<string name="shield_disconnected">Tecla Shield uitgeschakeld</string>
 	<string name="connecting_tecla_shield">Verbinding maken met Tecla Shield</string>
 	<string name="couldnt_connect_shield">Kon geen verbinding maken met Tecla Shield</string>
 	<string name="no_shields_inrange">Geen Tecla Shield beschikbaar</string>
-	<string name="searching_for_shields">Zoeken naar Tecla Shields. Even geduld...</string>
+	<string name="searching_for_shields">Zoeken naar Tecla Shields. Even geduld…</string>
 	<string name="fullscreen_enabled">Volledig scherm schakelaar modus ingeschakeld</string>
 	<string name="fullscreen_disabled">Volledig scherm schakelaar modus uitgeschakeld</string>
 </resources>

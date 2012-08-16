@@ -18,12 +18,19 @@ package ca.idi.tekla;
 
 //FIXME: Tecla Access - Solve backup elsewhere
 //import android.backup.BackupManager;
+import java.util.HashMap;
+
+import ca.idi.tecla.lib.ListPreference;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tekla.util.DefaultActionsDialog;
+import ca.idi.tekla.util.FullResetTimeoutDialog;
 import ca.idi.tekla.util.NavKbdTimeoutDialog;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.RepeatFrequencyDialog;
 import ca.idi.tekla.util.ScanSpeedDialog;
+import ca.idi.tekla.util.SwitchPreference;
 
 import android.R.bool;
 import android.app.ProgressDialog;
@@ -46,6 +53,7 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.AutoText;
 import android.util.Log;
+import android.widget.BaseAdapter;
 import android.view.KeyEvent;
 
 public class TeclaPrefs extends PreferenceActivity
@@ -56,19 +64,22 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	 */
 	private static final String CLASS_TAG = "Prefs: ";
 	private static final String QUICK_FIXES_KEY = "quick_fixes";
-	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
+//	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
 	private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
 
 	private CheckBoxPreference mQuickFixes;
-	private CheckBoxPreference mShowSuggestions;
+//	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
 
+	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefPersistentKeyboard;
+	private Preference mPrefMorseSwitchMode;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefTempDisconnect;
 	private CheckBoxPreference mPrefFullScreenSwitch;
+	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private ProgressDialog mProgressDialog;
@@ -77,8 +88,22 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private String mShieldAddress, mShieldName;
 	
 	private ScanSpeedDialog mScanSpeedDialog;
+	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
-
+	private FullResetTimeoutDialog mFullResetTimeoutDialog;
+	private PreferenceScreen mConfigureInputScreen;
+	private BaseAdapter mConfigureInputAdapter;
+	
+	private static SwitchPreference mSwitchJ1;
+	private static SwitchPreference mSwitchJ2;
+	private static SwitchPreference mSwitchJ3;
+	private static SwitchPreference mSwitchJ4;
+	private static SwitchPreference mSwitchE1;
+	private static SwitchPreference mSwitchE2;
+	
+	private DefaultActionsDialog mDefaultActionsDialog;
+	private static HashMap<String, String[]> mSwitchMap;
+		
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -93,21 +118,71 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 		addPreferencesFromResource(R.layout.activity_prefs);
 		mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
-		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
+//		mShowSuggestions = (CheckBoxPreference) findPreference(SHOW_SUGGESTIONS_KEY);
 		mPrefVoiceInput = (CheckBoxPreference) findPreference(Persistence.PREF_VOICE_INPUT);
 		mPrefVariantsKey = (CheckBoxPreference) findPreference(Persistence.PREF_VARIANTS_KEY);
+		mPrefMorse = (CheckBoxPreference) findPreference(Persistence.PREF_MORSE_MODE);
+		mPrefMorseSwitchMode = (ListPreference) findPreference(Persistence.PREF_MORSE_SWITCH_MODE);
 		mPrefPersistentKeyboard = (CheckBoxPreference) findPreference(Persistence.PREF_PERSISTENT_KEYBOARD);
 		mPrefAutohideTimeout = (Preference) findPreference(Persistence.PREF_AUTOHIDE_TIMEOUT);
 		mAutohideTimeoutDialog = new NavKbdTimeoutDialog(this);
-		mAutohideTimeoutDialog.setContentView(R.layout.dialog_autohide_timeout);
+		mAutohideTimeoutDialog.setContentView(R.layout.dialog_timeout);
+		mFullResetTimeoutDialog = new FullResetTimeoutDialog(this);
+		mFullResetTimeoutDialog.setContentView(R.layout.dialog_timeout);
 		mPrefConnectToShield = (CheckBoxPreference) findPreference(Persistence.PREF_CONNECT_TO_SHIELD);
 		mPrefTempDisconnect = (CheckBoxPreference) findPreference(Persistence.PREF_TEMP_SHIELD_DISCONNECT);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
+		mPrefSpeakerPhoneSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_SPEAKERPHONE_SWITCH);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);
 		mScanSpeedDialog.setContentView(R.layout.dialog_scan_speed);
+		mRepeatFrequencyDialog = new RepeatFrequencyDialog(this);
+		mRepeatFrequencyDialog.setContentView(R.layout.dialog_scan_speed);
 		mProgressDialog = new ProgressDialog(this);
+		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
+		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
+		
+		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_MORSE));
+		
+		mSwitchJ2 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J2), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J2_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J2_MORSE));
+		
+		mSwitchJ3 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J3), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J3_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J3_MORSE));
+		
+		mSwitchJ4 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J4), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J4_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_J4_MORSE));
+		
+		mSwitchE1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_E1), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E1_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E1_MORSE));
+		
+		mSwitchE2 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_E2), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_TECLA), 
+				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_MORSE));
+		
+		mDefaultActionsDialog = new DefaultActionsDialog(this);
+		mDefaultActionsDialog.setContentView(R.layout.reset_default);
+
+		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
+		// If Tecla Access IME is not selected disable all alternative input preferences
+		if (!TeclaApp.getInstance().isDefaultIME()) {
+			//Tecla Access is not selected
+			mPrefPersistentKeyboard.setEnabled(false);
+			mPrefAutohideTimeout.setEnabled(false);
+			mPrefFullScreenSwitch.setEnabled(false);
+			mPrefConnectToShield.setEnabled(false);
+			mPrefSelfScanning.setEnabled(false);
+			mPrefInverseScanning.setEnabled(false);
+//			mPrefMorse.setEnabled(false); // FIXME: Uncomment when adding morse
+			TeclaApp.getInstance().showToast(R.string.tecla_notselected);
+		}
 
 		// If no voice apps available, disable voice input
 		if (!(TeclaApp.getInstance().isVoiceInputSupported() && 
@@ -128,7 +203,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefSelfScanning.setEnabled(false);
 			mPrefInverseScanning.setEnabled(false);
 		}
-
+		
+		refreshSwitchesSummary();
+		
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
 		if (!TeclaApp.getInstance().isDefaultIME()) {
@@ -162,7 +239,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
 			.removePreference(mQuickFixes);
 		} else {
-			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
+			//FIXME: Enable when adding suggestions
+//			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
 		}
 	}
 
@@ -243,13 +321,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
-				mPrefPersistentKeyboard.setChecked(true);
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				// Enable scanning checkboxes so they can be turned on/off
 				mPrefTempDisconnect.setEnabled(true);
 				mPrefSelfScanning.setEnabled(true);
 				mPrefInverseScanning.setEnabled(true);
+//				mPrefMorse.setEnabled(true); // FIXME: Uncomment when adding morse
+				mPrefPersistentKeyboard.setChecked(true);
 			}
 
 			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
@@ -267,8 +346,17 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
 		}
+		if (preference.getKey().equals(Persistence.PREF_REPEAT_DELAY_INT)) {
+			mRepeatFrequencyDialog.show();
+		}
 		if (preference.getKey().equals(Persistence.PREF_AUTOHIDE_TIMEOUT)) {
 			mAutohideTimeoutDialog.show();
+		}
+		if (preference.getKey().equals(Persistence.PREF_SWITCH_DEFAULT)) {
+			mDefaultActionsDialog.show();
+		}
+		if (preference.getKey().equals(Persistence.PREF_FULL_RESET_TIMEOUT)) {
+			mFullResetTimeoutDialog.show();
 		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
@@ -284,9 +372,20 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				}
 			}
 		}
+		if (key.equals(Persistence.PREF_MORSE_MODE)) {
+			if (mPrefMorse.isChecked()) {
+				TeclaApp.getInstance().enabledMorseIME();
+				TeclaApp.getInstance().showToast(R.string.morse_enabled);
+			}
+			else {
+				TeclaApp.getInstance().disabledMorseIME();
+			}
+			
+		}
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);
+				
 				// Show keyboard immediately
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
@@ -317,6 +416,30 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				mPrefTempDisconnect.setEnabled(false);
 				TeclaApp.getInstance().requestHideIMEView();
 			}
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J1_TECLA) || key.equals(Persistence.PREF_SWITCH_J1_MORSE)) {
+			mSwitchJ1.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J2_TECLA) || key.equals(Persistence.PREF_SWITCH_J2_MORSE)) {
+			mSwitchJ2.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J3_TECLA) || key.equals(Persistence.PREF_SWITCH_J3_MORSE)) {
+			mSwitchJ3.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
+		}
+		if (key.equals(Persistence.PREF_SWITCH_J4_TECLA) || key.equals(Persistence.PREF_SWITCH_J4_MORSE)) {
+			mSwitchJ4.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
+		}
+		if (key.equals(Persistence.PREF_SWITCH_E1_TECLA) || key.equals(Persistence.PREF_SWITCH_E1_MORSE)) {
+			mSwitchE1.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
+		}
+		if (key.equals(Persistence.PREF_SWITCH_E2_TECLA) || key.equals(Persistence.PREF_SWITCH_E2_MORSE)) {
+			mSwitchE2.onPreferenceChanged(key);
+			mConfigureInputAdapter.notifyDataSetChanged();
 		}
 		if (key.equals(Persistence.PREF_CONNECT_TO_SHIELD)) {
 			if (mPrefConnectToShield.isChecked()) {
@@ -395,6 +518,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}
 		}
+		
 		if (key.equals(Persistence.PREF_SELF_SCANNING)) {
 			if (mPrefSelfScanning.isChecked()) {
 				mPrefInverseScanning.setChecked(false);
@@ -499,6 +623,25 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefConnectToShield.setSummary(R.string.shield_connect_summary);
 			mPrefConnectToShield.setEnabled(true);
 		}
+	}
+	
+	private void refreshSwitchesSummary() {
+		mSwitchJ1.refreshSummaries();
+		mSwitchJ2.refreshSummaries();
+		mSwitchJ3.refreshSummaries();
+		mSwitchJ4.refreshSummaries();
+		mSwitchE1.refreshSummaries();
+		mSwitchE2.refreshSummaries();
+	}
+	
+	public static void setDefaultSwitchActions() {
+		TeclaApp.persistence.setFullResetTimeout(Persistence.DEFAULT_FULL_RESET_TIMEOUT);
+		mSwitchJ1.setValues(1, 1);
+		mSwitchJ2.setValues(2, 2);
+		mSwitchJ3.setValues(3, 3);
+		mSwitchJ4.setValues(4, 4);
+		mSwitchE1.setValues(4, 0);
+		mSwitchE2.setValues(3, 0);
 	}
 
 }

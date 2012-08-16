@@ -21,32 +21,33 @@ import java.util.List;
 
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
-import ca.idi.tekla.R.dimen;
-import ca.idi.tekla.R.drawable;
-import ca.idi.tekla.R.string;
-import ca.idi.tekla.R.xml;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.Keyboard.Key;
-import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 
 public class TeclaKeyboard extends Keyboard {
 
 	public static int KEYCODE_VOICE = -202;
 	public static int KEYCODE_VARIANTS = -222;
-
+	
+    static final int KEYCODE_MORSE_DIT = 500;
+    static final int KEYCODE_MORSE_DAH = 501;
+    static final int KEYCODE_MORSE_SPACEKEY = 562;
+    static final int KEYCODE_MORSE_CAPSKEY = 559;
+    static final int KEYCODE_MORSE_DELKEY = 67;
+    
     private Drawable mShiftLockIcon;
     private Drawable mShiftLockPreviewIcon;
     private Drawable mOldShiftIcon;
     private Drawable mOldShiftPreviewIcon;
     private Key mShiftKey;
     private Key mEnterKey;
-    
+    private Key mSpaceKey;
+	private Key mCapsLockKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
     private static final int SHIFT_LOCKED = 2;
@@ -86,8 +87,32 @@ public class TeclaKeyboard extends Keyboard {
         if (key.codes[0] == 10) {
             mEnterKey = key;
         }
+        else if (key.codes[0] == KEYCODE_MORSE_SPACEKEY) {
+			mSpaceKey = key;
+        }
+        else if (key.codes[0] == KEYCODE_MORSE_CAPSKEY) {
+        	mCapsLockKey = key;
+        }
         return key;
     }
+    
+    /**
+     * Returns a reference to the Morse space key
+     * (Morse mode only)
+     * @return
+     */
+	public Key getSpaceKey() {
+		return this.mSpaceKey;
+	}
+
+	/**
+	 * Returns a reference to the Morse Caps Lock key
+	 * (Morse mode only)
+	 * @return
+	 */
+	public Key getCapsLockKey() {
+		return this.mCapsLockKey;
+	}
     
     void setImeOptions(Resources res, int mode, int options) {
         if (mEnterKey != null) {

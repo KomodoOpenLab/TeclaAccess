@@ -10,20 +10,9 @@ Getting Involved
 There are many ways to contribute to the [Tecla Access App for Android](https://play.google.com/store/apps/details?id=ca.idi.tekla). Here are some ideas:
 
 ### Code
-
-In order to start contributing code to the Tecla Access project, follow the steps below:
-
-1. Fork this repo. For detailed instructions visit [http://help.github.com/fork-a-repo/](http://help.github.com/fork-a-repo/)
-2. Download and install [Eclipse](http://www.eclipse.org/)
-3. Download and install the [Android SDK](http://developer.android.com/sdk/index.html)
-4. Create a new Android project in Eclipse named *Tecla Access* (target Android 2.0)
-5. Import the *Tecla Access* project's source from the *source* directory in your local repo (you may need to let Eclipse copy the source to the workspace)
+In order to start contributing code to the Tecla Access project, follow the steps outlined in the ['Contributing Code' page](https://github.com/jorgesilva/TeclaAccess/wiki/Contributing-Code) at https://github.com/jorgesilva/TeclaAccess/wiki/Contributing-Code
 6. Create a new Android **library** project in Eclipse named *Tecla Access SDK* 
 6a.If you have Eclipse 3.6 (Helios) or older, you may not have a **library** project option. In that case,just import the *Tecla Access SDK* project like a normal project, then right click on the project -> Properties -> Android and make sure **Is Library** is checked.
-7. Import the *Tecla Access SDK* project's source from the *sdk* directory in your local repo (you may need to let Eclipse copy the source to the workspace)
-8. Go to the properties of your *Tecla Access* project and add the project *Tecla Access SDK* as a library
-9. You should now be able to compile the project
-10. Hack away! but please make sure you follow [this branching model] (http://nvie.com/posts/a-successful-git-branching-model/). That means, make your pull requests against the **develop** branch, not the **master** branch.
 
 ### Review
 

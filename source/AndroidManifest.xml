@@ -1,63 +1,72 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="ca.idi.tekla"
-	android:versionName="0.6.1-beta" android:versionCode="18">
-	<application android:name=".TeclaApp"
-    	android:label="@string/english_ime_name"
-    	android:icon="@drawable/tecla_icon" android:debuggable="false">
-		<activity
-			android:name=".TeclaPrefs"
-			android:label="@string/english_ime_settings"
-			android:noHistory="true">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
-		</activity>
-		<activity
-			android:name=".TeclaSplash"
-			android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
-			android:launchMode="singleTop"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-			android:noHistory="true">
-		</activity>
-		<activity
-			android:name=".TeclaVoiceInput"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-			<intent-filter>
-				<action android:name="android.intent.action.VOICE_COMMAND"/>
-				<category android:name="android.intent.category.DEFAULT" />
-			</intent-filter>
-		</activity>
-		<service
-			android:name=".ime.TeclaIME"
-			android:label="@string/english_ime_name"
-			android:permission="android.permission.BIND_INPUT_METHOD"
-			>
-			<intent-filter>
-				<action android:name="android.view.InputMethod" />
-			</intent-filter>
-			<meta-data
-				android:name="android.view.im"
-				android:resource="@xml/method" />
-		</service>
-		<service
-			android:name=".sep.SwitchEventProvider"
-			android:enabled="true">
-			<intent-filter>
-				<action android:name="ca.idi.tekla.SEP_SERVICE" />
-			</intent-filter>
-		</service>
+    package="ca.idi.tekla"
+    android:versionCode="20"
+    android:versionName="0.7.1-beta" >
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="10">
+    </uses-sdk>
+
+    <application
+        android:name=".TeclaApp"
+        android:icon="@drawable/tecla_icon"
+        android:label="@string/english_ime_name" >
+        <activity
+            android:name=".TeclaPrefs"
+            android:label="@string/english_ime_settings"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TeclaSplash"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize" >
+        </activity>
+        <activity
+            android:name=".TeclaVoiceInput"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.VOICE_COMMAND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".ime.TeclaIME"
+            android:label="@string/english_ime_name"
+            android:permission="android.permission.BIND_INPUT_METHOD" >
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+        </service>
+        <service
+            android:name=".sep.SwitchEventProvider"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="ca.idi.tekla.SEP_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-	<uses-permission android:name="android.permission.VIBRATE"/>
-	<uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
-	<uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
-	<uses-permission android:name="android.permission.READ_CONTACTS" />
-	<uses-permission android:name="android.permission.BLUETOOTH"/>
-	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-	<uses-sdk android:minSdkVersion="5"></uses-sdk>
 
 </manifest>
