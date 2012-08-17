@@ -184,9 +184,10 @@ public class TeclaIME extends InputMethodService
 	private String mWordSeparators;
 	private String mSentenceSeparators;
 
-	private boolean mSendToPC;
+	
 	
 	private int wifi_ping_count=0;
+	private Thread wifisearcherthread;
 	
 	Handler mHandler = new Handler() {
 		@Override
@@ -234,6 +235,7 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 		initTeclaA11y();
+		initDesktop();
 	}
 	
 	private void initSuggest(String locale) {
@@ -251,7 +253,9 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	private void initDesktop(){
-		mSendToPC=false;
+		TeclaApp.mSendToPC=false;
+		wifisearcherthread=new Thread(desktopsearcher);
+		
 	}
 
 	@Override public void onDestroy() {
@@ -858,20 +862,54 @@ public class TeclaIME extends InputMethodService
 			break;
 		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-			//toggle the mSendToPC lock
-			mSendToPC=!mSendToPC;
-			if(mSendToPC && TeclaApp.connect_to_desktop)
-				new Thread(wificonnector).start();
-			else if(TeclaApp.desktop != null &&!mSendToPC && TeclaApp.desktop.isConnected()){
-				TeclaApp.desktop.disconnect();
-			}
+			//toggle the TeclaApp.mSendToPC lock
+			
 			break;
 		
 		case TeclaKeyboardView.KEYCODE_DICTATION:
 			//TODO: Add dictation actions here
+			if(TeclaApp.desktop==null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			
+				if(!TeclaApp.desktop.isConnected()&& !wifisearcherthread.isAlive())
+				{
+					wifisearcherthread=new Thread(desktopsearcher);
+					wifisearcherthread.start();
+				}
+				TeclaApp.dict_lock=TeclaApp.mSendToPC;
+				TeclaApp.mSendToPC=false;
+				Log.v("mSendToPC",""+TeclaApp.mSendToPC);
+				TeclaApp.dictation_lock=new Object();
+				
+				TeclaApp.getInstance().startVoiceDictation(RecognizerIntent.EXTRA_LANGUAGE_MODEL);
+				
+				/*synchronized(TeclaApp.dictation_lock){
+					try {
+						TeclaApp.dictation_lock.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}*/
+				
+			
 			break;
 		case TeclaKeyboardView.KEYCODE_SEND_TO_PC:
+			
 			//TODO: Add send to pc handling here
+			if(TeclaApp.desktop==null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			TeclaApp.mSendToPC=!TeclaApp.mSendToPC;
+			Log.v("voice",""+TeclaApp.desktop.isConnected()+" "+TeclaApp.mSendToPC+" "+wifisearcherthread.isAlive()+" "+TeclaApp.connect_to_desktop);
+			if(TeclaApp.mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected()&& !wifisearcherthread.isAlive())
+				{
+				Log.v("connection","entering new thread");
+				wifisearcherthread=new Thread(wificonnector);
+				wifisearcherthread.start();
+				}
+			else if(TeclaApp.desktop != null &&!TeclaApp.mSendToPC && TeclaApp.desktop.isConnected()){
+				TeclaApp.desktop.disconnect();
+			}
 			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
@@ -1826,7 +1864,7 @@ public class TeclaIME extends InputMethodService
 		}
 		
 		cancelNavKbdTimeout();
-		if(TeclaApp.desktop!=null&& mSendToPC && TeclaApp.desktop.isConnected() && TeclaApp.sendflag )
+		if(TeclaApp.desktop!=null&& TeclaApp.mSendToPC && TeclaApp.desktop.isConnected() && TeclaApp.sendflag )
 		{
 			TeclaApp.desktop.send_switch_event((byte)switchEvent.getSwitchStates());
 			return;
@@ -2375,7 +2413,11 @@ public class TeclaIME extends InputMethodService
 
 		public void run() {
 			// TODO Auto-generated method stub
+			
 			Log.v("dictation","attempting connection");
+			
+			if(TeclaApp.desktop== null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
 			TeclaApp.desktop.connect();
 			
 			if(TeclaApp.desktop.isConnected()){
@@ -2415,6 +2457,8 @@ public class TeclaIME extends InputMethodService
 				String rec=TeclaApp.desktop.receive();
 				if(rec!=null&&rec.equals("ping")){
 					wifi_ping_count=0;
+				}else if(rec !=null && rec.equals("dictation")){
+					onKey(TeclaKeyboardView.KEYCODE_DICTATION,null);
 				}
 			}
 		}
@@ -2428,8 +2472,8 @@ public class TeclaIME extends InputMethodService
 			Log.v("dictation","Started WiFiConnector");
 			if(TeclaApp.desktop!= null)
 				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
-			while( mSendToPC){
-				if(mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected())
+			while( TeclaApp.mSendToPC){
+				if(TeclaApp.mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected())
 				{
 				Log.v("dictation","attempting connection");
 				TeclaApp.desktop.connect();
@@ -2438,6 +2482,7 @@ public class TeclaIME extends InputMethodService
 					Log.v("dictation","connected to Desktop");
 					new Thread(wifipinger).start();
 					new Thread(wifireceiver).start();
+					// TODO :onConnect change the send to pc button to connect state
 				}
 				}
 				else{
@@ -2449,8 +2494,12 @@ public class TeclaIME extends InputMethodService
 					}
 				}
 			}
+			Log.v("dictation",""+wifisearcherthread.isAlive());
 		}
 		
 	};
+	
+	
+	
 }
 

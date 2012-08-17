@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical"
      >
- 
-   
-  
- <RelativeLayout 
+ <LinearLayout
+     android:layout_height="0dp"
+     android:layout_width="fill_parent"
+     android:layout_weight="0.1"
+     
+     >
+    <ListView 
+     android:id="@+id/resultlister"
+     android:persistentDrawingCache="scrolling"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     /> 
+</LinearLayout>
+ <LinearLayout 
      android:layout_height="wrap_content"
      android:layout_width="fill_parent"
      android:id="@+id/rl2"
-     android:layout_alignParentBottom="true"
+     android:orientation="horizontal"
+     android:layout_marginBottom="40dp"
      >
      <Button 
      	android:layout_height="wrap_content"
@@ -24,18 +36,8 @@
         android:layout_height="wrap_content"
      	android:layout_width="wrap_content"
      	android:id="@+id/button_next_field"
-     	android:text=" Next Field"
-     	android:layout_alignParentRight="true"
-     	android:layout_marginRight="50dp"
-     	
+     	android:text=" Next Field"    	
          />
- </RelativeLayout>
-    <ListView 
-     android:id="@+id/resultlist"
-     android:persistentDrawingCache="scrolling"
-     android:layout_width="fill_parent"
-     android:layout_height="wrap_content"
-     android:layout_above="@id/rl2"
-     /> 
+ </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>
