@@ -304,7 +304,7 @@
     
     <!-- Option to enable Morse HUD display -->
     <string name="morse_show_hud">Show Morse HUD</string>
-    <string name="morse_show_hud_summary">Displays a chart of Morse keys/values above the keyboard</string>
+    <string name="morse_show_hud_summary">Displays a set of Morse keys/values above the keyboard</string>
     
     <!-- Morse key mode strings -->
 	<string name="morse_key_mode">Morse input method</string>

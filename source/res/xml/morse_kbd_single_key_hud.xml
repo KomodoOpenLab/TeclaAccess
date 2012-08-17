@@ -34,16 +34,16 @@
         android:keyHeight="11%">
         
         <Key
-            android:codes="-4"
+            android:codes="@integer/key_done"
             android:keyIcon="@drawable/sym_keyboard_done"
             android:iconPreview="@drawable/sym_keyboard_feedback_done"
             android:keyEdgeFlags="left"/>
         <Key
-            android:codes="562"
+            android:codes="@integer/key_endof_char"
             android:keyIcon="@drawable/sym_keyboard_space"
             android:keyWidth="55%"/>
         <Key
-            android:codes="-1"
+            android:codes="@integer/key_shift"
             android:iconPreview="@drawable/sym_keyboard_feedback_shift"
             android:keyIcon="@drawable/sym_keyboard_shift"
             android:isModifier="true"
