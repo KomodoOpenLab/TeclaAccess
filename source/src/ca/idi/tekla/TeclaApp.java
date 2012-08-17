@@ -4,6 +4,8 @@
 
 package ca.idi.tekla;
 
+import java.util.ArrayList;
+
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -77,7 +79,11 @@ public class TeclaApp extends Application {
 	public static boolean sendflag=false,connect_to_desktop=false;
 	
 	public static TeclaDesktopClient desktop;
+	public static Object dictation_lock=new Object();
+	public static boolean dict_lock=false,mSendToPC;
 	
+	public static int disconnect_event;
+	public static int dictation_event;
 	
 	public TeclaApp() {
         instance = this;
@@ -100,7 +106,7 @@ public class TeclaApp extends Application {
 		
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
-		desktop=new TeclaDesktopClient(this);
+		
 		
 
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -220,6 +226,13 @@ public class TeclaApp extends Application {
 		sendBroadcast(intent);
 	}
 	
+	public void inputStringListAvailable(ArrayList<String> input_string) {
+		Log.d(TeclaApp.TAG, "Broadcasting input string: " + input_string);
+		Intent intent = new Intent(ACTION_INPUT_STRING);
+		intent.putExtra(EXTRA_INPUT_STRING, input_string);
+		sendBroadcast(intent);
+	}
+	
 	public void postDelayedFullReset(long delay) {
 		cancelFullReset();
 		mHandler.postDelayed(mFullResetRunnable, delay * 1000);
@@ -305,7 +318,14 @@ public class TeclaApp extends Application {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
-	
+	public void startVoiceDictation(String language_model) {
+		if (DEBUG) Log.d(TAG, "Calling voice input...");
+		Intent intent = new Intent(this, TeclaVoiceInput.class);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, language_model);
+		intent.putExtra("isDictation", 0x56);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
 	public void startVoiceActions() {
 		Log.d(TAG, "Starting voice actions...");
 		Intent intent = new Intent();
@@ -429,5 +449,6 @@ public class TeclaApp extends Application {
 	public void showToast(int resid) {
 		Toast.makeText(this, resid, Toast.LENGTH_LONG).show();
 	}
-
+	
+	
 }

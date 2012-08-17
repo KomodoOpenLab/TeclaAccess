@@ -8,12 +8,30 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
+
+
+import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
+import ca.idi.tekla.TeclaVoiceInput;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class TeclaDesktopClient implements Runnable {
 	
@@ -23,11 +41,11 @@ public class TeclaDesktopClient implements Runnable {
 	
 	InetAddress serveraddress;
 	
-	Object lock;
+	Object lock;	
 	
 	DatagramPacket pack;
 	
-	
+	public static int SPEECH_REQUEST_INTENT=2819;
 	
 	ObjectInputStream in;
 	ObjectOutputStream out;
@@ -48,7 +66,8 @@ public class TeclaDesktopClient implements Runnable {
 		
 		wifiman=(WifiManager)context.getSystemService(Context.WIFI_SERVICE);
 		locker=connectionstatus=false;	
-		
+		//disconnect_event=65;
+		//dictation_event=55;
 	}
 	
 	public void connect(){
@@ -114,6 +133,8 @@ public class TeclaDesktopClient implements Runnable {
 				if(result!=null && result.equals("Success")){
 					
 					connectionstatus=true;
+					send("disevent:"+TeclaApp.disconnect_event);
+					send("dictevent:"+TeclaApp.dictation_event);
 				}
 				
 			
@@ -125,7 +146,7 @@ public class TeclaDesktopClient implements Runnable {
 		}
     }
 
-	 public void send(String data){
+	 public synchronized void send(String data){
 		 /*
 		  * Sends data over the output stream.
 		  */
@@ -167,6 +188,7 @@ public class TeclaDesktopClient implements Runnable {
 	    }
 	    
 	    public void disconnect(){
+	    	connectionstatus=false;
 	    		try {
 	    			if(in != null)
 	    				in.close();				
@@ -174,7 +196,7 @@ public class TeclaDesktopClient implements Runnable {
 	    				out.close();
 	    			if(client!=null)
 	    				client.close();
-	    			connectionstatus=false;
+	    			// TODO set send to pc key to not connected state
 	    			Log.v("dictation","Disconnected");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -259,6 +281,8 @@ public class TeclaDesktopClient implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					multisock.close();
+					connectionstatus=false;
+					break;
 				}
 				
 				
@@ -278,8 +302,104 @@ public class TeclaDesktopClient implements Runnable {
 		public void send_keypress_event(int keycode){
 			send("keypress:"+keycode);
 		}
-		
-		
+		/*
+		public void startDictation(){
+			Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+	        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+	                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+	        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 100);
+	        startActivityForResult(intent, SPEECH_REQUEST_INTENT);
+		}
+		public String createDialog(final ArrayList<String> list,Context context){
+			String dictated=null;
+			
+			final Dialog dictatedialog=new Dialog(context);
+			Log.v("voice","creating Dialog");
+			dictatedialog.setContentView(ca.idi.tekla.R.layout.dictationdialog);
+			
+			ListView lv=(ListView) dictatedialog.findViewById(R.id.resultlist);
+			Button nextwindow=(Button) dictatedialog.findViewById(R.id.button_next_window);
+			Button nextfield=(Button) dictatedialog.findViewById(R.id.button_next_field);
+			
+			
+			ArrayAdapter<String> listsadapter=new ArrayAdapter<String>(dictatedialog.getContext(),
+					android.R.layout.simple_list_item_1,list);
+			lv.setAdapter(listsadapter);
+			listsadapter.notifyDataSetChanged();
+			
+			lv.setOnItemClickListener(new OnItemClickListener(){
+
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					String Dictation=list.get((int)arg3);
+					send_dictation_data(Dictation);
+					dictatedialog.dismiss();
+				}
+				
+			});
+			
+			nextwindow.setOnClickListener(new View.OnClickListener() {
+				
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					send("command:"+NEXT_WINDOW);
+				}
+			});
+			
+			nextfield.setOnClickListener(new View.OnClickListener() {
+				
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					send("command:"+NEXT_FIELD);
+				}
+			});
+			dictatedialog.setOnDismissListener(new OnDismissListener(){
+
+				public void onDismiss(DialogInterface arg0) {
+					// TODO Auto-generated method stub
+					Log.v("voice","Dismissed");
+					/*synchronized(TeclaApp.dictation_lock){
+					TeclaApp.dictation_lock.notify();
+					}
+					TeclaApp.dict_lock=false;
+					((Activity)dictatedialog.getContext()).finish();
+					
+					
+				}
+				
+			});
+			Log.v("voice","created dialog");
+			dictatedialog.show();
+			return dictated;
+		}/*
+		@Override
+		public void onActivityResult(int requestCode, int resultCode, Intent data){
+			if(requestCode==SPEECH_REQUEST_INTENT){
+				
+				if(resultCode ==RESULT_OK){
+					
+					ArrayList<String>list=data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+					
+					if(list.size()>0){
+						
+						createDialog(list);
+						
+					}
+					else{
+						
+						
+					}
+					
+				}
+				else{
+					
+				}
+					
+				
+			}
+			
+			
+		}*/
 }
 
 
