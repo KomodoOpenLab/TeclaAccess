@@ -2440,11 +2440,15 @@ public class TeclaIME extends InputMethodService
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			wifi_ping_count++;
+			
+			Log.v("pinger",""+wifi_ping_count);
 				if(wifi_ping_count>5){
 					TeclaApp.desktop.disconnect();
 				}
 			}
+			
 		}
 	
 	};
@@ -2452,14 +2456,17 @@ public class TeclaIME extends InputMethodService
 		
 		public void run() {
 			// TODO Auto-generated method stub
+			Log.v("connection","starting receiver");
 			while(TeclaApp.desktop.isConnected())
 			{
+				
 				String rec=TeclaApp.desktop.receive();
 				if(rec!=null&&rec.equals("ping")){
 					wifi_ping_count=0;
 				}else if(rec !=null && rec.equals("dictation")){
 					onKey(TeclaKeyboardView.KEYCODE_DICTATION,null);
 				}
+				
 			}
 		}
 		

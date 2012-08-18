@@ -15,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -127,6 +129,12 @@ public class TeclaApp extends Application {
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
+		SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
+		connect_to_desktop=prefs.getBoolean(Persistence.CONNECT_TO_PC, false);
+		sendflag=prefs.getBoolean(Persistence.SEND_SHIELD_EVENTS, false);
+		disconnect_event=prefs.getInt("set_disconnect_event", 65);
+		dictation_event=prefs.getInt("set_dictation_event", 55);
+		password=prefs.getString(Persistence.SET_PASSWORD, "Tecla123");
 		//if (persistence.isPersistentKeyboardEnabled()) queueSplash();
 
 	}

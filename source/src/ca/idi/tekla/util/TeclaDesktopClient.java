@@ -93,20 +93,11 @@ public class TeclaDesktopClient implements Runnable {
 				serveraddress=pack.getAddress();
 				Log.v("connection",""+serveraddress);
 			}
+			else
+				return;
 			buf=echomessage.getBytes();
 			
 			//multisock.leaveGroup(InetAddress.getByName("225.0.0.0"));
-			
-			MulticastSocket multisocksend=new MulticastSocket(PORTNUMBER+1);
-			
-			packet=new DatagramPacket(buf,buf.length,InetAddress.getByName("226.0.0.0"),PORTNUMBER+1); 
-			
-			multisocksend.setSoTimeout(30000);
-			
-			for(int i=0;i<8;i++)
-			{
-			multisocksend.send(packet);
-			}
 			
 			flag=false;
 			
@@ -114,14 +105,12 @@ public class TeclaDesktopClient implements Runnable {
 			
 				client=new Socket();
 							
-				client.connect(new InetSocketAddress(serveraddress,PORTNUMBER+2),60000);
+				client.connect(new InetSocketAddress(serveraddress,PORTNUMBER+2),30000);
 				
 				out=new ObjectOutputStream(client.getOutputStream());
 				out.flush();
-				
-				
+								
 				send(TeclaApp.password);
-				
 				
 				in=new ObjectInputStream(client.getInputStream());
 				
@@ -169,11 +158,10 @@ public class TeclaDesktopClient implements Runnable {
 	    	
 	    	try{
 	    		String data=in.readUTF();
-	    		Log.v("conenction","receiving"+data);
+	    		Log.v("connection","receiving"+data);
 	    		return data;
 	    	  		
 	    	}catch (IOException e){
-	    		disconnect();
 	    		e.printStackTrace();
 	    		return null;
 	    	}
@@ -182,7 +170,7 @@ public class TeclaDesktopClient implements Runnable {
 	    
 	    public boolean connectionstatus(){
 	    	if(client != null){
-	    		return client.isConnected();
+	    		return client.isConnected()&&connectionstatus;
 	    	}
 	    	return false;
 	    }
@@ -223,14 +211,15 @@ public class TeclaDesktopClient implements Runnable {
 				int count=0;
 				pack =new DatagramPacket(buffer,buffer.length);
 				flag=true;
-				
+				if(multisock!=null &&multisock.isConnected())
+					multisock.close();
 			try {
 				
 				
 				multisock=new MulticastSocket(PORTNUMBER);
-				
-				multisock.setSoTimeout(60000*10);			
-				
+				Log.v("connection","step 1 new multisock");
+				multisock.setSoTimeout(40000);			
+				Log.v("connection","step 2 setting timeout");
 				multisock.joinGroup(InetAddress.getByName("225.0.0.0"));
 				
 				buffer=new byte[256];
@@ -252,12 +241,15 @@ public class TeclaDesktopClient implements Runnable {
 				
 				Log.v("connection","pack="+new String(pack.getData()));
 				
-				multisock.setSoTimeout(30000);
+				multisock.setSoTimeout(10000);
 				
 				locker=true;
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
+				locker=true;
 				e1.printStackTrace();
+				multisock.close();
+				return;
 			}
 			
 			
@@ -281,7 +273,6 @@ public class TeclaDesktopClient implements Runnable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					multisock.close();
-					connectionstatus=false;
 					break;
 				}
 				
