@@ -362,7 +362,18 @@
 	    android:title="Set password"
 	    android:summary="Set password for authentication.Should match the password on the desktop client."
 	    android:persistent="true"
-	    />    
+	    />   
+	<Preference android:key="set_disconnect_event"
+	    android:title="Set Disconnect Event"
+	    android:summary="Set the Shield event that will break the switch event relay allowing you to gain control of your android device"
+	    android:persistent="true"
+	    />     
+	<Preference android:key="set_dictation_event"
+	    android:title="Set Dictation Launching Event"
+	    android:summary="Set the Shield event that will start the dictation mode prompting you to talk.PC control will be lost temporarily."
+	    android:persistent="true"
+	    />     
+	        
 	</PreferenceScreen>	    
 	</PreferenceCategory>
 </PreferenceScreen>

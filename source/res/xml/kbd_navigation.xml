@@ -122,7 +122,7 @@
         <Row
         android:keyboardMode="@+id/mode_secnav_voice">
         <Key
-            android:codes="@integer/key_voice"
+            android:codes="@integer/key_dictation"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
             android:keyWidth="25%p" />
@@ -132,7 +132,7 @@
             android:keyIcon="@drawable/nav_keyboard_repeat"
             android:keyWidth="25%p"/>
         <Key
-            android:codes="@integer/hide_secnav_kbd"
+            android:codes="@integer/key_sendto_pc"
             android:keyLabel="Send to PC"
             android:keyEdgeFlags="right"
             android:keyWidth="50%p" />
