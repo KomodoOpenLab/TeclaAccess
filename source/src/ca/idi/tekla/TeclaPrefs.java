@@ -165,7 +165,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		setDisconnectEvent=(Preference) findPreference ("set_disconnect_event");
 		setDictationEvent=(Preference) findPreference("set_dictation_event");
 		
-		TeclaApp.dictation_event=setDictationEvent.getSharedPreferences().getInt("dictevent", 55);
+		TeclaApp.dictation_event=setDictationEvent.getSharedPreferences().getInt("set_dictation_event", 55);
 		
 		setDictationEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
@@ -183,7 +183,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				return true;
 			}});
 		
-		TeclaApp.disconnect_event=setDisconnectEvent.getSharedPreferences().getInt("disevent", 65);
+		TeclaApp.disconnect_event=setDisconnectEvent.getSharedPreferences().getInt("set_disconnect_event", 65);
 		
 		
 		setPasswordLaunch=(Preference)findPreference(Persistence.SET_PASSWORD);
@@ -584,6 +584,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				setDisconnectEvent.setEnabled(true);
 				setDictationEvent.setEnabled(true);
 				mShieldRelay.setEnabled(true);
+				if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
+				TeclaApp.desktop.disconnect();
 			}
 		}
 		//FIXME: Tecla Access - Solve backup elsewhere
@@ -752,7 +754,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if(event==0 ){
 					if(y*10+x != TeclaApp.dictation_event){
 					TeclaApp.disconnect_event=y*10+x;
-					setDisconnectEvent.getEditor().putInt("d",TeclaApp.disconnect_event).commit();
+					setDisconnectEvent.getEditor().putInt("set_disconnect_event",TeclaApp.disconnect_event).commit();
 					if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
 						TeclaApp.desktop.send("disevent:"+TeclaApp.disconnect_event);
 					}
@@ -762,7 +764,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				else if(event==1 ){
 					if(y*10+x != TeclaApp.disconnect_event){
 					TeclaApp.dictation_event=y*10+x;
-					setDictationEvent.getEditor().putInt("dictevent",TeclaApp.disconnect_event).commit();
+					setDictationEvent.getEditor().putInt("set_dictation_event",TeclaApp.dictation_event).commit();
 					if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected()){
 						TeclaApp.desktop.send("dictevent:"+TeclaApp.dictation_event);
 						Log.v("voice","Entering sending preference");
