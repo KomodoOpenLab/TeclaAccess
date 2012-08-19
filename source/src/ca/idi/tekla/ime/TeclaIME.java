@@ -122,6 +122,7 @@ public class TeclaIME extends InputMethodService
 	private TeclaMorse mTeclaMorse;
 	private Keyboard.Key mSpaceKey;
 	private Keyboard.Key mCapsLockKey;
+	private Keyboard.Key mRepeatLockKey;
 	private int mCapsLockKeyIndex;
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
@@ -460,7 +461,6 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-		
 		initMorseKeyboard();
 		if (mKeyboardSwitcher.isMorseMode()) {
 			mTeclaMorse.getMorseChart().restore();
@@ -862,10 +862,8 @@ public class TeclaIME extends InputMethodService
 			break;
 		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-			//toggle the TeclaApp.mSendToPC lock
-			
+			//TODO:toggle the TeclaApp.mSendToPC lock
 			break;
-		
 		case TeclaKeyboardView.KEYCODE_DICTATION:
 			//TODO: Add dictation actions here
 			if(TeclaApp.desktop==null)
@@ -923,6 +921,9 @@ public class TeclaIME extends InputMethodService
 					if (mRepeatingKey == 0) {
 						 mRepeatingKey = primaryCode;
 						 handleRepeatedKey(mRepeatingKey);
+						//TODO: Figure out if the "changeKeyboardMode" is really needed, is causing 
+						 // an undesirable change of keyboard mode, the break added below fixes it temporarily
+						 break; 
 					}
 					if (! wasAutoRepeating)
 					{
@@ -943,7 +944,6 @@ public class TeclaIME extends InputMethodService
 		if (mKeyboardSwitcher.onKey(primaryCode)) {
 			changeKeyboardMode();
 		}
-
 		evaluateNavKbdTimeout();
 	}
 
@@ -1828,6 +1828,8 @@ public class TeclaIME extends InputMethodService
 	
 	public void stopRepeating() {
 		pauseRepeating();
+		mRepeatLockKey = mIMEView.getKeyboard().getRepeatLockKey();
+		mIMEView.toggleStickyKey(mRepeatLockKey);
 	}
 	
 	/**
@@ -2173,7 +2175,6 @@ public class TeclaIME extends InputMethodService
 				mRepeating = true;
 			} else {
 				mRepeating = false;
-				stopRepeating();
 			}
 		}
 	};

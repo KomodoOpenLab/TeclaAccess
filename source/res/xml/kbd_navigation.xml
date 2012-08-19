@@ -128,6 +128,7 @@
             android:keyWidth="25%p" />
         <Key
             android:codes="@integer/key_repeat_lock"
+            android:isSticky="true"
             android:iconPreview="@drawable/nav_keyboard_feedback_repeat"
             android:keyIcon="@drawable/nav_keyboard_repeat"
             android:keyWidth="25%p"/>
@@ -141,9 +142,9 @@
         android:keyboardMode="@+id/mode_secnav_voice"
         android:rowEdgeFlags="bottom" >
         <Key
-            android:codes="@integer/key_done"
-            android:iconPreview="@drawable/sym_keyboard_feedback_show"
-            android:keyIcon="@drawable/sym_keyboard_show"
+            android:codes="@integer/hide_secnav_kbd"
+            android:iconPreview="@drawable/sym_keyboard_feedback_done"
+            android:keyIcon="@drawable/sym_keyboard_done"
             android:keyEdgeFlags="left"
             android:keyWidth="12%p" />
         <Key
@@ -185,7 +186,7 @@
         android:keyboardMode="@+id/mode_voice"
         android:rowEdgeFlags="bottom" >
         <Key
-            android:codes="@integer/key_done"
+            android:codes="-4"
             android:iconPreview="@drawable/sym_keyboard_feedback_show"
             android:keyIcon="@drawable/sym_keyboard_show"
             android:keyEdgeFlags="left"

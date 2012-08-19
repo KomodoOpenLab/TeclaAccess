@@ -8,30 +8,12 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
-
-
-import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
-import ca.idi.tekla.TeclaVoiceInput;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
-import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class TeclaDesktopClient implements Runnable {
 	

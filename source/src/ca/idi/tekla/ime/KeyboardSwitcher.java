@@ -170,6 +170,7 @@ public class KeyboardSwitcher {
         mIMEView.setKeyboard(keyboard);
         keyboard.setShifted(false);
         keyboard.setShiftLocked(keyboard.isShiftLocked());
+        //keyboard.setRepeatLocked(keyboard.isRepeatLocked());
         keyboard.setImeOptions(mContext.getResources(), mMode, imeOptions);
         keyboard.updateVariantsState();
 

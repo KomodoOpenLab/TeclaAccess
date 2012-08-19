@@ -176,6 +176,21 @@ public class TeclaKeyboardView extends KeyboardView {
         }
 	}
 	
+	/**
+	 * 
+	 * Generic method to toggle the state of "sticky" keys i.e. repeatable keys
+	 * Changes appearance only
+	 * 
+	 */
+	
+	public void toggleStickyKey(Key stickyKey)
+	{
+		int stickyKeyIndex = this.getKeyboard().getKeys().indexOf(stickyKey);
+		stickyKey.onPressed();
+		stickyKey.onReleased(true);
+		this.invalidateKey(stickyKeyIndex);
+	}
+	
 	/****************************  INSTRUMENTATION  *******************************/
 
     static final boolean DEBUG_AUTO_PLAY = false;
