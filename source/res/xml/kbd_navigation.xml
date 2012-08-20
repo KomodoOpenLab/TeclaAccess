@@ -134,6 +134,7 @@
             android:keyWidth="25%p"/>
         <Key
             android:codes="@integer/key_sendto_pc"
+            android:isSticky="true"
             android:keyLabel="Send to PC"
             android:keyEdgeFlags="right"
             android:keyWidth="50%p" />

@@ -123,6 +123,7 @@ public class TeclaIME extends InputMethodService
 	private Keyboard.Key mSpaceKey;
 	private Keyboard.Key mCapsLockKey;
 	private Keyboard.Key mRepeatLockKey;
+	private Keyboard.Key mSendtoPCKey;
 	private int mCapsLockKeyIndex;
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
@@ -862,7 +863,6 @@ public class TeclaIME extends InputMethodService
 			break;
 		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
-			//TODO:toggle the TeclaApp.mSendToPC lock
 			break;
 		case TeclaKeyboardView.KEYCODE_DICTATION:
 			//TODO: Add dictation actions here
@@ -876,32 +876,20 @@ public class TeclaIME extends InputMethodService
 				}
 				TeclaApp.dict_lock=TeclaApp.mSendToPC;
 				TeclaApp.mSendToPC=false;
-				Log.v("mSendToPC",""+TeclaApp.mSendToPC);
-				TeclaApp.dictation_lock=new Object();
-				
+				if (TeclaApp.DEBUG) Log.d ("mSendToPC",""+TeclaApp.mSendToPC);
+				TeclaApp.dictation_lock=new Object();				
 				TeclaApp.getInstance().startVoiceDictation(RecognizerIntent.EXTRA_LANGUAGE_MODEL);
-				
-				/*synchronized(TeclaApp.dictation_lock){
-					try {
-						TeclaApp.dictation_lock.wait();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}*/
-				
-			
 			break;
-		case TeclaKeyboardView.KEYCODE_SEND_TO_PC:
 			
+		case TeclaKeyboardView.KEYCODE_SEND_TO_PC:
 			//TODO: Add send to pc handling here
 			if(TeclaApp.desktop==null)
 				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
 			TeclaApp.mSendToPC=!TeclaApp.mSendToPC;
-			Log.v("voice",""+TeclaApp.desktop.isConnected()+" "+TeclaApp.mSendToPC+" "+wifisearcherthread.isAlive()+" "+TeclaApp.connect_to_desktop);
+			if (TeclaApp.DEBUG) Log.d("voice",""+TeclaApp.desktop.isConnected()+" "+TeclaApp.mSendToPC+" "+wifisearcherthread.isAlive()+" "+TeclaApp.connect_to_desktop);
 			if(TeclaApp.mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected()&& !wifisearcherthread.isAlive())
 				{
-				Log.v("connection","entering new thread");
+				if (TeclaApp.DEBUG) Log.d("connection","entering new thread");
 				wifisearcherthread=new Thread(wificonnector);
 				wifisearcherthread.start();
 				}

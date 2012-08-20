@@ -186,8 +186,8 @@ public class TeclaKeyboardView extends KeyboardView {
 	public void toggleStickyKey(Key stickyKey)
 	{
 		int stickyKeyIndex = this.getKeyboard().getKeys().indexOf(stickyKey);
-		stickyKey.onPressed();
-		stickyKey.onReleased(true);
+		if(stickyKey.on) stickyKey.on = false;
+		else stickyKey.on=true;
 		this.invalidateKey(stickyKeyIndex);
 	}
 	

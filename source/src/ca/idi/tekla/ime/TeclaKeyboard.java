@@ -40,6 +40,7 @@ public class TeclaKeyboard extends Keyboard {
     static final int KEYCODE_MORSE_CAPSKEY = 559;
     static final int KEYCODE_MORSE_DELKEY = 67;
     static final int KEYCODE_REPEAT_LOCK = -8;
+    static final int KEYCODE_SEND_TO_PC = -11;
     
     private Drawable mShiftLockIcon;
     private Drawable mShiftLockPreviewIcon;
@@ -53,11 +54,13 @@ public class TeclaKeyboard extends Keyboard {
     private Key mSpaceKey;
     private Key mCapsLockKey;
     private Key mRepeatLockKey;
+    private Key mSendtoPCKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
     private static final int SHIFT_LOCKED = 2;
     
     private int mShiftState = SHIFT_OFF;
+	
 
     static int sSpacebarVerticalCorrection;
 
@@ -106,6 +109,9 @@ public class TeclaKeyboard extends Keyboard {
         else if (key.codes[0] == KEYCODE_REPEAT_LOCK) {
         	mRepeatLockKey = key;
         }
+        else if (key.codes[0] == KEYCODE_SEND_TO_PC) {
+        	mSendtoPCKey = key;
+        }
         return key;
     }
     
@@ -120,6 +126,10 @@ public class TeclaKeyboard extends Keyboard {
 
 	public Key getRepeatLockKey() {
 		return this.mRepeatLockKey;
+	}
+	
+	public Key getSendtoPCKey() {
+		return this.mSendtoPCKey;
 	}
 	/**
 	 * Returns a reference to the Morse Caps Lock key
