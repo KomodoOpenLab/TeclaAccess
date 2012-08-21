@@ -58,21 +58,24 @@ public class TeclaKeyboardView extends KeyboardView {
     static final int KEYCODE_REPEAT_LOCK = -8;
     
  // Keycode for showing and hiding secondary navigation keyboard
-    static final int KEYCODE_SHOW_SECNAV_VOICE = -9;
-    static final int KEYCODE_HIDE_SECNAV_VOICE = -10;
+    public static final int KEYCODE_SHOW_SECNAV_VOICE = -9;
+    public static final int KEYCODE_HIDE_SECNAV_VOICE = -10;
     
  // Keycode for send to pc and voice dictation
-    static final int KEYCODE_SEND_TO_PC = -11;
+    public static final int KEYCODE_SEND_TO_PC = -11;
     static final int KEYCODE_DICTATION = -12;
 
     private Keyboard mPhoneKeyboard;
-
+    private static TeclaKeyboardView instance;
+    
     public TeclaKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        instance=this;
     }
 
     public TeclaKeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        instance=this;
     }
 
     public void setPhoneKeyboard(Keyboard phoneKeyboard) {
@@ -86,7 +89,9 @@ public class TeclaKeyboardView extends KeyboardView {
 	public void setService(TeclaIME service) {
 		mIME = service;
 	}
-
+	public static TeclaKeyboardView getInstance(){
+		return instance;
+	}
     @Override
     protected boolean onLongPress(Key key) {
         if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
@@ -189,6 +194,11 @@ public class TeclaKeyboardView extends KeyboardView {
 		if(stickyKey.on) stickyKey.on = false;
 		else stickyKey.on=true;
 		this.invalidateKey(stickyKeyIndex);
+	}
+	
+	public void disableSendToPCKey(){
+		if(this.getKeyboard().getSendToPCKey()!= null)
+		toggleStickyKey(this.getKeyboard().getSendToPCKey());
 	}
 	
 	/****************************  INSTRUMENTATION  *******************************/

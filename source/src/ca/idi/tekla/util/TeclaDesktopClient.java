@@ -267,7 +267,7 @@ public class TeclaDesktopClient implements Runnable {
 			return connectionstatus;
 		}
 		public void send_dictation_data(String text){
-			send("dictate:"+text);
+			send("dictate:"+text+" ");
 		}
 		public void send_switch_event(byte b){
 			send("command:"+b);

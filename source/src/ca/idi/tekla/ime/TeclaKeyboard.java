@@ -68,7 +68,9 @@ public class TeclaKeyboard extends Keyboard {
         this(context, xmlLayoutResId, 0);
         customInit();
     }
-
+    public Key getSendToPCKey(){
+    	return mSendtoPCKey;
+    }
     public TeclaKeyboard(Context context, int xmlLayoutResId, int mode) {
         super(context, xmlLayoutResId, mode);
         Resources res = context.getResources();
@@ -83,7 +85,7 @@ public class TeclaKeyboard extends Keyboard {
         		mRepeatLockPreviewIcon.getIntrinsicWidth(), 
         		mRepeatLockPreviewIcon.getIntrinsicHeight());
         sSpacebarVerticalCorrection = res.getDimensionPixelOffset(
-                R.dimen.spacebar_vertical_correction);
+                R.dimen.spacebar_vertical_correction); 
         customInit();
     }
 
