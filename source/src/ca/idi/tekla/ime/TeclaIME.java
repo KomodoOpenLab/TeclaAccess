@@ -190,6 +190,12 @@ public class TeclaIME extends InputMethodService
 	
 	private int wifi_ping_count=0;
 	private Thread wifisearcherthread;
+	private static TeclaIME instance;
+	
+	public  static TeclaIME getInstance(){
+		return instance;
+	}
+	
 	
 	Handler mHandler = new Handler() {
 		@Override
@@ -218,9 +224,10 @@ public class TeclaIME extends InputMethodService
 	
 	@Override
 	public void onCreate() {
+		
 		super.onCreate();
 		mTeclaMorse = new TeclaMorse(this);
-		
+		instance=this;
 		// Setup Debugging
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");

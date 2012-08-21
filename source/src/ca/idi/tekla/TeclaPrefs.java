@@ -24,6 +24,8 @@ import java.util.HashMap;
 import ca.idi.tecla.lib.ListPreference;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
+import ca.idi.tekla.ime.TeclaIME;
+import ca.idi.tekla.ime.TeclaKeyboardView;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.FullResetTimeoutDialog;
@@ -572,6 +574,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			TeclaApp.sendflag=mShieldRelay.isChecked();
 		}
 		if(key.equals(Persistence.CONNECT_TO_PC)){
+			if(TeclaApp.mSendToPC && !mConnectToPC.isChecked()){
+				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SEND_TO_PC,null);
+				//update the send to pc button lock
+				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE, null);
+				TeclaKeyboardView.getInstance().disableSendToPCKey();
+				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE, null);
+			}
 			TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
 			if(!mConnectToPC.isChecked()){
 				setPasswordLaunch.setEnabled(false);
