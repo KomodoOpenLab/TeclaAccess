@@ -51,6 +51,7 @@ public class Persistence {
 	
 	public static final String PREF_FULL_RESET_TIMEOUT = "full_reset_timeout";
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
+	public static final String PREF_TEMP_SHIELD_DISCONNECT = "shield_temp_disconnect";
 	public static final String PREF_SHIELD_ADDRESS = "shield_address";
 	public static final String PREF_FULLSCREEN_SWITCH = "fullscreen_switch";
 	public static final String PREF_SPEAKERPHONE_SWITCH = "speakerphone_switch";
