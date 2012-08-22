@@ -39,20 +39,28 @@ public class TeclaKeyboard extends Keyboard {
     static final int KEYCODE_MORSE_SPACEKEY = 562;
     static final int KEYCODE_MORSE_CAPSKEY = 559;
     static final int KEYCODE_MORSE_DELKEY = 67;
+    static final int KEYCODE_REPEAT_LOCK = -8;
+    static final int KEYCODE_SEND_TO_PC = -11;
     
     private Drawable mShiftLockIcon;
     private Drawable mShiftLockPreviewIcon;
     private Drawable mOldShiftIcon;
     private Drawable mOldShiftPreviewIcon;
+    private Drawable mRepeatLockIcon;
+    private Drawable mRepeatLockPreviewIcon;
+    private Drawable mOldRepeatIcon;
     private Key mShiftKey;
     private Key mEnterKey;
     private Key mSpaceKey;
-	private Key mCapsLockKey;
+    private Key mCapsLockKey;
+    private Key mRepeatLockKey;
+    private Key mSendtoPCKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
     private static final int SHIFT_LOCKED = 2;
     
     private int mShiftState = SHIFT_OFF;
+	
 
     static int sSpacebarVerticalCorrection;
 
@@ -60,17 +68,24 @@ public class TeclaKeyboard extends Keyboard {
         this(context, xmlLayoutResId, 0);
         customInit();
     }
-
+    public Key getSendToPCKey(){
+    	return mSendtoPCKey;
+    }
     public TeclaKeyboard(Context context, int xmlLayoutResId, int mode) {
         super(context, xmlLayoutResId, mode);
         Resources res = context.getResources();
         mShiftLockIcon = res.getDrawable(R.drawable.sym_keyboard_shift_locked);
         mShiftLockPreviewIcon = res.getDrawable(R.drawable.sym_keyboard_feedback_shift_locked);
+        mRepeatLockIcon = res.getDrawable(R.drawable.nav_keyboard_repeat_locked);
+        mRepeatLockPreviewIcon = res.getDrawable(R.drawable.nav_keyboard_repeat_locked);
         mShiftLockPreviewIcon.setBounds(0, 0, 
                 mShiftLockPreviewIcon.getIntrinsicWidth(),
                 mShiftLockPreviewIcon.getIntrinsicHeight());
+        mRepeatLockPreviewIcon.setBounds(0,0, 
+        		mRepeatLockPreviewIcon.getIntrinsicWidth(), 
+        		mRepeatLockPreviewIcon.getIntrinsicHeight());
         sSpacebarVerticalCorrection = res.getDimensionPixelOffset(
-                R.dimen.spacebar_vertical_correction);
+                R.dimen.spacebar_vertical_correction); 
         customInit();
     }
 
@@ -93,6 +108,12 @@ public class TeclaKeyboard extends Keyboard {
         else if (key.codes[0] == KEYCODE_MORSE_CAPSKEY) {
         	mCapsLockKey = key;
         }
+        else if (key.codes[0] == KEYCODE_REPEAT_LOCK) {
+        	mRepeatLockKey = key;
+        }
+        else if (key.codes[0] == KEYCODE_SEND_TO_PC) {
+        	mSendtoPCKey = key;
+        }
         return key;
     }
     
@@ -105,6 +126,13 @@ public class TeclaKeyboard extends Keyboard {
 		return this.mSpaceKey;
 	}
 
+	public Key getRepeatLockKey() {
+		return this.mRepeatLockKey;
+	}
+	
+	public Key getSendtoPCKey() {
+		return this.mSendtoPCKey;
+	}
 	/**
 	 * Returns a reference to the Morse Caps Lock key
 	 * (Morse mode only)
@@ -113,7 +141,8 @@ public class TeclaKeyboard extends Keyboard {
 	public Key getCapsLockKey() {
 		return this.mCapsLockKey;
 	}
-    
+	
+   
     void setImeOptions(Resources res, int mode, int options) {
         if (mEnterKey != null) {
             // Reset some of the rarely used attributes.
@@ -203,6 +232,10 @@ public class TeclaKeyboard extends Keyboard {
         return mShiftState == SHIFT_LOCKED;
     }
     
+/*    boolean isRepeatLocked() {
+    	return mRepeatState == REPEAT_LOCKED;
+    }
+*/    
     @Override
     public boolean setShifted(boolean shiftState) {
         boolean shiftChanged = false;
@@ -224,7 +257,7 @@ public class TeclaKeyboard extends Keyboard {
         }
         return shiftChanged;
     }
-    
+        
     @Override
     public boolean isShifted() {
         if (mShiftKey != null) {

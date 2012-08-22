@@ -18,11 +18,14 @@ package ca.idi.tekla;
 
 //FIXME: Tecla Access - Solve backup elsewhere
 //import android.backup.BackupManager;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ca.idi.tecla.lib.ListPreference;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tekla.R;
+import ca.idi.tekla.ime.TeclaIME;
+import ca.idi.tekla.ime.TeclaKeyboardView;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.FullResetTimeoutDialog;
@@ -31,7 +34,9 @@ import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.RepeatFrequencyDialog;
 import ca.idi.tekla.util.ScanSpeedDialog;
 import ca.idi.tekla.util.SwitchPreference;
+import ca.idi.tekla.util.TeclaDesktopClient;
 
+import android.app.Dialog;
 import android.R.bool;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -48,13 +53,20 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.AutoText;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.view.KeyEvent;
+import android.view.View;
 
 public class TeclaPrefs extends PreferenceActivity
 implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -101,6 +113,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private static SwitchPreference mSwitchE1;
 	private static SwitchPreference mSwitchE2;
 	
+	private static CheckBoxPreference mConnectToPC;
+	private static CheckBoxPreference mShieldRelay;
+	private static Preference setPasswordLaunch;
+	private static Preference setDisconnectEvent;
+	private static Preference setDictationEvent;
+	
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
 		
@@ -109,7 +127,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		super.onCreate(icicle);
 
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
-		
 		init();
 		
 	}
@@ -142,6 +159,62 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
+		
+		//Desktop 
+		final TeclaPrefs pref=this;	
+		mConnectToPC=(CheckBoxPreference)findPreference(Persistence.CONNECT_TO_PC);
+		
+		mShieldRelay=(CheckBoxPreference)findPreference(Persistence.SEND_SHIELD_EVENTS);
+		
+		TeclaApp.sendflag=mShieldRelay.isChecked();
+		TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
+		setDisconnectEvent=(Preference) findPreference ("set_disconnect_event");
+		setDictationEvent=(Preference) findPreference("set_dictation_event");
+		
+		TeclaApp.dictation_event=setDictationEvent.getSharedPreferences().getInt("set_dictation_event", 55);
+		
+		setDictationEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			public boolean onPreferenceClick(Preference arg0) {
+				// TODO Auto-generated method stub
+				showEventSelectionDialog(1);
+				return true;
+			}});
+		
+		setDisconnectEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			public boolean onPreferenceClick(Preference arg0) {
+				// TODO Auto-generated method stub
+				showEventSelectionDialog(0);
+				return true;
+			}});
+		
+		TeclaApp.disconnect_event=setDisconnectEvent.getSharedPreferences().getInt("set_disconnect_event", 65);
+		
+		
+		setPasswordLaunch=(Preference)findPreference(Persistence.SET_PASSWORD);
+		
+		setPasswordLaunch.setDefaultValue("Tecla123");
+		TeclaApp.password=setPasswordLaunch.getSharedPreferences().getString(Persistence.SET_PASSWORD, "Tecla123");
+		Log.v("set password",""+setPasswordLaunch);
+		setPasswordLaunch.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+
+			public boolean onPreferenceClick(Preference arg0) {
+				// TODO Auto-generated method stub
+				TeclaPrefs.createPreferenceDialog(pref);
+				return true;
+			}
+	
+		});
+		//
+		TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+		if(!mConnectToPC.isChecked()){
+			setPasswordLaunch.setEnabled(false);
+			setDisconnectEvent.setEnabled(false);
+			setDictationEvent.setEnabled(false);
+			mShieldRelay.setEnabled(false);
+		}
+		
 		
 		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
@@ -551,6 +624,33 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				}
 			}
 		}
+		if(key.equals(Persistence.SEND_SHIELD_EVENTS)){
+			TeclaApp.sendflag=mShieldRelay.isChecked();
+		}
+		if(key.equals(Persistence.CONNECT_TO_PC)){
+			if(TeclaApp.mSendToPC && !mConnectToPC.isChecked()){
+				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SEND_TO_PC,null);
+				//update the send to pc button lock
+				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE, null);
+				TeclaKeyboardView.getInstance().disableSendToPCKey();
+				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE, null);
+			}
+			TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
+			if(!mConnectToPC.isChecked()){
+				setPasswordLaunch.setEnabled(false);
+				setDisconnectEvent.setEnabled(false);
+				setDictationEvent.setEnabled(false);
+				mShieldRelay.setEnabled(false);
+			}
+			else{
+				setPasswordLaunch.setEnabled(true);
+				setDisconnectEvent.setEnabled(true);
+				setDictationEvent.setEnabled(true);
+				mShieldRelay.setEnabled(true);
+				if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
+				TeclaApp.desktop.disconnect();
+			}
+		}
 		//FIXME: Tecla Access - Solve backup elsewhere
 		//(new BackupManager(getApplicationContext())).dataChanged();
 	}
@@ -643,5 +743,112 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mSwitchE1.setValues(4, 0);
 		mSwitchE2.setValues(3, 0);
 	}
-
+	
+	public static void createPreferenceDialog(Context context){
+		final Dialog passworddialog=new Dialog(context);
+		passworddialog.setContentView(R.layout.passworddialog);
+		final EditText psswdtext=(EditText)passworddialog.findViewById(R.id.passwordtext);
+		Button save=(Button)passworddialog.findViewById(R.id.savebutton);
+		Button cancel=(Button)passworddialog.findViewById(R.id.cancelbutton);
+		
+		psswdtext.setText(setPasswordLaunch.getSharedPreferences().getString(Persistence.SET_PASSWORD, "Tecla123"));
+		
+		save.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				TeclaApp.password=psswdtext.getText().toString();
+				setPasswordLaunch.getEditor().putString(Persistence.SET_PASSWORD, TeclaApp.password).commit();
+				passworddialog.dismiss();
+			}
+		});
+		cancel.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				passworddialog.dismiss();
+			}
+		});
+		passworddialog.show();
+	}
+	
+	public void showEventSelectionDialog(final int event){
+		final Dialog d=new Dialog(TeclaPrefs.this);
+		d.setContentView(R.layout.eventselectdialog);
+		final Spinner switchchoice=(Spinner)d.findViewById(R.id.spinnerswitch);
+		final Spinner eventchoice= (Spinner)d.findViewById(R.id.spinnerevent);
+		Button save=(Button)d.findViewById(R.id.save_button);
+		Button cancel=(Button)d.findViewById(R.id.cancel_button);
+		
+		
+		String[] switcharray={"switch j1/Up","switch j2/Down","Switch J3/Left","Switch J4,Right",
+				"Switch E1","Switch E2"};
+		ArrayList<String> switchlist=new ArrayList<String>();
+		for(int i=0;i<switcharray.length;i++)
+			switchlist.add(switcharray[i]);
+		ArrayAdapter<String> spin1adapter=new ArrayAdapter<String>(TeclaPrefs.this,
+									android.R.layout.simple_spinner_item,switchlist);
+		switchchoice.setAdapter(spin1adapter);
+		
+		String[] eventarray={"onPress","onRelease","onClick","onDoubleClick","onLongPress"};
+		ArrayList<String> eventlist=new ArrayList<String>();
+		for(int i=0;i<eventarray.length;i++)
+			eventlist.add(eventarray[i]);
+		ArrayAdapter<String> spin2adapter=new ArrayAdapter<String>(TeclaPrefs.this,
+									android.R.layout.simple_spinner_item,eventlist);
+		eventchoice.setAdapter(spin2adapter);
+		if(event==0){
+		eventchoice.setSelection(TeclaApp.disconnect_event%10-1);
+		switchchoice.setSelection(TeclaApp.disconnect_event/10-1);
+		}
+		else if(event==1){
+			eventchoice.setSelection(TeclaApp.dictation_event%10-1);
+			switchchoice.setSelection(TeclaApp.dictation_event/10-1);
+			}
+		spin1adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spin2adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		cancel.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				d.dismiss();
+			}
+		});
+		save.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				int x,y;
+				x=eventchoice.getSelectedItemPosition()+1;
+				y=switchchoice.getSelectedItemPosition()+1;
+				if(event==0 ){
+					if(y*10+x != TeclaApp.dictation_event){
+					TeclaApp.disconnect_event=y*10+x;
+					setDisconnectEvent.getEditor().putInt("set_disconnect_event",TeclaApp.disconnect_event).commit();
+					if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
+						TeclaApp.desktop.send("disevent:"+TeclaApp.disconnect_event);
+					}
+					else
+						eventchoice.setSelection(TeclaApp.dictation_event%10-1);
+				}
+				else if(event==1 ){
+					if(y*10+x != TeclaApp.disconnect_event){
+					TeclaApp.dictation_event=y*10+x;
+					setDictationEvent.getEditor().putInt("set_dictation_event",TeclaApp.dictation_event).commit();
+					if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected()){
+						TeclaApp.desktop.send("dictevent:"+TeclaApp.dictation_event);
+						Log.v("voice","Entering sending preference");
+						}
+					}
+					else{
+						eventchoice.setSelection(TeclaApp.dictation_event%10-1);
+					}
+				}
+				// TODO Auto-generated method stub
+				d.dismiss();
+			}
+		});
+		d.show();
+	}
+	
+	
 }

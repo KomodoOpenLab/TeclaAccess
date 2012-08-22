@@ -53,15 +53,29 @@ public class TeclaKeyboardView extends KeyboardView {
     
     // Keycode for stepping out self scanning
     static final int KEYCODE_STEP_OUT = -7;
+    
+    // Keycode for repeat locking navigation keys
+    static final int KEYCODE_REPEAT_LOCK = -8;
+    
+ // Keycode for showing and hiding secondary navigation keyboard
+    public static final int KEYCODE_SHOW_SECNAV_VOICE = -9;
+    public static final int KEYCODE_HIDE_SECNAV_VOICE = -10;
+    
+ // Keycode for send to pc and voice dictation
+    public static final int KEYCODE_SEND_TO_PC = -11;
+    static final int KEYCODE_DICTATION = -12;
 
     private Keyboard mPhoneKeyboard;
-
+    private static TeclaKeyboardView instance;
+    
     public TeclaKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        instance=this;
     }
 
     public TeclaKeyboardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        instance=this;
     }
 
     public void setPhoneKeyboard(Keyboard phoneKeyboard) {
@@ -75,7 +89,9 @@ public class TeclaKeyboardView extends KeyboardView {
 	public void setService(TeclaIME service) {
 		mIME = service;
 	}
-
+	public static TeclaKeyboardView getInstance(){
+		return instance;
+	}
     @Override
     protected boolean onLongPress(Key key) {
         if (key.codes[0] == TeclaKeyboard.KEYCODE_MORSE_SPACEKEY && 
@@ -163,6 +179,26 @@ public class TeclaKeyboardView extends KeyboardView {
         if (cheatsheetDialog != null) {
                 cheatsheetDialog.dismiss();
         }
+	}
+	
+	/**
+	 * 
+	 * Generic method to toggle the state of "sticky" keys i.e. repeatable keys
+	 * Changes appearance only
+	 * 
+	 */
+	
+	public void toggleStickyKey(Key stickyKey)
+	{
+		int stickyKeyIndex = this.getKeyboard().getKeys().indexOf(stickyKey);
+		if(stickyKey.on) stickyKey.on = false;
+		else stickyKey.on=true;
+		this.invalidateKey(stickyKeyIndex);
+	}
+	
+	public void disableSendToPCKey(){
+		if(this.getKeyboard().getSendToPCKey()!= null)
+		toggleStickyKey(this.getKeyboard().getSendToPCKey());
 	}
 	
 	/****************************  INSTRUMENTATION  *******************************/
