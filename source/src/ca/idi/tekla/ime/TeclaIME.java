@@ -153,7 +153,12 @@ public class TeclaIME extends InputMethodService
 	private boolean mShowSuggestions;
 	private int     mCorrectionMode;
 	private int     mOrientation;
-
+	
+	
+	// Keycode of the key which is on repeat
+	private int mRepeatingKey;
+	private boolean isAutoRepeating;
+	
 	// Indicates whether the suggestion strip is to be on in landscape
 	private boolean mJustAccepted;
 	private CharSequence mJustRevertedSeparator;
@@ -824,13 +829,34 @@ public class TeclaIME extends InputMethodService
 			TeclaApp.highlighter.externalstepOut();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Hidden key.Stepping out...");
 			break;
+		case TeclaKeyboardView.KEYCODE_REPEAT_LOCK:
+			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Enabling repeat");
+			mRepeating=true;
+			mRepeatingKey= 0;
+			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
 				onKeyMorse(primaryCode);
 			} else if (isWordSeparator(primaryCode)) {
 				handleSeparator(primaryCode);
 			} else if (isSpecialKey(primaryCode)) {
+				isAutoRepeating = false;
+				if(mRepeating)
+				{
+					if (mRepeatingKey == 0) {
+						 mRepeatingKey = primaryCode;
+						 handleRepeatedKey(mRepeatingKey);
+					}
+					if (! isAutoRepeating)
+					{
+						mRepeating=false;
+						mRepeatingKey = 0;
+						stopRepeating();
+					}
+				}
+				else {
 				handleSpecialKey(primaryCode);
+				}
 			} else { 
 				handleCharacter(primaryCode, keyCodes);
 			}
@@ -843,6 +869,7 @@ public class TeclaIME extends InputMethodService
 
 		evaluateNavKbdTimeout();
 	}
+
 	
 	/**
 	 * Handles key input on the Morse Code keyboard
@@ -1966,6 +1993,13 @@ public class TeclaIME extends InputMethodService
 				|| (keycode == TeclaKeyboard.KEYCODE_VARIANTS);
 	}
 
+	private void handleRepeatedKey(int keyEventCode) {
+		if ((keyEventCode>=KeyEvent.KEYCODE_DPAD_UP) && (keyEventCode<=KeyEvent.KEYCODE_DPAD_RIGHT)) {	
+			isAutoRepeating = true;
+			mTeclaHandler.post(mRepeatKeyRunnable);
+			}
+	}
+	
 	private void handleSpecialKey(int keyEventCode) {
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
@@ -2046,13 +2080,13 @@ public class TeclaIME extends InputMethodService
 
 	private Runnable mRepeatKeyRunnable = new Runnable() {
 		public void run() {
-			emulateKeyPress(mKeyCodes);
+			keyDownUp(mRepeatingKey);
 			if (mRepeating) {
-				mTeclaHandler.postDelayed(mRepeatKeyRunnable, Math.round(0.5 * TeclaApp.persistence.getScanDelay()));
-			} else {
-				// First key repeat takes a bit longer
 				mTeclaHandler.postDelayed(mRepeatKeyRunnable, TeclaApp.persistence.getScanDelay());
 				mRepeating = true;
+			} else {
+				mRepeating = false;
+				stopRepeating();
 			}
 		}
 	};

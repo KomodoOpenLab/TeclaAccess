@@ -53,6 +53,9 @@ public class TeclaKeyboardView extends KeyboardView {
     
     // Keycode for stepping out self scanning
     static final int KEYCODE_STEP_OUT = -7;
+    
+    // Keycode for repeat locking navigation keys
+    static final int KEYCODE_REPEAT_LOCK = -8;
 
     private Keyboard mPhoneKeyboard;
 
