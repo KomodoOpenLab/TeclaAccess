@@ -68,11 +68,10 @@
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
             android:codes="112"
+            android:keyEdgeFlags="right"
             android:keyLabel="p" />
         <Key
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -114,11 +113,11 @@
             android:codes="108"
             android:keyLabel="l"
             android:popupCharacters="@string/alternates_for_l"
+            android:keyEdgeFlags="right"
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
+            android:horizontalGap="5%p"
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -162,11 +161,10 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_delete"
             android:isRepeatable="true"
             android:keyIcon="@drawable/sym_keyboard_delete"
+            android:keyEdgeFlags="right"
             android:keyWidth="15%p" />
         <Key
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -207,11 +205,10 @@
             android:codes="@integer/key_voice"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyEdgeFlags="right"
             android:keyWidth="13%p" />
         <Key
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -256,11 +253,10 @@
             android:codes="@integer/key_voice"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyEdgeFlags="right"
             android:keyWidth="13%p" />
         <Key
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -306,11 +302,10 @@
             android:codes="@integer/key_voice"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyEdgeFlags="right"
             android:keyWidth="13%p" />
         <Key
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -351,11 +346,10 @@
             android:codes="@integer/key_voice"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
             android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyEdgeFlags="right"
             android:keyWidth="13%p" />
         <Key
             android:codes="-7"
-            android:keyEdgeFlags="right"
-            android:keyLabel=" "
             android:keyWidth="0%p" />
     </Row>
 

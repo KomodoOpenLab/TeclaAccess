@@ -18,54 +18,47 @@
 */
 -->
 
-<Keyboard 
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:horizontalGap="0px"
-        android:verticalGap="0px" 
-        >
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="0px"
+    android:verticalGap="0px" >
 
-        
-        <Row
-                android:keyWidth="100%"
-                android:rowEdgeFlags="top"
-                android:keyHeight="30%"/>
-        
-        <Row
-                android:keyWidth="13%"
-                android:rowEdgeFlags="bottom"
-                android:keyHeight="11%">
-                
-             	<Key 	
-                    	android:codes="-4"
-                    	android:keyIcon="@drawable/sym_keyboard_done"
-                    	android:iconPreview="@drawable/sym_keyboard_feedback_done"
-                    	android:keyWidth="12%"
-                    	android:keyEdgeFlags="left"/>     
-                <Key
-                        android:keyLabel="•"
-                        android:keyWidth="18%"
-                        android:codes="500"
-                        android:isRepeatable="true"/> 
-                <Key
-                        android:keyLabel="space"
-                        android:keyWidth="26%"
-                        android:codes="562"/>
-                <Key
-                        android:keyLabel="-"
-                        android:keyWidth="18%"
-                        android:codes="501"
-                        android:isRepeatable="true"/>
-                <Key
-                        android:keyLabel="@string/caps_lock_off"
-                        android:codes="559"
-                        android:isSticky="true"/>
-                <Key
-                        android:keyIcon="@drawable/sym_keyboard_delete"
-                        android:isRepeatable="true"
-                        android:codes="67"
-                    	android:keyEdgeFlags="right"/>
-               
-        </Row>
+    <Row
+        android:keyHeight="30%"
+        android:keyWidth="100%"
+        android:rowEdgeFlags="top" />
+    <Row
+        android:keyHeight="11%"
+        android:keyWidth="13%"
+        android:rowEdgeFlags="bottom" >
+        <Key
+            android:codes="-4"
+            android:iconPreview="@drawable/sym_keyboard_feedback_done"
+            android:keyEdgeFlags="left"
+            android:keyIcon="@drawable/sym_keyboard_done"
+            android:keyWidth="12%" />
+        <Key
+            android:codes="500"
+            android:isRepeatable="true"
+            android:keyLabel="•"
+            android:keyWidth="18%" />
+        <Key
+            android:codes="562"
+            android:keyLabel="space"
+            android:keyWidth="26%" />
+        <Key
+            android:codes="501"
+            android:isRepeatable="true"
+            android:keyLabel="-"
+            android:keyWidth="18%" />
+        <Key
+            android:codes="559"
+            android:isSticky="true"
+            android:keyLabel="@string/caps_lock_off" />
+        <Key
+            android:codes="67"
+            android:isRepeatable="true"
+            android:keyEdgeFlags="right"
+            android:keyIcon="@drawable/sym_keyboard_delete" />
+    </Row>
 
 </Keyboard>
-    

@@ -469,7 +469,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				Handler mHandler = new Handler();
 				Runnable mReconnect = new Runnable() {
 					
-					@Override
 					public void run() {
 						if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Re-enabling discovery");
 						discoverShield();
