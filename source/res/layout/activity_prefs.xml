@@ -334,5 +334,46 @@
             android:summary="@string/auto_complete_summary"
             android:title="@string/auto_complete" />
     </PreferenceCategory>
-
+	<PreferenceCategory
+	    android:title="Other Devices Settings"
+	    android:key="other_device_settings"
+	    >
+	<PreferenceScreen
+	    android:key="desktop_settings"
+	    android:title="Desktop Settings"
+	    
+	    >
+	<CheckBoxPreference
+	    android:key="enable_desktop_connectivity"
+	    android:title="Connect to Desktop"
+	    android:defaultValue="true"
+	    android:summary="Enable connection to the desktop over WiFi"
+	    android:persistent="true"
+	    /> 
+	<CheckBoxPreference
+	    android:key="enable_events_relay"
+	    android:title="Send Shield Events"
+	    android:defaultValue="true"
+	    android:summary="Check to enable sending shield events to PC."
+	    android:persistent="true"
+	    />    
+	<Preference 
+	    android:key="set_password"
+	    android:title="Set password"
+	    android:summary="Set password for authentication.Should match the password on the desktop client."
+	    android:persistent="true"
+	    />   
+	<Preference android:key="set_disconnect_event"
+	    android:title="Set Disconnect Event"
+	    android:summary="Set the Shield event that will break the switch event relay allowing you to gain control of your android device"
+	    android:persistent="true"
+	    />     
+	<Preference android:key="set_dictation_event"
+	    android:title="Set Dictation Launching Event"
+	    android:summary="Set the Shield event that will start the dictation mode prompting you to talk.PC control will be lost temporarily."
+	    android:persistent="true"
+	    />     
+	        
+	</PreferenceScreen>	    
+	</PreferenceCategory>
 </PreferenceScreen>
