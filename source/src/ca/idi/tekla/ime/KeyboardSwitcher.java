@@ -40,6 +40,7 @@ public class KeyboardSwitcher {
     public static final int MODE_1X9 = 14;
     public static final int MODE_1X10 = 15;
     public static final int MODE_MORSE = 16;
+    public static final int MODE_SECNAV_VOICE = 17;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -51,6 +52,7 @@ public class KeyboardSwitcher {
     public static final int KEYBOARDMODE_IM = R.id.mode_im;
     public static final int KEYBOARDMODE_VOICE = R.id.mode_voice;
     public static final int KEYBOARDMODE_VARIANTS = R.id.mode_variants;
+    public static final int KEYBOARDMODE_SECNAV_VOICE = R.id.mode_secnav_voice;
     
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
@@ -168,6 +170,7 @@ public class KeyboardSwitcher {
         mIMEView.setKeyboard(keyboard);
         keyboard.setShifted(false);
         keyboard.setShiftLocked(keyboard.isShiftLocked());
+        //keyboard.setRepeatLocked(keyboard.isRepeatLocked());
         keyboard.setImeOptions(mContext.getResources(), mMode, imeOptions);
         keyboard.updateVariantsState();
 
@@ -255,7 +258,7 @@ public class KeyboardSwitcher {
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_URL, true);
             case MODE_EMAIL:
             	if (useVoiceInput) {
-                    return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_EMAIL, true);
+            		return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_EMAIL, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_EMAIL, true);
             case MODE_IM:
@@ -268,6 +271,12 @@ public class KeyboardSwitcher {
             		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_VOICE, true);
             	}
                 return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_NORMAL, true);
+            case MODE_SECNAV_VOICE:
+            	if (useVoiceInput) {
+            		return new KeyboardId(R.xml.kbd_navigation,KEYBOARDMODE_SECNAV_VOICE,true);
+            	}
+            	//TODO: no voice available, don't need secondary keyboard ?
+            	return new KeyboardId(R.xml.kbd_navigation,KEYBOARDMODE_NORMAL,true);
             case MODE_1X3:
                 return new KeyboardId(R.xml.kbd_1x3, KEYBOARDMODE_NORMAL, true);
             case MODE_1X4:

@@ -4,6 +4,8 @@
 
 package ca.idi.tekla;
 
+import java.util.ArrayList;
+
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -13,6 +15,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
@@ -20,6 +23,7 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
@@ -27,6 +31,7 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.TeclaDesktopClient;
 
 public class TeclaApp extends Application {
 
@@ -71,7 +76,17 @@ public class TeclaApp extends Application {
 	private static TeclaApp instance;
 	public static Persistence persistence;
 	public static Highlighter highlighter;
-
+	
+	public static String password="Tecla123";
+	public static boolean sendflag=false,connect_to_desktop=false;
+	
+	public static TeclaDesktopClient desktop;
+	public static Object dictation_lock=new Object();
+	public static boolean dict_lock=false,mSendToPC;
+	
+	public static int disconnect_event;
+	public static int dictation_event;
+	
 	public TeclaApp() {
         instance = this;
     }
@@ -93,6 +108,8 @@ public class TeclaApp extends Application {
 		
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
+		
+		
 
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		mWakeLock = mPowerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK |
@@ -112,6 +129,12 @@ public class TeclaApp extends Application {
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
+		SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
+		connect_to_desktop=prefs.getBoolean(Persistence.CONNECT_TO_PC, false);
+		sendflag=prefs.getBoolean(Persistence.SEND_SHIELD_EVENTS, false);
+		disconnect_event=prefs.getInt("set_disconnect_event", 65);
+		dictation_event=prefs.getInt("set_dictation_event", 55);
+		password=prefs.getString(Persistence.SET_PASSWORD, "Tecla123");
 		//if (persistence.isPersistentKeyboardEnabled()) queueSplash();
 
 	}
@@ -211,6 +234,13 @@ public class TeclaApp extends Application {
 		sendBroadcast(intent);
 	}
 	
+	public void inputStringListAvailable(ArrayList<String> input_string) {
+		Log.d(TeclaApp.TAG, "Broadcasting input string: " + input_string);
+		Intent intent = new Intent(ACTION_INPUT_STRING);
+		intent.putExtra(EXTRA_INPUT_STRING, input_string);
+		sendBroadcast(intent);
+	}
+	
 	public void postDelayedFullReset(long delay) {
 		cancelFullReset();
 		mHandler.postDelayed(mFullResetRunnable, delay * 1000);
@@ -296,7 +326,14 @@ public class TeclaApp extends Application {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
-	
+	public void startVoiceDictation(String language_model) {
+		if (DEBUG) Log.d(TAG, "Calling voice input...");
+		Intent intent = new Intent(this, TeclaVoiceInput.class);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, language_model);
+		intent.putExtra("isDictation", 0x56);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
 	public void startVoiceActions() {
 		Log.d(TAG, "Starting voice actions...");
 		Intent intent = new Intent();
@@ -420,5 +457,6 @@ public class TeclaApp extends Application {
 	public void showToast(int resid) {
 		Toast.makeText(this, resid, Toast.LENGTH_LONG).show();
 	}
-
+	
+	
 }

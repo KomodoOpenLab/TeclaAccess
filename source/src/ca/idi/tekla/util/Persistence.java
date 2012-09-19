@@ -75,6 +75,10 @@ public class Persistence {
 	public static final int NEVER_AUTOHIDE = -1;
 	public static final int NEVER_REPEAT = -1;
 	
+	public static final String CONNECT_TO_PC="enable_desktop_connectivity";
+	public static final String SET_PASSWORD="set_password";
+	public static final String SEND_SHIELD_EVENTS="enable_events_relay";
+	
 	
 	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
 	private static HashMap<String,String[]> mSwitchMap;

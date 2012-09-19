@@ -60,6 +60,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 import ca.idi.tecla.sdk.SepManager;
 import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
@@ -68,6 +69,7 @@ import ca.idi.tekla.TeclaPrefs;
 import ca.idi.tekla.sep.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.TeclaDesktopClient;
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
@@ -120,6 +122,8 @@ public class TeclaIME extends InputMethodService
 	// Morse variables	
 	private TeclaMorse mTeclaMorse;
 	private Keyboard.Key mSpaceKey;
+	private Keyboard.Key mRepeatLockKey;
+	private Keyboard.Key mSendtoPCKey;
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
 	private long mMorseStartTime;
@@ -153,13 +157,15 @@ public class TeclaIME extends InputMethodService
 	private boolean mAutoCap;
 	private boolean mQuickFixes;
 	private boolean mShowSuggestions;
+	
+	
 	private int     mCorrectionMode;
 	private int     mOrientation;
 	
 	
 	// Keycode of the key which is on repeat
 	private int mRepeatingKey;
-	private boolean isAutoRepeating;
+	private boolean wasAutoRepeating;
 	
 	// Indicates whether the suggestion strip is to be on in landscape
 	private boolean mJustAccepted;
@@ -182,6 +188,17 @@ public class TeclaIME extends InputMethodService
 	private String mWordSeparators;
 	private String mSentenceSeparators;
 
+	
+	
+	private int wifi_ping_count=0;
+	private Thread wifisearcherthread;
+	private static TeclaIME instance;
+	
+	public  static TeclaIME getInstance(){
+		return instance;
+	}
+	
+	
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -209,9 +226,10 @@ public class TeclaIME extends InputMethodService
 	
 	@Override
 	public void onCreate() {
+		
 		super.onCreate();
 		mTeclaMorse = new TeclaMorse(this);
-		
+		instance=this;
 		// Setup Debugging
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
@@ -228,6 +246,7 @@ public class TeclaIME extends InputMethodService
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 		initTeclaA11y();
+		initDesktop();
 	}
 	
 	private void initSuggest(String locale) {
@@ -242,6 +261,12 @@ public class TeclaIME extends InputMethodService
 		mSuggest.setAutoDictionary(mAutoDictionary);
 		mWordSeparators = getResources().getString(R.string.word_separators);
 		mSentenceSeparators = getResources().getString(R.string.sentence_separators);
+	}
+	
+	private void initDesktop(){
+		TeclaApp.mSendToPC=false;
+		wifisearcherthread=new Thread(desktopsearcher);
+		
 	}
 
 	@Override public void onDestroy() {
@@ -444,7 +469,6 @@ public class TeclaIME extends InputMethodService
 			mLastKeyboardMode = thisKBMode;
 			evaluateStartScanning();
 		}
-
 		evaluateNavKbdTimeout();
 	}
 	
@@ -832,8 +856,54 @@ public class TeclaIME extends InputMethodService
 			break;
 		case TeclaKeyboardView.KEYCODE_REPEAT_LOCK:
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Enabling repeat");
+			if(mRepeating)
+			{
+				mRepeating=false;
+			}
+			else
+			{
 			mRepeating=true;
 			mRepeatingKey= 0;
+			}
+			break;
+		case TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE:
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SECNAV_VOICE,0);
+			break;
+		case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
+			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
+			break;
+		case TeclaKeyboardView.KEYCODE_DICTATION:
+			//TODO: Add dictation actions here
+			if(TeclaApp.desktop==null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			
+				if(!TeclaApp.desktop.isConnected()&& !wifisearcherthread.isAlive())
+				{
+					wifisearcherthread=new Thread(desktopsearcher);
+					wifisearcherthread.start();
+				}
+				TeclaApp.dict_lock=TeclaApp.mSendToPC;
+				TeclaApp.mSendToPC=false;
+				if (TeclaApp.DEBUG) Log.d ("mSendToPC",""+TeclaApp.mSendToPC);
+				TeclaApp.dictation_lock=new Object();				
+				TeclaApp.getInstance().startVoiceDictation(RecognizerIntent.EXTRA_LANGUAGE_MODEL);
+			break;
+			
+		case TeclaKeyboardView.KEYCODE_SEND_TO_PC:
+			//TODO: Add send to pc handling here
+			if(TeclaApp.desktop==null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			TeclaApp.mSendToPC=!TeclaApp.mSendToPC;
+			if (TeclaApp.DEBUG) Log.d("voice",""+TeclaApp.desktop.isConnected()+" "+TeclaApp.mSendToPC+" "+wifisearcherthread.isAlive()+" "+TeclaApp.connect_to_desktop);
+			if(TeclaApp.mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected()&& !wifisearcherthread.isAlive())
+				{
+				if (TeclaApp.DEBUG) Log.d("connection","entering new thread");
+				wifisearcherthread=new Thread(wificonnector);
+				wifisearcherthread.start();
+				}
+			else if(TeclaApp.desktop != null &&!TeclaApp.mSendToPC && TeclaApp.desktop.isConnected()){
+				TeclaApp.desktop.disconnect();
+			}
 			break;
 		default:
 			if (isMorseKeyboardKey(primaryCode)) {
@@ -841,14 +911,17 @@ public class TeclaIME extends InputMethodService
 			} else if (isWordSeparator(primaryCode)) {
 				handleSeparator(primaryCode);
 			} else if (isSpecialKey(primaryCode)) {
-				isAutoRepeating = false;
+				wasAutoRepeating = false;
 				if(mRepeating)
 				{
 					if (mRepeatingKey == 0) {
 						 mRepeatingKey = primaryCode;
 						 handleRepeatedKey(mRepeatingKey);
+						//TODO: Figure out if the "changeKeyboardMode" is really needed, is causing 
+						 // an undesirable change of keyboard mode, the break added below fixes it temporarily
+						 break; 
 					}
-					if (! isAutoRepeating)
+					if (! wasAutoRepeating)
 					{
 						mRepeating=false;
 						mRepeatingKey = 0;
@@ -867,7 +940,6 @@ public class TeclaIME extends InputMethodService
 		if (mKeyboardSwitcher.onKey(primaryCode)) {
 			changeKeyboardMode();
 		}
-
 		evaluateNavKbdTimeout();
 	}
 
@@ -1796,6 +1868,8 @@ public class TeclaIME extends InputMethodService
 	
 	public void stopRepeating() {
 		pauseRepeating();
+		mRepeatLockKey = mIMEView.getKeyboard().getRepeatLockKey();
+		mIMEView.toggleStickyKey(mRepeatLockKey);
 	}
 	
 	/**
@@ -1841,6 +1915,7 @@ public class TeclaIME extends InputMethodService
 		switch (TeclaApp.persistence.getMorseKeyMode()) {
 		case TRIPLE_KEY_MODE:
 			break;
+		
 
 		case DOUBLE_KEY_MODE:
 			mTeclaHandler.removeCallbacks(mEndOfCharRunnable);
@@ -2084,8 +2159,8 @@ public class TeclaIME extends InputMethodService
 	}
 
 	private void handleRepeatedKey(int keyEventCode) {
-		if ((keyEventCode>=KeyEvent.KEYCODE_DPAD_UP) && (keyEventCode<=KeyEvent.KEYCODE_DPAD_RIGHT)) {	
-			isAutoRepeating = true;
+		wasAutoRepeating = true;
+		if ((keyEventCode>=KeyEvent.KEYCODE_DPAD_UP) && (keyEventCode<=KeyEvent.KEYCODE_DPAD_CENTER)) {	
 			mTeclaHandler.post(mRepeatKeyRunnable);
 			}
 	}
@@ -2172,7 +2247,6 @@ public class TeclaIME extends InputMethodService
 				mRepeating = true;
 			} else {
 				mRepeating = false;
-				stopRepeating();
 			}
 		}
 	};
@@ -2399,5 +2473,114 @@ public class TeclaIME extends InputMethodService
 	public KeyboardSwitcher getKeyboardSwitcher() {
 		return mKeyboardSwitcher;
 	}
+	
+	public void ConnectToDesktop(){
+		Log.v("dictation","started connecting");
+		if(TeclaApp.desktop ==null)
+		TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+		
+		
+		if(!TeclaApp.desktop.isConnected()&&TeclaApp.connect_to_desktop)
+		new Thread(desktopsearcher).start();
+	}
+	Runnable desktopsearcher=new Runnable(){
 
+		public void run() {
+			// TODO Auto-generated method stub
+			
+			Log.v("dictation","attempting connection");
+			
+			if(TeclaApp.desktop== null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			TeclaApp.desktop.connect();
+			
+			if(TeclaApp.desktop.isConnected()){
+				Log.v("dictation","connected to Desktop");
+				new Thread(wifipinger).start();
+				new Thread(wifireceiver).start();
+			}
+		}
+		
+	};
+	private Runnable wifipinger=new Runnable(){
+
+		public void run() {
+			// TODO Auto-generated method stub
+			while(TeclaApp.desktop.isConnected()){
+			TeclaApp.desktop.send("ping");
+			try {
+				Thread.sleep(1000*2);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			wifi_ping_count++;
+			
+			Log.v("pinger",""+wifi_ping_count);
+				if(wifi_ping_count>5){
+					TeclaApp.desktop.disconnect();
+				}
+			}
+			
+		}
+	
+	};
+	private Runnable wifireceiver=new Runnable(){
+		
+		public void run() {
+			// TODO Auto-generated method stub
+			Log.v("connection","starting receiver");
+			while(TeclaApp.desktop.isConnected())
+			{
+				
+				String rec=TeclaApp.desktop.receive();
+				if(rec!=null&&rec.equals("ping")){
+					wifi_ping_count=0;
+				}else if(rec !=null && rec.equals("dictation")){
+					onKey(TeclaKeyboardView.KEYCODE_DICTATION,null);
+				}
+				
+			}
+		}
+		
+	};
+	
+	private Runnable wificonnector=new Runnable(){
+
+		public void run() {
+			// TODO Auto-generated method stub
+			Log.v("dictation","Started WiFiConnector");
+			if(TeclaApp.desktop!= null)
+				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
+			while( TeclaApp.mSendToPC){
+				if(TeclaApp.mSendToPC && TeclaApp.connect_to_desktop && !TeclaApp.desktop.isConnected())
+				{
+				Log.v("dictation","attempting connection");
+				TeclaApp.desktop.connect();
+				
+				if(TeclaApp.desktop.isConnected()){
+					Log.v("dictation","connected to Desktop");
+					new Thread(wifipinger).start();
+					new Thread(wifireceiver).start();
+					// TODO :onConnect change the send to pc button to connect state
+				}
+				}
+				else{
+					try {
+						Thread.sleep(10000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			Log.v("dictation",""+wifisearcherthread.isAlive());
+		}
+		
+	};
+	
+	
+	
 }
+
