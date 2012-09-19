@@ -24,7 +24,7 @@
         <activity
             android:name=".TeclaPrefs"
             android:label="@string/english_ime_settings"
-            android:noHistory="true" >
+            android:noHistory="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,6 +67,15 @@
                 <action android:name="ca.idi.tekla.SEP_SERVICE" />
             </intent-filter>
         </service>
+        <activity
+            android:name=".About"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="ca.idi.tekla.about" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

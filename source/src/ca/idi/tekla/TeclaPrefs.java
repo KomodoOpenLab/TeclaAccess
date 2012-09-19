@@ -49,6 +49,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.text.AutoText;
 import android.util.Log;
 import android.widget.BaseAdapter;
@@ -74,6 +75,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefMorseSwitchMode;
 	private Preference mPrefAutohideTimeout;
+	private Preference mContributors;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefFullScreenSwitch;
 	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
@@ -138,7 +140,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
-		
+		mContributors=(Preference) findPreference("contributors");
+		mContributors.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+		    public boolean onPreferenceClick(Preference preference) {
+		    	startActivity(new Intent("ca.idi.tekla.about"));
+		        return true; 
+		    }
+		});
 		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_MORSE));

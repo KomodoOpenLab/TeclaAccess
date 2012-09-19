@@ -334,5 +334,10 @@
             android:title="@string/auto_complete" />
         -->
     </PreferenceCategory>
-
+ 	
+ 	<Preference
+            android:key="contributors"
+            android:persistent="true"
+            android:summary="@string/contributors_summary"
+            android:title="@string/contributors" />
 </PreferenceScreen>
