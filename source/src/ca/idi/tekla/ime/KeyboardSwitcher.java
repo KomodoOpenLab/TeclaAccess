@@ -58,8 +58,8 @@ public class KeyboardSwitcher {
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
     private static final int SYMBOLS_MODE_STATE_SYMBOL = 2;
     
-    TeclaKeyboardView mIMEView;
-    TeclaIME mContext;
+    private TeclaKeyboardView mIMEView;
+    private TeclaIME mContext;
     
     private KeyboardId mSymbolsId;
     private KeyboardId mSymbolsShiftedId;
@@ -204,7 +204,19 @@ public class KeyboardSwitcher {
         switch (mode) {
 
         	case MODE_MORSE:
-        		return new KeyboardId(R.xml.morse_kbd, KEYBOARDMODE_NORMAL, true);
+        		if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE) {
+        			if (TeclaApp.persistence.isMorseHudEnabled())
+        				return new KeyboardId(R.xml.morse_kbd_single_key_hud, KEYBOARDMODE_NORMAL, true);
+        			else
+        				return new KeyboardId(R.xml.morse_kbd_single_key_nohud, KEYBOARDMODE_NORMAL, true);
+        		}
+        		else {
+        			if (TeclaApp.persistence.isMorseHudEnabled())
+        				return new KeyboardId(R.xml.morse_kbd_hud, KEYBOARDMODE_NORMAL, true);
+        			else
+        				return new KeyboardId(R.xml.morse_kbd_nohud, KEYBOARDMODE_NORMAL, true);
+        		}
+        		
             case MODE_TEXT:
             	if (useVoiceInput && scanVariants) {
             		// Using voice input AND scanning variants
@@ -366,17 +378,11 @@ public class KeyboardSwitcher {
     }
 
     boolean isNavigation() {
-		if (mMode == MODE_NAV) {
-			return true;
-		}
-		return false;
+    	return mMode == MODE_NAV;
     }
-    
+
     boolean isMorseMode() {
-		if (mMode == MODE_MORSE) {
-			return true;
-		}
-		return false;
+    	return mMode == MODE_MORSE; 
     }
 
     /**

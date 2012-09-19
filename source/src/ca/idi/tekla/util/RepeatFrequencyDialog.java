@@ -10,48 +10,55 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class RepeatFrequencyDialog extends Dialog
 		implements DialogInterface.OnKeyListener,
 		SeekBar.OnSeekBarChangeListener,
 		Button.OnClickListener {
-
-	private static final int SEEK_BAR_MAX = 11;
-	private static final double SPEED_CONVERSION_FACTOR = 0.935f;
+	
 	private SeekBar mSeekBar;
 	private Button mButton;
+	private TextView mMinLabel, mMaxLabel, mRepeatLabel;
+	private String[] mRepeatStrings;
+	private int[] mRepeatValues;
+	private int mSeekBarPos;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setTitle(R.string.mrepeat_frequency);
 		
 		int frequency = TeclaApp.persistence.getRepeatFrequency();
-		int progress = frequencyToProgress(frequency);
+		mRepeatStrings = TeclaApp.getInstance().getResources().getStringArray(R.array.repeat_frequency_strings);
+		mRepeatValues = TeclaApp.getInstance().getResources().getIntArray(R.array.repeat_frequency_values);
 
-		mSeekBar = (SeekBar) findViewById(R.id.seekBar1);
-		mButton = (Button) findViewById(R.id.speed_dlg_btn_done);
+		mSeekBarPos = -1;
+		int value = Persistence.AUTOHIDE_NULL;
+		while (value != frequency  && mSeekBarPos < (mRepeatValues.length - 1)) {
+			mSeekBarPos++;
+			value = mRepeatValues[mSeekBarPos];
+		}
+		
+		mMinLabel = (TextView) findViewById(R.id.dlg_min_label);
+		mMaxLabel = (TextView) findViewById(R.id.dlg_max_label);
+		mRepeatLabel = (TextView) findViewById(R.id.dlg_timeout_label);
+		mMinLabel.setText(mRepeatStrings[0]);
+		mMaxLabel.setText(mRepeatStrings[mRepeatStrings.length - 1]);
+		mRepeatLabel.setText(mRepeatStrings[mSeekBarPos]);
 
+		mButton = (Button) findViewById(R.id.dlg_btn_done);
 		mButton.setOnClickListener(this);
-		mSeekBar.setMax(SEEK_BAR_MAX);
-		mSeekBar.setProgress(progress);
+
+		mSeekBar = (SeekBar) findViewById(R.id.dlg_seekbar);
+		mSeekBar.setMax(mRepeatValues.length - 1);
+		mSeekBar.setProgress(mSeekBarPos);
 		mSeekBar.setOnSeekBarChangeListener(this);
 		mSeekBar.requestFocus();
-	}
-	
-	private int frequencyToProgress(int frequency) {
-		double progress =
-			Math.log(1.f * frequency / Persistence.MAX_REPEAT_FREQ) / Math.log(SPEED_CONVERSION_FACTOR);
-		return (int) Math.round(progress);
-	}
-
-	private int progressToFrequency(int progress) {
-		double delay = Persistence.MAX_REPEAT_FREQ * Math.pow(SPEED_CONVERSION_FACTOR, progress);
-		return (int) Math.round(delay);
 	}
 
 	public RepeatFrequencyDialog(Context context) {
 		super(context);
-		setTitle(R.string.mrepeat_frequency);
 		setOnKeyListener(this);
 	}
 
@@ -64,11 +71,11 @@ public class RepeatFrequencyDialog extends Dialog
 		}
 		return false;
 	}
-
+	
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromUser) {
-		int frequency = progressToFrequency(progress);
-		TeclaApp.persistence.setRepeatFrequency(frequency);
+		mRepeatLabel.setText(mRepeatStrings[progress]);
+		TeclaApp.persistence.setRepeatFrequency(mRepeatValues[progress]);
 	}
 
 	public void onStartTrackingTouch(SeekBar seekBar) {

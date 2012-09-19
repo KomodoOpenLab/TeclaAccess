@@ -37,7 +37,6 @@ public class TeclaKeyboard extends Keyboard {
     static final int KEYCODE_MORSE_DIT = 500;
     static final int KEYCODE_MORSE_DAH = 501;
     static final int KEYCODE_MORSE_SPACEKEY = 562;
-    static final int KEYCODE_MORSE_CAPSKEY = 559;
     static final int KEYCODE_MORSE_DELKEY = 67;
     static final int KEYCODE_REPEAT_LOCK = -8;
     static final int KEYCODE_SEND_TO_PC = -11;
@@ -60,7 +59,6 @@ public class TeclaKeyboard extends Keyboard {
     private static final int SHIFT_LOCKED = 2;
     
     private int mShiftState = SHIFT_OFF;
-	
 
     static int sSpacebarVerticalCorrection;
 
@@ -102,12 +100,6 @@ public class TeclaKeyboard extends Keyboard {
         if (key.codes[0] == 10) {
             mEnterKey = key;
         }
-        else if (key.codes[0] == KEYCODE_MORSE_SPACEKEY) {
-			mSpaceKey = key;
-        }
-        else if (key.codes[0] == KEYCODE_MORSE_CAPSKEY) {
-        	mCapsLockKey = key;
-        }
         else if (key.codes[0] == KEYCODE_REPEAT_LOCK) {
         	mRepeatLockKey = key;
         }
@@ -117,15 +109,6 @@ public class TeclaKeyboard extends Keyboard {
         return key;
     }
     
-    /**
-     * Returns a reference to the Morse space key
-     * (Morse mode only)
-     * @return
-     */
-	public Key getSpaceKey() {
-		return this.mSpaceKey;
-	}
-
 	public Key getRepeatLockKey() {
 		return this.mRepeatLockKey;
 	}
@@ -133,15 +116,6 @@ public class TeclaKeyboard extends Keyboard {
 	public Key getSendtoPCKey() {
 		return this.mSendtoPCKey;
 	}
-	/**
-	 * Returns a reference to the Morse Caps Lock key
-	 * (Morse mode only)
-	 * @return
-	 */
-	public Key getCapsLockKey() {
-		return this.mCapsLockKey;
-	}
-	
    
     void setImeOptions(Resources res, int mode, int options) {
         if (mEnterKey != null) {
@@ -408,6 +382,18 @@ public class TeclaKeyboard extends Keyboard {
 	
 	public Key getVariantsKey() {
 		return getKeyFromCode(TeclaKeyboard.KEYCODE_VARIANTS);
+	}
+	
+	public Key getMorseSpaceKey() {
+		return getKeyFromCode(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+	}
+	
+	public int getMorseSpaceKeyIndex() {
+		return getKeyIndexFromKeyCode(TeclaKeyboard.KEYCODE_MORSE_SPACEKEY);
+	}
+	
+	public int getShiftKeyIndex() {
+		return getKeyIndexFromKeyCode(Keyboard.KEYCODE_SHIFT);
 	}
 
 	private void customInit() {

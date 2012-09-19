@@ -258,12 +258,27 @@
         <item>After 60 seconds</item>
         <item>Never</item>
     </string-array>
+    
+    <string-array name="repeat_frequency_strings">
+        <item>Never</item>
+        <item>1000 ms</item>
+        <item>950 ms</item>
+        <item>900 ms</item>
+        <item>850 ms</item>
+        <item>800 ms</item>
+        <item>750 ms</item>
+        <item>700 ms</item>
+        <item>650 ms</item>
+        <item>600 ms</item>
+        <item>550 ms</item>
+        <item>500 ms</item>
+    </string-array>
 
     <string-array name="switch_actions">
         <item>None</item>
         <item>Step-scan next</item>
         <item>Step-scan previous</item>
-        <item>Step out / Cancel</item>
+        <item>Step out, cancel</item>
         <item>Select highlighted</item>
     </string-array>
     <string-array name="morse_actions">
@@ -274,28 +289,38 @@
         <item>Morse backspace</item>
         <item>Hide Morse IME view</item>
     </string-array>
-    <string-array name="morse_switch_mode_array">
-        <item>Triple-switch mode</item>
-        <item>Double-switch mode</item>
-        <item>Mono-switch mode</item>
+    <string-array name="morse_key_mode_array">
+        <item>Triple-key mode</item>
+        <item>Double-key mode</item>
+        <item>Single-key mode</item>
     </string-array>
     
     <!-- Morse cheat sheet -->
-    <string name="caps_lock_off">abc</string>
-    <string name="caps_lock_next">Abc</string>
-    <string name="caps_lock_all">ABC</string>
     <string name="tapforsymbols">Tap for symbols</string>
-    <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
-
-    <!-- Label for Morse space key. -->
-    <string name="morse_space">space</string>
-
-    <!-- Option to enable Morse input method -->
-    <string name="morse_mode">Use Morse input method</string>
-    <string name="morse_mode_summary">Enables users to type in Morse</string>
+    <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
 
     <!-- Category title for Morse settings -->
     <string name="morse_input_category">Morse settings</string>
+    
+    <!-- Option to enable Morse input method -->
+    <string name="morse_mode">Enable Morse input</string>
+    <string name="morse_mode_summary">Provides a Morse input method that replaces the standard keyboard</string>
+    
+    <!-- Option to enable Morse HUD display -->
+    <string name="morse_show_hud">Show Morse HUD</string>
+    <string name="morse_show_hud_summary">Displays a set of Morse keys/values above the keyboard</string>
+    
+    <!-- Morse key mode strings -->
+	<string name="morse_key_mode">Morse input method</string>
+	
+	<!-- Morse speed ratio strings -->
+	<string name="morse_time_unit_title">Morse time unit</string>
+	<string name="morse_time_unit_dlg_title">Select your Morse time unit</string>
+	
+	<!-- Morse repeat delay strings -->
+    <string name="mrepeat_frequency">Configure repeat frequency</string>
+    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
+    <string name="mrepeat_frequency_dlg_title">Configure the repeat frequency</string>
 
     <!-- Options to set full reset timeout -->
     <string name="fullreset_timeout">Long press reset delay</string>
@@ -312,6 +337,16 @@
         <item>32 seconds</item>
         <item>40 seconds</item>
     </string-array>
+    
+    <!-- Tecla: Reset Actions Dialog -->
+    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+
+    <!-- Tecla: Scan Speed Dialog -->
+    <string name="dialog_faster">Faster</string>
+    <string name="dialog_slower">Slower</string>
+    <string name="btn_done">Done</string>
 
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
@@ -327,10 +362,6 @@
     <!-- Self-scanning delay strings -->
     <string name="scan_speed">Scanning speed</string>
     <string name="scan_speed_summary">Adjust the scanning speed</string>
-
-    <!-- Morse repeat delay strings -->
-    <string name="mrepeat_frequency">Configure repeat frequency</string>
-    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
 
     <!-- Switch configuration strings -->
     <string name="define_switch_action">Configure switch actions</string>
@@ -354,24 +385,11 @@
     <string name="switch_e1_morse">Switch 1 Morse action</string>
     <string name="switch_e2_morse">Switch 2 Morse action</string>
 
+    <!-- Reset switch actions strings -->
     <string name="switch_default">Restore default actions</string>
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
 
-    <!-- Tecla: Reset Actions Dialog -->
-    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
-    <string name="btn_yes">Yes</string>
-    <string name="btn_no">No</string>
-
-    <!-- Tecla: Scan Speed Dialog -->
-    <string name="dialog_faster">Faster</string>
-    <string name="dialog_slower">Slower</string>
-    <string name="btn_done">Done</string>
-
-	<!--  Morse switch mode strings -->
-	<string name="morse_switch_mode">Morse switch input method</string>
-	<string name="morse_switch_mode_summary">Select your desired Morse switch input method</string>
-		
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
     <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>

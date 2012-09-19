@@ -65,6 +65,9 @@
             android:codes="112"
             android:keyEdgeFlags="right"
             android:keyLabel="p" />
+        <Key
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -101,6 +104,10 @@
             android:codes="108"
             android:keyEdgeFlags="right"
             android:keyLabel="l" />
+        <Key
+            android:horizontalGap="5%p"
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -145,6 +152,9 @@
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_delete"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_normal"
@@ -181,6 +191,9 @@
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_url"
@@ -222,6 +235,9 @@
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_email"
@@ -263,6 +279,9 @@
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
     <Row
         android:keyboardMode="@+id/mode_im"
@@ -304,6 +323,9 @@
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="-7"
+            android:keyWidth="0%p" />
     </Row>
 
 </Keyboard>
