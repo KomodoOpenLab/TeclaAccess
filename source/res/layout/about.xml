@@ -11,9 +11,8 @@
 	        android:id="@+id/title1"
 	        android:gravity="center_vertical"
 	        android:layout_width="match_parent"
-	        android:layout_height="40dp"
-	        android:textColor="#51b0e8"
-	        android:textSize="11pt"
+	        android:layout_height="30dp"
+	        
 	        android:text="@string/contributor_title_text1"/>
 		<TextView
 		    android:id="@+id/label1"
@@ -25,9 +24,8 @@
 		    android:id="@+id/title2"
 		    android:gravity="center_vertical"
 	        android:layout_width="match_parent"
-	        android:layout_height="40dp"
-	        android:textColor="#51b0e8"
-	        android:textSize="11pt"
+	        android:layout_height="30dp"
+	        
 	        android:text="@string/contributor_title_text2"/>
 		<TextView
 		    android:id="@+id/label2"
@@ -39,9 +37,8 @@
 		    android:id="@+id/title3"
 		    android:gravity="center_vertical"
 	        android:layout_width="match_parent"
-	        android:layout_height="40dp"
-	        android:textColor="#51b0e8"
-	        android:textSize="11pt"
+	        android:layout_height="30dp"
+	        
 	        android:text="@string/contributor_title_text3"/>
 		<TextView
 		    android:id="@+id/label3"
@@ -53,9 +50,7 @@
 		    android:id="@+id/title4"
 		    android:gravity="center_vertical"
 	        android:layout_width="match_parent"
-	        android:layout_height="40dp"
-	        android:textColor="#51b0e8"
-	        android:textSize="11pt"
+	        android:layout_height="30dp"
 	        android:text="@string/contributor_title_text4"/>
 		<TextView
 		    android:id="@+id/label4"
@@ -67,9 +62,7 @@
 		    android:id="@+id/title5"
 		    android:gravity="center_vertical"
 	        android:layout_width="match_parent"
-	        android:layout_height="40dp"
-	        android:textColor="#51b0e8"
-	        android:textSize="11pt"
+	        android:layout_height="30dp"        
 	        android:text="@string/contributor_title_text5"/>
 		<TextView
 		    android:id="@+id/label5"

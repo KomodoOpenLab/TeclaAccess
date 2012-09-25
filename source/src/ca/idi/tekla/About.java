@@ -1,15 +1,14 @@
 package ca.idi.tekla;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.view.View.OnFocusChangeListener;
 
-public class About extends Activity implements OnClickListener {
+public class About extends Activity implements OnFocusChangeListener,
+		OnClickListener {
 
 	TextView title1, label1, title2, label2, title3, label3, title4, label4,
 			title5, label5;
@@ -34,13 +33,31 @@ public class About extends Activity implements OnClickListener {
 		title3.setClickable(true);
 		title4.setClickable(true);
 		title5.setClickable(true);
-		
+
 		title1.setOnClickListener(this);
 		title2.setOnClickListener(this);
 		title3.setOnClickListener(this);
 		title4.setOnClickListener(this);
 		title5.setOnClickListener(this);
-		
+
+		title1.setFocusable(true);
+		title2.setFocusable(true);
+		title3.setFocusable(true);
+		title4.setFocusable(true);
+		title5.setFocusable(true);
+
+		title1.setFocusableInTouchMode(true);
+		title2.setFocusableInTouchMode(true);
+		title3.setFocusableInTouchMode(true);
+		title4.setFocusableInTouchMode(true);
+		title5.setFocusableInTouchMode(true);
+
+		title1.setOnFocusChangeListener(this);
+		title2.setOnFocusChangeListener(this);
+		title3.setOnFocusChangeListener(this);
+		title4.setOnFocusChangeListener(this);
+		title5.setOnFocusChangeListener(this);
+
 		label1.setVisibility(View.GONE);
 		label2.setVisibility(View.GONE);
 		label3.setVisibility(View.GONE);
@@ -49,49 +66,54 @@ public class About extends Activity implements OnClickListener {
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
+	public void onFocusChange(View view, boolean hasFocus) {
+		if (view.equals(title1)) {
+			label1.setVisibility(View.VISIBLE);
+			label2.setVisibility(View.GONE);
+			label3.setVisibility(View.GONE);
+			label4.setVisibility(View.GONE);
+			label5.setVisibility(View.GONE);
+		} else if (view.equals(title2)) {
+			label1.setVisibility(View.GONE);
+			label2.setVisibility(View.VISIBLE);
+			label3.setVisibility(View.GONE);
+			label4.setVisibility(View.GONE);
+			label5.setVisibility(View.GONE);
+		} else if (view.equals(title3)) {
+			label1.setVisibility(View.GONE);
+			label2.setVisibility(View.GONE);
+			label3.setVisibility(View.VISIBLE);
+			label4.setVisibility(View.GONE);
+			label5.setVisibility(View.GONE);
+		} else if (view.equals(title4)) {
+			label1.setVisibility(View.GONE);
+			label2.setVisibility(View.GONE);
+			label3.setVisibility(View.GONE);
+			label4.setVisibility(View.VISIBLE);
+			label5.setVisibility(View.GONE);
+		} else if (view.equals(title5)) {
+			label1.setVisibility(View.GONE);
+			label2.setVisibility(View.GONE);
+			label3.setVisibility(View.GONE);
+			label4.setVisibility(View.GONE);
+			label5.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
 	public void onClick(View view) {
 		if (view.equals(title1)) {
-			if (label1.getVisibility()==View.GONE){
-				label1.setVisibility(View.VISIBLE);
-			}else{
-				label1.setVisibility(View.GONE);
-			}
+			title1.requestFocus();
 		} else if (view.equals(title2)) {
-			if (label2.getVisibility()==View.GONE){
-				label2.setVisibility(View.VISIBLE);
-			}else{
-				label2.setVisibility(View.GONE);
-			}
+			title2.requestFocus();
 		} else if (view.equals(title3)) {
-			if (label3.getVisibility()==View.GONE){
-				label3.setVisibility(View.VISIBLE);
-			}else{
-				label3.setVisibility(View.GONE);
-			}
+			title3.requestFocus();
 		} else if (view.equals(title4)) {
-			if (label4.getVisibility()==View.GONE){
-				label4.setVisibility(View.VISIBLE);
-			}else{
-				label4.setVisibility(View.GONE);
-			}
+			title4.requestFocus();
 		} else if (view.equals(title5)) {
-			if (label5.getVisibility()==View.GONE){
-				label5.setVisibility(View.VISIBLE);
-			}else{
-				label5.setVisibility(View.GONE);
-			}
+			title5.requestFocus();
 		}
-		// TODO Auto-generated method stub
 
 	}
+
 }
