@@ -49,18 +49,18 @@ public class TeclaKeyboardView extends KeyboardView {
     static final int KEYCODE_SHIFT_LONGPRESS = -101;
     
     // Keycode for stepping out self scanning
-    static final int KEYCODE_STEP_OUT = -7;
-    
-    // Keycode for repeat locking navigation keys
-    static final int KEYCODE_REPEAT_LOCK = -8;
-    
- // Keycode for showing and hiding secondary navigation keyboard
+    public static final int KEYCODE_STEPOUT =
+    		TeclaApp.getInstance().getApplicationContext().getResources().getInteger(R.integer.key_stepout);
+
+    // Keycode for showing and hiding secondary navigation keyboard
     public static final int KEYCODE_SHOW_SECNAV_VOICE = -9;
     public static final int KEYCODE_HIDE_SECNAV_VOICE = -10;
     
- // Keycode for send to pc and voice dictation
-    public static final int KEYCODE_SEND_TO_PC = -11;
-    static final int KEYCODE_DICTATION = -12;
+    // Keycode for send to pc and voice dictation
+    public static final int KEYCODE_SEND_TO_PC = 
+    		TeclaApp.getInstance().getApplicationContext().getResources().getInteger(R.integer.key_sendto_pc);
+    public static final int KEYCODE_DICTATION =
+			TeclaApp.getInstance().getApplicationContext().getResources().getInteger(R.integer.key_dictation);
 
     private Keyboard mPhoneKeyboard;
     private static TeclaKeyboardView instance;
@@ -178,26 +178,6 @@ public class TeclaKeyboardView extends KeyboardView {
         if (mCheatSheetDialog != null) {
         	mCheatSheetDialog.dismiss();
         }
-	}
-	
-	/**
-	 * 
-	 * Generic method to toggle the state of "sticky" keys i.e. repeatable keys
-	 * Changes appearance only
-	 * 
-	 */
-	
-	public void toggleStickyKey(Key stickyKey)
-	{
-		int stickyKeyIndex = this.getKeyboard().getKeys().indexOf(stickyKey);
-		if(stickyKey.on) stickyKey.on = false;
-		else stickyKey.on=true;
-		this.invalidateKey(stickyKeyIndex);
-	}
-	
-	public void disableSendToPCKey(){
-		if(this.getKeyboard().getSendToPCKey()!= null)
-		toggleStickyKey(this.getKeyboard().getSendToPCKey());
 	}
 	
 	/**

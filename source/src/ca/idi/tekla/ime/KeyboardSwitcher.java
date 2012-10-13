@@ -52,7 +52,7 @@ public class KeyboardSwitcher {
     public static final int KEYBOARDMODE_IM = R.id.mode_im;
     public static final int KEYBOARDMODE_VOICE = R.id.mode_voice;
     public static final int KEYBOARDMODE_VARIANTS = R.id.mode_variants;
-    public static final int KEYBOARDMODE_SECNAV_VOICE = R.id.mode_secnav_voice;
+    public static final int KEYBOARDMODE_ANDROID = R.id.mode_android;
     
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
@@ -195,6 +195,8 @@ public class KeyboardSwitcher {
     			TeclaApp.persistence.isVoiceInputEnabled();
     	boolean scanVariants =
     			TeclaApp.persistence.isVariantsKeyEnabled();
+    	boolean showAndroidKeys =
+    			TeclaApp.persistence.isAndroidOn();    	
     	
         if (isSymbols) {
             return (mode == MODE_PHONE)
@@ -257,26 +259,28 @@ public class KeyboardSwitcher {
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_URL, true);
             case MODE_EMAIL:
-            	if (useVoiceInput) {
-            		return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_EMAIL, true);
+            	if (useVoiceInput && scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_EMAIL, true);
+            	} else if (useVoiceInput) {
+                    return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_EMAIL, true);
+            	} else if (scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_EMAIL, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_EMAIL, true);
             case MODE_IM:
-            	if (useVoiceInput) {
+            	if (useVoiceInput && scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_IM, true);
+            	} else if (useVoiceInput) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_IM, true);
+            	} else if (scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_IM, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_IM, true);
             case MODE_NAV:
-            	if (useVoiceInput) {
-            		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_VOICE, true);
+            	if (showAndroidKeys) {
+            		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_ANDROID, true);
             	}
                 return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_NORMAL, true);
-            case MODE_SECNAV_VOICE:
-            	if (useVoiceInput) {
-            		return new KeyboardId(R.xml.kbd_navigation,KEYBOARDMODE_SECNAV_VOICE,true);
-            	}
-            	//TODO: no voice available, don't need secondary keyboard ?
-            	return new KeyboardId(R.xml.kbd_navigation,KEYBOARDMODE_NORMAL,true);
             case MODE_1X3:
                 return new KeyboardId(R.xml.kbd_1x3, KEYBOARDMODE_NORMAL, true);
             case MODE_1X4:

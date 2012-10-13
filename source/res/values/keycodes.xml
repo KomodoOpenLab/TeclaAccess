@@ -35,17 +35,24 @@
     <!-- Keycode for F1 (function) key. This one switches between language switch & comma/.com -->
     <integer name="key_settings">-100</integer>
     <integer name="key_f1">-103</integer>
+    <!-- Custom Tecla keycodes -->
+    <integer name="key_android">-201</integer>
+    <integer name="key_voldown">25</integer>
+    <integer name="key_volup">24</integer>
+    <integer name="key_mute">164</integer>
+    <integer name="key_search">84</integer>
     <integer name="key_voice">-202</integer>
     <integer name="key_variants">-222</integer>
-    <integer name="key_custom">-232</integer>
-    <!-- Keycodes for Morse keyboard -->
-    <integer name="key_dit">500</integer>
-    <integer name="key_dah">501</integer>
-    <integer name="key_endof_char">562</integer>
-    <integer name="key_repeat_lock">-8</integer>
+    <integer name="key_custom">-232</integer><!-- Generic key for populating character alternatives -->
+    <integer name="key_repeat_lock">-303</integer>
     <integer name="show_secnav_kbd">-9</integer>
     <integer name="hide_secnav_kbd">-10</integer>
     <integer name="key_sendto_pc">-11</integer>
     <integer name="key_dictation">-12</integer>
+    <integer name="key_stepout">-7</integer>
+    <!-- Keycodes for Morse keyboard -->
+    <integer name="key_dit">500</integer>
+    <integer name="key_dah">501</integer>
+    <integer name="key_endof_char">562</integer>
     
 </resources>

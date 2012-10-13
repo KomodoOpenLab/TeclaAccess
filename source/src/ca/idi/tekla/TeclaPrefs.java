@@ -680,7 +680,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SEND_TO_PC,null);
 				//update the send to pc button lock
 				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE, null);
-				TeclaKeyboardView.getInstance().disableSendToPCKey();
+//				TeclaKeyboardView.getInstance().disableSendToPCKey();
 				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE, null);
 			}
 			TeclaApp.connect_to_desktop=mConnectToPC.isChecked();

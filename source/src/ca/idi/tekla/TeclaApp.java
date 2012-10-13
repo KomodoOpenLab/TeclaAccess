@@ -192,6 +192,29 @@ public class TeclaApp extends Application {
 		
 	};
 	
+	/**
+	 * A recursive call to force the soft IME open without blocking the UI
+	 * @param delay the time after which the call is sent
+	 * TODO: This method should be moved to the TeclaApp class
+	 */
+	public void callShowSoftIMEWatchDog(int delay) {
+		mHandler.removeCallbacks(mShowSoftIMEWatchdog);
+		mHandler.postDelayed(mShowSoftIMEWatchdog, delay);
+	}
+	
+	private Runnable mShowSoftIMEWatchdog = new Runnable () {
+
+		public void run() {
+			if (!TeclaApp.highlighter.isSoftIMEShowing()) {
+				// If IME View still not showing...
+				// We are force-openning the soft IME through an intent since
+				//it seems to be the only way to make it work
+				TeclaApp.getInstance().requestShowIMEView();
+			}
+		}
+		
+	};
+
 	public void enabledMorseIME() {
 		if (DEBUG) Log.d(TAG, "Broadcasting enable morse IME intent...");
 		sendBroadcast(new Intent(ACTION_ENABLE_MORSE));

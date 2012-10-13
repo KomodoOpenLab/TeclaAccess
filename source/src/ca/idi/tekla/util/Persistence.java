@@ -80,7 +80,7 @@ public class Persistence {
 	public static final String SEND_SHIELD_EVENTS="enable_events_relay";
 	
 	
-	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing;
+	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing, mAndroidOn;
 	private static HashMap<String,String[]> mSwitchMap;
 	
 	private SharedPreferences shared_prefs;
@@ -91,6 +91,7 @@ public class Persistence {
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
 		mVariantsShowing = false;
+		mAndroidOn = false;
 		mSwitchMap = new HashMap<String,String[]>();
 		
 	}
@@ -135,6 +136,14 @@ public class Persistence {
 
 	public boolean isVariantsShowing () {
 		return mVariantsShowing;
+	}
+
+	public boolean isAndroidOn () {
+		return mAndroidOn;
+	}
+
+	public void setAndroidOn (boolean on) {
+		mAndroidOn = on;
 	}
 
 	public boolean isPersistentKeyboardEnabled() {
