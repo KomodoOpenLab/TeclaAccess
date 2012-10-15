@@ -237,8 +237,8 @@
     <string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
 
     <!-- Option to enable speakerphone switch mode -->
-    <string name="speakerphone_switch">Use speakerphone for voice calls</string>
-    <string name="speakerphone_switch_summary">Automatically turn on speakerphone when voice calls start</string>
+    <string name="speakerphone_switch">Always use speakerphone</string>
+    <string name="speakerphone_switch_summary">Turn on speakerphone for voice calls, voice commands and voice input.</string>
 
     <!-- Option to show the UI navigation keyboard on the screen -->
     <string name="persistent_keyboard">Show navigation keyboard</string>
@@ -247,8 +247,8 @@
     <!-- Option to autohide the UI navigation keyboard on the screen -->
     <string name="autohide_timeout">Navigation keyboard timeout</string>
     <string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
-    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
-
+    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>    
+    
     <string-array name="autohide_strings">
         <item>Immediately</item>
         <item>After 4 seconds</item>
@@ -300,7 +300,7 @@
     <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
 
     <!-- Category title for Morse settings -->
-    <string name="morse_input_category">Morse settings</string>
+    <string name="morse_input_settings">Morse input settings</string>
     
     <!-- Option to enable Morse input method -->
     <string name="morse_mode">Enable Morse input</string>
@@ -390,6 +390,8 @@
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
 
+    <string name="advanced_input_settings">Advanced input settings</string>
+    
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
     <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
@@ -404,7 +406,7 @@
     <string name="shield_connected">Tecla Shield Connected</string>
     <string name="shield_disconnected">Tecla Shield disconnected</string>
     <string name="no_voice_input_available">No speech recognition applications available!</string>
-    <string name="no_voice_actions_installed">Voice Actions is not installed!</string>
+    <string name="no_voice_actions_installed">Voice Search is not installed!</string>
 
     <!-- Tecla: Titles and labels -->
     <string name="sep_label">Tecla Shield Status</string>

@@ -122,7 +122,6 @@ public class TeclaIME extends InputMethodService
 	// Morse variables	
 	private TeclaMorse mTeclaMorse;
 	private Keyboard.Key mSpaceKey;
-	private Keyboard.Key mRepeatLockKey;
 	private Keyboard.Key mSendtoPCKey;
 	private int mSpaceKeyIndex;
 	private int mRepeatedKey;
@@ -582,8 +581,12 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 
+	/**
+	 * Hardware key down!
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
 			// FIXME: Tecla - Prevent soft input method from consuming the back key
@@ -810,6 +813,10 @@ public class TeclaIME extends InputMethodService
 	public void onKey(int primaryCode, int[] keyCodes) {
 		long when = SystemClock.uptimeMillis();
 
+		if (TeclaApp.persistence.isRepeatingKey()
+				&& primaryCode != TeclaKeyboard.KEYCODE_REPEAT_LOCK
+				&& !TeclaApp.persistence.isFullscreenSwitchEnabled()) stopRepeatingKey();
+
 		if (TeclaApp.DEBUG) {
 			if (keyCodes != null && keyCodes.length > 0) {
 				Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
@@ -887,12 +894,6 @@ public class TeclaIME extends InputMethodService
 				break;
 			case Keyboard.KEYCODE_MODE_CHANGE:
 				changeKeyboardMode();
-				break;
-			case TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_SECNAV_VOICE,0);
-				break;
-			case TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE:
-				mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 				break;
 			default:
 				if (isMorseKeyboardKey(primaryCode)) {
@@ -1113,7 +1114,7 @@ public class TeclaIME extends InputMethodService
 		TeclaKeyboard keyboard = mIMEView.getKeyboard();
 		Key key = keyboard.getKeyFromKeyCode(primaryCode);
 		if (key != null) variants = key.popupCharacters;
-		if (TeclaApp.persistence.isVariantsOn() && variants != null && variants.length() > 0) {
+		if (TeclaApp.persistence.isVariantsKeyOn() && variants != null && variants.length() > 0) {
 			// Key has variants!
 			mWasSymbols = mKeyboardSwitcher.isSymbols();
 			mWasShifted = keyboard.isShifted();
@@ -1711,7 +1712,7 @@ public class TeclaIME extends InputMethodService
 	//TODO: Try moving these variables to TeclaApp class
 	private String mVoiceInputString;
 	private int mLastKeyboardMode, mLastFullKeyboardMode;
-	private boolean mShieldConnected, isKeyRepeating;
+	private boolean mShieldConnected;
 	private PopupWindow mSwitchPopup;
 	private View mSwitch;
 	private Handler mTeclaHandler;
@@ -1738,7 +1739,6 @@ public class TeclaIME extends InputMethodService
 		 mLastFullKeyboardMode = TeclaApp.persistence.isMorseModeEnabled() ? KeyboardSwitcher.MODE_MORSE : KeyboardSwitcher.MODE_TEXT;
 		 mTeclaHandler = new Handler();
 		 mShieldConnected = false;
-		 isKeyRepeating = false;
 		 mWasSymbols = false;
 		 mWasShifted = false;
 		 
@@ -1965,6 +1965,8 @@ public class TeclaIME extends InputMethodService
 	 */
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
+		if (TeclaApp.persistence.isRepeatingKey()) stopRepeatingKey();
+
 		//Emulator issue (temporary fix): if typing too fast, or holding a long press
 		//while in auto-release mode, some switch events are null
 		if (switchEvent.toString() == null) {
@@ -1975,7 +1977,7 @@ public class TeclaIME extends InputMethodService
 		cancelNavKbdTimeout();
 		if (!TeclaApp.highlighter.isSoftIMEShowing() && TeclaApp.persistence.isPersistentKeyboardEnabled()) {
 			showIMEView();
-			TeclaApp.highlighter.startSelfScanning();
+			evaluateStartScanning();
 		} else {
 			
 			//Collect the mapped actions of the current switch
@@ -2017,14 +2019,11 @@ public class TeclaIME extends InputMethodService
 						if (TeclaApp.persistence.isInverseScanningEnabled()) {
 							if (TeclaApp.persistence.isInverseScanningChanged()) {
 								//Ignore event right after Inverse Scanning is Enabled
-								stopRepeatingKey();
 								TeclaApp.persistence.unsetInverseScanningChanged();
 								Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
 							} else {
 								selectHighlighted(false);
 							}
-						} else {
-							stopRepeatingKey();
 						}
 					}
 					break;
@@ -2118,23 +2117,27 @@ public class TeclaIME extends InputMethodService
 		return ((keycode>=KeyEvent.KEYCODE_DPAD_UP)
 				&& (keycode<=KeyEvent.KEYCODE_DPAD_CENTER))
 				|| (keycode == KeyEvent.KEYCODE_BACK)
+				|| (keycode == KeyEvent.KEYCODE_SEARCH)
+				|| (keycode == KeyEvent.KEYCODE_VOLUME_DOWN)
+				|| (keycode == KeyEvent.KEYCODE_VOLUME_UP)
 				|| (keycode == Keyboard.KEYCODE_DONE)
 				|| (keycode == TeclaKeyboard.KEYCODE_REPEAT_LOCK)
 				|| (keycode == TeclaKeyboard.KEYCODE_VOICE)
 				|| (keycode == TeclaKeyboard.KEYCODE_VARIANTS)
-				|| (keycode == TeclaKeyboard.KEYCODE_ANDROID);
+				|| (keycode == TeclaKeyboard.KEYCODE_ALTNAV);
 	}
 
 	private void handleSpecialKey(int keyEventCode) {
-		if(mIMEView.getKeyboard().isRepeatLocked() && isKeyRepeating) {
-			stopRepeatingKey();
-			mIMEView.getKeyboard().setRepeatLocked(false);
+		TeclaKeyboard keyboard = mIMEView.getKeyboard();
+		if ((keyEventCode == KeyEvent.KEYCODE_SEARCH)
+				|| (keyEventCode == TeclaKeyboard.KEYCODE_VOICE)) {
+			hideAltNavKeyboard();
 		}
 		if (keyEventCode == Keyboard.KEYCODE_DONE) {
 			if (!mKeyboardSwitcher.isNavigation() && !mKeyboardSwitcher.isVariants()) {
 				// Closing
 				mLastFullKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
-				mWasShifted = mIMEView.getKeyboard().isShifted();
+				mWasShifted = keyboard.isShifted();
 				hideSoftIME();
 			} else {
 				// Opening
@@ -2142,29 +2145,10 @@ public class TeclaIME extends InputMethodService
 					doVariantsExit(keyEventCode);
 				} else {
 					mKeyboardSwitcher.setKeyboardMode(mLastFullKeyboardMode);
-					mIMEView.getKeyboard().setShifted(mWasShifted);
+					keyboard.setShifted(mWasShifted);
 				}
 				
 				evaluateStartScanning();
-			}
-		} else if (keyEventCode == TeclaKeyboard.KEYCODE_VOICE) {
-			if (mKeyboardSwitcher.isNavigation()) {
-				TeclaApp.getInstance().broadcastVoiceCommand();
-			} else {
-				TeclaApp.getInstance().startVoiceInput(RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-			}
-		} else if (keyEventCode ==  TeclaKeyboard.KEYCODE_VARIANTS) {
-			Key key = mIMEView.getKeyboard().getVariantsKey();
-			if (key != null) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Variants key code is " + key.codes[0]);
-				if (TeclaApp.persistence.isVariantsOn()) {
-					TeclaApp.persistence.setVariantsOff();
-					key.on = false;
-				} else {
-					TeclaApp.persistence.setVariantsOn();
-					key.on = true;
-				}
-				mIMEView.invalidateAllKeys();
 			}
 		} else if (keyEventCode == KeyEvent.KEYCODE_BACK) {
 			if (mKeyboardSwitcher.isMorseMode()) {
@@ -2172,19 +2156,51 @@ public class TeclaIME extends InputMethodService
 			}
 			keyDownUp(keyEventCode);
 		} else if (keyEventCode ==  TeclaKeyboard.KEYCODE_REPEAT_LOCK) {
-			if (isKeyRepeating) {
+			if (TeclaApp.persistence.isRepeatLockOn()) {
 				stopRepeatingKey();
+			} else {
+				TeclaApp.persistence.setRepeatLockOn();
+				redrawKeyboard();
 			}
-		} else if (keyEventCode ==  TeclaKeyboard.KEYCODE_ANDROID) {
-			TeclaApp.persistence.setAndroidOn(!TeclaApp.persistence.isAndroidOn());
-			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV);
+		} else if (keyEventCode ==  TeclaKeyboard.KEYCODE_VARIANTS) {
+			if (TeclaApp.persistence.isVariantsKeyOn()) {
+				TeclaApp.persistence.setVariantsKeyOff();
+			} else {
+				TeclaApp.persistence.setVariantsKeyOn();
+			}
+			redrawKeyboard();
+		} else if (keyEventCode == TeclaKeyboard.KEYCODE_VOICE) {
+			if (mKeyboardSwitcher.isNavigation()) {
+				TeclaApp.getInstance().startVoiceActions();
+			} else {
+				TeclaApp.getInstance().startVoiceInput(RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+			}
+		} else if (keyEventCode ==  TeclaKeyboard.KEYCODE_ALTNAV) {
+			TeclaApp.persistence.setAltNavKeyboardOn(!TeclaApp.persistence.isAltNavKeyboardOn());
+			redrawKeyboard();
 		} else {
-			if (mIMEView.getKeyboard().isRepeatLocked() && !isKeyRepeating && isRepeatableWithTecla(keyEventCode)) {
+			if (TeclaApp.persistence.isRepeatLockOn() && !TeclaApp.persistence.isRepeatingKey() && isRepeatableWithTecla(keyEventCode)) {
 				startRepeatingKey(keyEventCode);
 			} else {
 				keyDownUp(keyEventCode);
 			}
 		}
+	}
+	
+	private void redrawKeyboard () {
+		mLastKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
+		mKeyboardSwitcher.setKeyboardMode(mLastKeyboardMode);
+		TeclaKeyboard keyboard = mIMEView.getKeyboard();
+		keyboard.updateVariantsState();
+		keyboard.updateRepeatLockState();
+		mIMEView.invalidateAllKeys();
+	}
+	
+	private void hideAltNavKeyboard() {
+		if (TeclaApp.persistence.isAltNavKeyboardOn()) {
+			TeclaApp.persistence.setAltNavKeyboardOn(false);
+		}
+		mKeyboardSwitcher.setKeyboardMode(mLastKeyboardMode);
 	}
 
 	/**
@@ -2208,18 +2224,16 @@ public class TeclaIME extends InputMethodService
 	
 	private void startRepeatingKey(int keycode) {
 		mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
-		if (!isKeyRepeating) {
-			isKeyRepeating = true;
-			mRepeatingKeyCode = keycode;
-			mTeclaHandler.post(mRepeatKeyRunnable);
-		}
+		mRepeatingKeyCode = keycode;
+		TeclaApp.persistence.setRepeatingKey(true);
+		mTeclaHandler.post(mRepeatKeyRunnable);
 	}
 	
 	private void stopRepeatingKey() {
-		if (isKeyRepeating) {
-			mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
-			isKeyRepeating = false;
-		}
+		mTeclaHandler.removeCallbacks(mRepeatKeyRunnable);
+		TeclaApp.persistence.setRepeatingKey(false);
+		TeclaApp.persistence.setRepeatLockOff();
+		redrawKeyboard();
 	}
 
 	private Runnable mRepeatKeyRunnable = new Runnable() {
@@ -2296,6 +2310,7 @@ public class TeclaIME extends InputMethodService
 		public boolean onTouch(View v, MotionEvent event) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+				if (TeclaApp.persistence.isRepeatingKey()) stopRepeatingKey();
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
 				mSwitch.setBackgroundResource(R.color.switch_pressed);
 				vibrate();
@@ -2355,7 +2370,7 @@ public class TeclaIME extends InputMethodService
 	private void evaluateStartScanning() {
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
 			if (mShieldConnected || isFullScreenShowing()) {
-				TeclaApp.highlighter.startSelfScanning(0);
+				TeclaApp.highlighter.startSelfScanning();
 			} else {
 				TeclaApp.highlighter.stopSelfScanning();
 			}
@@ -2389,6 +2404,7 @@ public class TeclaIME extends InputMethodService
 	}
 	
 	private void hideSoftIME() {
+		hideAltNavKeyboard();
 		hideWindow();
 		updateInputViewShown();
 	}
@@ -2424,7 +2440,7 @@ public class TeclaIME extends InputMethodService
 			mIMEView.setShifted(mWasShifted);
 		}
 		if (keyCode != TeclaKeyboard.KEYCODE_DONE) {
-			TeclaApp.persistence.setVariantsOff();
+			TeclaApp.persistence.setVariantsKeyOff();
 			Key key = mIMEView.getKeyboard().getVariantsKey();
 			key.on = false;
 		}

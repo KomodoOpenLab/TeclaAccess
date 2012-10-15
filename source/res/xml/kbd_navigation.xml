@@ -34,6 +34,7 @@
         <Key
             android:codes="@integer/key_repeat_lock"
             android:iconPreview="@drawable/nav_keyboard_feedback_repeat"
+            android:isModifier="true"
             android:isSticky="true"
             android:keyIcon="@drawable/nav_keyboard_repeat"
             android:keyWidth="14%p" />
@@ -57,7 +58,7 @@
             android:codes="@integer/key_dpad_center"
             android:keyLabel="OK" />
         <Key
-            android:codes="@integer/key_android"
+            android:codes="@integer/key_altnav"
             android:iconPreview="@drawable/nav_keyboard_feedback_android"
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/nav_keyboard_android"
@@ -65,22 +66,28 @@
     </Row>
     <Row
         android:keyWidth="16%p"
-        android:keyboardMode="@+id/mode_android"
+        android:keyboardMode="@+id/mode_altnav"
         android:rowEdgeFlags="bottom" >
         <Key
             android:codes="@integer/key_done"
             android:iconPreview="@drawable/sym_keyboard_feedback_show"
             android:keyEdgeFlags="left"
             android:keyIcon="@drawable/sym_keyboard_show"
-            android:keyWidth="18%p" />
+            android:keyWidth="20%p" />
+        <Key
+            android:codes="@integer/key_voice"
+            android:iconPreview="@drawable/sym_keyboard_feedback_mic"
+            android:keyIcon="@drawable/sym_keyboard_mic" />
         <Key
             android:codes="@integer/key_voldown"
             android:iconPreview="@drawable/nav_keyboard_feedback_voldown"
-            android:keyIcon="@drawable/nav_keyboard_voldown" />
+            android:keyIcon="@drawable/nav_keyboard_voldown"
+            android:keyWidth="17%p" />
         <Key
             android:codes="@integer/key_volup"
             android:iconPreview="@drawable/nav_keyboard_feedback_volup"
-            android:keyIcon="@drawable/nav_keyboard_volup" />
+            android:keyIcon="@drawable/nav_keyboard_volup"
+            android:keyWidth="17%p" />
         <!--
              <Key
             android:isSticky="true"
@@ -92,15 +99,11 @@
             android:iconPreview="@drawable/key_feedback_search"
             android:keyIcon="@drawable/key_search" />
         <Key
-            android:codes="@integer/key_voice"
-            android:iconPreview="@drawable/sym_keyboard_feedback_mic"
-            android:keyIcon="@drawable/sym_keyboard_mic" />
-        <Key
-            android:codes="@integer/key_android"
+            android:codes="@integer/key_altnav"
             android:iconPreview="@drawable/nav_keyboard_feedback_android"
             android:keyEdgeFlags="right"
             android:keyIcon="@drawable/nav_keyboard_android_on"
-            android:keyWidth="18%p" />
+            android:keyWidth="14%p" />
     </Row>
     <!--
              <Key

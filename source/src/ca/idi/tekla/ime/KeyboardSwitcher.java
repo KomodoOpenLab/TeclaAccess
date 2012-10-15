@@ -52,7 +52,7 @@ public class KeyboardSwitcher {
     public static final int KEYBOARDMODE_IM = R.id.mode_im;
     public static final int KEYBOARDMODE_VOICE = R.id.mode_voice;
     public static final int KEYBOARDMODE_VARIANTS = R.id.mode_variants;
-    public static final int KEYBOARDMODE_ANDROID = R.id.mode_android;
+    public static final int KEYBOARDMODE_ALTNAV = R.id.mode_altnav;
     
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
@@ -195,8 +195,8 @@ public class KeyboardSwitcher {
     			TeclaApp.persistence.isVoiceInputEnabled();
     	boolean scanVariants =
     			TeclaApp.persistence.isVariantsKeyEnabled();
-    	boolean showAndroidKeys =
-    			TeclaApp.persistence.isAndroidOn();    	
+    	boolean showAltNavKeyboard =
+    			TeclaApp.persistence.isAltNavKeyboardOn();    	
     	
         if (isSymbols) {
             return (mode == MODE_PHONE)
@@ -277,8 +277,8 @@ public class KeyboardSwitcher {
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_IM, true);
             case MODE_NAV:
-            	if (showAndroidKeys) {
-            		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_ANDROID, true);
+            	if (showAltNavKeyboard) {
+            		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_ALTNAV, true);
             	}
                 return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_NORMAL, true);
             case MODE_1X3:

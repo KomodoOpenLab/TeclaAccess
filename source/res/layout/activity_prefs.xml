@@ -42,20 +42,6 @@
         android:summary="@string/pref_variants_key_summary"
         android:title="@string/pref_variants_key" />
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="voice_input"
-        android:persistent="true"
-        android:summary="@string/pref_voice_input_summary"
-        android:title="@string/pref_voice_input" />
-
-	<CheckBoxPreference
-        android:defaultValue="false"
-        android:key="speakerphone_switch"
-        android:persistent="true"
-        android:summary="@string/speakerphone_switch_summary"
-        android:title="@string/speakerphone_switch" />
-
     <PreferenceCategory
         android:key="alternative_input_settings"
         android:title="@string/alternative_input_category" >
@@ -83,7 +69,7 @@
                     android:persistent="true"
                     android:title="@string/switch_e1_tecla" />
 
-				<ca.idi.tecla.lib.ListPreference
+                <ca.idi.tecla.lib.ListPreference
                     android:defaultValue="0"
                     android:entries="@array/morse_actions"
                     android:entryValues="@array/morse_action_values"
@@ -104,7 +90,7 @@
                     android:persistent="true"
                     android:title="@string/switch_e2_tecla" />
 
-				<ca.idi.tecla.lib.ListPreference
+                <ca.idi.tecla.lib.ListPreference
                     android:defaultValue="0"
                     android:entries="@array/morse_actions"
                     android:entryValues="@array/morse_action_values"
@@ -188,7 +174,7 @@
                     android:persistent="true"
                     android:title="@string/switch_j4_tecla" />
 
-                     <ca.idi.tecla.lib.ListPreference
+                <ca.idi.tecla.lib.ListPreference
                     android:defaultValue="4"
                     android:entries="@array/morse_actions"
                     android:entryValues="@array/morse_action_values"
@@ -216,94 +202,112 @@
         </PreferenceScreen>
 
         <CheckBoxPreference
-			android:key="shield_temp_disconnect"
-			android:title="@string/shield_temp_disconnect"
-			android:summary="@string/shield_temp_disconnect_summary"
-			android:persistent="true"
-			android:defaultValue="false"
-			/>
-		<CheckBoxPreference
             android:key="fullscreen_switch"
             android:persistent="true"
             android:summary="@string/fullscreen_switch_summary"
             android:title="@string/fullscreen_switch" />
-
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="persistent_keyboard"
-            android:persistent="true"
-            android:summary="@string/persistent_keyboard_summary"
-            android:title="@string/persistent_keyboard" />
 
         <Preference
             android:key="autohide_timeout"
             android:persistent="true"
             android:summary="@string/autohide_timeout_summary"
             android:title="@string/autohide_timeout" />
-    </PreferenceCategory>
 
-    
-    <PreferenceCategory
-        android:key="morse_input_settings"
-        android:title="@string/morse_input_category" >
+        <PreferenceScreen
+            android:key="scanning_settings"
+            android:title="@string/scanning_category" >
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="morse_mode"
-            android:persistent="true"
-            android:summary="@string/morse_mode_summary"
-            android:title="@string/morse_mode" />
-        
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="morse_show_hud"
-            android:persistent="true"
-            android:summary="@string/morse_show_hud_summary"
-            android:title="@string/morse_show_hud" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="self_scanning"
+                android:persistent="true"
+                android:summary="@string/self_scanning_summary"
+                android:title="@string/self_scanning" />
 
-        <ca.idi.tecla.lib.ListPreference
-            android:defaultValue="0"
-            android:entries="@array/morse_key_mode_array"
-            android:entryValues="@array/morse_key_mode_values"
-            android:key="morse_key_mode"
-            android:persistent="true"
-            android:title="@string/morse_key_mode"/>
-        
-        <Preference
-            android:key="morse_time_unit"
-            android:persistent="true"
-            android:title="@string/morse_time_unit_title"/>
-        
-        <Preference
-            android:key="morse_repeat_int"
-            android:persistent="true"
-            android:title="@string/mrepeat_frequency"
-            android:summary="@string/mrepeat_frequency_summary"/>
-    </PreferenceCategory>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="inverse_scanning"
+                android:persistent="true"
+                android:summary="@string/inverse_scanning_summary"
+                android:title="@string/inverse_scanning" />
 
-    <PreferenceCategory
-        android:key="scanning_settings"
-        android:title="@string/scanning_category" >
+            <Preference
+                android:key="scan_delay_int"
+                android:persistent="true"
+                android:summary="@string/scan_speed_summary"
+                android:title="@string/scan_speed" />
+        </PreferenceScreen>
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="self_scanning"
+            android:key="speakerphone_switch"
             android:persistent="true"
-            android:summary="@string/self_scanning_summary"
-            android:title="@string/self_scanning" />
+            android:summary="@string/speakerphone_switch_summary"
+            android:title="@string/speakerphone_switch" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="inverse_scanning"
-            android:persistent="true"
-            android:summary="@string/inverse_scanning_summary"
-            android:title="@string/inverse_scanning" />
+        <PreferenceScreen
+            android:key="morse_input_settings"
+            android:title="@string/morse_input_settings" >
 
-        <Preference
-            android:key="scan_delay_int"
-            android:persistent="true"
-            android:summary="@string/scan_speed_summary"
-            android:title="@string/scan_speed" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="morse_mode"
+                android:persistent="true"
+                android:summary="@string/morse_mode_summary"
+                android:title="@string/morse_mode" />
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="morse_show_hud"
+                android:persistent="true"
+                android:summary="@string/morse_show_hud_summary"
+                android:title="@string/morse_show_hud" />
+
+            <ca.idi.tecla.lib.ListPreference
+                android:defaultValue="0"
+                android:entries="@array/morse_key_mode_array"
+                android:entryValues="@array/morse_key_mode_values"
+                android:key="morse_key_mode"
+                android:persistent="true"
+                android:title="@string/morse_key_mode" />
+
+            <Preference
+                android:key="morse_time_unit"
+                android:persistent="true"
+                android:title="@string/morse_time_unit_title" />
+
+            <Preference
+                android:key="morse_repeat_int"
+                android:persistent="true"
+                android:summary="@string/mrepeat_frequency_summary"
+                android:title="@string/mrepeat_frequency" />
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:key="advanced_input_settings"
+            android:title="@string/advanced_input_settings" >
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="voice_input"
+                android:persistent="true"
+                android:summary="@string/pref_voice_input_summary"
+                android:title="@string/pref_voice_input" />
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="shield_temp_disconnect"
+                android:persistent="true"
+                android:summary="@string/shield_temp_disconnect_summary"
+                android:title="@string/shield_temp_disconnect" />
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="persistent_keyboard"
+                android:persistent="true"
+                android:summary="@string/persistent_keyboard_summary"
+                android:title="@string/persistent_keyboard" />
+        </PreferenceScreen>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -334,46 +338,48 @@
             android:summary="@string/auto_complete_summary"
             android:title="@string/auto_complete" />
     </PreferenceCategory>
-	<PreferenceCategory
-	    android:title="Other Devices Settings"
-	    android:key="other_device_settings"
-	    >
-	<PreferenceScreen
-	    android:key="desktop_settings"
-	    android:title="Desktop Settings"
-	    
-	    >
-	<CheckBoxPreference
-	    android:key="enable_desktop_connectivity"
-	    android:title="Connect to Desktop"
-	    android:defaultValue="true"
-	    android:summary="Enable connection to the desktop over WiFi"
-	    android:persistent="true"
-	    /> 
-	<CheckBoxPreference
-	    android:key="enable_events_relay"
-	    android:title="Send Shield Events"
-	    android:defaultValue="true"
-	    android:summary="Check to enable sending shield events to PC."
-	    android:persistent="true"
-	    />    
-	<Preference 
-	    android:key="set_password"
-	    android:title="Set password"
-	    android:summary="Set password for authentication.Should match the password on the desktop client."
-	    android:persistent="true"
-	    />   
-	<Preference android:key="set_disconnect_event"
-	    android:title="Set Disconnect Event"
-	    android:summary="Set the Shield event that will break the switch event relay allowing you to gain control of your android device"
-	    android:persistent="true"
-	    />     
-	<Preference android:key="set_dictation_event"
-	    android:title="Set Dictation Launching Event"
-	    android:summary="Set the Shield event that will start the dictation mode prompting you to talk.PC control will be lost temporarily."
-	    android:persistent="true"
-	    />     
-	        
-	</PreferenceScreen>	    
-	</PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="alternative_output_settings"
+        android:title="Alternative Output Settings" >
+
+        <PreferenceScreen
+            android:enabled="false"
+            android:key="desktop_settings"
+            android:title="Desktop Access Settings" >
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="enable_desktop_connectivity"
+                android:persistent="true"
+                android:summary="Enable connection to the desktop over WiFi"
+                android:title="Connect to Desktop" />
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="enable_events_relay"
+                android:persistent="true"
+                android:summary="Check to enable sending shield events to PC."
+                android:title="Send Shield Events" />
+
+            <Preference
+                android:key="set_password"
+                android:persistent="true"
+                android:summary="Set password for authentication.Should match the password on the desktop client."
+                android:title="Set password" />
+
+            <Preference
+                android:key="set_disconnect_event"
+                android:persistent="true"
+                android:summary="Set the Shield event that will break the switch event relay allowing you to gain control of your android device"
+                android:title="Set Disconnect Event" />
+
+            <Preference
+                android:key="set_dictation_event"
+                android:persistent="true"
+                android:summary="Set the Shield event that will start the dictation mode prompting you to talk.PC control will be lost temporarily."
+                android:title="Set Dictation Launching Event" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+
 </PreferenceScreen>

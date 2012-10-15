@@ -31,20 +31,21 @@ import android.view.inputmethod.EditorInfo;
 
 public class TeclaKeyboard extends Keyboard {
 
-	public static int KEYCODE_ANDROID =
-			TeclaApp.getInstance().getResources().getInteger(R.integer.key_android);
-	public static int KEYCODE_VOICE =
-			TeclaApp.getInstance().getResources().getInteger(R.integer.key_voice);
-	public static int KEYCODE_VARIANTS =
-			TeclaApp.getInstance().getResources().getInteger(R.integer.key_variants);
-	
     static final int KEYCODE_MORSE_DIT = 500;
     static final int KEYCODE_MORSE_DAH = 501;
     static final int KEYCODE_MORSE_SPACEKEY = 562;
     static final int KEYCODE_MORSE_DELKEY = 67;
-    static final int KEYCODE_REPEAT_LOCK = -303;
     static final int KEYCODE_SEND_TO_PC = -11;
     
+	public static int KEYCODE_ALTNAV =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_altnav);
+	public static int KEYCODE_VOICE =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_voice);
+	public static int KEYCODE_VARIANTS =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_variants);
+    public static final int KEYCODE_REPEAT_LOCK =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_repeat_lock);
+	
     private Drawable mShiftLockIcon;
     private Drawable mShiftLockPreviewIcon;
     private Drawable mOldShiftIcon;
@@ -54,7 +55,6 @@ public class TeclaKeyboard extends Keyboard {
     private Key mEnterKey;
     private Key mSpaceKey;
     private Key mCapsLockKey;
-    private Key mRepeatLockKey;
     private Key mSendtoPCKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
@@ -94,13 +94,10 @@ public class TeclaKeyboard extends Keyboard {
     protected Key createKeyFromXml(Resources res, Row parent, int x, int y, 
             XmlResourceParser parser) {
         Key key = new TeclaKey(res, parent, x, y, parser);
-        if (key.codes[0] == 10) {
+        int code = key.codes[0];
+        if (code == 10) {
             mEnterKey = key;
-        }
-        else if (key.codes[0] == KEYCODE_REPEAT_LOCK) {
-        	mRepeatLockKey = key;
-        }
-        else if (key.codes[0] == KEYCODE_SEND_TO_PC) {
+        } else if (code == KEYCODE_SEND_TO_PC) {
         	mSendtoPCKey = key;
         }
         return key;
@@ -199,10 +196,6 @@ public class TeclaKeyboard extends Keyboard {
         return mShiftState == SHIFT_LOCKED;
     }
     
-    void setRepeatLocked(boolean repeatLocked) {
-    	mRepeatLockKey.on = repeatLocked;
-    }
-
     @Override
     public boolean setShifted(boolean shiftState) {
         boolean shiftChanged = false;
@@ -361,12 +354,6 @@ public class TeclaKeyboard extends Keyboard {
 		return key.codes[0] == keycode? i : -1;
 	}
 	
-    boolean isRepeatLocked() {
-    	if (mRepeatLockKey != null)
-    		return mRepeatLockKey.on;
-    	else return false;
-    }
-
 	/**
 	 * Return the key with the specified keycode
 	 * @return the key or null if the keyboard doesn't have a key with the keycode provided
@@ -379,8 +366,8 @@ public class TeclaKeyboard extends Keyboard {
 		return null;
 	}
 	
-	public Key getAndroidKey() {
-		return getKeyFromKeyCode(KEYCODE_ANDROID);
+	public Key getAltNavKey() {
+		return getKeyFromKeyCode(KEYCODE_ALTNAV);
 	}
 	
 	public Key getVariantsKey() {
@@ -388,7 +375,7 @@ public class TeclaKeyboard extends Keyboard {
 	}
 	
 	public Key getRepeatLockKey() {
-		return getKeyFromKeyCode(KEYCODE_ANDROID);
+		return getKeyFromKeyCode(KEYCODE_REPEAT_LOCK);
 	}
 	
 	public Key getMorseSpaceKey() {
@@ -406,18 +393,25 @@ public class TeclaKeyboard extends Keyboard {
 	private void customInit() {
 		Key key = getVariantsKey();
 		if (key != null) {
-			key.on = TeclaApp.persistence.isVariantsOn();
+			key.on = TeclaApp.persistence.isVariantsKeyOn();
 		}
 		key = getRepeatLockKey();
 		if (key != null) {
-			key.on = false;
+			key.on = TeclaApp.persistence.isRepeatLockOn();
 		}
 	}
 
+	public void updateRepeatLockState() {
+		Key key = getRepeatLockKey();
+		if (key != null) {
+			key.on = TeclaApp.persistence.isRepeatLockOn();
+		}
+	}
+	
 	public void updateVariantsState() {
 		Key key = getVariantsKey();
 		if (key != null) {
-			key.on = TeclaApp.persistence.isVariantsOn();
+			key.on = TeclaApp.persistence.isVariantsKeyOn();
 		}
 	}
 	

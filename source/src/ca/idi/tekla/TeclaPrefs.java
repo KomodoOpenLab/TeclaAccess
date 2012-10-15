@@ -57,6 +57,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.text.AutoText;
@@ -100,6 +101,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
+	private PreferenceScreen mAllPreferences;
+	private PreferenceCategory mPredictionPreferences;
 	private ProgressDialog mProgressDialog;
 	private BluetoothAdapter mBluetoothAdapter;
 	private boolean mShieldFound, mConnectionCancelled;
@@ -133,8 +136,13 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		init();
+		// FIXME: Not yet supported preferences
+		mPredictionPreferences = (PreferenceCategory) findPreference("prediction_settings");
+		mPredictionPreferences.removePreference(findPreference("show_suggestions"));
+		mPredictionPreferences.removePreference(findPreference("auto_complete"));
+		mAllPreferences = (PreferenceScreen) findPreference("english_ime_settings");
+		mAllPreferences.removePreference(findPreference("alternative_output_settings"));
 		
 	}
 	
@@ -173,7 +181,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
 		
 		//Desktop 
-		final TeclaPrefs pref=this;	
+		final TeclaPrefs pref=this;
 		mConnectToPC=(CheckBoxPreference)findPreference(Persistence.CONNECT_TO_PC);
 		
 		mShieldRelay=(CheckBoxPreference)findPreference(Persistence.SEND_SHIELD_EVENTS);
@@ -270,8 +278,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		}
 
 		// If no voice apps available, disable voice input
-		if (!(TeclaApp.getInstance().isVoiceInputSupported() && 
-				TeclaApp.getInstance().isVoiceActionsInstalled())) {
+		if (!(TeclaApp.getInstance().isVoiceInputSupported())) {
 			if (mPrefVoiceInput.isChecked()) mPrefVoiceInput.setChecked(false);
 			mPrefVoiceInput.setEnabled(false);
 			mPrefVoiceInput.setSummary(R.string.no_voice_input_available);

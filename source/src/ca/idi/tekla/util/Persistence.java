@@ -16,9 +16,9 @@ public class Persistence {
 	// Deprecated preferences
 	//public static final String PREF_SCAN_DELAY_STRING = "scan_delay";
 	//public static final String PREF_SHIELD_VERSION = "shield_version";
+//	public static final String PREF_VARIANTS = "variants";
 
 	public static final String PREF_VOICE_INPUT = "voice_input";
-	public static final String PREF_VARIANTS = "variants";
 	public static final String PREF_VARIANTS_KEY = "variants_key";
 	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_MORSE_SHOW_HUD = "morse_show_hud";
@@ -80,7 +80,8 @@ public class Persistence {
 	public static final String SEND_SHIELD_EVENTS="enable_events_relay";
 	
 	
-	private boolean mScreenOn, mInverseScanningChanged, mVariantsShowing, mAndroidOn;
+	private boolean mScreenOn, mInverseScanningChanged, mVariantsKeyOn, mVariantsShowing;
+	private boolean mAltNavKeyboardOn, mRepeatLockOn, isRepeatingKey;
 	private static HashMap<String,String[]> mSwitchMap;
 	
 	private SharedPreferences shared_prefs;
@@ -91,7 +92,11 @@ public class Persistence {
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
 		mVariantsShowing = false;
-		mAndroidOn = false;
+		mAltNavKeyboardOn = false;
+		mVariantsKeyOn = false;
+		mRepeatLockOn = false;
+		isRepeatingKey = false;
+		mScreenOn = false;
 		mSwitchMap = new HashMap<String,String[]>();
 		
 	}
@@ -116,18 +121,36 @@ public class Persistence {
 		return shared_prefs.getBoolean(PREF_VARIANTS_KEY, false);
 	}
 	
-	public boolean isVariantsOn() {
-		return shared_prefs.getBoolean(PREF_VARIANTS, false);
+	public boolean isRepeatingKey() {
+		return isRepeatingKey;
 	}
 	
-	public void setVariantsOn() {
-		prefs_editor.putBoolean(PREF_VARIANTS, true);
-		prefs_editor.commit();
+	public void setRepeatingKey(boolean repeat) {
+		isRepeatingKey = repeat;
 	}
 
-	public void setVariantsOff() {
-		prefs_editor.putBoolean(PREF_VARIANTS, false);
-		prefs_editor.commit();
+	public boolean isRepeatLockOn() {
+		return mRepeatLockOn;
+	}
+	
+	public void setRepeatLockOn() {
+		mRepeatLockOn = true;
+	}
+
+	public void setRepeatLockOff() {
+		mRepeatLockOn = false;
+	}
+	
+	public boolean isVariantsKeyOn() {
+		return mVariantsKeyOn;
+	}
+	
+	public void setVariantsKeyOn() {
+		mVariantsKeyOn = true;
+	}
+
+	public void setVariantsKeyOff() {
+		mVariantsKeyOn = false;
 	}
 	
 	public void setVariantsShowing (boolean showing) {
@@ -138,12 +161,12 @@ public class Persistence {
 		return mVariantsShowing;
 	}
 
-	public boolean isAndroidOn () {
-		return mAndroidOn;
+	public boolean isAltNavKeyboardOn () {
+		return mAltNavKeyboardOn;
 	}
 
-	public void setAndroidOn (boolean on) {
-		mAndroidOn = on;
+	public void setAltNavKeyboardOn (boolean state) {
+		mAltNavKeyboardOn = state;
 	}
 
 	public boolean isPersistentKeyboardEnabled() {
