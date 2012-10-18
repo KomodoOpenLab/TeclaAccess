@@ -72,7 +72,7 @@
             android:keyEdgeFlags="right"
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -123,7 +123,7 @@
             android:keyEdgeFlags="right"
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -171,7 +171,7 @@
             android:keyEdgeFlags="right"
             android:keyWidth="15%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row android:rowEdgeFlags="bottom" >
@@ -208,7 +208,7 @@
             android:keyEdgeFlags="right"
             android:keyWidth="20%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
 

@@ -51,7 +51,7 @@
             android:keyEdgeFlags="right"
             android:keyLabel="j" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_normal" >
@@ -79,7 +79,7 @@
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
             android:horizontalGap="5%p"
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_voice" >
@@ -107,7 +107,7 @@
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
             android:horizontalGap="5%p"
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row android:keyboardMode="@+id/mode_variants" >
@@ -138,7 +138,7 @@
             android:keyEdgeFlags="right"
             android:keyLabel="áž" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -171,7 +171,7 @@
             android:keyIcon="@drawable/sym_keyboard_delete"
             android:keyWidth="15%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -208,7 +208,7 @@
             android:keyEdgeFlags="right"
             android:keyWidth="20%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -250,7 +250,7 @@
             android:keyEdgeFlags="right"
             android:keyWidth="13%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row
@@ -287,7 +287,7 @@
             android:keyEdgeFlags="right"
             android:keyWidth="20%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
 

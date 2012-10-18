@@ -43,7 +43,7 @@
             android:keyEdgeFlags="right"
             android:keyLabel="}" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -68,7 +68,7 @@
             android:keyEdgeFlags="right"
             android:keyLabel="]" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row>
@@ -103,7 +103,7 @@
             android:keyIcon="@drawable/sym_keyboard_delete"
             android:keyWidth="15%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
     <Row android:rowEdgeFlags="bottom" >
@@ -138,7 +138,7 @@
             android:keyIcon="@drawable/sym_keyboard_return"
             android:keyWidth="20%p" />
         <Key
-            android:codes="-7"
+            android:codes="@integer/key_stepout"
             android:keyWidth="0%p" />
     </Row>
 

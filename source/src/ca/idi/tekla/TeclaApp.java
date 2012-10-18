@@ -6,6 +6,7 @@ package ca.idi.tekla;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -13,6 +14,7 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -29,6 +31,7 @@ import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;
@@ -47,6 +50,9 @@ public class TeclaApp extends Application {
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
 	//IME CONSTANTS
+	public static final String PACKAGE_VOICE_SEARCH = "com.google.android.voicesearch";
+//	public static final String PACKAGE_QUICKSEARCHBOX = "com.android.quicksearchbox";
+	public static final String PACKAGE_QUICKSEARCHBOX = "com.google.android.googlequicksearchbox";
 	public static final String ACTION_ENABLE_MORSE = "ca.idi.tekla.ime.action.ENABLE_MORSE";
 	public static final String ACTION_DISABLE_MORSE = "ca.idi.tekla.ime.action.DISABLE_MORSE";
 	public static final String ACTION_SHOW_IME = "ca.idi.tekla.ime.action.SHOW_IME";
@@ -192,6 +198,29 @@ public class TeclaApp extends Application {
 		
 	};
 	
+	/**
+	 * A recursive call to force the soft IME open without blocking the UI
+	 * @param delay the time after which the call is sent
+	 * TODO: This method should be moved to the TeclaApp class
+	 */
+	public void callShowSoftIMEWatchDog(int delay) {
+		mHandler.removeCallbacks(mShowSoftIMEWatchdog);
+		mHandler.postDelayed(mShowSoftIMEWatchdog, delay);
+	}
+	
+	private Runnable mShowSoftIMEWatchdog = new Runnable () {
+
+		public void run() {
+			if (!TeclaApp.highlighter.isSoftIMEShowing()) {
+				// If IME View still not showing...
+				// We are force-openning the soft IME through an intent since
+				//it seems to be the only way to make it work
+				TeclaApp.getInstance().requestShowIMEView();
+			}
+		}
+		
+	};
+
 	public void enabledMorseIME() {
 		if (DEBUG) Log.d(TAG, "Broadcasting enable morse IME intent...");
 		sendBroadcast(new Intent(ACTION_ENABLE_MORSE));
@@ -311,8 +340,7 @@ public class TeclaApp extends Application {
 		// Check to see if voice actions is installed
 		Intent intent = new Intent();
 		intent.setComponent(new
-		    ComponentName("com.google.android.voicesearch",
-		                  "com.google.android.voicesearch.RecognitionActivity"));
+		    ComponentName(PACKAGE_VOICE_SEARCH, PACKAGE_VOICE_SEARCH + ".RecognitionActivity"));
 		if (mPackageManager.queryIntentActivities(intent, 0).size() != 0) {
 			return true;
 		}
@@ -338,23 +366,31 @@ public class TeclaApp extends Application {
 		Log.d(TAG, "Starting voice actions...");
 		Intent intent = new Intent();
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setAction(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_LAUNCHER);
 		intent.setComponent(new
-		    ComponentName("com.google.android.voicesearch",
-		                  "com.google.android.voicesearch.RecognitionActivity"));
+		    ComponentName(PACKAGE_VOICE_SEARCH, PACKAGE_VOICE_SEARCH + ".RecognitionActivity"));
 		try {
 			startActivity(intent);
-		} catch (ActivityNotFoundException e) {
-			Log.e(TeclaApp.TAG, "Voice Actions not installed");
-            TeclaApp.getInstance().showToast(R.string.no_voice_actions_installed);
+		} catch (ActivityNotFoundException e1) {
+			Log.e(TeclaApp.TAG, "Voice Search not installed");
+			intent.setComponent(new
+				    ComponentName(PACKAGE_QUICKSEARCHBOX, PACKAGE_QUICKSEARCHBOX + ".VoiceSearchActivity"));
+			try {
+				startActivity(intent);
+			} catch (ActivityNotFoundException e2) {
+				Log.e(TeclaApp.TAG, "Quick Search Box not available");
+				TeclaApp.getInstance().showToast(R.string.no_voice_actions_installed);
+			}
 		}
 	}
 	
-	public void broadcastVoiceCommand() {
-		Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
-	}
-
+//	public void startVoiceCommand() {
+//		Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND);
+//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		startActivity(intent);
+//	}
+//
 	public void broadcastInputViewCreated() {
 		synchronized(this) {
 			sendBroadcast(new Intent(ACTION_IME_CREATED));
@@ -456,7 +492,6 @@ public class TeclaApp extends Application {
 
 	public void showToast(int resid) {
 		Toast.makeText(this, resid, Toast.LENGTH_LONG).show();
-	}
-	
+	}	
 	
 }

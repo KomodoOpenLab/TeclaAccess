@@ -216,7 +216,7 @@
 
     <!-- Option to enable accented characters -->
     <string name="pref_variants_key">Show accents key</string>
-    <string name="pref_variants_key_summary">Adds a key to enable accents and other character variants</string>
+    <string name="pref_variants_key_summary">Adds a sticky key that enables accented characters and other variants</string>
 
     <!-- Tecla: IME Preferences Strings -->
     <!-- Category title for tecla shield -->
@@ -226,7 +226,7 @@
     <string name="shield_connect">Connect to Tecla Shield</string>
     <string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
     <string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
-    <string name="shield_connect_summary">Establishes a connection to a nearby Tecla Shield</string>
+    <string name="shield_connect_summary">Attempts a connection to a nearby Tecla Shield</string>
 
 	<!-- Option to temporarily disconnect Tecla shield -->
 	<string name="shield_temp_disconnect">Temporarily Disconnect Tecla Shield</string>
@@ -237,8 +237,8 @@
     <string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
 
     <!-- Option to enable speakerphone switch mode -->
-    <string name="speakerphone_switch">Use speakerphone for voice calls</string>
-    <string name="speakerphone_switch_summary">Automatically turn on speakerphone when voice calls start</string>
+    <string name="speakerphone_switch">Always use speakerphone</string>
+    <string name="speakerphone_switch_summary">Turn on speakerphone for voice calls, voice commands and voice input.</string>
 
     <!-- Option to show the UI navigation keyboard on the screen -->
     <string name="persistent_keyboard">Show navigation keyboard</string>
@@ -247,8 +247,8 @@
     <!-- Option to autohide the UI navigation keyboard on the screen -->
     <string name="autohide_timeout">Navigation keyboard timeout</string>
     <string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
-    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
-
+    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>    
+    
     <string-array name="autohide_strings">
         <item>Immediately</item>
         <item>After 4 seconds</item>
@@ -300,7 +300,8 @@
     <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
 
     <!-- Category title for Morse settings -->
-    <string name="morse_input_category">Morse settings</string>
+    <string name="morse_input_settings">Morse input settings</string>
+    <string name="morse_settings_summary">Adjust Morse input mode and preferences</string>
     
     <!-- Option to enable Morse input method -->
     <string name="morse_mode">Enable Morse input</string>
@@ -350,7 +351,8 @@
 
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
-
+    <string name="scanning_settings_summary">Adjust the scanning mode and speed</string>
+    
     <!-- Option to enable self-scanning -->
     <string name="self_scanning">Enable self-scanning</string>
     <string name="self_scanning_summary">Scans the keyboard automatically</string>
@@ -390,6 +392,8 @@
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
 
+    <string name="advanced_input_settings">Advanced input settings</string>
+    
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
     <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
@@ -400,11 +404,11 @@
     <string name="morse_disabled">Morse input method disabled</string>
     <string name="fullscreen_enabled">Fullscreen switch mode enabled</string>
     <string name="fullscreen_disabled">Fullscreen switch mode disabled</string>
-    <string name="tecla_notselected">Tecla keyboard is not selected!</string>
+    <string name="tecla_notselected">Please select Tecla Access as your default input method before adjusting settings.</string>
     <string name="shield_connected">Tecla Shield Connected</string>
     <string name="shield_disconnected">Tecla Shield disconnected</string>
     <string name="no_voice_input_available">No speech recognition applications available!</string>
-    <string name="no_voice_actions_installed">Voice Actions is not installed!</string>
+    <string name="no_voice_actions_installed">Voice Search is not installed!</string>
 
     <!-- Tecla: Titles and labels -->
     <string name="sep_label">Tecla Shield Status</string>
