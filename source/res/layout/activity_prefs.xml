@@ -50,6 +50,7 @@
             android:defaultValue="false"
             android:key="shield_connect"
             android:persistent="true"
+            android:summary="@string/shield_connect_summary"
             android:title="@string/shield_connect" />
 
         <PreferenceScreen
@@ -215,6 +216,7 @@
 
         <PreferenceScreen
             android:key="scanning_settings"
+            android:summary="@string/scanning_settings_summary"
             android:title="@string/scanning_category" >
 
             <CheckBoxPreference
@@ -238,15 +240,9 @@
                 android:title="@string/scan_speed" />
         </PreferenceScreen>
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="speakerphone_switch"
-            android:persistent="true"
-            android:summary="@string/speakerphone_switch_summary"
-            android:title="@string/speakerphone_switch" />
-
         <PreferenceScreen
             android:key="morse_input_settings"
+            android:summary="@string/morse_settings_summary"
             android:title="@string/morse_input_settings" >
 
             <CheckBoxPreference
@@ -286,6 +282,13 @@
         <PreferenceScreen
             android:key="advanced_input_settings"
             android:title="@string/advanced_input_settings" >
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="speakerphone_switch"
+                android:persistent="true"
+                android:summary="@string/speakerphone_switch_summary"
+                android:title="@string/speakerphone_switch" />
 
             <CheckBoxPreference
                 android:defaultValue="true"

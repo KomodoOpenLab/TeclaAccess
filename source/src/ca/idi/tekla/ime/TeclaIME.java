@@ -581,12 +581,13 @@ public class TeclaIME extends InputMethodService
 		}
 	}
 
+	
 	/**
 	 * Hardware key down!
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
+		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
 			// FIXME: Tecla - Prevent soft input method from consuming the back key
@@ -1965,8 +1966,10 @@ public class TeclaIME extends InputMethodService
 	 */
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
-		if (TeclaApp.persistence.isRepeatingKey()) stopRepeatingKey();
-
+		if (switchEvent.isAnyPressed()) {
+			if (TeclaApp.persistence.isRepeatingKey()) stopRepeatingKey();
+		}
+		
 		//Emulator issue (temporary fix): if typing too fast, or holding a long press
 		//while in auto-release mode, some switch events are null
 		if (switchEvent.toString() == null) {

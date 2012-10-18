@@ -51,6 +51,19 @@ public class SwitchEvent {
 		return false;
 	}
 		
+	public boolean isAnyPressed() {
+		if (isPressed(SWITCH_E1)
+				|| isPressed(SWITCH_E2)
+				|| isPressed(SWITCH_J1)
+				|| isPressed(SWITCH_J2)
+				|| isPressed(SWITCH_J3)
+				|| isPressed(SWITCH_J4)
+				) {
+			return true;
+		}
+		return false;
+	}
+		
 	public boolean isReleased(int bitmask) {
 		if ((switch_changes & bitmask) == bitmask) {
 			// Switch changed
