@@ -415,4 +415,20 @@
     <string name="voice_input">Tecla Voice Input</string>
     <string name="configuring_tecla">Configuring Tecla…</string>
 
+       <!--  Contributors labels -->
+    <string name="contributors">Contributors</string>
+    <string name="contributors_summary">View contributors to the project</string>
+	
+    <!--  Contributor names and descriptions -->
+    <string name="contributor_title_text1">Jorge Silva</string>
+    <string name="contributor_title_text2">Maurici Mesa</string>
+    <string name="contributor_title_text3">Kelvin Mak</string>
+    <string name="contributor_title_text4">Darcy Mcgray</string>
+    <string name="contributor_title_text5">John Smith</string>
+    <string name="contributor_label_text1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec lacus orci, faucibus vitae aliquam eget, gravida at lectus. Mauris sed arcu vel purus dictum vulputate nec non nunc. Suspendisse dapibus libero sit amet odio ultrices dapibus adipiscing purus semper. Etiam at lacus eget elit vulputate mattis. Proin nec tellus nec turpis lobortis ultricies. Vivamus ultricies risus non ipsum fringilla sit amet facilisis tellus tempus. Aliquam erat volutpat. Vestibulum ac enim neque, at vulputate metus. Cras suscipit tellus non orci vehicula et tristique metus iaculis. Pellentesque et lorem libero, ut tincidunt orci. Duis condimentum massa at tortor hendrerit dignissim. Vestibulum ut risus et massa laoreet tristique.</string>
+    <string name="contributor_label_text2">Proin eros dolor, pellentesque nec vehicula et, consequat vitae est. Sed et tincidunt mauris. Proin vel elit tempus enim feugiat ultricies sed non turpis. Morbi egestas ullamcorper leo, quis bibendum leo auctor sit amet. Maecenas sem nunc, interdum interdum ornare et, interdum a leo. Sed feugiat, justo nec congue sodales, leo velit gravida nulla, sit amet suscipit quam nisl ut justo. Nunc tincidunt tortor sit amet enim bibendum rutrum. Etiam fringilla leo bibendum felis laoreet facilisis.</string>
+    <string name="contributor_label_text3">Donec congue tincidunt ornare. Duis a lectus sit amet orci ornare ornare. Duis varius libero eget velit molestie consequat. Nulla facilisi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus pellentesque sollicitudin urna ac volutpat. Nullam malesuada nisl ut dui ullamcorper rhoncus. Phasellus blandit accumsan nisi at viverra.</string>
+    <string name="contributor_label_text4">Phasellus a nunc orci, non eleifend tellus. Etiam et nunc tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse leo ipsum, auctor vel hendrerit id, blandit ac est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec pulvinar euismod lorem, non condimentum dui feugiat et. Nulla laoreet neque a metus tincidunt pretium. Quisque venenatis quam sit amet dui congue accumsan. Aliquam erat volutpat. Sed eget lorem et est viverra commodo. Sed ut ultrices felis. Nam posuere egestas nunc sed viverra. Sed at quam et ligula vehicula tincidunt nec at justo. Morbi id ipsum quis risus imperdiet imperdiet. Nulla consequat tempor magna, sit amet imperdiet risus adipiscing nec.</string>
+    <string name="contributor_label_text5">Nullam sed urna sed turpis gravida pretium quis nec risus. Mauris eget feugiat orci. Curabitur non risus tortor, ornare feugiat diam. Donec non sem urna, id facilisis ante. Quisque ullamcorper bibendum auctor. Mauris quis luctus nisi. In hac habitasse platea dictumst. Nam velit eros, malesuada at pharetra sed, mattis eu nunc.</string>    
+    
 </resources>

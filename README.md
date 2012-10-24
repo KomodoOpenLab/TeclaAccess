@@ -10,7 +10,7 @@ Getting Involved
 There are many ways to contribute to the [Tecla Access App for Android](https://play.google.com/store/apps/details?id=ca.idi.tekla). Here are some ideas:
 
 ### Code
-In order to start contributing code to the Tecla Access project, follow the steps outlined in the ['Contributing Code' page](https://github.com/jorgesilva/TeclaAccess/wiki/Contributing-Code) at https://github.com/jorgesilva/TeclaAccess/wiki/Contributing-Code
+In order to start contributing code to the Tecla Access project, follow the steps outlined in the ['Contributing Code' page](https://github.com/idrc/TeclaAccess/wiki/Contributing-Code) at https://github.com/idrc/TeclaAccess/wiki/Contributing-Code
 6. Create a new Android **library** project in Eclipse named *Tecla Access SDK* 
 6a.If you have Eclipse 3.6 (Helios) or older, you may not have a **library** project option. In that case,just import the *Tecla Access SDK* project like a normal project, then right click on the project -> Properties -> Android and make sure **Is Library** is checked.
 

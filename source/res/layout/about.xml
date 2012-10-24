@@ -1,0 +1,74 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	    
+	    <TextView
+	        android:id="@+id/title1"
+	        android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="30dp"
+	        
+	        android:text="@string/contributor_title_text1"/>
+		<TextView
+		    android:id="@+id/label1"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/contributor_label_text1"/>	
+	
+		<TextView
+		    android:id="@+id/title2"
+		    android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="30dp"
+	        
+	        android:text="@string/contributor_title_text2"/>
+		<TextView
+		    android:id="@+id/label2"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/contributor_label_text2"/>		
+	
+		<TextView
+		    android:id="@+id/title3"
+		    android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="30dp"
+	        
+	        android:text="@string/contributor_title_text3"/>
+		<TextView
+		    android:id="@+id/label3"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/contributor_label_text3"/>		
+		
+		<TextView
+		    android:id="@+id/title4"
+		    android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="30dp"
+	        android:text="@string/contributor_title_text4"/>
+		<TextView
+		    android:id="@+id/label4"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/contributor_label_text4"/>
+		
+		<TextView
+		    android:id="@+id/title5"
+		    android:gravity="center_vertical"
+	        android:layout_width="match_parent"
+	        android:layout_height="30dp"        
+	        android:text="@string/contributor_title_text5"/>
+		<TextView
+		    android:id="@+id/label5"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/contributor_label_text5"/>
+	</LinearLayout>
+	
+</ScrollView>
