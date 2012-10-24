@@ -99,6 +99,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
+	private Preference mContributors;
 	private CheckBoxPreference mPrefConnectToShield;
 	private CheckBoxPreference mPrefTempDisconnect;
 	private CheckBoxPreference mPrefFullScreenSwitch;
@@ -185,7 +186,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mProgressDialog = new ProgressDialog(this);
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
-		
+		mContributors=(Preference) findPreference("contributors");
+		mContributors.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+		    public boolean onPreferenceClick(Preference preference) {
+		    	startActivity(new Intent("ca.idi.tekla.about"));
+		        return true; 
+		    }
+		});
 		//Desktop 
 		final TeclaPrefs mTeclaPrefs=this;
 		mConnectToPC=(CheckBoxPreference)findPreference(Persistence.CONNECT_TO_PC);

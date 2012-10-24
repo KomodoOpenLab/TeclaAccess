@@ -385,4 +385,13 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="about_pages"
+        android:title="About" >
+     	<Preference
+            android:key="contributors"
+            android:persistent="true"
+            android:summary="@string/contributors_summary"
+            android:title="@string/contributors" />
+    </PreferenceCategory>
 </PreferenceScreen>
