@@ -21,93 +21,108 @@
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:horizontalGap="0px"
     android:keyHeight="@dimen/key_height"
-    android:keyWidth="10%p"
+    android:keyWidth="12%p"
     android:verticalGap="0px" >
 
     <Row
         android:keyboardMode="@+id/mode_normal"
         android:rowEdgeFlags="bottom" >
         <Key
-            android:codes="-4"
-            android:iconPreview="@drawable/sym_keyboard_feedback_show"
-            android:keyEdgeFlags="left"
-            android:keyIcon="@drawable/sym_keyboard_show"
-            android:keyWidth="15%p" />
-        <Key
-            android:codes="4"
+            android:codes="@integer/key_back"
             android:iconPreview="@drawable/nav_keyboard_feedback_back"
-            android:keyIcon="@drawable/nav_keyboard_back"
-            android:keyWidth="15%p" />
+            android:keyIcon="@drawable/nav_keyboard_back" />
         <Key
-            android:codes="19"
+            android:codes="@integer/key_repeat_lock"
+            android:iconPreview="@drawable/nav_keyboard_feedback_repeat"
+            android:isModifier="true"
+            android:isSticky="true"
+            android:keyIcon="@drawable/nav_keyboard_repeat"
+            android:keyWidth="14%p" />
+        <Key
+            android:codes="@integer/key_dpad_up"
             android:iconPreview="@drawable/nav_keyboard_feedback_up"
-            android:keyIcon="@drawable/nav_keyboard_up"
-            android:keyWidth="14%p" />
+            android:keyIcon="@drawable/nav_keyboard_up" />
         <Key
-            android:codes="20"
+            android:codes="@integer/key_dpad_down"
             android:iconPreview="@drawable/nav_keyboard_feedback_down"
-            android:keyIcon="@drawable/nav_keyboard_down"
-            android:keyWidth="14%p" />
+            android:keyIcon="@drawable/nav_keyboard_down" />
         <Key
-            android:codes="21"
+            android:codes="@integer/key_dpad_left"
             android:iconPreview="@drawable/nav_keyboard_feedback_left"
-            android:keyIcon="@drawable/nav_keyboard_left"
-            android:keyWidth="14%p" />
+            android:keyIcon="@drawable/nav_keyboard_left" />
         <Key
-            android:codes="22"
+            android:codes="@integer/key_dpad_right"
             android:iconPreview="@drawable/nav_keyboard_feedback_right"
-            android:keyIcon="@drawable/nav_keyboard_right"
-            android:keyWidth="14%p" />
+            android:keyIcon="@drawable/nav_keyboard_right" />
         <Key
-            android:codes="23"
-            android:keyLabel="OK"
+            android:codes="@integer/key_dpad_center"
+            android:keyLabel="OK" />
+        <Key
+            android:codes="@integer/key_altnav"
+            android:iconPreview="@drawable/nav_keyboard_feedback_android"
             android:keyEdgeFlags="right"
+            android:keyIcon="@drawable/nav_keyboard_android"
             android:keyWidth="14%p" />
     </Row>
     <Row
-        android:keyboardMode="@+id/mode_voice"
+        android:keyWidth="16%p"
+        android:keyboardMode="@+id/mode_altnav"
         android:rowEdgeFlags="bottom" >
         <Key
             android:codes="@integer/key_done"
             android:iconPreview="@drawable/sym_keyboard_feedback_show"
-            android:keyIcon="@drawable/sym_keyboard_show"
             android:keyEdgeFlags="left"
-            android:keyWidth="14%p" />
-        <Key
-            android:codes="@integer/key_back"
-            android:iconPreview="@drawable/nav_keyboard_feedback_back"
-            android:keyIcon="@drawable/nav_keyboard_back"
-            android:keyWidth="13%p" />
-        <Key
-            android:codes="@integer/key_dpad_up"
-            android:iconPreview="@drawable/nav_keyboard_feedback_up"
-            android:keyIcon="@drawable/nav_keyboard_up"
-            android:keyWidth="12%p" />
-        <Key
-            android:codes="@integer/key_dpad_down"
-            android:iconPreview="@drawable/nav_keyboard_feedback_down"
-            android:keyIcon="@drawable/nav_keyboard_down"
-            android:keyWidth="12%p" />
-        <Key
-            android:codes="@integer/key_dpad_left"
-            android:iconPreview="@drawable/nav_keyboard_feedback_left"
-            android:keyIcon="@drawable/nav_keyboard_left"
-            android:keyWidth="12%p" />
-        <Key
-            android:codes="@integer/key_dpad_right"
-            android:iconPreview="@drawable/nav_keyboard_feedback_right"
-            android:keyIcon="@drawable/nav_keyboard_right"
-            android:keyWidth="12%p" />
-        <Key
-            android:codes="@integer/key_dpad_center"
-            android:keyLabel="OK"
-            android:keyWidth="12%p" />
+            android:keyIcon="@drawable/sym_keyboard_show"
+            android:keyWidth="20%p" />
         <Key
             android:codes="@integer/key_voice"
             android:iconPreview="@drawable/sym_keyboard_feedback_mic"
-            android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyIcon="@drawable/sym_keyboard_mic" />
+        <Key
+            android:codes="@integer/key_voldown"
+            android:iconPreview="@drawable/nav_keyboard_feedback_voldown"
+            android:keyIcon="@drawable/nav_keyboard_voldown"
+            android:keyWidth="17%p" />
+        <Key
+            android:codes="@integer/key_volup"
+            android:iconPreview="@drawable/nav_keyboard_feedback_volup"
+            android:keyIcon="@drawable/nav_keyboard_volup"
+            android:keyWidth="17%p" />
+        <!--
+             <Key
+            android:isSticky="true"
+            android:codes="@integer/key_mute"
+            android:keyLabel="M" />
+        -->
+        <Key
+            android:codes="@integer/key_search"
+            android:iconPreview="@drawable/key_feedback_search"
+            android:keyIcon="@drawable/key_search" />
+        <Key
+            android:codes="@integer/key_altnav"
+            android:iconPreview="@drawable/nav_keyboard_feedback_android"
             android:keyEdgeFlags="right"
-            android:keyWidth="13%p" />
-        </Row>
+            android:keyIcon="@drawable/nav_keyboard_android_on"
+            android:keyWidth="14%p" />
+    </Row>
+    <!--
+             <Key
+            android:codes="@integer/key_dictation"
+            android:iconPreview="@drawable/sym_keyboard_feedback_mic"
+            android:keyIcon="@drawable/sym_keyboard_mic"
+            android:keyWidth="25%p" />
+        <Key
+            android:codes="@integer/key_sendto_pc"
+            android:isSticky="true"
+            android:keyEdgeFlags="right"
+            android:keyLabel="Send to PC"
+            android:keyWidth="50%p" />
+        <Key
+            android:codes="@integer/hide_secnav_kbd"
+            android:iconPreview="@drawable/sym_keyboard_feedback_done"
+            android:keyEdgeFlags="left"
+            android:keyIcon="@drawable/sym_keyboard_done"
+            android:keyWidth="12%p" />
+    -->
 
 </Keyboard>

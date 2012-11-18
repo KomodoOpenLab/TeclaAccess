@@ -31,23 +31,31 @@ import android.view.inputmethod.EditorInfo;
 
 public class TeclaKeyboard extends Keyboard {
 
-	public static int KEYCODE_VOICE = -202;
-	public static int KEYCODE_VARIANTS = -222;
-	
     static final int KEYCODE_MORSE_DIT = 500;
     static final int KEYCODE_MORSE_DAH = 501;
     static final int KEYCODE_MORSE_SPACEKEY = 562;
-    static final int KEYCODE_MORSE_CAPSKEY = 559;
     static final int KEYCODE_MORSE_DELKEY = 67;
+    static final int KEYCODE_SEND_TO_PC = -11;
     
+	public static int KEYCODE_ALTNAV =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_altnav);
+	public static int KEYCODE_VOICE =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_voice);
+	public static int KEYCODE_VARIANTS =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_variants);
+    public static final int KEYCODE_REPEAT_LOCK =
+			TeclaApp.getInstance().getResources().getInteger(R.integer.key_repeat_lock);
+	
     private Drawable mShiftLockIcon;
     private Drawable mShiftLockPreviewIcon;
     private Drawable mOldShiftIcon;
     private Drawable mOldShiftPreviewIcon;
+    private Drawable mOldRepeatIcon;
     private Key mShiftKey;
     private Key mEnterKey;
     private Key mSpaceKey;
-	private Key mCapsLockKey;
+    private Key mCapsLockKey;
+    private Key mSendtoPCKey;
     private static final int SHIFT_OFF = 0;
     private static final int SHIFT_ON = 1;
     private static final int SHIFT_LOCKED = 2;
@@ -60,7 +68,9 @@ public class TeclaKeyboard extends Keyboard {
         this(context, xmlLayoutResId, 0);
         customInit();
     }
-
+    public Key getSendToPCKey(){
+    	return mSendtoPCKey;
+    }
     public TeclaKeyboard(Context context, int xmlLayoutResId, int mode) {
         super(context, xmlLayoutResId, mode);
         Resources res = context.getResources();
@@ -70,7 +80,7 @@ public class TeclaKeyboard extends Keyboard {
                 mShiftLockPreviewIcon.getIntrinsicWidth(),
                 mShiftLockPreviewIcon.getIntrinsicHeight());
         sSpacebarVerticalCorrection = res.getDimensionPixelOffset(
-                R.dimen.spacebar_vertical_correction);
+                R.dimen.spacebar_vertical_correction); 
         customInit();
     }
 
@@ -84,36 +94,19 @@ public class TeclaKeyboard extends Keyboard {
     protected Key createKeyFromXml(Resources res, Row parent, int x, int y, 
             XmlResourceParser parser) {
         Key key = new TeclaKey(res, parent, x, y, parser);
-        if (key.codes[0] == 10) {
+        int code = key.codes[0];
+        if (code == 10) {
             mEnterKey = key;
-        }
-        else if (key.codes[0] == KEYCODE_MORSE_SPACEKEY) {
-			mSpaceKey = key;
-        }
-        else if (key.codes[0] == KEYCODE_MORSE_CAPSKEY) {
-        	mCapsLockKey = key;
+        } else if (code == KEYCODE_SEND_TO_PC) {
+        	mSendtoPCKey = key;
         }
         return key;
     }
     
-    /**
-     * Returns a reference to the Morse space key
-     * (Morse mode only)
-     * @return
-     */
-	public Key getSpaceKey() {
-		return this.mSpaceKey;
+	public Key getSendtoPCKey() {
+		return this.mSendtoPCKey;
 	}
-
-	/**
-	 * Returns a reference to the Morse Caps Lock key
-	 * (Morse mode only)
-	 * @return
-	 */
-	public Key getCapsLockKey() {
-		return this.mCapsLockKey;
-	}
-    
+   
     void setImeOptions(Resources res, int mode, int options) {
         if (mEnterKey != null) {
             // Reset some of the rarely used attributes.
@@ -224,7 +217,7 @@ public class TeclaKeyboard extends Keyboard {
         }
         return shiftChanged;
     }
-    
+        
     @Override
     public boolean isShifted() {
         if (mShiftKey != null) {
@@ -365,7 +358,7 @@ public class TeclaKeyboard extends Keyboard {
 	 * Return the key with the specified keycode
 	 * @return the key or null if the keyboard doesn't have a key with the keycode provided
 	 */
-	public Key getKeyFromCode(int keycode) {
+	public Key getKeyFromKeyCode(int keycode) {
 		int index = getKeyIndexFromKeyCode(keycode);
 		if (index > -1) {
 			return getKeys().get(index);
@@ -373,21 +366,52 @@ public class TeclaKeyboard extends Keyboard {
 		return null;
 	}
 	
+	public Key getAltNavKey() {
+		return getKeyFromKeyCode(KEYCODE_ALTNAV);
+	}
+	
 	public Key getVariantsKey() {
-		return getKeyFromCode(TeclaKeyboard.KEYCODE_VARIANTS);
+		return getKeyFromKeyCode(KEYCODE_VARIANTS);
+	}
+	
+	public Key getRepeatLockKey() {
+		return getKeyFromKeyCode(KEYCODE_REPEAT_LOCK);
+	}
+	
+	public Key getMorseSpaceKey() {
+		return getKeyFromKeyCode(KEYCODE_MORSE_SPACEKEY);
+	}
+	
+	public int getMorseSpaceKeyIndex() {
+		return getKeyIndexFromKeyCode(KEYCODE_MORSE_SPACEKEY);
+	}
+	
+	public int getShiftKeyIndex() {
+		return getKeyIndexFromKeyCode(Keyboard.KEYCODE_SHIFT);
 	}
 
 	private void customInit() {
 		Key key = getVariantsKey();
 		if (key != null) {
-			key.on = TeclaApp.persistence.isVariantsOn();
+			key.on = TeclaApp.persistence.isVariantsKeyOn();
+		}
+		key = getRepeatLockKey();
+		if (key != null) {
+			key.on = TeclaApp.persistence.isRepeatLockOn();
 		}
 	}
 
+	public void updateRepeatLockState() {
+		Key key = getRepeatLockKey();
+		if (key != null) {
+			key.on = TeclaApp.persistence.isRepeatLockOn();
+		}
+	}
+	
 	public void updateVariantsState() {
 		Key key = getVariantsKey();
 		if (key != null) {
-			key.on = TeclaApp.persistence.isVariantsOn();
+			key.on = TeclaApp.persistence.isVariantsKeyOn();
 		}
 	}
 	

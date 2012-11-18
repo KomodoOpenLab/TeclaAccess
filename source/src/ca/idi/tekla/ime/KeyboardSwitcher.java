@@ -40,6 +40,7 @@ public class KeyboardSwitcher {
     public static final int MODE_1X9 = 14;
     public static final int MODE_1X10 = 15;
     public static final int MODE_MORSE = 16;
+    public static final int MODE_SECNAV_VOICE = 17;
     
     public static final int MODE_TEXT_QWERTY = 0;
     public static final int MODE_TEXT_ALPHA = 1;
@@ -51,13 +52,14 @@ public class KeyboardSwitcher {
     public static final int KEYBOARDMODE_IM = R.id.mode_im;
     public static final int KEYBOARDMODE_VOICE = R.id.mode_voice;
     public static final int KEYBOARDMODE_VARIANTS = R.id.mode_variants;
+    public static final int KEYBOARDMODE_ALTNAV = R.id.mode_altnav;
     
     private static final int SYMBOLS_MODE_STATE_NONE = 0;
     private static final int SYMBOLS_MODE_STATE_BEGIN = 1;
     private static final int SYMBOLS_MODE_STATE_SYMBOL = 2;
     
-    TeclaKeyboardView mIMEView;
-    TeclaIME mContext;
+    private TeclaKeyboardView mIMEView;
+    private TeclaIME mContext;
     
     private KeyboardId mSymbolsId;
     private KeyboardId mSymbolsShiftedId;
@@ -168,6 +170,7 @@ public class KeyboardSwitcher {
         mIMEView.setKeyboard(keyboard);
         keyboard.setShifted(false);
         keyboard.setShiftLocked(keyboard.isShiftLocked());
+        //keyboard.setRepeatLocked(keyboard.isRepeatLocked());
         keyboard.setImeOptions(mContext.getResources(), mMode, imeOptions);
         keyboard.updateVariantsState();
 
@@ -192,6 +195,8 @@ public class KeyboardSwitcher {
     			TeclaApp.persistence.isVoiceInputEnabled();
     	boolean scanVariants =
     			TeclaApp.persistence.isVariantsKeyEnabled();
+    	boolean showAltNavKeyboard =
+    			TeclaApp.persistence.isAltNavKeyboardOn();    	
     	
         if (isSymbols) {
             return (mode == MODE_PHONE)
@@ -201,7 +206,19 @@ public class KeyboardSwitcher {
         switch (mode) {
 
         	case MODE_MORSE:
-        		return new KeyboardId(R.xml.morse_kbd, KEYBOARDMODE_NORMAL, true);
+        		if (TeclaApp.persistence.getMorseKeyMode() == TeclaIME.SINGLE_KEY_MODE) {
+        			if (TeclaApp.persistence.isMorseHudEnabled())
+        				return new KeyboardId(R.xml.morse_kbd_single_key_hud, KEYBOARDMODE_NORMAL, true);
+        			else
+        				return new KeyboardId(R.xml.morse_kbd_single_key_nohud, KEYBOARDMODE_NORMAL, true);
+        		}
+        		else {
+        			if (TeclaApp.persistence.isMorseHudEnabled())
+        				return new KeyboardId(R.xml.morse_kbd_hud, KEYBOARDMODE_NORMAL, true);
+        			else
+        				return new KeyboardId(R.xml.morse_kbd_nohud, KEYBOARDMODE_NORMAL, true);
+        		}
+        		
             case MODE_TEXT:
             	if (useVoiceInput && scanVariants) {
             		// Using voice input AND scanning variants
@@ -242,18 +259,26 @@ public class KeyboardSwitcher {
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_URL, true);
             case MODE_EMAIL:
-            	if (useVoiceInput) {
+            	if (useVoiceInput && scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_EMAIL, true);
+            	} else if (useVoiceInput) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_EMAIL, true);
+            	} else if (scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_EMAIL, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_EMAIL, true);
             case MODE_IM:
-            	if (useVoiceInput) {
+            	if (useVoiceInput && scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_IM, true);
+            	} else if (useVoiceInput) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_IM, true);
+            	} else if (scanVariants) {
+                    return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_IM, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_IM, true);
             case MODE_NAV:
-            	if (useVoiceInput) {
-            		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_VOICE, true);
+            	if (showAltNavKeyboard) {
+            		return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_ALTNAV, true);
             	}
                 return new KeyboardId(R.xml.kbd_navigation, KEYBOARDMODE_NORMAL, true);
             case MODE_1X3:
@@ -357,17 +382,11 @@ public class KeyboardSwitcher {
     }
 
     boolean isNavigation() {
-		if (mMode == MODE_NAV) {
-			return true;
-		}
-		return false;
+    	return mMode == MODE_NAV;
     }
-    
+
     boolean isMorseMode() {
-		if (mMode == MODE_MORSE) {
-			return true;
-		}
-		return false;
+    	return mMode == MODE_MORSE; 
     }
 
     /**

@@ -29,11 +29,12 @@ public class Highlighter {
 	public static final int DEPTH_ROW = 0x0F; // arbitrary number.
 	public static final int DEPTH_KEY = 0xF0; // arbitrary number.
 
-	
+
 	private long mScanDelay = Math.round(1.5 * TeclaApp.persistence.getScanDelay());
 	private int mScanDepth;
 	private int mScanKeyCounter, mScanRowCounter;
 	private int mLastKeyCounter, mLastRowCounter;
+	private int mInactiveScans,mStartScanKeyCounter;
 	private boolean mWasShowingVariants;
 	private TeclaKeyboardView mIMEView;
 	private Handler mHandler;
@@ -59,7 +60,7 @@ public class Highlighter {
 		};
 
 	}
-	
+
 	/**
 	 * Set the input method view that the highlighter will work on.
 	 * @param imeView the input method view the highlighter class will work on.
@@ -71,7 +72,7 @@ public class Highlighter {
 			mScanDepth = Highlighter.DEPTH_KEY;
 		}
 	}
-	
+
 	/**
 	 * Determine if the input method view is currently showing
 	 * @return true if the input method view is showing, false otherwise.
@@ -89,7 +90,7 @@ public class Highlighter {
 	public void clear() {
 		highlightKeys(-1, -1);
 	}
-	
+
 	/** 
 	 * Update highlighting after a key selection. Key should be obtained with {@link #getCurrentKey()}
 	 */
@@ -102,6 +103,10 @@ public class Highlighter {
 		if (shouldDelayKey(keyCode)) {
 			startSelfScanning(mScanDelay);
 		} else {
+			if (keyCode == TeclaKeyboard.KEYCODE_ALTNAV
+					|| keyCode == TeclaKeyboard.KEYCODE_VOICE) {
+				initRowHighlighting();
+			}
 			startSelfScanning();
 		}
 	}
@@ -117,31 +122,35 @@ public class Highlighter {
 			mHandler.postDelayed(mScanRunnable, mScanDelay);
 		}
 	}
-	
+
 	public void move(int direction) {
 		TeclaKeyboard keyboard = mIMEView.getKeyboard();
-		int rowCount = keyboard.getRowCount();
+		// Move only if not repeating key!
+		if (!TeclaApp.persistence.isRepeatingKey()) {
+			int rowCount = keyboard.getRowCount();
 
-		if (rowCount == 1) {
-			mScanDepth = DEPTH_KEY;
-			mScanRowCounter = 0;
+			if (rowCount == 1) {
+				mScanDepth = DEPTH_KEY;
+				mScanRowCounter = 0;
+			}
+			if (mScanDepth == Highlighter.DEPTH_ROW) {
+				if (direction == Highlighter.HIGHLIGHT_NEXT) mScanRowCounter++;
+				if (direction == Highlighter.HIGHLIGHT_PREV) mScanRowCounter--;
+				mScanRowCounter = wrapCounter(mScanRowCounter, 0, rowCount - 1);
+			}
+			int fromIndex = keyboard.getRowStart(mScanRowCounter);
+			int toIndex = keyboard.getRowEnd(mScanRowCounter);
+			mStartScanKeyCounter = fromIndex;
+			if (mScanDepth == Highlighter.DEPTH_KEY) {
+				if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
+				if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
+				mScanKeyCounter = wrapCounter(mScanKeyCounter, fromIndex, toIndex);
+				highlightKeys(mScanKeyCounter,mScanKeyCounter);
+			} else 
+				highlightKeys(fromIndex,toIndex);
 		}
-		if (mScanDepth == Highlighter.DEPTH_ROW) {
-			if (direction == Highlighter.HIGHLIGHT_NEXT) mScanRowCounter++;
-			if (direction == Highlighter.HIGHLIGHT_PREV) mScanRowCounter--;
-			mScanRowCounter = wrapCounter(mScanRowCounter, 0, rowCount - 1);
-		}
-		int fromIndex = keyboard.getRowStart(mScanRowCounter);
-		int toIndex = keyboard.getRowEnd(mScanRowCounter);
-		if (mScanDepth == Highlighter.DEPTH_KEY) {
-			if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
-			if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
-			mScanKeyCounter = wrapCounter(mScanKeyCounter, fromIndex, toIndex);
-			highlightKeys(mScanKeyCounter,mScanKeyCounter);
-		} else 
-			highlightKeys(fromIndex,toIndex);
 	}
-	
+
 	public void stepOut() {
 		TeclaKeyboard keyboard = mIMEView.getKeyboard();
 		if (keyboard.getRowCount() != 1) {
@@ -171,7 +180,7 @@ public class Highlighter {
 		pauseSelfScanning();
 		mHandler.postDelayed(mStartScanRunnable, delay);
 	}
-	
+
 	public void startSelfScanning() {
 		startSelfScanning(0);
 	}
@@ -183,16 +192,16 @@ public class Highlighter {
 		mHandler.removeCallbacks(mScanRunnable);
 		mHandler.removeCallbacks(mStartScanRunnable);
 	}
-	
+
 	/**
 	 * Resume auto scanning. Call after {@link #pauseSelfScanning()} to resume scanning from where it was last paused.
 	 */
 	public void resumeSelfScanning() {
 		if (TeclaApp.persistence.isScanningEnabled()) {
-				mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
+			mHandler.postDelayed(mScanRunnable, TeclaApp.persistence.getScanDelay());
 		}
 	}
-	
+
 	/**
 	 * Stop auto scanning on the current keyboard. Resets all scanning variables and clears all highlights.
 	 */
@@ -200,8 +209,8 @@ public class Highlighter {
 		pauseSelfScanning();
 		clear();
 	}
-	
-	
+
+
 	public void restoreHighlight() {
 		move(HIGHLIGHT_NEXT);
 		move(HIGHLIGHT_PREV);
@@ -214,12 +223,37 @@ public class Highlighter {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
-				move(Highlighter.HIGHLIGHT_NEXT);
+			move(Highlighter.HIGHLIGHT_NEXT);
+			if(mScanKeyCounter==mStartScanKeyCounter)  mInactiveScans++;
+			if(mInactiveScans==2 && getScanDepth()==Highlighter.DEPTH_KEY)
+			{
+				mInactiveScans=0;
+				stepOut();
+				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "No activity.Stepping out...");
+			}
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}
-		
+
 	};
-	
+
+	/*
+	 * Runnable used to step out with hidden key
+	 */
+	public void externalstepOut()
+	{
+		Runnable mScanRunnable = new Runnable() {
+
+			public void run() {
+				mInactiveScans = 0;
+				pauseSelfScanning();
+				stepOut();
+				resumeSelfScanning();
+				Log.d(TeclaApp.TAG,CLASS_TAG + "Hidden Key pressed");	
+			}	
+		}; 
+		mHandler.postDelayed(mScanRunnable,TeclaApp.persistence.getScanDelay());
+	}
+
 	/**
 	 * Runnable used only to start auto scan. It resets highlighting before calling the self scanning methods.
 	 */
@@ -254,19 +288,23 @@ public class Highlighter {
 			}
 		}
 		restoreHighlight();
+		mStartScanKeyCounter=mScanKeyCounter;  // Counter to check which key
+		mInactiveScans=0;  // Counter to check number of eventless self scan
 	}
-	
+
 	private boolean shouldDelayKey(int keyCode){
 		if (TeclaApp.persistence.isVariantsShowing()) return false;
-		if (keyCode == TeclaKeyboard.KEYCODE_DONE ||
-				keyCode == TeclaKeyboard.KEYCODE_MODE_CHANGE ||
-				keyCode == TeclaKeyboard.KEYCODE_SHIFT ||
-				keyCode == TeclaKeyboard.KEYCODE_VARIANTS) {
+		if (keyCode == TeclaKeyboard.KEYCODE_DONE
+				|| keyCode == TeclaKeyboard.KEYCODE_MODE_CHANGE
+				|| keyCode == TeclaKeyboard.KEYCODE_SHIFT
+				|| keyCode == TeclaKeyboard.KEYCODE_ALTNAV
+				|| keyCode == TeclaKeyboard.KEYCODE_VOICE
+				|| keyCode == TeclaKeyboard.KEYCODE_VARIANTS) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	private void initRowHighlighting() {
 		mScanDepth = DEPTH_KEY;
 		mScanKeyCounter = mIMEView.getKeyboard().getRowStart(mScanRowCounter);

@@ -1,8 +1,5 @@
 package ca.idi.tekla.util;
 
-import java.util.HashMap;
-
-import ca.idi.tekla.TeclaApp;
 import ca.idi.tecla.lib.ListPreference;
 
 import android.preference.PreferenceScreen;
@@ -35,7 +32,7 @@ public class SwitchPreference {
 	 */
 	public void setValues(int a, int b) {
 		this.tecla.setValueIndex(a);
-//		this.morse.setValueIndex(b); // FIXME: Uncomment when adding morse
+		this.morse.setValueIndex(b);
 	}
 
 	/**
@@ -43,8 +40,8 @@ public class SwitchPreference {
 	 */
 	public void refreshSummaries() {
 		this.tecla.setSummary(this.tecla.getEntry());
-//		this.morse.setSummary(this.morse.getEntry()); // FIXME: Uncomment when adding morse
-		this.prefScreen.setSummary(this.tecla.getEntry() /*+ " / " + this.morse.getEntry()*/); // FIXME: Uncomment when adding morse
+		this.morse.setSummary(this.morse.getEntry());
+		this.prefScreen.setSummary(this.tecla.getEntry() + " / " + this.morse.getEntry());
 	}
 	
 

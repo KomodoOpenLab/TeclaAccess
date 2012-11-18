@@ -4,6 +4,9 @@
 
 package ca.idi.tekla;
 
+import java.util.ArrayList;
+
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -11,8 +14,10 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
@@ -20,13 +25,16 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
+import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
+import ca.idi.tekla.util.TeclaDesktopClient;
 
 public class TeclaApp extends Application {
 
@@ -37,11 +45,14 @@ public class TeclaApp extends Application {
 	/**
 	 * Main debug switch, turns on/off debugging for the whole app
 	 */
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = false	;
 
 	public static final String TECLA_IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 
 	//IME CONSTANTS
+	public static final String PACKAGE_VOICE_SEARCH = "com.google.android.voicesearch";
+//	public static final String PACKAGE_QUICKSEARCHBOX = "com.android.quicksearchbox";
+	public static final String PACKAGE_QUICKSEARCHBOX = "com.google.android.googlequicksearchbox";
 	public static final String ACTION_ENABLE_MORSE = "ca.idi.tekla.ime.action.ENABLE_MORSE";
 	public static final String ACTION_DISABLE_MORSE = "ca.idi.tekla.ime.action.DISABLE_MORSE";
 	public static final String ACTION_SHOW_IME = "ca.idi.tekla.ime.action.SHOW_IME";
@@ -71,7 +82,17 @@ public class TeclaApp extends Application {
 	private static TeclaApp instance;
 	public static Persistence persistence;
 	public static Highlighter highlighter;
-
+	
+	public static String password="Tecla123";
+	public static boolean sendflag=false,connect_to_desktop=false;
+	
+	public static TeclaDesktopClient desktop;
+	public static Object dictation_lock=new Object();
+	public static boolean dict_lock=false,mSendToPC;
+	
+	public static int disconnect_event;
+	public static int dictation_event;
+	
 	public TeclaApp() {
         instance = this;
     }
@@ -93,6 +114,8 @@ public class TeclaApp extends Application {
 		
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
+		
+		
 
 		mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
 		mWakeLock = mPowerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK |
@@ -112,6 +135,12 @@ public class TeclaApp extends Application {
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
+		SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
+		connect_to_desktop=prefs.getBoolean(Persistence.CONNECT_TO_PC, false);
+		sendflag=prefs.getBoolean(Persistence.SEND_SHIELD_EVENTS, false);
+		disconnect_event=prefs.getInt("set_disconnect_event", 65);
+		dictation_event=prefs.getInt("set_dictation_event", 55);
+		password=prefs.getString(Persistence.SET_PASSWORD, "Tecla123");
 		//if (persistence.isPersistentKeyboardEnabled()) queueSplash();
 
 	}
@@ -169,6 +198,29 @@ public class TeclaApp extends Application {
 		
 	};
 	
+	/**
+	 * A recursive call to force the soft IME open without blocking the UI
+	 * @param delay the time after which the call is sent
+	 * TODO: This method should be moved to the TeclaApp class
+	 */
+	public void callShowSoftIMEWatchDog(int delay) {
+		mHandler.removeCallbacks(mShowSoftIMEWatchdog);
+		mHandler.postDelayed(mShowSoftIMEWatchdog, delay);
+	}
+	
+	private Runnable mShowSoftIMEWatchdog = new Runnable () {
+
+		public void run() {
+			if (!TeclaApp.highlighter.isSoftIMEShowing()) {
+				// If IME View still not showing...
+				// We are force-openning the soft IME through an intent since
+				//it seems to be the only way to make it work
+				TeclaApp.getInstance().requestShowIMEView();
+			}
+		}
+		
+	};
+
 	public void enabledMorseIME() {
 		if (DEBUG) Log.d(TAG, "Broadcasting enable morse IME intent...");
 		sendBroadcast(new Intent(ACTION_ENABLE_MORSE));
@@ -205,6 +257,13 @@ public class TeclaApp extends Application {
 	}
 	
 	public void inputStringAvailable(String input_string) {
+		Log.d(TeclaApp.TAG, "Broadcasting input string: " + input_string);
+		Intent intent = new Intent(ACTION_INPUT_STRING);
+		intent.putExtra(EXTRA_INPUT_STRING, input_string);
+		sendBroadcast(intent);
+	}
+	
+	public void inputStringListAvailable(ArrayList<String> input_string) {
 		Log.d(TeclaApp.TAG, "Broadcasting input string: " + input_string);
 		Intent intent = new Intent(ACTION_INPUT_STRING);
 		intent.putExtra(EXTRA_INPUT_STRING, input_string);
@@ -281,8 +340,7 @@ public class TeclaApp extends Application {
 		// Check to see if voice actions is installed
 		Intent intent = new Intent();
 		intent.setComponent(new
-		    ComponentName("com.google.android.voicesearch",
-		                  "com.google.android.voicesearch.RecognitionActivity"));
+		    ComponentName(PACKAGE_VOICE_SEARCH, PACKAGE_VOICE_SEARCH + ".RecognitionActivity"));
 		if (mPackageManager.queryIntentActivities(intent, 0).size() != 0) {
 			return true;
 		}
@@ -296,28 +354,43 @@ public class TeclaApp extends Application {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
-	
+	public void startVoiceDictation(String language_model) {
+		if (DEBUG) Log.d(TAG, "Calling voice input...");
+		Intent intent = new Intent(this, TeclaVoiceInput.class);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, language_model);
+		intent.putExtra("isDictation", 0x56);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
 	public void startVoiceActions() {
 		Log.d(TAG, "Starting voice actions...");
 		Intent intent = new Intent();
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setAction(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_LAUNCHER);
 		intent.setComponent(new
-		    ComponentName("com.google.android.voicesearch",
-		                  "com.google.android.voicesearch.RecognitionActivity"));
+		    ComponentName(PACKAGE_VOICE_SEARCH, PACKAGE_VOICE_SEARCH + ".RecognitionActivity"));
 		try {
 			startActivity(intent);
-		} catch (ActivityNotFoundException e) {
-			Log.e(TeclaApp.TAG, "Voice Actions not installed");
-            TeclaApp.getInstance().showToast(R.string.no_voice_actions_installed);
+		} catch (ActivityNotFoundException e1) {
+			Log.e(TeclaApp.TAG, "Voice Search not installed");
+			intent.setComponent(new
+				    ComponentName(PACKAGE_QUICKSEARCHBOX, PACKAGE_QUICKSEARCHBOX + ".VoiceSearchActivity"));
+			try {
+				startActivity(intent);
+			} catch (ActivityNotFoundException e2) {
+				Log.e(TeclaApp.TAG, "Quick Search Box not available");
+				TeclaApp.getInstance().showToast(R.string.no_voice_actions_installed);
+			}
 		}
 	}
 	
-	public void broadcastVoiceCommand() {
-		Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		startActivity(intent);
-	}
-
+//	public void startVoiceCommand() {
+//		Intent intent = new Intent(Intent.ACTION_VOICE_COMMAND);
+//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		startActivity(intent);
+//	}
+//
 	public void broadcastInputViewCreated() {
 		synchronized(this) {
 			sendBroadcast(new Intent(ACTION_IME_CREATED));
@@ -419,6 +492,6 @@ public class TeclaApp extends Application {
 
 	public void showToast(int resid) {
 		Toast.makeText(this, resid, Toast.LENGTH_LONG).show();
-	}
-
+	}	
+	
 }

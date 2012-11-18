@@ -67,10 +67,13 @@
             android:keyLabel="9" />
         <Key
             android:codes="48"
-            android:keyEdgeFlags="right"
             android:keyLabel="0"
             android:popupCharacters="ⁿ∅"
+            android:keyEdgeFlags="right"
             android:popupKeyboard="@xml/kbd_popup_template" />
+        <Key
+            android:codes="@integer/key_stepout"
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -114,10 +117,14 @@
             android:popupKeyboard="@xml/kbd_popup_template" />
         <Key
             android:codes="41"
-            android:keyEdgeFlags="right"
+
             android:keyLabel=")"
             android:popupCharacters="]}>"
+            android:keyEdgeFlags="right"
             android:popupKeyboard="@xml/kbd_popup_template" />
+        <Key
+            android:codes="@integer/key_stepout"
+            android:keyWidth="0%p" />
     </Row>
     <Row>
         <Key
@@ -160,9 +167,12 @@
             android:codes="-5"
             android:iconPreview="@drawable/sym_keyboard_feedback_delete"
             android:isRepeatable="true"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_delete"
+            android:keyEdgeFlags="right"
             android:keyWidth="15%p" />
+        <Key
+            android:codes="@integer/key_stepout"
+            android:keyWidth="0%p" />
     </Row>
     <Row android:rowEdgeFlags="bottom" >
         <Key
@@ -194,9 +204,12 @@
         <Key
             android:codes="10"
             android:iconPreview="@drawable/sym_keyboard_feedback_return"
-            android:keyEdgeFlags="right"
             android:keyIcon="@drawable/sym_keyboard_return"
+            android:keyEdgeFlags="right"
             android:keyWidth="20%p" />
+        <Key
+            android:codes="@integer/key_stepout"
+            android:keyWidth="0%p" />
     </Row>
 
 </Keyboard>

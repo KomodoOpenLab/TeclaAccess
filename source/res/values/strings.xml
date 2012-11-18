@@ -216,7 +216,7 @@
 
     <!-- Option to enable accented characters -->
     <string name="pref_variants_key">Show accents key</string>
-    <string name="pref_variants_key_summary">Adds a key to enable accents and other character variants</string>
+    <string name="pref_variants_key_summary">Adds a sticky key that enables accented characters and other variants</string>
 
     <!-- Tecla: IME Preferences Strings -->
     <!-- Category title for tecla shield -->
@@ -226,15 +226,19 @@
     <string name="shield_connect">Connect to Tecla Shield</string>
     <string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
     <string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
-    <string name="shield_connect_summary">Establishes a connection to a nearby Tecla Shield</string>
+    <string name="shield_connect_summary">Attempts a connection to a nearby Tecla Shield</string>
 
+	<!-- Option to temporarily disconnect Tecla shield -->
+	<string name="shield_temp_disconnect">Temporarily Disconnect Tecla Shield</string>
+	<string name="shield_temp_disconnect_summary">Check to allow another device to connect to Tecla Shield</string>
+	
     <!-- Option to enable fullscreen switch mode -->
     <string name="fullscreen_switch">Fullscreen switch mode</string>
     <string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
 
     <!-- Option to enable speakerphone switch mode -->
-    <string name="speakerphone_switch">Use speakerphone for voice calls</string>
-    <string name="speakerphone_switch_summary">Automatically turn on speakerphone when voice calls start</string>
+    <string name="speakerphone_switch">Always use speakerphone</string>
+    <string name="speakerphone_switch_summary">Turn on speakerphone for voice calls, voice commands and voice input.</string>
 
     <!-- Option to show the UI navigation keyboard on the screen -->
     <string name="persistent_keyboard">Show navigation keyboard</string>
@@ -243,8 +247,8 @@
     <!-- Option to autohide the UI navigation keyboard on the screen -->
     <string name="autohide_timeout">Navigation keyboard timeout</string>
     <string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
-    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
-
+    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>    
+    
     <string-array name="autohide_strings">
         <item>Immediately</item>
         <item>After 4 seconds</item>
@@ -254,12 +258,27 @@
         <item>After 60 seconds</item>
         <item>Never</item>
     </string-array>
+    
+    <string-array name="repeat_frequency_strings">
+        <item>Never</item>
+        <item>1000 ms</item>
+        <item>950 ms</item>
+        <item>900 ms</item>
+        <item>850 ms</item>
+        <item>800 ms</item>
+        <item>750 ms</item>
+        <item>700 ms</item>
+        <item>650 ms</item>
+        <item>600 ms</item>
+        <item>550 ms</item>
+        <item>500 ms</item>
+    </string-array>
 
     <string-array name="switch_actions">
         <item>None</item>
-        <item>Highlight next</item>
-        <item>Highlight previous</item>
-        <item>Step out / Cancel</item>
+        <item>Step-scan next</item>
+        <item>Step-scan previous</item>
+        <item>Step out, cancel</item>
         <item>Select highlighted</item>
     </string-array>
     <string-array name="morse_actions">
@@ -270,28 +289,39 @@
         <item>Morse backspace</item>
         <item>Hide Morse IME view</item>
     </string-array>
-    <string-array name="morse_switch_mode_array">
-        <item>Triple-switch mode</item>
-        <item>Double-switch mode</item>
-        <item>Mono-switch mode</item>
+    <string-array name="morse_key_mode_array">
+        <item>Triple-key mode</item>
+        <item>Double-key mode</item>
+        <item>Single-key mode</item>
     </string-array>
     
     <!-- Morse cheat sheet -->
-    <string name="caps_lock_off">abc</string>
-    <string name="caps_lock_next">Abc</string>
-    <string name="caps_lock_all">ABC</string>
     <string name="tapforsymbols">Tap for symbols</string>
-    <string name="tapforlettersandnumbers">Tap for letters and numbers</string>
-
-    <!-- Label for Morse space key. -->
-    <string name="morse_space">space</string>
-
-    <!-- Option to enable Morse input method -->
-    <string name="morse_mode">Use Morse input method</string>
-    <string name="morse_mode_summary">Enables users to type in Morse</string>
+    <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
 
     <!-- Category title for Morse settings -->
-    <string name="morse_input_category">Morse settings</string>
+    <string name="morse_input_settings">Morse input settings</string>
+    <string name="morse_settings_summary">Adjust Morse input mode and preferences</string>
+    
+    <!-- Option to enable Morse input method -->
+    <string name="morse_mode">Enable Morse input</string>
+    <string name="morse_mode_summary">Provides a Morse input method that replaces the standard keyboard</string>
+    
+    <!-- Option to enable Morse HUD display -->
+    <string name="morse_show_hud">Show Morse HUD</string>
+    <string name="morse_show_hud_summary">Displays a set of Morse keys/values above the keyboard</string>
+    
+    <!-- Morse key mode strings -->
+	<string name="morse_key_mode">Morse input method</string>
+	
+	<!-- Morse speed ratio strings -->
+	<string name="morse_time_unit_title">Morse time unit</string>
+	<string name="morse_time_unit_dlg_title">Select your Morse time unit</string>
+	
+	<!-- Morse repeat delay strings -->
+    <string name="mrepeat_frequency">Configure repeat frequency</string>
+    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
+    <string name="mrepeat_frequency_dlg_title">Configure the repeat frequency</string>
 
     <!-- Options to set full reset timeout -->
     <string name="fullreset_timeout">Long press reset delay</string>
@@ -308,10 +338,21 @@
         <item>32 seconds</item>
         <item>40 seconds</item>
     </string-array>
+    
+    <!-- Tecla: Reset Actions Dialog -->
+    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+
+    <!-- Tecla: Scan Speed Dialog -->
+    <string name="dialog_faster">Faster</string>
+    <string name="dialog_slower">Slower</string>
+    <string name="btn_done">Done</string>
 
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
-
+    <string name="scanning_settings_summary">Adjust the scanning mode and speed</string>
+    
     <!-- Option to enable self-scanning -->
     <string name="self_scanning">Enable self-scanning</string>
     <string name="self_scanning_summary">Scans the keyboard automatically</string>
@@ -323,10 +364,6 @@
     <!-- Self-scanning delay strings -->
     <string name="scan_speed">Scanning speed</string>
     <string name="scan_speed_summary">Adjust the scanning speed</string>
-
-    <!-- Morse repeat delay strings -->
-    <string name="mrepeat_frequency">Configure repeat frequency</string>
-    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
 
     <!-- Switch configuration strings -->
     <string name="define_switch_action">Configure switch actions</string>
@@ -350,24 +387,13 @@
     <string name="switch_e1_morse">Switch 1 Morse action</string>
     <string name="switch_e2_morse">Switch 2 Morse action</string>
 
+    <!-- Reset switch actions strings -->
     <string name="switch_default">Restore default actions</string>
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
 
-    <!-- Tecla: Reset Actions Dialog -->
-    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
-    <string name="btn_yes">Yes</string>
-    <string name="btn_no">No</string>
-
-    <!-- Tecla: Scan Speed Dialog -->
-    <string name="dialog_faster">Faster</string>
-    <string name="dialog_slower">Slower</string>
-    <string name="btn_done">Done</string>
-
-	<!--  Morse switch mode strings -->
-	<string name="morse_switch_mode">Morse switch input method</string>
-	<string name="morse_switch_mode_summary">Select your desired Morse switch input method</string>
-		
+    <string name="advanced_input_settings">Advanced input settings</string>
+    
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
     <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
@@ -378,11 +404,11 @@
     <string name="morse_disabled">Morse input method disabled</string>
     <string name="fullscreen_enabled">Fullscreen switch mode enabled</string>
     <string name="fullscreen_disabled">Fullscreen switch mode disabled</string>
-    <string name="tecla_notselected">Tecla keyboard is not selected!</string>
+    <string name="tecla_notselected">Please select Tecla Access as your default input method before adjusting settings.</string>
     <string name="shield_connected">Tecla Shield Connected</string>
     <string name="shield_disconnected">Tecla Shield disconnected</string>
     <string name="no_voice_input_available">No speech recognition applications available!</string>
-    <string name="no_voice_actions_installed">Voice Actions is not installed!</string>
+    <string name="no_voice_actions_installed">Voice Search is not installed!</string>
 
     <!-- Tecla: Titles and labels -->
     <string name="sep_label">Tecla Shield Status</string>
