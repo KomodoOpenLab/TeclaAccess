@@ -105,7 +105,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
-	private PreferenceScreen mAllPreferences;
+	private PreferenceScreen mPreferenceScreen;
 	private PreferenceCategory mPredictionPreferences;
 	private ProgressDialog mProgressDialog;
 	private BluetoothAdapter mBluetoothAdapter;
@@ -145,8 +145,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		mPredictionPreferences = (PreferenceCategory) findPreference("prediction_settings");
 		mPredictionPreferences.removePreference(findPreference("show_suggestions"));
 		mPredictionPreferences.removePreference(findPreference("auto_complete"));
-		mAllPreferences = (PreferenceScreen) findPreference("english_ime_settings");
-		mAllPreferences.removePreference(findPreference("alternative_output_settings"));
+		mPreferenceScreen = (PreferenceScreen) findPreference("english_ime_settings");
+		mPreferenceScreen.removePreference(findPreference("alternative_output_settings"));
 		
 	}
 	
