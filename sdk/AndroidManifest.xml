@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="ca.idi.tekla.sdk"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="5" />
+      android:versionCode="5"
+      android:versionName="5">
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="9"/>
 
     <application android:icon="@drawable/icon">
 

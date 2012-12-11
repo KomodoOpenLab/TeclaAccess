@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="10">
+    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="9">
     </uses-sdk>
 
     <application
