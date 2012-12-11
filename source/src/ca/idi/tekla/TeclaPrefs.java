@@ -593,6 +593,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 						mPrefSelfScanning.setEnabled(false);
 						mPrefInverseScanning.setChecked(false);
 						mPrefInverseScanning.setEnabled(false);
+						mPrefPersistentKeyboard.setChecked(false);
 					}
 					stopSEP();
 				}
