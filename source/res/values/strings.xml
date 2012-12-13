@@ -414,5 +414,31 @@
     <string name="sep_label">Tecla Shield Status</string>
     <string name="voice_input">Tecla Voice Input</string>
     <string name="configuring_tecla">Configuring Tecla…</string>
+    
+    <!--  Contributions page titles and labels -->
+    <string name="contributor_main_heading">About Tecla Access</string>
+    <string name="contributor_main_title">Contributors</string>
+    <string name="contributor_main_summary">View contributors to the project</string>
+    
+    <string name="contributor_heading1">Developers</string>
+    <string name="contributor_heading2">Testers</string>
+    <string name="contributor_heading3">Sponsors</string>
+    
+   	<string name="contributor_title1">Kelvin Mak</string>
+   	<string name="contributor_summary1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sollicitudin, felis id gravida feugiat, turpis diam vulputate lacus, non fringilla risus libero non metus. </string>
+   	
+   	<string name="contributor_title2">Jorge Silva</string>
+   	<string name="contributor_summary2">Pellentesque justo nisl, sodales id mattis at, rhoncus a neque. </string>
+   	
+   	<string name="contributor_title3">Mauricio Meza</string>
+   	<string name="contributor_summary3">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</string>
+   	
+   	<string name="contributor_title4">Deborah Fels</string>
+   	<string name="contributor_summary4">Pellentesque justo nisl, sodales id mattis at, rhoncus a neque. </string>
+   	
+   	<string name="contributor_title5">John Smith</string>
+   	<string name="contributor_summary5">Pellentesque justo nisl, sodales id mattis at, rhoncus a neque. </string>
+   	
+   	 
 
 </resources>

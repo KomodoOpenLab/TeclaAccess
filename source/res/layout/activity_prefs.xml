@@ -384,5 +384,46 @@
                 android:title="Set Dictation Launching Event" />
         </PreferenceScreen>
     </PreferenceCategory>
-
+    
+    <PreferenceCategory
+        android:title="@string/contributor_main_heading" 
+        >
+    
+     <PreferenceScreen
+            android:key="configure_input"
+            android:title="@string/contributor_main_title" 
+        android:summary="@string/contributor_main_summary">
+            
+        <PreferenceCategory
+        	android:title="@string/contributor_heading1" >
+         <Preference
+                android:persistent="true"
+                android:summary="@string/contributor_summary1"
+                android:title="@string/contributor_title1" />
+         <Preference
+                android:persistent="true"
+                android:summary="@string/contributor_summary2"
+                android:title="@string/contributor_title2" />
+         </PreferenceCategory>
+         
+         <PreferenceCategory
+        	android:title="@string/contributor_heading2" >
+         <Preference
+                android:persistent="true"
+                android:summary="@string/contributor_summary3"
+                android:title="@string/contributor_title3" />
+         <Preference
+                android:persistent="true"
+                android:summary="@string/contributor_summary4"
+                android:title="@string/contributor_title4" />
+         </PreferenceCategory>
+         <PreferenceCategory
+        	android:title="@string/contributor_heading3" >
+         <Preference
+                android:persistent="true"
+                android:summary="@string/contributor_summary5"
+                android:title="@string/contributor_title5" />
+         </PreferenceCategory>
+        </PreferenceScreen>
+    </PreferenceCategory>
 </PreferenceScreen>
