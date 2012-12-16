@@ -282,8 +282,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefTempDisconnect.setEnabled(false);
 			mPrefSelfScanning.setChecked(false);
 			mPrefInverseScanning.setChecked(false);
-			mPrefSelfScanning.setEnabled(false);
-			mPrefInverseScanning.setEnabled(false);
 		}
 		
 		mPrefMorseKeyMode.setSummary(mPrefMorseKeyMode.getEntry());
@@ -320,8 +318,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			mPrefFullScreenSwitch.setEnabled(false);
 			mPrefConnectToShield.setEnabled(false);
 			mPrefTempDisconnect.setEnabled(false);
-			mPrefSelfScanning.setEnabled(false);
-			mPrefInverseScanning.setEnabled(false);
 			mPrefMorse.setEnabled(false);
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(R.string.tecla_notselected);
@@ -428,10 +424,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
-				// Enable scanning checkboxes so they can be turned on/off
 				mPrefTempDisconnect.setEnabled(true);
-				mPrefSelfScanning.setEnabled(true);
-				mPrefInverseScanning.setEnabled(true);
 				mPrefMorse.setEnabled(true);
 				mPrefPersistentKeyboard.setChecked(true);
 			}
@@ -525,9 +518,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			} else {
 				mPrefAutohideTimeout.setEnabled(false);
 				mPrefSelfScanning.setChecked(false);
-				mPrefSelfScanning.setEnabled(false);
 				mPrefInverseScanning.setChecked(false);
-				mPrefInverseScanning.setEnabled(false);
 				mPrefFullScreenSwitch.setChecked(false);
 				mPrefConnectToShield.setChecked(false);
 				mPrefTempDisconnect.setChecked(false);
@@ -541,9 +532,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
 				mPrefSelfScanning.setChecked(false);
-				mPrefSelfScanning.setEnabled(false);
 				mPrefInverseScanning.setChecked(false);
-				mPrefInverseScanning.setEnabled(false);
 				mPrefFullScreenSwitch.setChecked(false);
 				mPrefConnectToShield.setChecked(false);
 				mPrefTempDisconnect.setChecked(false);
@@ -590,9 +579,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 						mPrefTempDisconnect.setChecked(false);
 						mPrefTempDisconnect.setEnabled(false);
 						mPrefSelfScanning.setChecked(false);
-						mPrefSelfScanning.setEnabled(false);
 						mPrefInverseScanning.setChecked(false);
-						mPrefInverseScanning.setEnabled(false);
 						mPrefPersistentKeyboard.setChecked(false);
 					}
 					stopSEP();
@@ -634,8 +621,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 			if (mPrefFullScreenSwitch.isChecked()) {
 				mPrefPersistentKeyboard.setChecked(true);
 				TeclaApp.getInstance().startFullScreenSwitchMode();
-				mPrefSelfScanning.setEnabled(true);
-				mPrefInverseScanning.setEnabled(true);
 				if (!(mPrefSelfScanning.isChecked() || mPrefInverseScanning.isChecked())) {
 					mPrefSelfScanning.setChecked(true);
 				}
@@ -646,9 +631,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					mPrefTempDisconnect.setChecked(false);
 					mPrefTempDisconnect.setEnabled(false);
 					mPrefSelfScanning.setChecked(false);
-					mPrefSelfScanning.setEnabled(false);
 					mPrefInverseScanning.setChecked(false);
-					mPrefInverseScanning.setEnabled(false);
 				}
 				if (mPrefPersistentKeyboard.isChecked()) {
 					mPrefAutohideTimeout.setEnabled(true);
@@ -668,7 +651,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					if (!mPrefConnectToShield.isChecked()) {
 						mPrefTempDisconnect.setChecked(false);
 						mPrefTempDisconnect.setEnabled(false);
-						mPrefSelfScanning.setEnabled(false);
 					}
 				}
 			}
@@ -684,7 +666,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 					if (!mPrefConnectToShield.isChecked()) {
 						mPrefTempDisconnect.setChecked(false);
 						mPrefTempDisconnect.setEnabled(false);
-						mPrefInverseScanning.setEnabled(false);
 					}
 				}
 			}
