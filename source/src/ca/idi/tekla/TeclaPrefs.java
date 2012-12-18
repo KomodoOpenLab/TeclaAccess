@@ -75,7 +75,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 public class TeclaPrefs extends PreferenceActivity
-implements SharedPreferences.OnSharedPreferenceChangeListener {
+implements SharedPreferences.OnSharedPreferenceChangeListener{
 
 	/**
 	 * Tag used for logging in this class
@@ -132,7 +132,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	private static Preference setPasswordLaunch;
 	private static Preference setDisconnectEvent;
 	private static Preference setDictationEvent;
-	
+
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
 		
@@ -198,6 +198,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		setDictationEvent=(Preference) findPreference("set_dictation_event");
 		
 		TeclaApp.dictation_event=setDictationEvent.getSharedPreferences().getInt("set_dictation_event", 55);
+
 		
 		setDictationEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
@@ -441,6 +442,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			Preference preference) {
+		if (preference.getKey()==null){
+			return false;
+		}
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
 		}
@@ -912,4 +916,5 @@ implements SharedPreferences.OnSharedPreferenceChangeListener {
 		alert.show();
         InputAccess.showBelowIME(alert);
 	}
+	
 }
