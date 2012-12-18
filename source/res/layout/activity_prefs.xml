@@ -390,7 +390,7 @@
         >
     
      <PreferenceScreen
-            android:key="configure_input"
+            android:key="contributor_screen"
             android:title="@string/contributor_main_title" 
         android:summary="@string/contributor_main_summary">
             
