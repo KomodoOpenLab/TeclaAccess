@@ -75,7 +75,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 public class TeclaPrefs extends PreferenceActivity
-implements SharedPreferences.OnSharedPreferenceChangeListener,OnPreferenceClickListener {
+implements SharedPreferences.OnSharedPreferenceChangeListener{
 
 	/**
 	 * Tag used for logging in this class
@@ -198,13 +198,6 @@ implements SharedPreferences.OnSharedPreferenceChangeListener,OnPreferenceClickL
 		setDictationEvent=(Preference) findPreference("set_dictation_event");
 		
 		TeclaApp.dictation_event=setDictationEvent.getSharedPreferences().getInt("set_dictation_event", 55);
-		
-		(findPreference("contributor1")).setOnPreferenceClickListener(this);
-		(findPreference("contributor2")).setOnPreferenceClickListener(this);
-		(findPreference("contributor3")).setOnPreferenceClickListener(this);
-		(findPreference("contributor4")).setOnPreferenceClickListener(this);
-		(findPreference("contributor5")).setOnPreferenceClickListener(this);
-		
 
 		
 		setDictationEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
@@ -449,6 +442,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener,OnPreferenceClickL
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
 			Preference preference) {
+		if (preference.getKey()==null){
+			return false;
+		}
 		if (preference.getKey().equals(Persistence.PREF_SCAN_DELAY_INT)) {
 			mScanSpeedDialog.show();
 		}
@@ -921,9 +917,4 @@ implements SharedPreferences.OnSharedPreferenceChangeListener,OnPreferenceClickL
         InputAccess.showBelowIME(alert);
 	}
 	
-	@Override
-	public boolean onPreferenceClick(Preference arg0) {
-		// TODO Auto-generated method stub
-		return true;
-	}
 }
