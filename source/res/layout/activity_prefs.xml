@@ -390,12 +390,11 @@
         >
     
      <PreferenceScreen
-            android:key="configure_input"
-            android:title="@string/contributor_main_title" 
+        android:title="@string/contributor_main_title" 
         android:summary="@string/contributor_main_summary">
             
         <PreferenceCategory
-        	android:title="@string/contributor_core" >
+        		android:title="@string/contributor_core" >
          <Preference
                 android:summary="@string/contributor_jan_summary"
                 android:title="@string/contributor_jan" />
