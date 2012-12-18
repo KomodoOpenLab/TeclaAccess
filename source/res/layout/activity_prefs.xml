@@ -397,15 +397,6 @@
         <PreferenceCategory
         	android:title="@string/contributor_core" >
          <Preference
-<<<<<<< HEAD
-				android:key="contributor1"	
-                android:summary="@string/contributor_summary1"
-                android:title="@string/contributor_title1" />
-         <Preference
-				android:key="contributor2"	
-                android:summary="@string/contributor_summary2"
-                android:title="@string/contributor_title2" />
-=======
                 android:summary="@string/contributor_jan_summary"
                 android:title="@string/contributor_jan" />
          <Preference
@@ -414,39 +405,22 @@
          <Preference
                 android:summary="@string/contributor_jorge_summary"
                 android:title="@string/contributor_jorge" />
->>>>>>> 1d2183469f9e0901bcaa85fc9da446186248ae4c
          </PreferenceCategory>
          
          <PreferenceCategory
         	android:title="@string/contributor_coders" >
          <Preference
-<<<<<<< HEAD
-				android:key="contributor3"	
-                android:summary="@string/contributor_summary3"
-                android:title="@string/contributor_title3" />
-         <Preference
-				android:key="contributor4"	
-                android:summary="@string/contributor_summary4"
-                android:title="@string/contributor_title4" />
-=======
                 android:summary="@string/contributor_wan_summary"
                 android:title="@string/contributor_wan" />
          <Preference
                 android:summary="@string/contributor_kelvin_summary"
                 android:title="@string/contributor_kelvin" />
->>>>>>> 1d2183469f9e0901bcaa85fc9da446186248ae4c
          </PreferenceCategory>
          <PreferenceCategory
         	android:title="@string/contributor_contributors" >
          <Preference
-<<<<<<< HEAD
-				android:key="contributor5"	
-                android:summary="@string/contributor_summary5"
-                android:title="@string/contributor_title5" />
-=======
                 android:summary="@string/contributor_mats_summary"
                 android:title="@string/contributor_mats" />
->>>>>>> 1d2183469f9e0901bcaa85fc9da446186248ae4c
          </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
