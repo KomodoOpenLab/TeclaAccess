@@ -13,9 +13,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-sdk android:minSdkVersion="5" android:targetSdkVersion="9">
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-sdk
+        android:minSdkVersion="5"
+        android:targetSdkVersion="9" >
     </uses-sdk>
 
     <application
@@ -68,6 +71,20 @@
                 <action android:name="ca.idi.tekla.SEP_SERVICE" />
             </intent-filter>
         </service>
+        
+        <!-- ENTRIES BELOW BELONG TO NEW FRAMEWORK ARCHITECTURE -->
+        <service android:name="ca.idi.tecla.sdk.TeclaService" >
+            <intent-filter>
+                <action android:name="ca.idi.tecla.sdk.TECLA_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <receiver android:name="ca.idi.tecla.sdk.TeclaReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

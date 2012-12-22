@@ -7,7 +7,6 @@ package ca.idi.tekla;
 import java.util.ArrayList;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.ActivityNotFoundException;
@@ -36,7 +35,7 @@ import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;
 
-public class TeclaApp extends Application {
+public class TeclaApp extends ca.idi.tecla.sdk.TeclaApp {
 
 	/**
 	 * Tag used for logging in the whole app
@@ -109,9 +108,6 @@ public class TeclaApp extends Application {
 	
 	private void init() {
 
-		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
-		Log.d(TAG, "TECLA APP STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
-		
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
 		
