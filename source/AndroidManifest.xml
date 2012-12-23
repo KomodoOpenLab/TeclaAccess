@@ -71,7 +71,7 @@
                 <action android:name="ca.idi.tekla.SEP_SERVICE" />
             </intent-filter>
         </service>
-        
+
         <!-- ENTRIES BELOW BELONG TO NEW FRAMEWORK ARCHITECTURE -->
         <service android:name="ca.idi.tecla.sdk.TeclaService" >
             <intent-filter>
@@ -79,9 +79,10 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="ca.idi.tecla.sdk.TeclaReceiver" >
+        <receiver android:name="ca.idi.tecla.sdk.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>

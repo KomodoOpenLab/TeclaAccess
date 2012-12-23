@@ -19,14 +19,14 @@ public class TeclaCommon
 
 	public static void startTeclaService (Context context)
 	{
-		if (DEBUG) Log.d(TeclaCommon.TAG, "Starting TeclaService...");
+		logD("Starting TeclaService...");
 		if (!isTeclaServiceRunning(context))
 		{
 			Intent serviceIntent = new Intent(TeclaService.NAME);
 			context.startService(serviceIntent);		
 		} else
 		{
-			if (DEBUG) Log.w(TeclaCommon.TAG, "Tecla Service already started!");
+			logW("Tecla Service already started!");
 		}
 	}
 	
@@ -41,5 +41,17 @@ public class TeclaCommon
 	        }
 	    }
 	    return false;
+	}
+	
+	public static void logD(String msg) {
+		if (DEBUG) Log.d(TAG, msg);
+	}
+	
+	public static void logW(String msg) {
+		if (DEBUG) Log.w(TAG, msg);
+	}
+
+	public static void logE(String msg) {
+		if (DEBUG) Log.e(TAG, msg);
 	}
 }
