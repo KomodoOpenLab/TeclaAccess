@@ -35,7 +35,7 @@ import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;
 
-public class TeclaApp extends ca.idi.tecla.sdk.TeclaApp {
+public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 
 	/**
 	 * Tag used for logging in the whole app

@@ -1,4 +1,4 @@
-package ca.idi.tecla.sdk;
+package ca.idi.tecla.framework;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;

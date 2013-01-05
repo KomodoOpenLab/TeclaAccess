@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tecla.lib.ListPreference;
-import ca.idi.tecla.sdk.SepManager;
+import ca.idi.tecla.framework.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.ime.TeclaKeyboardView;

@@ -2,7 +2,7 @@
  * Copyright (C) 2010-2011, Inclusive Design Research Centre
  */
 
-package ca.idi.tecla.sdk;
+package ca.idi.tecla.framework;
 
 import android.os.Bundle;
 

@@ -1,4 +1,4 @@
-package ca.idi.tecla.sdk;
+package ca.idi.tecla.framework;
 
 import android.content.Context;
 import android.inputmethodservice.KeyboardView;

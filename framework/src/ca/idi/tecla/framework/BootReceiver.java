@@ -1,4 +1,4 @@
-package ca.idi.tecla.sdk;
+package ca.idi.tecla.framework;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

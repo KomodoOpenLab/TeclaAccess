@@ -4,7 +4,7 @@
 
 package ca.idi.tekla;
 
-import ca.idi.tecla.sdk.SepManager;
+import ca.idi.tecla.framework.SepManager;
 import ca.idi.tekla.R;
 import android.app.Activity;
 import android.content.BroadcastReceiver;

@@ -14,8 +14,8 @@ import java.util.UUID;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tecla.sdk.SepManager;
-import ca.idi.tecla.sdk.SwitchEvent;
+import ca.idi.tecla.framework.SepManager;
+import ca.idi.tecla.framework.SwitchEvent;
 
 import android.app.Notification;
 import android.app.NotificationManager;
