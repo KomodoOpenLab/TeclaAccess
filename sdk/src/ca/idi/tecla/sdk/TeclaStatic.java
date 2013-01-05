@@ -4,9 +4,10 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.util.Log;
 
-public class TeclaCommon
+public class TeclaStatic
 {
 	/**
 	 * Tag used for logging in the whole framework
@@ -17,6 +18,9 @@ public class TeclaCommon
 	 */
 	public static final boolean DEBUG = true;
 
+	private static final String IME_ID = "ca.idi.tekla/.ime.TeclaIME";
+	private static final String IME_SERVICE = "ca.idi.tekla.ime.TeclaIME";
+
 	public static void startTeclaService (Context context)
 	{
 		logD("Starting TeclaService...");
@@ -26,7 +30,7 @@ public class TeclaCommon
 			context.startService(serviceIntent);		
 		} else
 		{
-			logW("Tecla Service already started!");
+			logW("Tecla Service already running!");
 		}
 	}
 	
@@ -43,6 +47,25 @@ public class TeclaCommon
 	    return false;
 	}
 	
+	public static boolean isIMERunning(Context context)
+	{
+	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service_info : manager.getRunningServices(Integer.MAX_VALUE))
+	    {
+	        if (IME_SERVICE.equals(service_info.service.getClassName()))
+	        {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	public static Boolean isDefaultIME(Context context) {
+		String ime_id = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
+		if (ime_id.equals(IME_ID)) return true;
+		return false;
+	}
+
 	public static void logD(String msg) {
 		if (DEBUG) Log.d(TAG, msg);
 	}

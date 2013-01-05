@@ -92,10 +92,6 @@ public class TeclaApp extends ca.idi.tecla.sdk.TeclaApp {
 	public static int disconnect_event;
 	public static int dictation_event;
 	
-	public TeclaApp() {
-        instance = this;
-    }
-	
 	public static TeclaApp getInstance() {
 		return instance;
 	}
@@ -108,6 +104,7 @@ public class TeclaApp extends ca.idi.tecla.sdk.TeclaApp {
 	
 	private void init() {
 
+		instance = this;
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
 		

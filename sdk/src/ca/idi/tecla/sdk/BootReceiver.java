@@ -14,7 +14,7 @@ public class BootReceiver extends BroadcastReceiver
 		
 		if (action.equals(Intent.ACTION_BOOT_COMPLETED))
 		{
-			TeclaCommon.startTeclaService(context);
+			TeclaStatic.startTeclaService(context);
 		}
 	}
 	

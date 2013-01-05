@@ -13,7 +13,6 @@ public class TeclaApp extends Application
 {
 
 	private PowerManager power_manager;
-	
 	private Boolean screen_on;
 
 	@Override
@@ -25,7 +24,7 @@ public class TeclaApp extends Application
 	
 	private void init()
 	{
-		TeclaCommon.logD("TECLA FRAMEWORK STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
+		TeclaStatic.logD("TECLA FRAMEWORK STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
 		
 		power_manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
@@ -34,13 +33,13 @@ public class TeclaApp extends Application
 		{
 			screen_on = getScreenState();
 		}
-		TeclaCommon.logD("Screen on? " + screen_on);
+		TeclaStatic.logD("Screen on? " + screen_on);
 		
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
-		TeclaCommon.startTeclaService(this);
+		TeclaStatic.startTeclaService(this);
 	}
 
 	// All intents will be processed here
@@ -55,7 +54,7 @@ public class TeclaApp extends Application
 				{
 					screen_on = getScreenState();
 				}
-				TeclaCommon.logD("Screen on? " + screen_on);
+				TeclaStatic.logD("Screen on? " + screen_on);
 			}
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				screen_on = true;
@@ -63,7 +62,7 @@ public class TeclaApp extends Application
 				{
 					screen_on = getScreenState();
 				}
-				TeclaCommon.logD("Screen on? " + screen_on);
+				TeclaStatic.logD("Screen on? " + screen_on);
 			}
 		}
 
