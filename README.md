@@ -19,7 +19,7 @@ Another very useful way to contribute to the Tecla Access project is to identify
 1. [Sign up for a fee github account](https://github.com/signup/free) if you don't already have one
 2. [Download the Tecla Access App for Android](https://play.google.com/store/apps/details?id=ca.idi.tekla) from the Google Play Store.
 2. Use Tecla Access as your main input method on your Android device
-3. Report issues and submit feature requests to your heart's content via a the [Tecla Access issues page](https://github.com/jorgesilva/TeclaAccess/issues) 
+3. Report issues and submit feature requests to your heart's content via a the [Tecla Access issues page](https://github.com/idrc/TeclaAccess/issues) 
 
 ### Translate
 
