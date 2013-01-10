@@ -73,13 +73,13 @@
         </service>
 
         <!-- ENTRIES BELOW BELONG TO NEW FRAMEWORK ARCHITECTURE -->
-        <service android:name="ca.idi.tecla.sdk.TeclaService" >
+        <service android:name="ca.idi.tecla.framework.TeclaService" >
             <intent-filter>
-                <action android:name="ca.idi.tecla.sdk.TECLA_SERVICE" />
+                <action android:name="ca.idi.tecla.framework.TECLA_SERVICE" />
             </intent-filter>
         </service>
 
-        <receiver android:name="ca.idi.tecla.sdk.BootReceiver" >
+        <receiver android:name="ca.idi.tecla.framework.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
