@@ -10,7 +10,7 @@ import android.os.IBinder;
 public class TeclaService extends Service
 {
 
-	public static final String NAME = "ca.idi.tecla.sdk.TECLA_SERVICE";
+	public static final String NAME = "ca.idi.tecla.framework.TECLA_SERVICE";
 	
 	private static final int REQUEST_IME_DELAY = 1000;
 	
