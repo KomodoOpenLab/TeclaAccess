@@ -3,3 +3,4 @@
 *.settings
 *.properties
 *.classpath
+*proguard-project.txt
