@@ -35,14 +35,16 @@ public class SepManager {
 	 * Start the Switch Event Provider and attempt a connection with a Tecla Shield with the address provided
 	 */
 	public static boolean start(Context context, String shieldAddress) {
-		Intent sepIntent = new Intent(SEP_SERVICE);
-		sepIntent.putExtra(EXTRA_SHIELD_ADDRESS, shieldAddress);
-		return context.startService(sepIntent) == null? false:true;
+		return TeclaApp.getInstance().startSEP(shieldAddress);
+//		Intent sepIntent = new Intent(SEP_SERVICE);
+//		sepIntent.putExtra(EXTRA_SHIELD_ADDRESS, shieldAddress);
+//		return context.startService(sepIntent) == null? false:true;
 	}
 
 	public static boolean stop(Context context) {
-		Intent sepIntent = new Intent(SEP_SERVICE);
-		return context.stopService(sepIntent);
+		return TeclaApp.getInstance().stopSEP();
+//		Intent sepIntent = new Intent(SEP_SERVICE);
+//		return context.stopService(sepIntent);
 	}
 
 	public static boolean isRunning(Context context) {

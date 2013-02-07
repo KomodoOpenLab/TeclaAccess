@@ -113,9 +113,9 @@ public class TeclaApp extends Application implements Runnable {
 
 	private boolean mKeepReconnecting;
 	private int mPingCounter;
-	private Handler mHandler;
+	private Handler sep_handler;
 
-	public void initSEP() {
+	private void initSEP() {
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, SEP_TAG + "Creating SEP...");
 
@@ -123,7 +123,7 @@ public class TeclaApp extends Application implements Runnable {
 		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
 		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
 
-		mHandler = new Handler();
+		sep_handler = new Handler();
 		mIsBroadcasting = false;
 		mPhoneRinging = false;
 		mPrevSwitchStates = STATE_DEFAULT;
@@ -134,14 +134,17 @@ public class TeclaApp extends Application implements Runnable {
 		mIsBold = false;
 	}
 	
-	public void stopSEP() {
+	public boolean stopSEP() {
 		stopMainThread();
 		unregisterReceiver(mReceiver);
 		Log.i(TeclaApp.TAG, SEP_TAG + "Service Stopped");
+		return true;
 	}
 	
-	public void startSEP(String shield_address) {
+	public boolean startSEP(String shield_address) {
 
+		initSEP();
+		
 		boolean success = false;
 
 		if (!mServiceStarted) {
@@ -171,6 +174,8 @@ public class TeclaApp extends Application implements Runnable {
 			Log.w(TeclaApp.TAG, SEP_TAG + "SEP already started, ignored start command.");
 			success = true;
 		}
+		
+		return success;
 
 	}
 
@@ -250,8 +255,8 @@ public class TeclaApp extends Application implements Runnable {
 								} else {
 									mSwitchStates = inByte;
 									// Ignore any changes ocurring before DEBOUNCE_TIMEOUT runs out
-									mHandler.removeCallbacks(mDebounceRunnable);
-									mHandler.postDelayed(mDebounceRunnable,DEBOUNCE_TIMEOUT);
+									sep_handler.removeCallbacks(mDebounceRunnable);
+									sep_handler.postDelayed(mDebounceRunnable,DEBOUNCE_TIMEOUT);
 								}
 							}
 						} catch (IOException e) {
@@ -265,7 +270,7 @@ public class TeclaApp extends Application implements Runnable {
 					Log.w(TeclaApp.TAG, SEP_TAG + "Disconnected from Tecla Shield");
 					TeclaApp.getInstance().wakeUnlockScreen();
 					//Need to toast on a separate thread!
-					mHandler.post(new Runnable () {
+					sep_handler.post(new Runnable () {
 						public void run() {
 							TeclaApp.getInstance().showToast(R.string.shield_connected);
 						}
@@ -344,7 +349,7 @@ public class TeclaApp extends Application implements Runnable {
 	}
 
 	private void killSocket() {
-		mHandler.removeCallbacks(mPingingRunnable);
+		sep_handler.removeCallbacks(mPingingRunnable);
 		if (mBluetoothSocket != null) {
 			// Close socket if it still exists
 			try {
@@ -453,8 +458,8 @@ public class TeclaApp extends Application implements Runnable {
 	}
 	
 	private void pingShield(long delay) {
-		mHandler.removeCallbacks(mPingingRunnable);
-		mHandler.postDelayed(mPingingRunnable, delay);
+		sep_handler.removeCallbacks(mPingingRunnable);
+		sep_handler.postDelayed(mPingingRunnable, delay);
 	}
 	
 	private Runnable mPingingRunnable = new Runnable () {
