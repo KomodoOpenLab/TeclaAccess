@@ -62,14 +62,11 @@ public class TeclaService extends Service
 		public void run()
 		{
 			handler.removeCallbacks(requestIME);
-			if (TeclaStatic.isDefaultIME(context))
-			{
+			if (TeclaStatic.isDefaultIME(context)) {
 				//TODO: Check if soft IME view is created
-				if (TeclaStatic.isIMERunning(context))
-				{
+				if (TeclaStatic.isIMERunning(context)) {
 					TeclaStatic.logD("IME is running!");
-				} else
-				{
+				} else {
 					TeclaStatic.logD("IME is NOT running!");
 				}
 				//TODO: If soft IME not running/created, spawn activity to force it open
