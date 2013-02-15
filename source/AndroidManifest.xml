@@ -28,7 +28,7 @@
         <activity
             android:name=".TeclaPrefs"
             android:label="@string/english_ime_settings"
-            android:noHistory="true" >
+            android:noHistory="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
