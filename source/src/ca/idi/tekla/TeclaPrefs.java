@@ -467,7 +467,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			if (mBluetoothAdapter == null) {
 				showAlert(R.string.shield_connect_summary_BT_nosupport);
 			} else if (!mBluetoothAdapter.isEnabled()) {
-				showAlert(R.string.shield_connect_summary_BT_disabled);
+				startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
 			}
 		}
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
