@@ -7,6 +7,7 @@ package ca.idi.tecla.framework;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 public class SepManager {
@@ -16,6 +17,7 @@ public class SepManager {
 	 * provider service. {@link #EXTRA_SHIELD_ADDRESS}
 	 * must be provided to start the service.
 	 */
+	private static final String SEP_SERVICE = "ca.idi.tekla.SEP_SERVICE";
 	private static final String SEP_SERVICE_CLASS = "ca.idi.tekla.sep.SwitchEventProvider";
 	/**
 	 * Tecla Shield MAC Address to connect to.
