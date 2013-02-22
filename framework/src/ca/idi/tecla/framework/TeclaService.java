@@ -87,7 +87,5 @@ public class TeclaService extends Service
             return TeclaService.this;
         }
     }
-    
-
-	
+    	
 }

@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 import ca.idi.tecla.framework.TeclaApp;
+import ca.idi.tecla.framework.TeclaService.LocalBinder;
 import android.app.Notification;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -18,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.inputmethodservice.InputMethodService;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -542,10 +544,23 @@ public class SwitchEventProvider extends Service implements Runnable {
 		TeclaApp.notification_manager.cancel(R.string.shield_connected);
 	}
 
+    // Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
+    
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
-		return null;
+        return mBinder;
 	}
 
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class LocalBinder extends Binder {
+    	SwitchEventProvider getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return SwitchEventProvider.this;
+        }
+    }
+    	
 }
