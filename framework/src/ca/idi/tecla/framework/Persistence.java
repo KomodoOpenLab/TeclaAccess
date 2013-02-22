@@ -23,6 +23,7 @@ public class Persistence {
 	public Persistence(Context context) {
 		
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		prefs_editor = shared_prefs.edit();
 		screen_on = false;
 		
 	}

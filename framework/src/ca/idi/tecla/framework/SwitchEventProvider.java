@@ -96,9 +96,10 @@ public class SwitchEventProvider extends Service implements Runnable {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		initSEP();
 	}
 
-	public void startSEP() {
+	public void initSEP() {
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
 		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, SEP_TAG + "Creating SEP...");
 
