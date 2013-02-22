@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.idi.tekla"
-    android:versionCode="26"
-    android:versionName="0.9.1-beta" >
+    android:versionCode="27"
+    android:versionName="0.9.3-beta" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -18,7 +18,7 @@
 
     <uses-sdk
         android:minSdkVersion="5"
-        android:targetSdkVersion="9" >
+        android:targetSdkVersion="10" >
     </uses-sdk>
 
     <application
