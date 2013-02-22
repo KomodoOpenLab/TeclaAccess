@@ -244,7 +244,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		registerReceiver(mReceiver, new IntentFilter(AudioManager.RINGER_MODE_CHANGED_ACTION));
 
 		initTeclaA11y();
-		initDesktop();
+//		initDesktop();
 	}
 	
 	private void initSuggest(String locale) {
@@ -261,12 +261,12 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		mSentenceSeparators = getResources().getString(R.string.sentence_separators);
 	}
 	
-	private void initDesktop(){
+/*	private void initDesktop(){
 		TeclaApp.mSendToPC=false;
 		wifisearcherthread=new Thread(desktopsearcher);
 		
 	}
-
+*/
 	@Override public void onDestroy() {
 		super.onDestroy();
 		mUserDictionary.close();
@@ -835,7 +835,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		if (primaryCode == TeclaKeyboardView.KEYCODE_STEPOUT) {
 			TeclaApp.highlighter.externalstepOut();
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Hidden key.Stepping out...");
-		} else if (primaryCode == TeclaKeyboardView.KEYCODE_DICTATION) {
+		}/* else if (primaryCode == TeclaKeyboardView.KEYCODE_DICTATION) {
 			//TODO: Add dictation actions here
 			if(TeclaApp.desktop==null)
 				TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
@@ -865,7 +865,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			else if(TeclaApp.desktop != null &&!TeclaApp.mSendToPC && TeclaApp.desktop.isConnected()){
 				TeclaApp.desktop.disconnect();
 			}
-		} else {
+		}*/ else {
 			switch (primaryCode) {
 			case Keyboard.KEYCODE_DELETE:
 				handleBackspace();
@@ -2452,7 +2452,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		return mKeyboardSwitcher;
 	}
 	
-	public void ConnectToDesktop(){
+/*	public void ConnectToDesktop(){
 		Log.v("dictation","started connecting");
 		if(TeclaApp.desktop ==null)
 		TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
@@ -2555,10 +2555,8 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			}
 			Log.v("dictation",""+wifisearcherthread.isAlive());
 		}
-		
 	};
-	
-	
+*/	
 	
 }
 

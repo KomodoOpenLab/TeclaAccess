@@ -190,10 +190,10 @@ public class KeyboardSwitcher {
 
     private KeyboardId getKeyboardId(int mode, int imeOptions, boolean isSymbols) {
     	
-    	boolean useVoiceInput =
+    	boolean use_voiceInput =
     			TeclaApp.getInstance().isVoiceInputSupported() && 
     			TeclaApp.persistence.isVoiceInputEnabled();
-    	boolean scanVariants =
+    	boolean scan_variants =
     			TeclaApp.persistence.isVariantsKeyEnabled();
     	boolean showAltNavKeyboard =
     			TeclaApp.persistence.isAltNavKeyboardOn();    	
@@ -220,59 +220,31 @@ public class KeyboardSwitcher {
         		}
         		
             case MODE_TEXT:
-            	if (useVoiceInput && scanVariants) {
-            		// Using voice input AND scanning variants
-                    if (mTextMode == MODE_TEXT_QWERTY) {
-                        return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_NORMAL, true);
-                    } else if (mTextMode == MODE_TEXT_ALPHA) {
-                        return new KeyboardId(R.xml.kbd_alpha_voice_variants, KEYBOARDMODE_NORMAL, true);
-                    }
-            	} else if (useVoiceInput) {
-            		// Using voice input only
-                    if (mTextMode == MODE_TEXT_QWERTY) {
-                        return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_NORMAL, true);
-                    } else if (mTextMode == MODE_TEXT_ALPHA) {
-                        return new KeyboardId(R.xml.kbd_alpha, KEYBOARDMODE_VOICE, true);
-                    }
-            	} else if (scanVariants) {
-            		// Scanning variants only
-                    if (mTextMode == MODE_TEXT_QWERTY) {
-                        return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_NORMAL, true);
-                    } else if (mTextMode == MODE_TEXT_ALPHA) {
-                        return new KeyboardId(R.xml.kbd_alpha, KEYBOARDMODE_VARIANTS, true);
-                    }
-            	} else
-            	//Default
-                if (mTextMode == MODE_TEXT_QWERTY) {
-                    return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_NORMAL, true);
-                } else if (mTextMode == MODE_TEXT_ALPHA) {
-                    return new KeyboardId(R.xml.kbd_alpha, KEYBOARDMODE_NORMAL, true);
-                }
-                break;
+            	return processModeDefault(use_voiceInput, scan_variants);
             case MODE_SYMBOLS:
                 return new KeyboardId(R.xml.kbd_symbols);
             case MODE_PHONE:
                 return new KeyboardId(R.xml.kbd_phone);
             case MODE_URL:
-            	if (useVoiceInput) {
+            	if (use_voiceInput) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_URL, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_URL, true);
             case MODE_EMAIL:
-            	if (useVoiceInput && scanVariants) {
+            	if (use_voiceInput && scan_variants) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_EMAIL, true);
-            	} else if (useVoiceInput) {
+            	} else if (use_voiceInput) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_EMAIL, true);
-            	} else if (scanVariants) {
+            	} else if (scan_variants) {
                     return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_EMAIL, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_EMAIL, true);
             case MODE_IM:
-            	if (useVoiceInput && scanVariants) {
+            	if (use_voiceInput && scan_variants) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_IM, true);
-            	} else if (useVoiceInput) {
+            	} else if (use_voiceInput) {
                     return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_IM, true);
-            	} else if (scanVariants) {
+            	} else if (scan_variants) {
                     return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_IM, true);
             	}
                 return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_IM, true);
@@ -297,8 +269,37 @@ public class KeyboardSwitcher {
                 return new KeyboardId(R.xml.kbd_1x9, KEYBOARDMODE_NORMAL, true);
             case MODE_1X10:
                 return new KeyboardId(R.xml.kbd_1x10, KEYBOARDMODE_NORMAL, true);
+            default:
+            	return processModeDefault(use_voiceInput, scan_variants);
         }
-        return null;
+    }
+    
+    private KeyboardId processModeDefault(boolean use_voice_input, boolean scan_variants) {
+    	if (use_voice_input && scan_variants) {
+    		// Using voice input AND scanning variants
+            if (mTextMode == MODE_TEXT_QWERTY) {
+                return new KeyboardId(R.xml.kbd_qwerty_voice_variants, KEYBOARDMODE_NORMAL, true);
+            } else if (mTextMode == MODE_TEXT_ALPHA) {
+                return new KeyboardId(R.xml.kbd_alpha_voice_variants, KEYBOARDMODE_NORMAL, true);
+            }
+    	} else if (use_voice_input) {
+    		// Using voice input only
+            if (mTextMode == MODE_TEXT_QWERTY) {
+                return new KeyboardId(R.xml.kbd_qwerty_voice, KEYBOARDMODE_NORMAL, true);
+            } else if (mTextMode == MODE_TEXT_ALPHA) {
+                return new KeyboardId(R.xml.kbd_alpha, KEYBOARDMODE_VOICE, true);
+            }
+    	} else if (scan_variants) {
+    		// Scanning variants only
+            if (mTextMode == MODE_TEXT_QWERTY) {
+                return new KeyboardId(R.xml.kbd_qwerty_variants, KEYBOARDMODE_NORMAL, true);
+            } else if (mTextMode == MODE_TEXT_ALPHA) {
+                return new KeyboardId(R.xml.kbd_alpha, KEYBOARDMODE_VARIANTS, true);
+            }
+    	} else if (mTextMode == MODE_TEXT_ALPHA) {
+            return new KeyboardId(R.xml.kbd_alpha, KEYBOARDMODE_NORMAL, true);
+        }
+    	return new KeyboardId(R.xml.kbd_qwerty, KEYBOARDMODE_NORMAL, true);
     }
     
     int getKeyboardMode() {

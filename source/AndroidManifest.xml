@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.idi.tekla"
-    android:versionCode="26"
-    android:versionName="0.9.1-beta" >
+    android:versionCode="27"
+    android:versionName="0.9.3-beta" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -28,7 +28,7 @@
         <activity
             android:name=".TeclaPrefs"
             android:label="@string/english_ime_settings"
-            android:noHistory="true" >
+            android:noHistory="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
