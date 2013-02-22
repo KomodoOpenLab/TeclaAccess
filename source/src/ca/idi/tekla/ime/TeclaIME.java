@@ -65,7 +65,7 @@ import ca.idi.tecla.framework.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tecla.framework.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;

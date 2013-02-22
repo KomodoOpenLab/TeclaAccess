@@ -27,7 +27,7 @@ import ca.idi.tecla.framework.SepManager;
 import ca.idi.tekla.R;
 import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.ime.TeclaKeyboardView;
-import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tecla.framework.SwitchEventProvider;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.FullResetTimeoutDialog;
 import ca.idi.tekla.util.MorseTimeUnitDialog;
