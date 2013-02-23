@@ -64,13 +64,6 @@
                 android:name="android.view.im"
                 android:resource="@xml/method" />
         </service>
-        <service
-            android:name=".sep.SwitchEventProvider"
-            android:enabled="true" >
-            <intent-filter>
-                <action android:name="ca.idi.tekla.SEP_SERVICE" />
-            </intent-filter>
-        </service>
 
         <!-- ENTRIES BELOW BELONG TO NEW FRAMEWORK ARCHITECTURE -->
         <service android:name="ca.idi.tecla.framework.TeclaService" >
@@ -86,6 +79,14 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="ca.idi.tecla.framework.SwitchEventProvider"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="ca.idi.tecla.SEP_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

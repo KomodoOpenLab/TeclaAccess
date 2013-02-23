@@ -17,8 +17,8 @@ public class SepManager {
 	 * provider service. {@link #EXTRA_SHIELD_ADDRESS}
 	 * must be provided to start the service.
 	 */
-	private static final String SEP_SERVICE = "ca.idi.tekla.SEP_SERVICE";
-	private static final String SEP_SERVICE_CLASS = "ca.idi.tekla.sep.SwitchEventProvider";
+	private static final String SEP_SERVICE = "ca.idi.tecla.SEP_SERVICE";
+	private static final String SEP_SERVICE_CLASS = "ca.idi.tecla.framework.SwitchEventProvider";
 	/**
 	 * Tecla Shield MAC Address to connect to.
 	 */

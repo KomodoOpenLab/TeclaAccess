@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import ca.idi.tecla.framework.TeclaIMEService;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
@@ -65,7 +66,7 @@ import ca.idi.tecla.framework.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tekla.sep.SwitchEventProvider;
+import ca.idi.tecla.framework.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;
@@ -573,7 +574,7 @@ public class TeclaIME extends InputMethodService
 	}
 
 	@Override
-	public void onComputeInsets(InputMethodService.Insets outInsets) {
+	public void onComputeInsets(TeclaIMEService.Insets outInsets) {
 		super.onComputeInsets(outInsets);
 		if (!isFullscreenMode()) {
 			outInsets.contentTopInsets = outInsets.visibleTopInsets;

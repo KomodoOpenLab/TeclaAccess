@@ -10,27 +10,26 @@ import android.util.Log;
 public class TeclaStatic
 {
 	/**
-	 * Tag used for logging in the whole framework
-	 */
-	public static final String TAG = "TeclaFramework";
-	/**
 	 * Main debug switch, turns on/off debugging for the whole framework
 	 */
 	public static final boolean DEBUG = true;
 
+	/**
+	 * Tag used for logging in the whole framework
+	 */
+	public static final String TAG = "TeclaFramework";
+	public static final String CLASS_TAG = "TeclaStatic";
+
 	private static final String IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 	private static final String IME_SERVICE = "ca.idi.tekla.ime.TeclaIME";
 
-	public static void startTeclaService (Context context)
-	{
-		logD("Starting TeclaService...");
-		if (!isTeclaServiceRunning(context))
-		{
+	public static void startTeclaService (Context context) {
+		logD(CLASS_TAG, "Starting TeclaService...");
+		if (!isTeclaServiceRunning(context)) {
 			Intent serviceIntent = new Intent(TeclaService.NAME);
 			context.startService(serviceIntent);		
-		} else
-		{
-			logW("Tecla Service already running!");
+		} else {
+			logW(CLASS_TAG, "Tecla Service already running!");
 		}
 	}
 	
@@ -66,15 +65,23 @@ public class TeclaStatic
 		return false;
 	}
 
-	public static void logD(String msg) {
-		if (DEBUG) Log.d(TAG, msg);
+	public static void logV(String class_tag, String msg) {
+		if (DEBUG) Log.v(TAG, class_tag + ": " + msg);
 	}
 	
-	public static void logW(String msg) {
-		if (DEBUG) Log.w(TAG, msg);
+	public static void logI(String class_tag, String msg) {
+		if (DEBUG) Log.i(TAG, class_tag + ": " + msg);
+	}
+	
+	public static void logD(String class_tag, String msg) {
+		if (DEBUG) Log.d(TAG, class_tag + ": " + msg);
+	}
+	
+	public static void logW(String class_tag, String msg) {
+		if (DEBUG) Log.w(TAG, class_tag + ": " + msg);
 	}
 
-	public static void logE(String msg) {
-		if (DEBUG) Log.e(TAG, msg);
+	public static void logE(String class_tag, String msg) {
+		if (DEBUG) Log.e(TAG, class_tag + ": " + msg);
 	}
 }
