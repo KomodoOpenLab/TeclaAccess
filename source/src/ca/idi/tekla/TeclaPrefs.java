@@ -374,7 +374,20 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mBluetoothAdapter.startDiscovery();
 		showDiscoveryDialog();
 	}
+	
+	BroadcastReceiver btReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
+			if (state == BluetoothAdapter.STATE_ON){
+				Log.i(TeclaApp.TAG, "Bluetooth Turned On Successfully");
+				discoverShield();
+			}
+		}
+	};
 
+	
 	// All intents will be processed here
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -468,6 +481,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			if (mBluetoothAdapter == null) {
 				showAlert(R.string.shield_connect_summary_BT_nosupport);
 			} else if (!mBluetoothAdapter.isEnabled()) {
+				registerReceiver(btReceiver, new IntentFilter(
+						BluetoothAdapter.ACTION_STATE_CHANGED));
 				startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
 			}
 		}
