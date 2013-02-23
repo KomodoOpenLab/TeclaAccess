@@ -12,7 +12,8 @@ public class TeclaService extends Service
 
 	public static final String NAME = "ca.idi.tecla.framework.TECLA_SERVICE";
 	
-	private static final int REQUEST_IME_DELAY = 1000;
+	private static final String CLASS_TAG = "TeclaService";
+	private static final int REQUEST_IME_DELAY = 60000;
 	
 	private Handler handler;
 	private Context context;
@@ -38,7 +39,7 @@ public class TeclaService extends Service
 		context = this;
 		handler = new Handler();
 		handler.postDelayed(requestIME, REQUEST_IME_DELAY);
-		TeclaStatic.logD("Tecla Service created");
+		TeclaStatic.logD(CLASS_TAG, "Tecla Service created");
 	}
 
 	@Override
@@ -46,14 +47,14 @@ public class TeclaService extends Service
 	{
 		super.onDestroy();
 		handler.removeCallbacks(requestIME);
-		TeclaStatic.logW("TeclaService onDestroy called!");
+		TeclaStatic.logW(CLASS_TAG, "TeclaService onDestroy called!");
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId)
 	{
 		super.onStart(intent, startId);
-		TeclaStatic.logD("TeclaService onStart called");
+		TeclaStatic.logD(CLASS_TAG, "TeclaService onStart called");
 	}
 
 	private Runnable requestIME = new Runnable()
@@ -62,15 +63,12 @@ public class TeclaService extends Service
 		public void run()
 		{
 			handler.removeCallbacks(requestIME);
-			if (TeclaStatic.isDefaultIME(context))
-			{
+			if (TeclaStatic.isDefaultIME(context)) {
 				//TODO: Check if soft IME view is created
-				if (TeclaStatic.isIMERunning(context))
-				{
-					TeclaStatic.logD("IME is running!");
-				} else
-				{
-					TeclaStatic.logD("IME is NOT running!");
+				if (TeclaStatic.isIMERunning(context)) {
+					TeclaStatic.logD(CLASS_TAG, "IME is running!");
+				} else {
+					TeclaStatic.logD(CLASS_TAG, "IME is NOT running!");
 				}
 				//TODO: If soft IME not running/created, spawn activity to force it open
 				//TeclaStatic.logD("TeclaIME is the default!");
@@ -90,7 +88,5 @@ public class TeclaService extends Service
             return TeclaService.this;
         }
     }
-    
-
-	
+    	
 }
