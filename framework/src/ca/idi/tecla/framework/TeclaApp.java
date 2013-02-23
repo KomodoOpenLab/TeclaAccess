@@ -3,6 +3,7 @@ package ca.idi.tecla.framework;
 import ca.idi.tecla.framework.Persistence;
 import android.annotation.TargetApi;
 import android.app.Application;
+import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.bluetooth.BluetoothAdapter;
@@ -23,15 +24,15 @@ import android.widget.Toast;
 public class TeclaApp extends Application {
 
 	/**
-	 * Tag used for logging in the whole app
+	 * Tag used for logging in the whole class
 	 */
-	public static final String TAG = "TeclaFramework";
+	public static final String CLASS_TAG = "TeclaApp";
 	/**
 	 * Main debug switch, turns on/off debugging for the whole app
 	 */
 	public static final boolean DEBUG = true;
 
-	private static final int WAKE_LOCK_TIMEOUT = 5000;
+	public static final int WAKE_LOCK_TIMEOUT = 5000;
 
 	private static TeclaApp instance;
 	public static Persistence persistence;
@@ -39,6 +40,7 @@ public class TeclaApp extends Application {
 	public static NotificationManager notification_manager;
 
 	private PowerManager power_manager;
+	private KeyguardManager keyguard_manager;
 	private WakeLock wake_lock;
 	private KeyguardLock keyguard_lock;
 	private AudioManager audio_manager;
@@ -58,28 +60,30 @@ public class TeclaApp extends Application {
 		init();
 	}
 	
-	private void init()
-	{
-		TeclaStatic.logD("TECLA FRAMEWORK STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
+	private void init() {
+		
+		TeclaStatic.logD(CLASS_TAG, "TECLA FRAMEWORK STARTING ON " + Build.MODEL + " BY " + Build.MANUFACTURER);
 
 		instance = this;
 		persistence = new Persistence(this);
 
 		power_manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wake_lock = power_manager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.FULL_WAKE_LOCK |
-				PowerManager.ON_AFTER_RELEASE, TeclaApp.TAG);
+				PowerManager.ON_AFTER_RELEASE, TeclaStatic.TAG);
+		keyguard_manager = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+		keyguard_lock = keyguard_manager.newKeyguardLock(CLASS_TAG);
 		bluetooth_adapter = BluetoothAdapter.getDefaultAdapter();
 		notification_manager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		audio_manager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 		handler = new Handler();
 
-		screen_on = true;
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR_MR1)
-		{
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR_MR1) {
 			screen_on = getScreenState();
+		} else {
+			screen_on = true;
 		}
-		TeclaStatic.logD("Screen on? " + screen_on);
+		TeclaStatic.logD(CLASS_TAG, "Screen on? " + screen_on);
 		
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
@@ -88,6 +92,14 @@ public class TeclaApp extends Application {
 		TeclaStatic.startTeclaService(this);
 	}
 
+	public boolean isScreenOn() {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR_MR1) {
+			return getScreenState();
+		} else {
+			return screen_on;
+		}
+	}
+	
 	// All intents will be processed here
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -96,19 +108,11 @@ public class TeclaApp extends Application {
 
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
 				screen_on = false;
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR_MR1)
-				{
-					screen_on = getScreenState();
-				}
-				TeclaStatic.logD("Screen on? " + screen_on);
+				TeclaStatic.logD(CLASS_TAG, "Screen off");
 			}
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				screen_on = true;
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR_MR1)
-				{
-					screen_on = getScreenState();
-				}
-				TeclaStatic.logD("Screen on? " + screen_on);
+				TeclaStatic.logD(CLASS_TAG, "Screen on");
 			}
 		}
 
@@ -132,22 +136,27 @@ public class TeclaApp extends Application {
 	 */
 	public void holdWakeLock(long length) {
 		if (length > 0) {
-			if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring temporal wake lock...");
+			TeclaStatic.logD(CLASS_TAG, "Aquiring temporal wake lock...");
 			wake_lock.acquire(length);
 		} else {
-			if (DEBUG) Log.d(TeclaApp.TAG, "Aquiring wake lock...");
+			TeclaStatic.logD(CLASS_TAG, "Aquiring wake lock...");
 			wake_lock.acquire();
 		}
 		pokeUserActivityTimer();
 	}
 
 	public void releaseWakeLock () {
-		if (DEBUG) Log.d(TeclaApp.TAG, "Releasing wake lock...");
+		TeclaStatic.logD(CLASS_TAG, "Releasing wake lock...");
 		wake_lock.release();
 	}
 	
+	public void releaseKeyguardLock() {
+		TeclaStatic.logD(CLASS_TAG, "Releasing keyguard lock...");
+		keyguard_lock.reenableKeyguard();
+	}
+	
 	public void holdKeyguardLock() {
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Acquiring keyguard lock...");
+		TeclaStatic.logD(CLASS_TAG, "Acquiring keyguard lock...");
 		keyguard_lock.disableKeyguard();
 	}
 	
@@ -209,6 +218,10 @@ public class TeclaApp extends Application {
 	
 	public void showToast(int resid) {
 		Toast.makeText(this, resid, Toast.LENGTH_LONG).show();
-	}	
+	}
 	
+	public void showToast(String msg) {
+		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+	}
+
 }

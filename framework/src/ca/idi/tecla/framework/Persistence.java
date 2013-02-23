@@ -15,8 +15,6 @@ public class Persistence {
 
 	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
 
-	private boolean screen_on;
-	
 	private SharedPreferences shared_prefs;
 	private SharedPreferences.Editor prefs_editor;
 
@@ -24,7 +22,6 @@ public class Persistence {
 		
 		shared_prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		prefs_editor = shared_prefs.edit();
-		screen_on = false;
 		
 	}
 	
@@ -43,10 +40,6 @@ public class Persistence {
 		prefs_editor.commit();
 	}
 
-	public boolean isScreenOn() {
-		return screen_on;
-	}
-	
 	public boolean isSpeakerphoneEnabled() {
 		return shared_prefs.getBoolean(PREF_SPEAKERPHONE_SWITCH, false);
 	}

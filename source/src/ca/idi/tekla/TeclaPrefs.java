@@ -24,6 +24,7 @@ import java.util.HashMap;
 import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tecla.lib.ListPreference;
 import ca.idi.tecla.framework.SepManager;
+import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.R;
 import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.ime.TeclaKeyboardView;
@@ -312,7 +313,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
-		if (!TeclaApp.getInstance().isDefaultIME()) {
+		if (!TeclaStatic.isDefaultIME(getApplicationContext())) {
 			//Tecla Access is not selected
 			mPrefPersistentKeyboard.setEnabled(false);
 			mPrefAutohideTimeout.setEnabled(false);
