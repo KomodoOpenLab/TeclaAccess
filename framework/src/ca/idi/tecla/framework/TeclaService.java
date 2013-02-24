@@ -84,6 +84,7 @@ public class TeclaService extends Service {
 	}
 	
 	public void handleSwitchEvent(int switchChanges, int switchStates) {
+		TeclaStatic.logD(CLASS_TAG, "Handling switch event.");
 		if (mPhoneRinging) {
 			//Screen should be on
 			//Answering should also unlock
