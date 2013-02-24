@@ -35,6 +35,11 @@ public class SwitchEvent {
 		switch_states = SWITCH_STATES_DEFAULT;
 	}
 	
+	public SwitchEvent(int mask) {
+		switch_changes = mask;
+		switch_states = ~mask;
+	}
+	
 	public SwitchEvent(Bundle bundle) {
 		switch_changes = bundle.getInt(EXTRA_SWITCH_CHANGES);
 		switch_states = bundle.getInt(EXTRA_SWITCH_STATES);
@@ -86,11 +91,6 @@ public class SwitchEvent {
 			}
 		}
 		return false;
-	}
-	
-	public void setPressed(int mask) {
-		switch_changes = mask;
-		switch_states = ~mask;
 	}
 	
 	public void setReleased(int mask) {

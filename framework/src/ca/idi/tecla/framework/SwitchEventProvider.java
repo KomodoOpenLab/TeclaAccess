@@ -79,11 +79,11 @@ public class SwitchEventProvider extends Service {
 	};
 	
 	/** INPUT HANDLING METHODS AND VARIABLES **/
-	public void handleSwitchEvent(SwitchEvent event) {
-		handleSwitchEvent(event.getSwitchChanges(), event.getSwitchStates());
+	public void injectSwitchEvent(SwitchEvent event) {
+		injectSwitchEvent(event.getSwitchChanges(), event.getSwitchStates());
 	}
 	
-	public void handleSwitchEvent(int switchChanges, int switchStates) {
+	public void injectSwitchEvent(int switchChanges, int switchStates) {
 		TeclaStatic.logD(CLASS_TAG, "Handling switch event.");
 		if (mPhoneRinging) {
 			//Screen should be on
