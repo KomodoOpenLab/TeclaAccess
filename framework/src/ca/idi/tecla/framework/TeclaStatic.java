@@ -26,7 +26,7 @@ public class TeclaStatic
 	public static void startTeclaService (Context context) {
 		logD(CLASS_TAG, "Starting TeclaService...");
 		if (!isTeclaServiceRunning(context)) {
-			Intent serviceIntent = new Intent(TeclaService.NAME);
+			Intent serviceIntent = new Intent(SwitchEventProvider.NAME);
 			context.startService(serviceIntent);		
 		} else {
 			logW(CLASS_TAG, "Tecla Service already running!");
@@ -38,7 +38,7 @@ public class TeclaStatic
 	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service_info : manager.getRunningServices(Integer.MAX_VALUE))
 	    {
-	        if (TeclaService.class.getName().equals(service_info.service.getClassName()))
+	        if (SwitchEventProvider.class.getName().equals(service_info.service.getClassName()))
 	        {
 	            return true;
 	        }

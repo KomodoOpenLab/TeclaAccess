@@ -1,6 +1,6 @@
 package ca.idi.tecla.framework;
 
-import ca.idi.tecla.framework.TeclaService.LocalBinder;
+import ca.idi.tecla.framework.SwitchEventProvider.LocalBinder;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +15,11 @@ public class TeclaIMEService extends InputMethodService {
 		super.onCreate();
 		
 		// Bind to TeclaService
-		Intent intent = new Intent(this, TeclaService.class);
+		Intent intent = new Intent(this, SwitchEventProvider.class);
 		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 	}
 
-	TeclaService tecla_service;
+	SwitchEventProvider tecla_service;
 	boolean mBound = false;
 
     /** Defines callbacks for service binding, passed to bindService() */

@@ -4,7 +4,7 @@
 
 package ca.idi.tekla;
 
-import ca.idi.tecla.framework.SepManager;
+import ca.idi.tecla.framework.TeclaShieldManager;
 import ca.idi.tekla.R;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -117,7 +117,7 @@ public class TeclaSplash extends Activity
 		mConnectToShieldCalled = true;
 		if (TeclaApp.persistence.shouldConnectToShield()) {
 			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Starting SEP...");
-			SepManager.start(this);
+			TeclaShieldManager.connect(this);
 		}
 	}
 
