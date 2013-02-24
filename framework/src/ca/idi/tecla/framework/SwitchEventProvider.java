@@ -8,21 +8,20 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 import ca.idi.tecla.framework.TeclaApp;
+import ca.idi.tecla.framework.TeclaService.LocalBinder;
 import android.app.Notification;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Binder;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class SwitchEventProvider extends Service implements Runnable {
@@ -58,7 +57,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 	public static final int SWITCH_EVENT_RELEASE = 160;
 
 	// FLAGS FOR READING SWITCH STATES
-	private static final int STATE_DEFAULT = 0x3F;
 	private static final int STATE_PING = 0x70;
 
 	private static final int PING_DELAY = 2000; //milliseconds
@@ -78,13 +76,10 @@ public class SwitchEventProvider extends Service implements Runnable {
 	// VARIABLES FOR SWITCH PROCESSING
 	// TODO: This variable should be used when new Shield versions are available
 	private int mPrevSwitchStates, mSwitchStates;
-	private boolean mPhoneRinging;
 	private static final long DEBOUNCE_TIMEOUT = 20; // milliseconds
 
 	private Boolean mIsBroadcasting, mServiceStarted;
 	private Thread mMainThread;
-
-	private Intent mSwitchEventIntent;
 
 	private boolean mKeepReconnecting;
 	private int mPingCounter;
@@ -99,14 +94,13 @@ public class SwitchEventProvider extends Service implements Runnable {
 	public void initSEP() {
 		TeclaStatic.logD(CLASS_TAG, "Creating SEP...");
 
-		//Intents & Intent Filters
-		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
-		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
+		// Bind to TeclaService
+		Intent intent = new Intent(this, TeclaService.class);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
 		mHandler = new Handler();
 		mIsBroadcasting = false;
-		mPhoneRinging = false;
-		mPrevSwitchStates = STATE_DEFAULT;
+		mPrevSwitchStates = SwitchEvent.SWITCH_STATES_DEFAULT;
 		mServiceStarted = false;
 
 		mShyCounter = 0;
@@ -116,7 +110,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 
 	public void stopSEP() {
 		stopMainThread();
-		unregisterReceiver(mReceiver);
 		TeclaStatic.logI(CLASS_TAG, "Service Stopped");
 	}
 
@@ -290,13 +283,13 @@ public class SwitchEventProvider extends Service implements Runnable {
 			mPrevSwitchStates = mSwitchStates;
 
 			//FIXME: Temporal work-around for compatibility with mono plugs
-			if ((switchChanges & SwitchEvent.SWITCH_E2) != SwitchEvent.SWITCH_E2) {
-				mSwitchStates |= SwitchEvent.SWITCH_E2;
+			if ((switchChanges & SwitchEvent.MASK_SWITCH_E2) != SwitchEvent.MASK_SWITCH_E2) {
+				mSwitchStates |= SwitchEvent.MASK_SWITCH_E2;
 			}
 
-			handleSwitchEvent(switchChanges, mSwitchStates);
+			tecla_service.handleSwitchEvent(switchChanges, mSwitchStates);
 
-			if (mSwitchStates != STATE_DEFAULT) {
+			if (mSwitchStates != SwitchEvent.SWITCH_STATES_DEFAULT) {
 				if(!TeclaApp.persistence.isMorseModeEnabled()) {
 					//Disables sending a category.HOME intent when
 					//using Morse repeat-on-switch-down
@@ -308,34 +301,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 		}
 
 	};
-
-	private void handleSwitchEvent(int switchChanges, int switchStates) {
-		if (mPhoneRinging) {
-			//Screen should be on
-			//Answering should also unlock
-			TeclaApp.getInstance().answerCall();
-			// Assume phone is not ringing any more
-			mPhoneRinging = false;
-		} else if (!TeclaApp.getInstance().isScreenOn()) {
-			// Screen is off, so just wake it
-			TeclaApp.getInstance().wakeUnlockScreen();
-			TeclaStatic.logD(CLASS_TAG, "Waking and unlocking screen.");
-		} else {
-			// In all other instances acquire wake lock,
-			// WARNING: just poking user activity timer DOES NOT WORK on gingerbread
-			TeclaApp.getInstance().wakeUnlockScreen();
-			TeclaStatic.logD(CLASS_TAG, "Broadcasting switch event: " +
-					TeclaApp.getInstance().byte2Hex(switchChanges) + ":" +
-					TeclaApp.getInstance().byte2Hex(switchStates));
-			// Reset intent
-			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_CHANGES);
-			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_STATES);
-			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, switchChanges);
-			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, switchStates);
-			// Broadcast event
-			sendBroadcast(mSwitchEventIntent);
-		}
-	}
 
 	private void killSocket() {
 		mHandler.removeCallbacks(mPingingRunnable);
@@ -352,25 +317,6 @@ public class SwitchEventProvider extends Service implements Runnable {
 		}
 		TeclaStatic.logD(CLASS_TAG, "Socket killed");
 	}
-
-	// All intents will be processed here
-	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-
-			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
-				TeclaStatic.logD(CLASS_TAG, "Phone state changed");
-				mPhoneRinging = false;
-				TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-				if (tm.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-					TeclaStatic.logD(CLASS_TAG, "Phone ringing");
-					mPhoneRinging = true;
-				}
-			}
-		}
-
-	};
 
 	/**
 	 * Connects to bluetooth server.
@@ -541,24 +487,32 @@ public class SwitchEventProvider extends Service implements Runnable {
 		// Cancel the persistent notification.
 		TeclaApp.notification_manager.cancel(R.string.shield_connected);
 	}
+	
+	TeclaService tecla_service;
+	boolean mBound = false;
 
-	// Binder given to clients
-	private final IBinder mBinder = new LocalBinder();
+	/** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName arg0, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            LocalBinder binder = (LocalBinder) service;
+            tecla_service = binder.getService();
+            mBound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+			
+		}
+    };
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		return mBinder;
-	}
-
-	/**
-	 * Class used for the client Binder.  Because we know this service always
-	 * runs in the same process as its clients, we don't need to deal with IPC.
-	 */
-	public class LocalBinder extends Binder {
-		SwitchEventProvider getService() {
-			// Return this instance of LocalService so clients can call public methods
-			return SwitchEventProvider.this;
-		}
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

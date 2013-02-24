@@ -1,60 +1,60 @@
 package ca.idi.tecla.framework;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.telephony.TelephonyManager;
 
-public class TeclaService extends Service
-{
+public class TeclaService extends Service {
 
 	public static final String NAME = "ca.idi.tecla.framework.TECLA_SERVICE";
 	
 	private static final String CLASS_TAG = "TeclaService";
 	private static final int REQUEST_IME_DELAY = 60000;
 	
+	private Intent mSwitchEventIntent;
+	private boolean mPhoneRinging;
+
 	private Handler handler;
 	private Context context;
 
-    // Binder given to clients
-    private final IBinder mBinder = new LocalBinder();
-    
-    @Override
-    public IBinder onBind(Intent intent) {
-        return mBinder;
-    }
-    
 	@Override
-	public void onCreate()
-	{
+	public void onCreate() {
 		super.onCreate();
 		
 		init();
 	}
 	
-	private void init()
-	{
+	private void init() {
 		context = this;
 		handler = new Handler();
+		mPhoneRinging = false;
+		
+		//Intents & Intent Filters
+		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
+		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
+		
 		handler.postDelayed(requestIME, REQUEST_IME_DELAY);
 		TeclaStatic.logD(CLASS_TAG, "Tecla Service created");
 	}
 
 	@Override
-	public void onDestroy()
-	{
-		super.onDestroy();
-		handler.removeCallbacks(requestIME);
-		TeclaStatic.logW(CLASS_TAG, "TeclaService onDestroy called!");
+	public void onStart(Intent intent, int startId) {
+		super.onStart(intent, startId);
+		TeclaStatic.logD(CLASS_TAG, "TeclaService onStart called");
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId)
-	{
-		super.onStart(intent, startId);
-		TeclaStatic.logD(CLASS_TAG, "TeclaService onStart called");
+	public void onDestroy() {
+		super.onDestroy();
+		unregisterReceiver(mReceiver);
+		handler.removeCallbacks(requestIME);
+		TeclaStatic.logW(CLASS_TAG, "TeclaService onDestroy called!");
 	}
 
 	private Runnable requestIME = new Runnable()
@@ -78,6 +78,67 @@ public class TeclaService extends Service
 		
 	};
 	
+	/** INPUT HANDLING METHODS AND VARIABLES **/
+	public void handleSwitchEvent(SwitchEvent event) {
+		handleSwitchEvent(event.getSwitchChanges(), event.getSwitchStates());
+	}
+	
+	public void handleSwitchEvent(int switchChanges, int switchStates) {
+		if (mPhoneRinging) {
+			//Screen should be on
+			//Answering should also unlock
+			TeclaApp.getInstance().answerCall();
+			// Assume phone is not ringing any more
+			mPhoneRinging = false;
+		} else if (!TeclaApp.getInstance().isScreenOn()) {
+			// Screen is off, so just wake it
+			TeclaApp.getInstance().wakeUnlockScreen();
+			TeclaStatic.logD(CLASS_TAG, "Waking and unlocking screen.");
+		} else {
+			// In all other instances acquire wake lock,
+			// WARNING: just poking user activity timer DOES NOT WORK on gingerbread
+			TeclaApp.getInstance().wakeUnlockScreen();
+			TeclaStatic.logD(CLASS_TAG, "Broadcasting switch event: " +
+					TeclaApp.getInstance().byte2Hex(switchChanges) + ":" +
+					TeclaApp.getInstance().byte2Hex(switchStates));
+			// Reset intent
+			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_CHANGES);
+			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_STATES);
+			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, switchChanges);
+			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, switchStates);
+			// Broadcast event
+			sendBroadcast(mSwitchEventIntent);
+		}
+	}
+
+	// All intents will be processed here
+	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
+				TeclaStatic.logD(CLASS_TAG, "Phone state changed");
+				mPhoneRinging = false;
+				TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+				if (tm.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+					TeclaStatic.logD(CLASS_TAG, "Phone ringing");
+					mPhoneRinging = true;
+				}
+			}
+		}
+
+	};
+
+	/** BINDING METHODS AND VARIABLES **/
+	// Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
+    
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
+    
     /**
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.

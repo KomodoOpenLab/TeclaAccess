@@ -30,7 +30,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import ca.idi.tecla.framework.TeclaIMEService;
-import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
@@ -69,12 +68,11 @@ import ca.idi.tekla.TeclaPrefs;
 import ca.idi.tecla.framework.SwitchEventProvider;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
-import ca.idi.tekla.util.TeclaDesktopClient;
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
  */
-public class TeclaIME extends InputMethodService
+public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		implements KeyboardView.OnKeyboardActionListener {
 	static final boolean TRACE = false;
 
