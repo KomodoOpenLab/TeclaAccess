@@ -287,7 +287,7 @@ public class TeclaShieldService extends Service implements Runnable {
 				mSwitchStates |= SwitchEvent.MASK_SWITCH_E2;
 			}
 
-			tecla_service.handleSwitchEvent(switchChanges, mSwitchStates);
+			switch_event_provider.injectSwitchEvent(switchChanges, mSwitchStates);
 
 			if (mSwitchStates != SwitchEvent.SWITCH_STATES_DEFAULT) {
 				if(!TeclaApp.persistence.isMorseModeEnabled()) {
@@ -488,7 +488,7 @@ public class TeclaShieldService extends Service implements Runnable {
 		TeclaApp.notification_manager.cancel(R.string.shield_connected);
 	}
 	
-	SwitchEventProvider tecla_service;
+	SwitchEventProvider switch_event_provider;
 	boolean mBound = false;
 
 	/** Defines callbacks for service binding, passed to bindService() */
@@ -498,7 +498,7 @@ public class TeclaShieldService extends Service implements Runnable {
 		public void onServiceConnected(ComponentName arg0, IBinder service) {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             LocalBinder binder = (LocalBinder) service;
-            tecla_service = binder.getService();
+            switch_event_provider = binder.getService();
             mBound = true;
 		}
 

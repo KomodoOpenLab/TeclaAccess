@@ -1971,7 +1971,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		//Emulator issue (temporary fix): if typing too fast, or holding a long press
 		//while in auto-release mode, some switch events are null
 		if (switchEvent.toString() == null) {
-			Log.d(TeclaApp.TAG, "Captured null switch event");
+			Log.w(TeclaApp.TAG, "Captured null switch event");
 			return;
 		}
 
@@ -2311,31 +2311,14 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		public boolean onTouch(View v, MotionEvent event) {
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				if (TeclaApp.persistence.isRepeatingKey()) stopRepeatingKey();
+				injectSwitchEvent(new SwitchEvent(SwitchEvent.MASK_SWITCH_E1)); //Primary switch pressed
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
 				mSwitch.setBackgroundResource(R.color.switch_pressed);
-				vibrate();
-				playKeySound(KEYCODE_ENTER);
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					TeclaApp.highlighter.resumeSelfScanning();
-				} else {
-					selectHighlighted(false);
-				}
 				break;
 			case MotionEvent.ACTION_UP:
+				injectSwitchEvent(new SwitchEvent()); //Switches released
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
 				mSwitch.setBackgroundResource(android.R.color.transparent);
-				if (TeclaApp.persistence.isInverseScanningEnabled()) {
-					if (TeclaApp.persistence.isInverseScanningChanged()) {
-						//Ignore event right after Inverse Scanning is Enabled
-						TeclaApp.persistence.unsetInverseScanningChanged();
-						Log.w(TeclaApp.TAG, CLASS_TAG + "Ignoring switch event because Inverse Scanning was just enabled");
-					} else {
-						vibrate();
-						playKeySound(KEYCODE_ENTER);
-						selectHighlighted(false);
-					}
-				}
 				break;
 			default:
 				break;
