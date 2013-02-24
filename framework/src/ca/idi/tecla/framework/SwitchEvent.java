@@ -18,18 +18,31 @@ public class SwitchEvent {
 	public static final String EXTRA_SWITCH_STATES = "ca.idi.tekla.sdk.extra.SWITCH_STATES";
 	
 	// MASKS FOR READING SWITCH STATES
-	public static final int SWITCH_J1 = 0x01; //Forward / Up
-	public static final int SWITCH_J2 = 0x02; //Back / Down
-	public static final int SWITCH_J3 = 0x04; //Left
-	public static final int SWITCH_J4 = 0x08; //Right
-	public static final int SWITCH_E1 = 0x10;
-	public static final int SWITCH_E2 = 0x20;
+	public static final int MASK_SWITCH_J1 = 0x01; //Forward / Up
+	public static final int MASK_SWITCH_J2 = 0x02; //Back / Down
+	public static final int MASK_SWITCH_J3 = 0x04; //Left
+	public static final int MASK_SWITCH_J4 = 0x08; //Right
+	public static final int MASK_SWITCH_E1 = 0x10;
+	public static final int MASK_SWITCH_E2 = 0x20;
+
+	public static final int SWITCH_STATES_DEFAULT = 0x3F;
+	public static final int SWITCH_CHANGES_DEFAULT = 0x00;
 
 	private int switch_changes, switch_states;
+	
+	public SwitchEvent() {
+		switch_changes = SWITCH_STATES_DEFAULT;
+		switch_states = SWITCH_STATES_DEFAULT;
+	}
 	
 	public SwitchEvent(Bundle bundle) {
 		switch_changes = bundle.getInt(EXTRA_SWITCH_CHANGES);
 		switch_states = bundle.getInt(EXTRA_SWITCH_STATES);
+	}
+	
+	public SwitchEvent(int states, int changes) {
+		switch_changes = states;
+		switch_states = changes;
 	}
 	
 	public int getSwitchChanges() {
@@ -52,12 +65,12 @@ public class SwitchEvent {
 	}
 		
 	public boolean isAnyPressed() {
-		if (isPressed(SWITCH_E1)
-				|| isPressed(SWITCH_E2)
-				|| isPressed(SWITCH_J1)
-				|| isPressed(SWITCH_J2)
-				|| isPressed(SWITCH_J3)
-				|| isPressed(SWITCH_J4)
+		if (isPressed(MASK_SWITCH_E1)
+				|| isPressed(MASK_SWITCH_E2)
+				|| isPressed(MASK_SWITCH_J1)
+				|| isPressed(MASK_SWITCH_J2)
+				|| isPressed(MASK_SWITCH_J3)
+				|| isPressed(MASK_SWITCH_J4)
 				) {
 			return true;
 		}
@@ -75,13 +88,23 @@ public class SwitchEvent {
 		return false;
 	}
 	
+	public void setPressed(int mask) {
+		switch_changes = mask;
+		switch_states = ~mask;
+	}
+	
+	public void setReleased(int mask) {
+		switch_changes = mask;
+		switch_states = SWITCH_STATES_DEFAULT;
+	}
+	
 	public String toString() {
-		if (switch_changes == SWITCH_J1) return "switch_j1";
-		if (switch_changes == SWITCH_J2) return "switch_j2";
-		if (switch_changes == SWITCH_J3) return "switch_j3";
-		if (switch_changes == SWITCH_J4) return "switch_j4";
-		if (switch_changes == SWITCH_E1) return "switch_e1";
-		if (switch_changes == SWITCH_E2) return "switch_e2";
+		if (switch_changes == MASK_SWITCH_J1) return "switch_j1";
+		if (switch_changes == MASK_SWITCH_J2) return "switch_j2";
+		if (switch_changes == MASK_SWITCH_J3) return "switch_j3";
+		if (switch_changes == MASK_SWITCH_J4) return "switch_j4";
+		if (switch_changes == MASK_SWITCH_E1) return "switch_e1";
+		if (switch_changes == MASK_SWITCH_E2) return "switch_e2";
 		return null;
 	}
 		

@@ -10,15 +10,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class SepManager {
+public class TeclaShieldManager {
 
 	/**
 	 * Intent string used to start and stop the switch event
 	 * provider service. {@link #EXTRA_SHIELD_ADDRESS}
 	 * must be provided to start the service.
 	 */
-	private static final String SEP_SERVICE = "ca.idi.tecla.SEP_SERVICE";
-	private static final String SEP_SERVICE_CLASS = "ca.idi.tecla.framework.SwitchEventProvider";
+	private static final String SHIELD_SERVICE = "ca.idi.tecla.framework.TECLA_SHIELD_SERVICE";
+	private static final String SHIELD_SERVICE_CLASS = "ca.idi.tecla.framework.TeclaShieldService";
 	/**
 	 * Tecla Shield MAC Address to connect to.
 	 */
@@ -27,21 +27,21 @@ public class SepManager {
 	/**
 	 * Start the Switch Event Provider and attempt a connection with the last known Tecla Shield
 	 */
-	public static boolean start(Context context) {
-		return start(context, null);
+	public static boolean connect(Context context) {
+		return connect(context, null);
 	}
 
 	/**
 	 * Start the Switch Event Provider and attempt a connection with a Tecla Shield with the address provided
 	 */
-	public static boolean start(Context context, String shieldAddress) {
-		Intent sepIntent = new Intent(SEP_SERVICE);
+	public static boolean connect(Context context, String shieldAddress) {
+		Intent sepIntent = new Intent(SHIELD_SERVICE);
 		sepIntent.putExtra(EXTRA_SHIELD_ADDRESS, shieldAddress);
 		return context.startService(sepIntent) == null? false:true;
 	}
 
-	public static boolean stop(Context context) {
-		Intent sepIntent = new Intent(SEP_SERVICE);
+	public static boolean disconnect(Context context) {
+		Intent sepIntent = new Intent(SHIELD_SERVICE);
 		return context.stopService(sepIntent);
 	}
 
@@ -49,7 +49,7 @@ public class SepManager {
 	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 	    	Log.d("Tecla SDK", service.service.getClassName().toString());
-	    	if (SEP_SERVICE_CLASS.equals(service.service.getClassName())) {
+	    	if (SHIELD_SERVICE_CLASS.equals(service.service.getClassName())) {
 	            return true;
 	        }
 	    }

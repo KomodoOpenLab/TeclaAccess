@@ -23,12 +23,12 @@ import java.util.HashMap;
 
 import ca.idi.tecla.lib.InputAccess;
 import ca.idi.tecla.lib.ListPreference;
-import ca.idi.tecla.framework.SepManager;
+import ca.idi.tecla.framework.TeclaShieldManager;
 import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.R;
 import ca.idi.tekla.ime.TeclaIME;
 import ca.idi.tekla.ime.TeclaKeyboardView;
-import ca.idi.tecla.framework.SwitchEventProvider;
+import ca.idi.tecla.framework.TeclaShieldService;
 import ca.idi.tekla.util.DefaultActionsDialog;
 import ca.idi.tekla.util.FullResetTimeoutDialog;
 import ca.idi.tekla.util.MorseTimeUnitDialog;
@@ -306,8 +306,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
 		registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 		registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_CONNECTED));
-		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED));
+		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_CONNECTED));
+		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_DISCONNECTED));
 
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(TeclaPrefs.this);
 		
@@ -397,8 +397,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			if (intent.getAction().equals(BluetoothDevice.ACTION_FOUND) && !mShieldFound) {
 				BluetoothDevice dev = intent.getExtras().getParcelable(BluetoothDevice.EXTRA_DEVICE);
 				if ((dev.getName() != null) && (
-						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_2) ||
-						dev.getName().startsWith(SwitchEventProvider.SHIELD_PREFIX_3) )) {
+						dev.getName().startsWith(TeclaShieldService.SHIELD_PREFIX_2) ||
+						dev.getName().startsWith(TeclaShieldService.SHIELD_PREFIX_3) )) {
 					mShieldFound = true;
 					mShieldAddress = dev.getAddress();
 					mShieldName = dev.getName();
@@ -420,7 +420,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 					});
 					mProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
 							" " + mShieldName);
-					if(!SepManager.start(TeclaPrefs.this, mShieldAddress)) {
+					if(!TeclaShieldManager.connect(TeclaPrefs.this, mShieldAddress)) {
 						// Could not connect to Shield
 						dismissDialog();
 						TeclaApp.getInstance().showToast(R.string.couldnt_connect_shield);
@@ -435,7 +435,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				}
 			}
 
-			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
+			if (intent.getAction().equals(TeclaShieldService.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
@@ -444,7 +444,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				mPrefPersistentKeyboard.setChecked(true);
 			}
 
-			if (intent.getAction().equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
+			if (intent.getAction().equals(TeclaShieldService.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
 				dismissDialog();
 				mPrefTempDisconnect.setChecked(false);
@@ -775,8 +775,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	 * Stops the SEP if it is running
 	 */
 	private void stopSEP() {
-		if (SepManager.isRunning(getApplicationContext())) {
-			SepManager.stop(getApplicationContext());
+		if (TeclaShieldManager.isRunning(getApplicationContext())) {
+			TeclaShieldManager.disconnect(getApplicationContext());
 		}
 	}
 	
