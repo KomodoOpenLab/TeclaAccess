@@ -66,9 +66,11 @@
         </service>
 
         <!-- ENTRIES BELOW BELONG TO NEW FRAMEWORK ARCHITECTURE -->
-        <service android:name="ca.idi.tecla.framework.TeclaService" >
+        <service
+            android:name="ca.idi.tecla.framework.TeclaShieldService"
+            android:enabled="true" >
             <intent-filter>
-                <action android:name="ca.idi.tecla.framework.TECLA_SERVICE" />
+                <action android:name="ca.idi.tecla.framework.TECLA_SHIELD_SERVICE" />
             </intent-filter>
         </service>
 
@@ -84,7 +86,7 @@
             android:name="ca.idi.tecla.framework.SwitchEventProvider"
             android:enabled="true" >
             <intent-filter>
-                <action android:name="ca.idi.tecla.SEP_SERVICE" />
+                <action android:name="ca.idi.tecla.framework.SWITCH_EVENT_PROVIDER" />
             </intent-filter>
         </service>
     </application>

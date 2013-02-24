@@ -30,7 +30,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import ca.idi.tecla.framework.TeclaIMEService;
-import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
@@ -61,20 +60,19 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
-import ca.idi.tecla.framework.SepManager;
+import ca.idi.tecla.framework.TeclaShieldManager;
 import ca.idi.tecla.framework.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
-import ca.idi.tecla.framework.SwitchEventProvider;
+import ca.idi.tecla.framework.TeclaShieldService;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
-import ca.idi.tekla.util.TeclaDesktopClient;
 
 /**
  * Input method implementation for Qwerty'ish keyboard.
  */
-public class TeclaIME extends InputMethodService
+public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		implements KeyboardView.OnKeyboardActionListener {
 	static final boolean TRACE = false;
 
@@ -274,7 +272,7 @@ public class TeclaIME extends InputMethodService
 		mContactsDictionary.close();
 		unregisterReceiver(mReceiver);
 		TeclaApp.highlighter.stopSelfScanning();
-		SepManager.stop(this);
+		TeclaShieldManager.disconnect(this);
 	}
 
 	
@@ -673,13 +671,13 @@ public class TeclaIME extends InputMethodService
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received switch event intent.");
 				handleSwitchEvent(new SwitchEvent(intent.getExtras()));
 			}
-			if (action.equals(SwitchEventProvider.ACTION_SHIELD_CONNECTED)) {
+			if (action.equals(TeclaShieldService.ACTION_SHIELD_CONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield connected intent.");
 				if (!mShieldConnected) mShieldConnected = true;
 				showIMEView();
 				evaluateStartScanning();
 			}
-			if (action.equals(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED)) {
+			if (action.equals(TeclaShieldService.ACTION_SHIELD_DISCONNECTED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield disconnected intent.");
 				if (mShieldConnected) mShieldConnected = false;
 				evaluateStartScanning();
@@ -1724,8 +1722,8 @@ public class TeclaIME extends InputMethodService
 	private void initTeclaA11y() {
 
 		// register to receive switch events from Tecla shield
-		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_CONNECTED));
-		registerReceiver(mReceiver, new IntentFilter(SwitchEventProvider.ACTION_SHIELD_DISCONNECTED));
+		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_CONNECTED));
+		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_DISCONNECTED));
 		registerReceiver(mReceiver, new IntentFilter(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_SHOW_IME));
 		registerReceiver(mReceiver, new IntentFilter(TeclaApp.ACTION_HIDE_IME));
