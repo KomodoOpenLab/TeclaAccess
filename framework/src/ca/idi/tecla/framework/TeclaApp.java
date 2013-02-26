@@ -212,6 +212,11 @@ public class TeclaApp extends Application {
 		audio_manager.setSpeakerphoneOn(true);
 	}
 	
+	public void stopUsingSpeakerPhone() {
+		audio_manager.setMode(AudioManager.MODE_NORMAL);
+		audio_manager.setSpeakerphoneOn(false);
+	}
+
 	public String byte2Hex(int bite) {
 		return String.format("0x%02x", bite);
 	}
