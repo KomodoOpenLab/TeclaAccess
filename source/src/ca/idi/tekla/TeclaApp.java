@@ -45,7 +45,6 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	public static final String EXTRA_INPUT_STRING = "ca.idi.tekla.sep.extra.INPUT_STRING";
 	private static final long BOOT_TIMEOUT = 60000;
 	
-	private AudioManager mAudioManager;
 	private PackageManager mPackageManager;
 	private Handler mHandler;
 
@@ -85,7 +84,6 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
 		
-		mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 		mPackageManager = getPackageManager();
 		
 		mHandler = new Handler();
@@ -343,11 +341,6 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	
 	public boolean isIMECreated() {
 		return mIMECreated;
-	}
-
-	public void stopUsingSpeakerPhone() {
-		mAudioManager.setMode(AudioManager.MODE_NORMAL);
-		mAudioManager.setSpeakerphoneOn(false);
 	}
 
 }
