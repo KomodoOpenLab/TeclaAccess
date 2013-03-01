@@ -9,11 +9,11 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import ca.idi.tecla.sdk.SwitchEvent;
 
-public class SwitchEventProvider extends Service {
+public class SwitchEventProvider extends ca.idi.tecla.sdk.SwitchEventProvider {
 
-	public static final String NAME = "ca.idi.tecla.framework.SWITCH_EVENT_PROVIDER";
-	
 	private static final String CLASS_TAG = "SwitchEventProvider";
 	private static final int REQUEST_IME_DELAY = 60000;
 	
@@ -40,6 +40,11 @@ public class SwitchEventProvider extends Service {
 		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
 		
 		handler.postDelayed(requestIME, REQUEST_IME_DELAY);
+		
+		if (TeclaApp.persistence.shouldConnectToShield()) {
+			TeclaStatic.logD(CLASS_TAG, "Starting Shield Service...");
+			TeclaShieldManager.connect(this);
+		}
 		TeclaStatic.logD(CLASS_TAG, "Tecla Service created");
 	}
 
@@ -80,10 +85,10 @@ public class SwitchEventProvider extends Service {
 	
 	/** INPUT HANDLING METHODS AND VARIABLES **/
 	public void injectSwitchEvent(SwitchEvent event) {
-		injectSwitchEvent(event.getSwitchChanges(), event.getSwitchStates());
-	}
-	
-	public void injectSwitchEvent(int switchChanges, int switchStates) {
+		
+		int switchChanges = event.getSwitchChanges();
+		int switchStates = event.getSwitchStates();
+		
 		TeclaStatic.logD(CLASS_TAG, "Handling switch event.");
 		if (mPhoneRinging) {
 			//Screen should be on
@@ -102,14 +107,24 @@ public class SwitchEventProvider extends Service {
 			TeclaStatic.logD(CLASS_TAG, "Broadcasting switch event: " +
 					TeclaApp.getInstance().byte2Hex(switchChanges) + ":" +
 					TeclaApp.getInstance().byte2Hex(switchStates));
+
 			// Reset intent
+			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_ACTIONS);
 			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_CHANGES);
 			mSwitchEventIntent.removeExtra(SwitchEvent.EXTRA_SWITCH_STATES);
+			//Collect the mapped actions of the current switch
+			String[] switchActions = TeclaApp.persistence.getSwitchMap().get(event.toString());
+			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_ACTIONS, switchActions);
 			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_CHANGES, switchChanges);
 			mSwitchEventIntent.putExtra(SwitchEvent.EXTRA_SWITCH_STATES, switchStates);
+
 			// Broadcast event
 			sendBroadcast(mSwitchEventIntent);
 		}
+	}
+	
+	public void injectSwitchEvent(int switchChanges, int switchStates) {
+		injectSwitchEvent(new SwitchEvent(switchChanges, switchStates));
 	}
 
 	// All intents will be processed here

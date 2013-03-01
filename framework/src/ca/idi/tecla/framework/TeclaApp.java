@@ -1,6 +1,7 @@
 package ca.idi.tecla.framework;
 
 import ca.idi.tecla.framework.Persistence;
+import ca.idi.tecla.sdk.SEPManager;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.app.KeyguardManager;
@@ -89,7 +90,7 @@ public class TeclaApp extends Application {
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
 		
-		TeclaStatic.startTeclaService(this);
+		SEPManager.start(this);
 	}
 
 	public boolean isScreenOn() {

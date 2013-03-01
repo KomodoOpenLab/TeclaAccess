@@ -1,6 +1,7 @@
 package ca.idi.tecla.framework;
 
 import ca.idi.tecla.framework.SwitchEventProvider.LocalBinder;
+import ca.idi.tecla.sdk.SwitchEvent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;

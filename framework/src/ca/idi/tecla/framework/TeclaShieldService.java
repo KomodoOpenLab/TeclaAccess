@@ -1,5 +1,7 @@
 package ca.idi.tecla.framework;
 
+import ca.idi.tecla.sdk.SwitchEvent;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
