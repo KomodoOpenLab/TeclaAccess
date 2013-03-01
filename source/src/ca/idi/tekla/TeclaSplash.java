@@ -5,6 +5,7 @@
 package ca.idi.tekla;
 
 import ca.idi.tecla.framework.TeclaShieldManager;
+import ca.idi.tecla.sdk.SEPManager;
 import ca.idi.tekla.R;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -20,15 +21,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 public class TeclaSplash extends Activity
-		implements OnFocusChangeListener {
+implements OnFocusChangeListener {
 
 	/**
 	 * Tag used for logging in this class
 	 */
 	private static final String CLASS_TAG = "Splash: ";
-	
+
 	private TextView mSplashText;
-	private boolean mIMECreated, mConnectToShieldCalled, mStartFullscreenSwitchCalled;
+	private boolean mIMECreated, mStartFullscreenSwitchCalled;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -38,7 +39,7 @@ public class TeclaSplash extends Activity
 
 		init();
 	}
-	
+
 	private void init() {
 		setContentView(R.layout.activity_splash);
 		mSplashText = (TextView) findViewById(R.id.splash_text);
@@ -56,12 +57,11 @@ public class TeclaSplash extends Activity
 		mSplashText.setOnFocusChangeListener(this);
 		mSplashText.clearFocus();
 		mSplashText.requestFocus();
-		
-		mConnectToShieldCalled = false;
+
 		mStartFullscreenSwitchCalled = false;
-		
+
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -90,14 +90,14 @@ public class TeclaSplash extends Activity
 			if (intent.getAction().equals(TeclaApp.ACTION_IME_CREATED)) {
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Closing splash screen...");
 				// Soft IME showing, process the rest of the preferences
-				connectToShield();
+				startSEP();
 				startFullscreenSwitch();
 				finish();
 			}
 		}
-		
+
 	};
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -105,20 +105,14 @@ public class TeclaSplash extends Activity
 			unregisterReceiver(mReceiver);
 		// Sometimes IME hides so show it again!
 		TeclaApp.getInstance().requestShowIMEView();
-		if (!mConnectToShieldCalled) {
-			connectToShield();
-		}
+		startSEP();
 		if (!mStartFullscreenSwitchCalled) {
 			startFullscreenSwitch();
 		}
 	}
 
-	private void connectToShield() {
-		mConnectToShieldCalled = true;
-		if (TeclaApp.persistence.shouldConnectToShield()) {
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Starting SEP...");
-			TeclaShieldManager.connect(this);
-		}
+	private void startSEP() {
+		SEPManager.start(this);
 	}
 
 	private void startFullscreenSwitch() {

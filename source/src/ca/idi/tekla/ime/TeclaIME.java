@@ -61,7 +61,7 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.PopupWindow;
 import ca.idi.tecla.framework.TeclaShieldManager;
-import ca.idi.tecla.framework.SwitchEvent;
+import ca.idi.tecla.sdk.SwitchEvent;
 import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
@@ -1993,22 +1993,22 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 				String action_tecla = switchActions[0];
 				switch(Integer.parseInt(action_tecla)) {
 
-				case 1:
+				case SwitchEvent.ACTION_NEXT:
 					if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_NEXT);
 					break;
 
-				case 2:
+				case SwitchEvent.ACTION_PREV:
 					if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 						TeclaApp.highlighter.move(Highlighter.HIGHLIGHT_PREV);
 					break;
 
-				case 3:
+				case SwitchEvent.ACTION_CANCEL:
 					if (switchEvent.isPressed(switchEvent.getSwitchChanges()))
 						TeclaApp.highlighter.stepOut();
 					break;
 
-				case 4:
+				case SwitchEvent.ACTION_SELECT:
 					if (switchEvent.isPressed(switchEvent.getSwitchChanges())) {
 						if (TeclaApp.persistence.isInverseScanningEnabled()) {
 							TeclaApp.highlighter.resumeSelfScanning();

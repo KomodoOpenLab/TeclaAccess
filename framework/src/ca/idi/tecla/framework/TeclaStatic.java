@@ -23,29 +23,6 @@ public class TeclaStatic
 	private static final String IME_ID = "ca.idi.tekla/.ime.TeclaIME";
 	private static final String IME_SERVICE = "ca.idi.tekla.ime.TeclaIME";
 
-	public static void startTeclaService (Context context) {
-		logD(CLASS_TAG, "Starting TeclaService...");
-		if (!isTeclaServiceRunning(context)) {
-			Intent serviceIntent = new Intent(SwitchEventProvider.NAME);
-			context.startService(serviceIntent);		
-		} else {
-			logW(CLASS_TAG, "Tecla Service already running!");
-		}
-	}
-	
-	private static boolean isTeclaServiceRunning(Context context)
-	{
-	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-	    for (RunningServiceInfo service_info : manager.getRunningServices(Integer.MAX_VALUE))
-	    {
-	        if (SwitchEventProvider.class.getName().equals(service_info.service.getClassName()))
-	        {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
-	
 	public static boolean isIMERunning(Context context)
 	{
 	    ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
