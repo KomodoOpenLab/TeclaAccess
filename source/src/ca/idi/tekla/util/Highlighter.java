@@ -307,7 +307,8 @@ public class Highlighter {
 
 	private void initRowHighlighting() {
 		mScanDepth = DEPTH_KEY;
-		mScanKeyCounter = mIMEView.getKeyboard().getRowStart(mScanRowCounter);
+		if (mIMEView == null) TeclaApp.getInstance().requestShowIMEView();
+		else mScanKeyCounter = mIMEView.getKeyboard().getRowStart(mScanRowCounter);
 		restoreHighlight();
 	}
 
