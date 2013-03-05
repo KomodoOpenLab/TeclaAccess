@@ -383,6 +383,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			if (state == BluetoothAdapter.STATE_ON){
 				Log.i(TeclaApp.TAG, "Bluetooth Turned On Successfully");
 				discoverShield();
+				mPrefConnectToShield.setChecked(true);
 			}
 		}
 	};
