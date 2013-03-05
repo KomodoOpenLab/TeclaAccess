@@ -382,7 +382,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
 			if (state == BluetoothAdapter.STATE_ON){
 				Log.i(TeclaApp.TAG, "Bluetooth Turned On Successfully");
-				discoverShield();
+				mPrefConnectToShield.setChecked(true);
 			}
 		}
 	};
