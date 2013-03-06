@@ -124,40 +124,48 @@ public class Highlighter {
 	}
 
 	public void move(int direction) {
-		TeclaKeyboard keyboard = mIMEView.getKeyboard();
-		// Move only if not repeating key!
-		if (!TeclaApp.persistence.isRepeatingKey()) {
-			int rowCount = keyboard.getRowCount();
+		if (mIMEView != null) {
+			TeclaKeyboard keyboard = mIMEView.getKeyboard();
+			// Move only if not repeating key!
+			if (!TeclaApp.persistence.isRepeatingKey()) {
+				int rowCount = keyboard.getRowCount();
 
-			if (rowCount == 1) {
-				mScanDepth = DEPTH_KEY;
-				mScanRowCounter = 0;
+				if (rowCount == 1) {
+					mScanDepth = DEPTH_KEY;
+					mScanRowCounter = 0;
+				}
+				if (mScanDepth == Highlighter.DEPTH_ROW) {
+					if (direction == Highlighter.HIGHLIGHT_NEXT) mScanRowCounter++;
+					if (direction == Highlighter.HIGHLIGHT_PREV) mScanRowCounter--;
+					mScanRowCounter = wrapCounter(mScanRowCounter, 0, rowCount - 1);
+				}
+				int fromIndex = keyboard.getRowStart(mScanRowCounter);
+				int toIndex = keyboard.getRowEnd(mScanRowCounter);
+				mStartScanKeyCounter = fromIndex;
+				if (mScanDepth == Highlighter.DEPTH_KEY) {
+					if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
+					if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
+					mScanKeyCounter = wrapCounter(mScanKeyCounter, fromIndex, toIndex);
+					highlightKeys(mScanKeyCounter,mScanKeyCounter);
+				} else 
+					highlightKeys(fromIndex,toIndex);
 			}
-			if (mScanDepth == Highlighter.DEPTH_ROW) {
-				if (direction == Highlighter.HIGHLIGHT_NEXT) mScanRowCounter++;
-				if (direction == Highlighter.HIGHLIGHT_PREV) mScanRowCounter--;
-				mScanRowCounter = wrapCounter(mScanRowCounter, 0, rowCount - 1);
-			}
-			int fromIndex = keyboard.getRowStart(mScanRowCounter);
-			int toIndex = keyboard.getRowEnd(mScanRowCounter);
-			mStartScanKeyCounter = fromIndex;
-			if (mScanDepth == Highlighter.DEPTH_KEY) {
-				if (direction == Highlighter.HIGHLIGHT_NEXT) mScanKeyCounter++;
-				if (direction == Highlighter.HIGHLIGHT_PREV) mScanKeyCounter--;
-				mScanKeyCounter = wrapCounter(mScanKeyCounter, fromIndex, toIndex);
-				highlightKeys(mScanKeyCounter,mScanKeyCounter);
-			} else 
-				highlightKeys(fromIndex,toIndex);
+		} else {
+			TeclaApp.getInstance().requestShowIMEView();
 		}
 	}
 
 	public void stepOut() {
-		TeclaKeyboard keyboard = mIMEView.getKeyboard();
-		if (keyboard.getRowCount() != 1) {
-			mScanDepth = Highlighter.DEPTH_ROW;		
-			highlightKeys(
-					keyboard.getRowStart(mScanRowCounter),
-					keyboard.getRowEnd(mScanRowCounter));
+		if (mIMEView != null) {
+			TeclaKeyboard keyboard = mIMEView.getKeyboard();
+			if (keyboard.getRowCount() != 1) {
+				mScanDepth = Highlighter.DEPTH_ROW;		
+				highlightKeys(
+						keyboard.getRowStart(mScanRowCounter),
+						keyboard.getRowEnd(mScanRowCounter));
+			}
+		} else {
+			TeclaApp.getInstance().requestShowIMEView();
 		}
 	}
 
@@ -307,8 +315,8 @@ public class Highlighter {
 
 	private void initRowHighlighting() {
 		mScanDepth = DEPTH_KEY;
-		if (mIMEView == null) TeclaApp.getInstance().requestShowIMEView();
-		else mScanKeyCounter = mIMEView.getKeyboard().getRowStart(mScanRowCounter);
+		if (mIMEView != null) mScanKeyCounter = mIMEView.getKeyboard().getRowStart(mScanRowCounter);
+		else TeclaApp.getInstance().requestShowIMEView();
 		restoreHighlight();
 	}
 
@@ -327,6 +335,8 @@ public class Highlighter {
 				}
 			}
 			redrawInputView();
+		} else {
+			TeclaApp.getInstance().requestShowIMEView();
 		}
 	}
 
