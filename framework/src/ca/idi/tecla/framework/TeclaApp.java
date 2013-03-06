@@ -18,20 +18,19 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.PowerManager.WakeLock;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
 public class TeclaApp extends Application {
 
 	/**
+	 * Main debug switch, turns on/off debugging for the whole app
+	 */
+	public static final boolean DEBUG = false;
+	/**
 	 * Tag used for logging in the whole class
 	 */
 	public static final String CLASS_TAG = "TeclaApp";
-	/**
-	 * Main debug switch, turns on/off debugging for the whole app
-	 */
-	public static final boolean DEBUG = true;
 
 	public static final int WAKE_LOCK_TIMEOUT = 5000;
 
