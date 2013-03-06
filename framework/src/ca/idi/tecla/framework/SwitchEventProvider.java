@@ -36,6 +36,8 @@ public class SwitchEventProvider extends Service {
 		
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
+		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
+		
 		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
 		
 		handler.postDelayed(requestIME, REQUEST_IME_DELAY);
@@ -131,6 +133,15 @@ public class SwitchEventProvider extends Service {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+
+			//if enabled in prefs, activate speaker phone  whenever an outgoing call is placed
+			if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
+				TeclaStatic.logD(CLASS_TAG, "New Outgoing Call Placed");
+				
+				if(TeclaApp.persistence.isSpeakerphoneEnabled()) 
+					TeclaApp.getInstance().useSpeakerphone();
+				
+			}
 
 			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
 				TeclaStatic.logD(CLASS_TAG, "Phone state changed");
