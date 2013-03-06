@@ -183,8 +183,8 @@ public class TeclaApp extends Application {
 		buttonUp.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_HEADSETHOOK));
 		sendOrderedBroadcast(buttonUp, "android.permission.CALL_PRIVILEGED");
 		
-		TeclaApp.persistence.isSpeakerphoneEnabled();
-		useSpeakerphone();
+		if(TeclaApp.persistence.isSpeakerphoneEnabled())
+				useSpeakerphone();
 	}
 
 	public void postDelayedFullReset(long delay) {
