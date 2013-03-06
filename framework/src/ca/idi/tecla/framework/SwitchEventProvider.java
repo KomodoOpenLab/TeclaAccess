@@ -9,10 +9,9 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import ca.idi.tecla.sdk.SwitchEvent;
 
-public class SwitchEventProvider extends ca.idi.tecla.sdk.SwitchEventProvider {
+public class SwitchEventProvider extends Service {
 
 	private static final String CLASS_TAG = "SwitchEventProvider";
 	private static final int REQUEST_IME_DELAY = 60000;
