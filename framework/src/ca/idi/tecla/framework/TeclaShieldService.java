@@ -98,7 +98,7 @@ public class TeclaShieldService extends Service implements Runnable {
 
 		// Bind to TeclaService
 		Intent intent = new Intent(this, SwitchEventProvider.class);
-		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+		bindService(intent, mSEPConnection, Context.BIND_AUTO_CREATE);
 
 		mHandler = new Handler();
 		mIsBroadcasting = false;
@@ -110,15 +110,18 @@ public class TeclaShieldService extends Service implements Runnable {
 		mIsBold = false;
 	}
 
-	public void stopSEP() {
+	public void stopShieldService() {
+		if (mBound) {
+			unbindService(mSEPConnection);
+		}
 		stopMainThread();
-		TeclaStatic.logI(CLASS_TAG, "Service Stopped");
+		TeclaStatic.logI(CLASS_TAG, "Stopping Shield Service");
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		stopSEP();
+		stopShieldService();
 	}
 
 	@Override
@@ -255,7 +258,7 @@ public class TeclaShieldService extends Service implements Runnable {
 					//Need to toast on a separate thread!
 					mHandler.post(new Runnable () {
 						public void run() {
-							TeclaApp.getInstance().showToast(R.string.shield_connected);
+							TeclaApp.getInstance().showToast(R.string.shield_disconnected);
 						}
 					});
 				}
@@ -494,7 +497,7 @@ public class TeclaShieldService extends Service implements Runnable {
 	boolean mBound = false;
 
 	/** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection mConnection = new ServiceConnection() {
+    private ServiceConnection mSEPConnection = new ServiceConnection() {
 
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder service) {

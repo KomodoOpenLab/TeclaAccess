@@ -35,14 +35,14 @@ public class TeclaShieldManager {
 	 * Start the Switch Event Provider and attempt a connection with a Tecla Shield with the address provided
 	 */
 	public static boolean connect(Context context, String shieldAddress) {
-		Intent sepIntent = new Intent(SHIELD_SERVICE);
-		sepIntent.putExtra(EXTRA_SHIELD_ADDRESS, shieldAddress);
-		return context.startService(sepIntent) == null? false:true;
+		Intent shieldIntent = new Intent(SHIELD_SERVICE);
+		shieldIntent.putExtra(EXTRA_SHIELD_ADDRESS, shieldAddress);
+		return context.startService(shieldIntent) == null? false:true;
 	}
 
 	public static boolean disconnect(Context context) {
-		Intent sepIntent = new Intent(SHIELD_SERVICE);
-		return context.stopService(sepIntent);
+		Intent shieldIntent = new Intent(SHIELD_SERVICE);
+		return context.stopService(shieldIntent);
 	}
 
 	public static boolean isRunning(Context context) {
