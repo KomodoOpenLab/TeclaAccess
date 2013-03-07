@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="shield_connected">"Tecla Shield connecté"</string>
+    <string name="shield_disconnected">"Tecla Shield déconnecté"</string>
+    <string name="sep_label">"Statut du Tecla Shield"</string>
+
+</resources>
