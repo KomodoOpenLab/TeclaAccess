@@ -308,8 +308,11 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 
 	@Override
 	public View onCreateInputView() {
-		mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(
-				R.xml.input, null);
+		if(TeclaApp.persistence.isRedHighlight())
+			mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(R.xml.input_red, null);
+		else
+			mIMEView = (TeclaKeyboardView) getLayoutInflater().inflate(R.xml.input, null);
+		
 		mKeyboardSwitcher.setInputView(mIMEView);
 		mKeyboardSwitcher.makeKeyboards(true);
 		mIMEView.setOnKeyboardActionListener(this);

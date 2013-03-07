@@ -20,6 +20,13 @@
     <string name="sound_on_keypress">"Sonido al pulsar tecla"</string>
     <string name="hit_correction">"Corregir errores de escritura"</string>
     <string name="hit_correction_summary">"Habilitar la introducción de corrección de errores"</string>
+    
+    <!-- Option to use Old Red highlight -->
+    <string name="red_highlight">Highlight Colour: Red</string>
+
+    <!-- Description for red_highlight -->
+    <string name="red_highlight_summary">Red key-highlight colour instead of Blue</string>
+    
     <string name="hit_correction_land">"Errores de introducción de datos en vista horizontal"</string>
     <string name="hit_correction_land_summary">"Permitir la corrección de error de entrada"</string>
     <string name="auto_correction">"Sugerencias de palabras"</string>

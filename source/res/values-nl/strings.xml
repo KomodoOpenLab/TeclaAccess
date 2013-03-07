@@ -22,6 +22,13 @@
     <string name="hit_correction_summary">"Foutcorrectie tijdens invoer inschakelen"</string>
     <string name="hit_correction_land">"Invoerfouten in liggende weergave"</string>
     <string name="hit_correction_land_summary">"Foutcorrectie tijdens invoer inschakelen"</string>
+    
+    <!-- Option to use Old Red highlight -->
+    <string name="red_highlight">Highlight Colour: Red</string>
+
+    <!-- Description for red_highlight -->
+    <string name="red_highlight_summary">Red key-highlight colour instead of Blue</string>
+    
     <string name="auto_correction">"Woordsuggesties"</string>
     <string name="auto_correction_summary">"Het vorige woord automatisch corrigeren"</string>
     <string name="prediction">"Woordsuggesties"</string>
