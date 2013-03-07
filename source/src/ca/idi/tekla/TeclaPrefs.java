@@ -104,6 +104,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	private CheckBoxPreference mPrefTempDisconnect;
 	private CheckBoxPreference mPrefFullScreenSwitch;
 	private CheckBoxPreference mPrefSpeakerPhoneSwitch;
+	private CheckBoxPreference mPrefRedHighlight;
 	private CheckBoxPreference mPrefSelfScanning;
 	private CheckBoxPreference mPrefInverseScanning;
 	private PreferenceScreen mPreferenceScreen;
@@ -175,6 +176,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mPrefTempDisconnect = (CheckBoxPreference) findPreference(Persistence.PREF_TEMP_SHIELD_DISCONNECT);
 		mPrefFullScreenSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_FULLSCREEN_SWITCH);
 		mPrefSpeakerPhoneSwitch = (CheckBoxPreference) findPreference(Persistence.PREF_SPEAKERPHONE_SWITCH);
+		mPrefRedHighlight = (CheckBoxPreference) findPreference(Persistence.PREF_RED_HIGHLIGHT);
 		mPrefSelfScanning = (CheckBoxPreference) findPreference(Persistence.PREF_SELF_SCANNING);
 		mPrefInverseScanning = (CheckBoxPreference) findPreference(Persistence.PREF_INVERSE_SCANNING);
 		mScanSpeedDialog = new ScanSpeedDialog(this);

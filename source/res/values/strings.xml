@@ -29,6 +29,13 @@
 
     <!-- Description for hit_correction -->
     <string name="hit_correction_summary">Enable input error correction</string>
+    
+    <!-- Option to use Old Red highlight -->
+    <string name="red_highlight">Highlight Colour: Red</string>
+
+    <!-- Description for red_highlight -->
+    <string name="red_highlight_summary">Red key-highlight colour instead of Blue</string>
+    
 
     <!-- Option to enable using nearby keys when correcting/predicting in landscape -->
     <string name="hit_correction_land">Landscape input errors</string>

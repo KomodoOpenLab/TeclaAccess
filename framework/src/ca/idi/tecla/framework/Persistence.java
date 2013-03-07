@@ -15,6 +15,7 @@ public class Persistence {
 	public static final String PREF_CONNECT_TO_SHIELD = "shield_connect";
 	public static final String SEND_SHIELD_EVENTS="enable_events_relay";
 	public static final String PREF_SPEAKERPHONE_SWITCH = "speakerphone_switch";
+	public static final String PREF_RED_HIGHLIGHT = "red_highlight";
 	public static final String PREF_MORSE_MODE = "morse_mode";
 	public static final String PREF_FULL_RESET_TIMEOUT = "full_reset_timeout";
 
@@ -75,6 +76,10 @@ public class Persistence {
 
 	public boolean isSpeakerphoneEnabled() {
 		return shared_prefs.getBoolean(PREF_SPEAKERPHONE_SWITCH, false);
+	}
+	
+	public boolean isRedHighlight() {
+		return shared_prefs.getBoolean(PREF_RED_HIGHLIGHT, false);
 	}
 
 	public boolean isMorseModeEnabled() {

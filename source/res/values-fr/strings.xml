@@ -22,6 +22,13 @@
     <string name="hit_correction_summary">Activer la correction des fautes de frappe</string>
     <string name="hit_correction_land">Fautes de frappe en mode paysage</string>
     <string name="hit_correction_land_summary">Activer la correction des fautes de frappe</string>
+    
+    <!-- Option to use Old Red highlight -->
+    <string name="red_highlight">Highlight Colour: Red</string>
+
+    <!-- Description for red_highlight -->
+    <string name="red_highlight_summary">Red key-highlight colour instead of Blue</string>
+    
     <string name="auto_correction">Saisie prédictive</string>
     <string name="auto_correction_summary">Corriger automatiquement le mot précédent</string>
     <string name="prediction">Suggestions des mots</string>
