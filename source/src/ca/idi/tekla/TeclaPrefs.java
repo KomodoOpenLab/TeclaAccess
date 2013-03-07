@@ -602,7 +602,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 						mPrefInverseScanning.setChecked(false);
 						mPrefPersistentKeyboard.setChecked(false);
 					}
-					stopSEP();
+					stopShieldService();
 				}
 			} else {
 				mPrefConnectToShield.setChecked(false);
@@ -611,7 +611,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		if (key.equals(Persistence.PREF_TEMP_SHIELD_DISCONNECT)) {
 			if(mPrefTempDisconnect.isChecked()) {
 				mPrefConnectToShield.setEnabled(false);
-				stopSEP();
+				stopShieldService();
 				Handler mHandler = new Handler();
 				Runnable mReconnect = new Runnable() {
 					
@@ -774,7 +774,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	/*
 	 * Stops the SEP if it is running
 	 */
-	private void stopSEP() {
+	private void stopShieldService() {
 		if (TeclaShieldManager.isRunning(getApplicationContext())) {
 			TeclaShieldManager.disconnect(getApplicationContext());
 		}
