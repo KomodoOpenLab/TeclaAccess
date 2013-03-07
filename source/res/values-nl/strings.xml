@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,106 +14,252 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="vibrate_on_keypress" msgid="5258079494276955460">"Trillen bij druk op een toets"</string>
-    <string name="sound_on_keypress" msgid="6093592297198243644">"Geluid bij druk op een toets"</string>
-    <string name="hit_correction" msgid="4855351009261318389">"Typefouten corrigeren"</string>
-    <string name="hit_correction_summary" msgid="8761701873008070796">"Foutcorrectie tijdens invoer inschakelen"</string>
-    <string name="hit_correction_land" msgid="2567691684825205448">"Invoerfouten in liggende weergave"</string>
-    <string name="hit_correction_land_summary" msgid="4076803842198368328">"Foutcorrectie tijdens invoer inschakelen"</string>
-    <string name="auto_correction" msgid="7911639788808958255">"Woordsuggesties"</string>
-    <string name="auto_correction_summary" msgid="6881047311475758267">"Het vorige woord automatisch corrigeren"</string>
-    <string name="prediction" msgid="466220283138359837">"Woordsuggesties"</string>
-    <string name="prediction_category" msgid="7027100625580696660">"Instellingen voor woordsuggesties"</string>
-    <string name="prediction_summary" msgid="459788228830873110">"Automatisch voltooien tijdens typen inschakelen"</string>
-    <string name="auto_complete_dialog_title" msgid="2172048590607201920">"Automatisch voltooien"</string>
-    <string name="prediction_landscape" msgid="4874601565593216183">"Tekstveld vergroten"</string>
-    <string name="prediction_landscape_summary" msgid="6736551095997839472">"Woordsuggesties verbergen in liggende weergave"</string>
-    <string name="auto_cap" msgid="1719746674854628252">"Automatisch hoofdlettergebruik"</string>
-    <string name="auto_cap_summary" msgid="3260681697600786825">"Hoofdletter gebruiken aan het begin van een zin"</string>
-    <string name="auto_punctuate" msgid="7276672334264521751">"Automatische interpunctie"</string>
-    <string name="quick_fixes" msgid="5353213327680897927">"Snelle oplossingen"</string>
-    <string name="quick_fixes_summary" msgid="3405028402510332373">"Hiermee worden veelvoorkomende typefouten gecorrigeerd"</string>
-    <string name="show_suggestions" msgid="507074425254289133">"Suggesties weergeven"</string>
-    <string name="show_suggestions_summary" msgid="1989672863935759654">"Voorgestelde woorden weergeven tijdens typen"</string>
-    <string name="auto_complete" msgid="1103196318775486023">"Auto-aanvullen"</string>
-    <string name="auto_complete_summary" msgid="6113149638718274624">"Gemarkeerd woord automatisch invoegen met spatiebalk en interpunctie"</string>
-  <string-array name="prediction_modes">
-    <item msgid="4870266572388153286">"Geen"</item>
-    <item msgid="1669461741568287396">"Basis"</item>
-    <item msgid="4894328801530136615">"Geavanceerd"</item>
-  </string-array>
-    <string name="prediction_none" msgid="2472795101338047944">"0"</string>
-    <string name="prediction_basic" msgid="8407291081834155558">"1"</string>
-    <string name="prediction_full" msgid="3765102052052510268">"2"</string>
-    <!-- no translation found for prediction_modes_values:0 (579944677836100459) -->
-    <!-- no translation found for prediction_modes_values:1 (7214414132844804570) -->
-    <!-- no translation found for prediction_modes_values:2 (6678546276084314171) -->
-    <string name="added_word" msgid="8993883354622484372">"<xliff:g id="WORD">%s</xliff:g> : Opgeslagen"</string>
-    <string name="alternates_for_a" msgid="2566516493365324765">"àáâãäåæ"</string>
-    <string name="alternates_for_e" msgid="3900510936875547555">"èéêë"</string>
-    <string name="alternates_for_i" msgid="7097915268629342242">"ìíîï"</string>
-    <string name="alternates_for_o" msgid="6151402748321267776">"òóôõöœø"</string>
-    <string name="alternates_for_u" msgid="5899096818189442934">"ùúûü"</string>
-    <string name="alternates_for_s" msgid="348762530927662188">"§ß"</string>
-    <string name="alternates_for_n" msgid="6257322556221886400">"ñ"</string>
-    <string name="alternates_for_c" msgid="151699780720639892">"ç"</string>
-    <string name="alternates_for_y" msgid="1722776806607271199">"ýÿ"</string>
-    <string name="key_i" msgid="6483655742552255124">"i"</string>
-    <string name="tip_long_press" msgid="6101270866284343344">"Houd een toets ingedrukt om diakritische tekens weer te geven (ø, ö, enzovoort)"</string>
-    <string name="tip_dismiss" msgid="7585579046862204381">"Druk op elk gewenst moment op de toets Terug ↶ om het toetsenbord te sluiten"</string>
-    <string name="tip_access_symbols" msgid="6344098517525531652">"Toegang tot cijfers en symbolen"</string>
-    <string name="tip_add_to_dictionary" msgid="1487293888469227817">"Blijf drukken op het meest linkse woord om het toe te voegen aan het woordenboek"</string>
-    <string name="touch_to_continue" msgid="7869803257948414531">"Raak deze tip aan om door te gaan »"</string>
-    <string name="touch_to_finish" msgid="7990196086480585789">"Raak dit punt aan om deze tip te sluiten en te beginnen met typen."</string>
-    <string name="tip_to_open_keyboard" msgid="6821200275486950452"><b>"Het toetsenbord wordt geopend wanneer u een tekstveld aanraakt"</b></string>
-    <string name="tip_to_view_accents" msgid="5433158573693308501"><b>"Blijf een toets aanraken om diakritische tekens weer te geven"\n"(ø, ö, ô, ó, enzovoort)"</b></string>
-    <string name="tip_to_open_symbols" msgid="7345139325622444880"><b>"Schakel over naar cijfers en symbolen door deze toets aan te raken"</b></string>
-    <string name="tip_to_close_symbols" msgid="5227724217206927185"><b>"Ga terug naar letters door deze toets nogmaals aan te raken"</b></string>
-    <string name="tip_to_launch_settings" msgid="8402961128983196128"><b>"Blijf deze toets aanraken om toetsenbordinstellingen te wijzigen, zoals auto-aanvullen"</b></string>
-    <string name="tip_to_start_typing" msgid="7213843601369174313"><b>"Probeer het zelf!"</b></string>
-    <string name="label_go_key" msgid="1635148082137219148">"Beginnen"</string>
-    <string name="label_next_key" msgid="362972844525672568">"Volgende"</string>
-    <string name="label_done_key" msgid="2441578748772529288">"Gereed"</string>
-    <string name="label_send_key" msgid="2815056534433717444">"Verzenden"</string>
-    <string name="label_symbol_key" msgid="6175820506864489453">"?123"</string>
-    <string name="label_phone_key" msgid="4275497665515080551">"123"</string>
-    <string name="label_alpha_key" msgid="8864943487292437456">"ABC"</string>
-    <string name="label_alt_key" msgid="2846315350346694811">"Alt"</string>
-    <string name="open_the_keyboard" msgid="2215920976029260466"><font size="17"><b>"Het toetsenbord openen"\n</b></font><font size="3">\n</font>"Raak een tekstveld aan."</string>
-    <string name="close_the_keyboard" msgid="6251022259044940103"><font size="17"><b>"Het toetsenbord sluiten"\n</b></font><font size="3">\n</font>"Druk op de terugtoets."</string>
-    <string name="touch_and_hold" msgid="6154166367273010534"><font size="17"><b>"Een toets blijven aanraken voor opties"\n</b></font><font size="3">\n</font>"Toegang tot interpunctie en diakritische tekens."</string>
-    <string name="keyboard_settings" msgid="4585753477617374032"><font size="17"><b>"Toetsenbordinstellingen"\n</b></font><font size="3">\n</font>"Blijf de toets "<b>"?123"</b>" aanraken."</string>
-    <string name="popular_domain_0" msgid="3745279225122472969">".com"</string>
-    <string name="popular_domain_1" msgid="1370572248164278467">".net"</string>
-    <string name="popular_domain_2" msgid="3036812463748402878">".org"</string>
-    <string name="popular_domain_3" msgid="8718639560809452028">".gov"</string>
-    <string name="popular_domain_4" msgid="35359437471311470">".edu"</string>
-    
-    <!-- Tecla: IME Strings -->
-    <string name="english_ime_name" msgid="7252517407088836577">"Tecla-toetsenbord"</string>
-    <string name="english_ime_settings" msgid="6661589557206947774">"Instellingen voor Tecla-toetsenbord"</string>
-	<string name="inputMethod">Invoer methode</string>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="vibrate_on_keypress">"Trillen bij druk op een toets"</string>
+    <string name="sound_on_keypress">"Geluid bij druk op een toets"</string>
+    <string name="hit_correction">"Typefouten corrigeren"</string>
+    <string name="hit_correction_summary">"Foutcorrectie tijdens invoer inschakelen"</string>
+    <string name="hit_correction_land">"Invoerfouten in liggende weergave"</string>
+    <string name="hit_correction_land_summary">"Foutcorrectie tijdens invoer inschakelen"</string>
+    <string name="auto_correction">"Woordsuggesties"</string>
+    <string name="auto_correction_summary">"Het vorige woord automatisch corrigeren"</string>
+    <string name="prediction">"Woordsuggesties"</string>
+    <string name="prediction_category">"Instellingen voor woordsuggesties"</string>
+    <string name="prediction_summary">"Automatisch voltooien tijdens typen inschakelen"</string>
+    <string name="auto_complete_dialog_title">"Automatisch voltooien"</string>
+    <string name="prediction_landscape">"Tekstveld vergroten"</string>
+    <string name="prediction_landscape_summary">"Woordsuggesties verbergen in liggende weergave"</string>
+    <string name="auto_cap">"Automatisch hoofdlettergebruik"</string>
+    <string name="auto_cap_summary">"Hoofdletter gebruiken aan het begin van een zin"</string>
+    <string name="auto_punctuate">"Automatische interpunctie"</string>
+    <string name="quick_fixes">"Snelle oplossingen"</string>
+    <string name="quick_fixes_summary">"Hiermee worden veelvoorkomende typefouten gecorrigeerd"</string>
+    <string name="show_suggestions">"Suggesties weergeven"</string>
+    <string name="show_suggestions_summary">"Voorgestelde woorden weergeven tijdens typen"</string>
+    <string name="auto_complete">"Auto-aanvullen"</string>
+    <string name="auto_complete_summary">"Gemarkeerd woord automatisch invoegen met spatiebalk en interpunctie"</string>
+    <string name="prediction_none">"0"</string>
+    <string name="prediction_basic">"1"</string>
+    <string name="prediction_full">"2"</string>
+    <string name="added_word">"<xliff:g id="WORD">%s</xliff:g> : Opgeslagen"</string>
+    <string name="alternates_for_a">"àáâãäåæ"</string>
+    <string name="alternates_for_e">"èéêë"</string>
+    <string name="alternates_for_i">"ìíîï"</string>
+    <string name="alternates_for_o">"òóöø"</string>
+    <string name="alternates_for_u">"ùúûü"</string>
+    <string name="alternates_for_s">"§ß"</string>
+    <string name="alternates_for_n">""</string>
+    <string name="alternates_for_c">""</string>
+    <string name="alternates_for_y">""</string>
+    <string name="key_i">"i"</string>
+    <string name="tip_long_press">"Houd een toets ingedrukt om diakritische tekens weer te geven (ø, ö, enzovoort)"</string>
+    <string name="tip_dismiss">"Druk op elk gewenst moment op de toets Terug ↶ om het toetsenbord te sluiten"</string>
+    <string name="tip_access_symbols">"Toegang tot cijfers en symbolen"</string>
+    <string name="tip_add_to_dictionary">Houd het meest linkse woord ingedrukt om het toe te voegen aan het woordenboek</string>
+    <string name="touch_to_continue">"Raak deze tip aan om door te gaan »"</string>
+    <string name="touch_to_finish">"Raak dit punt aan om deze tip te sluiten en te beginnen met typen."</string>
+    <string name="tip_to_open_keyboard"><b>"Het toetsenbord wordt geopend wanneer u een tekstveld aanraakt"</b></string>
+    <string name="tip_to_view_accents"><b>Raak de sleutel aan en hou het ingedrukt om accenten te zien (ø, ö, ô, ó, enz.)</b></string>
+    <string name="tip_to_open_symbols"><b>"Schakel over naar cijfers en symbolen door deze toets aan te raken"</b></string>
+    <string name="tip_to_close_symbols"><b>"Ga terug naar letters door deze toets nogmaals aan te raken"</b></string>
+    <string name="tip_to_launch_settings"><b>"Blijf deze toets aanraken om toetsenbordinstellingen te wijzigen, zoals auto-aanvullen"</b></string>
+    <string name="tip_to_start_typing"><b>"Probeer het zelf!"</b></string>
+    <string name="label_go_key">"Beginnen"</string>
+    <string name="label_next_key">"Volgende"</string>
+    <string name="label_done_key">"Gereed"</string>
+    <string name="label_send_key">"Verzenden"</string>
+    <string name="label_symbol_key">"?123"</string>
+    <string name="label_phone_key">"123"</string>
+    <string name="label_alpha_key">"ABC"</string>
+    <string name="label_alt_key">"Alt"</string>
+    <string name="open_the_keyboard"><font size="17"><b>"Het toetsenbord openen"\n</b></font><font size="3">\n</font>\"Raak een tekstveld aan.\"</string>
+    <string name="close_the_keyboard"><font size="17"><b>"Het toetsenbord sluiten"\n</b></font><font size="3">\n</font>\"Druk op de terugtoets.\"</string>
+    <string name="touch_and_hold"><font size="17"><b>"Een toets blijven aanraken voor opties"\n</b></font><font size="3">\n</font>\"Toegang tot interpunctie en diakritische tekens.\"</string>
+    <string name="keyboard_settings"><font size="17"><b>"Toetsenbordinstellingen"\n</b></font><font size="3">\n</font>"Blijf de toets "<b>\"?123\"</b>\" aanraken.\"</string>
+    <string name="popular_domain_0">".com"</string>
+    <string name="popular_domain_1">".net"</string>
+    <string name="popular_domain_2">".org"</string>
+    <string name="popular_domain_3">".gov"</string>
+    <string name="popular_domain_4">".edu"</string>
+    <string name="english_ime_name">"Tecla-toetsenbord"</string>
+    <string name="english_ime_settings">Tecla Access instellingen</string>
+    <string name="inputMethod">Invoer methode</string>
+    <string name="pref_voice_input">Maak stem ingave mogelijk</string>
+    <string name="pref_voice_input_summary">Voegt een toets toe voor snelle toegang tot gesproken commando\'s en spraakherkenning</string>
+    <string name="pref_variants_key">Toon accenten toets</string>
+    <string name="pref_variants_key_summary">Laat sticky key zien waarmee tekens met accenten en andere varianten worden toegevoegd</string>
     <string name="alternative_input_category">Alternatieve invoer instellingen</string>
-	<string name="persistent_keyboard">Toon altijd toetsenbord</string>
-	<string name="persistent_keyboard_summary">Toont een klein navigatie toetsenbord wanneer geen tekst wordtingevoerd</string>
-	<string name="shield_connect">Verbinding maken met Tecla Shield</string>
-	<string name="shield_connect_summary_BT_nosupport">Bluetooth is niet ondersteund</string>
-	<string name="shield_connect_summary_BT_disabled">Bluetooth is uitgeschakeld</string>
-	<string name="shield_connect_summary">Kies een beschikbaar Tecla Shield</string>
-	<string name="fullscreen_switch">Volledig scherm schakelaar instelling</string>
-	<string name="fullscreen_switch_summary">Gebruikt het volledige scherm als één enkele schakelaar</string>
+    <string name="shield_connect">Verbinding maken met Tecla Shield</string>
+    <string name="shield_connect_summary_BT_nosupport">Bluetooth is niet ondersteund</string>
+    <string name="shield_connect_summary_BT_disabled">Bluetooth is uitgeschakeld</string>
+    <string name="shield_connect_summary">Probeert een verbinding met een nabijgelegen Tecla Shield te maken</string>
+    <string name="shield_temp_disconnect">Tijdelijk verbinding verbreken met Tecla Shield</string>
+    <string name="shield_temp_disconnect_summary">Aanvinken om een ander apparaat te laten verbinden met Tecla Shield</string>
+    <string name="fullscreen_switch">Volledig scherm schakelaar instelling</string>
+    <string name="fullscreen_switch_summary">Gebruikt het volledige scherm als één enkele schakelaar</string>
+    <string name="speakerphone_switch">Altijd speakerphone gebruiken</string>
+    <string name="speakerphone_switch_summary">Speaker voor spraakoproepen, spraakopdrachten en stem input inschakelen.</string>
+    <string name="persistent_keyboard">Toon altijd toetsenbord</string>
+    <string name="persistent_keyboard_summary">Toont een klein navigatie toetsenbord wanneer geen tekst wordt ingevoerd</string>
+    <string name="autohide_timeout">Toetsenbord navigatie time-out</string>
+    <string name="autohide_timeout_summary">Pas de vertraging aan vóór de toetsenbord navigatie automatisch verdwijnt</string>
+    <string name="autohide_timeout_dlg_title">Verberg toetsenbord navigatie</string>
+    <string name="tapforsymbols">Tik voor symbolen</string>
+    <string name="tapforlettersandnumbers">Druk voor letters en cijfers</string>
+    <string name="morse_input_settings">Morse invoer instellingen</string>
+    <string name="morse_settings_summary">Morse mode en voorkeuren aanpassen</string>
+    <string name="morse_mode">Morse invoer activeren</string>
+    <string name="morse_mode_summary">Biedt een Morse invoermethode die het standaard toetsenbord vervangt</string>
+    <string name="morse_show_hud">Toon Morse HUD</string>
+    <string name="morse_show_hud_summary">Laat een aantal Morse sleutels/waarden boven het toetsenbord zien</string>
+    <string name="morse_key_mode">Morse invoermethode</string>
+    <string name="morse_time_unit_title">Morse tijdseenheid</string>
+    <string name="morse_time_unit_dlg_title">Selecteer uw Morse tijdseenheid</string>
+    <string name="mrepeat_frequency">Configureren herhaal frequentie</string>
+    <string name="mrepeat_frequency_summary">Stel de herhaal frequentie van een dit/dah in wanneer u een schakelaar indrukt</string>
+    <string name="mrepeat_frequency_dlg_title">Herhaalfrequentie configureren</string>
+    <string name="fullreset_timeout">Lang indrukken resetvertraging</string>
+    <string name="fullreset_timeout_summary">Pas het lang indrukken met vertraging aan alvorens terug te keren naar Home</string>
+    <string name="dialog_confirm_reset">Weet u zeker dat u alle instellingen op standaardwaarden terug wilt zetten?</string>
+    <string name="btn_yes">Ja</string>
+    <string name="btn_no">Neen</string>
+    <string name="dialog_faster">Sneller</string>
+    <string name="dialog_slower">Trager</string>
+    <string name="btn_done">"Gereed"</string>
     <string name="scanning_category">Scaninstellingen</string>
-	<string name="self_scanning">Activeer zelf-scanning</string>
-	<string name="self_scanning_summary">Scant het toetsenbord automatisch</string>
-	<string name="sep_label">Schakelaar aanbieder</string>
-	<string name="shield_connected">Tecla Shield verbonden</string>
-	<string name="shield_disconnected">Tecla Shield uitgeschakeld</string>
-	<string name="connecting_tecla_shield">Verbinding maken met Tecla Shield</string>
-	<string name="couldnt_connect_shield">Kon geen verbinding maken met Tecla Shield</string>
-	<string name="no_shields_inrange">Geen Tecla Shield beschikbaar</string>
-	<string name="searching_for_shields">Zoeken naar Tecla Shields. Even geduld…</string>
-	<string name="fullscreen_enabled">Volledig scherm schakelaar modus ingeschakeld</string>
-	<string name="fullscreen_disabled">Volledig scherm schakelaar modus uitgeschakeld</string>
+    <string name="scanning_settings_summary">Scan modus en snelheid aanpassen</string>
+    <string name="self_scanning">Activeer zelf-scanning</string>
+    <string name="self_scanning_summary">Scant het toetsenbord automatisch</string>
+    <string name="inverse_scanning">Laat inverse scanning toe</string>
+    <string name="inverse_scanning_summary">Start het scannen bij het drukken en selecteer bij het loslaten</string>
+    <string name="scan_speed">Scansnelheid</string>
+    <string name="scan_speed_summary">Pas de scansnelheid aan</string>
+    <string name="define_switch_action">Configureren schakelaar acties</string>
+    <string name="define_switch_action_summary">Pas de acties aan die toegewezen zijn aan elke invoerschakelaar</string>
+    <string name="switch_j1">ECU 1 / Vooruit</string>
+    <string name="switch_j2">ECU 2 / Achteruit</string>
+    <string name="switch_j3">ECU 3 / Links</string>
+    <string name="switch_j4">ECU 4 / Rechts</string>
+    <string name="switch_e1">Schakelaar 1</string>
+    <string name="switch_e2">Schakelaar 2</string>
+    <string name="switch_j1_tecla">ECU 1 / Tecla actie Vooruit</string>
+    <string name="switch_j2_tecla">ECU 2 / Tecla actie Achteruit</string>
+    <string name="switch_j3_tecla">ECU 3 / Tecla actie Links</string>
+    <string name="switch_j4_tecla">ECU 4 / Tecla actie Rechts</string>
+    <string name="switch_e1_tecla">Knop 1 Tecla Aktie</string>
+    <string name="switch_e2_tecla">Knop 2 Tecla Aktie</string>
+    <string name="switch_j1_morse">ECU 1 / Voorwaarts Morse actie</string>
+    <string name="switch_j2_morse">ECU 2 / Terug Morse actie</string>
+    <string name="switch_j3_morse">ECU 3 / links Morse actie</string>
+    <string name="switch_j4_morse">ECU 4 / rechts Morse actie</string>
+    <string name="switch_e1_morse">Schakelaar 1 Morse actie</string>
+    <string name="switch_e2_morse">Schakelaar 2 Morse actie</string>
+    <string name="switch_default">Herstel standaard acties</string>
+    <string name="switch_default_summary">Reset schakelaar acties op standaardwaarden</string>
+    <string name="user_data_category">Reset schakelaar acties</string>
+    <string name="advanced_input_settings">Geavanceerde invoer instellingen</string>
+    <string name="connecting_tecla_shield">Verbinding maken met Tecla Shield</string>
+    <string name="couldnt_connect_shield">Kon geen verbinding maken met Tecla Shield</string>
+    <string name="shield_connection_cancelled">Verbinding met Tecla Shield geannuleerd</string>
+    <string name="no_shields_inrange">Geen Tecla Shield beschikbaar</string>
+    <string name="searching_for_shields">Op zoek naar Tecla Shields. Een ogenblik geduld…</string>
+    <string name="morse_enabled">Morse invoermethode ingeschakeld</string>
+    <string name="morse_disabled">Morse invoermethode uitgeschakeld</string>
+    <string name="fullscreen_enabled">Volledig scherm schakelaar modus ingeschakeld</string>
+    <string name="fullscreen_disabled">Volledig scherm schakelaar modus uitgeschakeld</string>
+    <string name="tecla_notselected">Selecteer Tecla toegang als uw standaard invoermethode voordat u uw instellingen aanpast.</string>
+    <string name="no_voice_input_available">Geen spraakherkenning applicaties beschikbaar!</string>
+    <string name="no_voice_actions_installed">Voice Search is niet geïnstalleerd!</string>
+    <string name="voice_input">Tecla Stem ingave</string>
+    <string name="configuring_tecla">Tecla instellen&#8230;</string>
+    <string name="contributor_main_heading">About Tecla Access</string>
+    <string name="contributor_main_title">The Team</string>
+    <string name="contributor_main_summary">Learn who made Tecla a reality</string>
+    <string name="contributor_core">Core Team</string>
+    <string name="contributor_jan">Jan Richards</string>
+    <string name="contributor_jan_summary">Manager &amp; User Experience</string>
+    <string name="contributor_jorge">Jorge Silva</string>
+    <string name="contributor_jorge_summary">Lead Developer</string>
+    <string name="contributor_mauricio">Mauricio Meza</string>
+    <string name="contributor_mauricio_summary">User Experience</string>
+    <string name="contributor_wan">Eric Wan</string>
+    <string name="contributor_wan_summary">Junior Developer</string>
+    <string name="contributor_coders">Coders</string>
+    <string name="contributor_kelvin">Eric Ma</string>
+    <string name="contributor_kelvin_summary">Volunter</string>
+    <string name="contributor_kelvin">Eric Ma</string>
+    <string name="contributor_kelvin_summary">Volunter</string>
+    <string name="contributor_kelvin">Eric Ma</string>
+    <string name="contributor_kelvin_summary">Volunter</string>
+    <string name="contributor_contributors">Enhancements</string>
+    <string name="contributor_mats">Mats Lundalv</string>
+    <string name="contributor_mats_summary">Auto-cancel scan</string>
+    <string name="contributor_tanslators">Translators</string>
+
+    <string-array name="prediction_modes">
+        <item>"Geen"</item>
+        <item>"Basis"</item>
+        <item>"Geavanceerd"</item>
+    </string-array>
+    <string-array name="prediction_modes_values">
+        <item>@string/prediction_none</item>
+        <item>@string/prediction_basic</item>
+        <item>@string/prediction_full</item>
+    </string-array>
+    <string-array name="autohide_strings">
+        <item>Onmiddellijk</item>
+        <item>Na 4 seconden</item>
+        <item>Na 8 seconden</item>
+        <item>Na 15 seconden</item>
+        <item>Na 30 seconden</item>
+        <item>Na 60 seconden</item>
+        <item>Nooit</item>
+    </string-array>
+    <string-array name="repeat_frequency_strings">
+        <item>Nooit</item>
+        <item>1000 ms</item>
+        <item>950 ms</item>
+        <item>900 ms</item>
+        <item>850 ms</item>
+        <item>800 ms</item>
+        <item>750 ms</item>
+        <item>700 ms</item>
+        <item>650 ms</item>
+        <item>600 ms</item>
+        <item>550 ms</item>
+        <item>500 ms</item>
+    </string-array>
+    <string-array name="switch_actions">
+        <item>"Geen"</item>
+        <item>Stap-scan volgende</item>
+        <item>Stap-scan vorige</item>
+        <item>Annuleren</item>
+        <item>Selecteer de gemaarkeerde</item>
+    </string-array>
+    <string-array name="morse_actions">
+        <item>"Geen"</item>
+        <item>Morse dit</item>
+        <item>Morse dah</item>
+        <item>Morse einde van karakter</item>
+        <item>Morse backspace</item>
+        <item>Morse IME weergave verbergen</item>
+    </string-array>
+    <string-array name="morse_key_mode_array">
+        <item>Drievoudige toets-modus</item>
+        <item>Dubbel-toets modus</item>
+        <item>Eén toets modus</item>
+    </string-array>
+    <string-array name="fullreset_strings">
+        <item>3 seconden</item>
+        <item>6 seconden</item>
+        <item>9 seconden</item>
+        <item>12 seconden</item>
+        <item>16 seconden</item>
+        <item>20 seconden</item>
+        <item>25 seconden</item>
+        <item>32 seconden</item>
+        <item>40 seconden</item>
+    </string-array>
+
 </resources>

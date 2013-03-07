@@ -424,19 +424,19 @@
    	<string name="contributor_jorge_summary">Lead Developer</string>
    		<string name="contributor_mauricio">Mauricio Meza</string>
    	<string name="contributor_mauricio_summary">User Experience</string>
-   		
-    <string name="contributor_coders">Coders</string>
    		   	<string name="contributor_wan">Eric Wan</string>
-   	<string name="contributor_wan_summary">Summer Intern</string>  	
+   	<string name="contributor_wan_summary">Junior Developer</string>  	
+   			
+    <string name="contributor_coders">Coders</string>
    		<string name="contributor_kelvin">Eric Ma</string>
    	<string name="contributor_kelvin_summary">Volunter</string>
    	<string name="contributor_kelvin">Elyas Bhy</string>
    	<string name="contributor_kelvin_summary">Summer Intern</string>
-   	   	<string name="contributor_kelvin">Rishab</string>
+   	   	<string name="contributor_kelvin">Rishab Garg</string>
    	<string name="contributor_kelvin_summary">Summer Intern</string>
    	
     <string name="contributor_contributors">Enhancements</string>
-   	   	<string name="contributor_mats">Mats</string>
+   	   	<string name="contributor_mats">Mats Lundalv</string>
    	<string name="contributor_mats_summary">Auto-cancel scan</string>
    	
     <string name="contributor_tanslators">Translators</string>	

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,136 +14,252 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-	<string name="vibrate_on_keypress">"Vibrar al pulsar tecla"</string>
-	<string name="sound_on_keypress">"Sonido al pulsar tecla"</string>
-	<string name="hit_correction">"Corregir errores de escritura"</string>
-	<string name="hit_correction_summary">"Habilitar la introducción de corrección de errores"</string>
-	<string name="hit_correction_land">"Errores de introducción de datos en vista horizontal"</string>
-	<string name="hit_correction_land_summary">"Permitir la corrección de error de entrada"</string>
-	<string name="auto_correction">"Sugerencias de palabras"</string>
-	<string name="auto_correction_summary">"Corregir automáticamente la palabra anterior"</string>
-	<string name="prediction">"Sugerencias de palabras"</string>
-	<string name="prediction_category">"Configuración de sugerencia de palabras"</string>
-	<string name="prediction_summary">"Habilitar autocompletar al escribir"</string>
-	<string name="auto_complete_dialog_title">"Autocompletar"</string>
-	<string name="prediction_landscape">"Aumentar el tamaño del campo de texto"</string>
-	<string name="prediction_landscape_summary">"Ocultar sugerencias de palabras en la vista horizontal"</string>
-	<string name="auto_cap">"Uso de mayúsculas auto."</string>
-	<string name="auto_cap_summary">"Escribir en mayúscula el principio de la frase"</string>
-	<string name="auto_punctuate">"Puntuación automática"</string>
-	<string name="quick_fixes">"Correcciones rápidas"</string>
-	<string name="quick_fixes_summary">"Corrige los errores tipográficos que se cometen con más frecuencia."</string>
-	<string name="show_suggestions">"Mostrar sugerencias"</string>
-	<string name="show_suggestions_summary">"Muestra las palabras sugeridas mientras se escribe."</string>
-	<string name="auto_complete">"Autocompletar"</string>
-	<string name="auto_complete_summary">"La barra espaciadora y los signos de puntuación insertan automáticamente la palabra resaltada."</string>
-	<string name="prediction_none">"0"</string>
-	<string name="prediction_basic">"1"</string>
-	<string name="prediction_full">"2"</string>
-	<string name="added_word">"<xliff:g id="WORD">%s</xliff:g> : Guardada"</string>
-	<string name="alternates_for_a">"á"</string>
-	<string name="alternates_for_e">"é"</string>
-	<string name="alternates_for_i">"í"</string>
-	<string name="alternates_for_o">"ó"</string>
-	<string name="alternates_for_u">"úü"</string>
-	<string name="alternates_for_s">"§ß"</string>
-	<string name="alternates_for_n">"ñ"</string>
-	<string name="alternates_for_c">"ç"</string>
-	<string name="alternates_for_y">"ýÿ"</string>
-	<string name="key_i">"i"</string>
-	<string name="tip_long_press">"Mantén pulsada una tecla para ver los caracteres acentuados (ø, ö, etc.)."</string>
-	<string name="tip_dismiss">"Pulsa la tecla \"Atrás\" ↶ para cerrar el teclado en cualquier momento."</string>
-	<string name="tip_access_symbols">"Acceso a números y símbolos"</string>
-	<string name="tip_add_to_dictionary">"Mantén pulsada la palabra situada más a la izquierda para añadirla al diccionario."</string>
-	<string name="touch_to_continue">"Toca esta sugerencia para continuar »"</string>
-	<string name="touch_to_finish">"Toca aquí para cerrar la sugerencia y comenzar a escribir."</string>
-	<string name="tip_to_open_keyboard"><b>"El teclado se abre cada vez que tocas un campo de texto"</b></string>
-	<string name="tip_to_view_accents"><b>"Mantén pulsada una tecla para ver los caracteres acentuados "\n"(ø, ö, ô, ó, etc.)"</b></string>
-	<string name="tip_to_open_symbols"><b>"Toca esta tecla para cambiar al teclado de números y símbolos"</b>\".\"</string>
-	<string name="tip_to_close_symbols"><b>"Toca esta tecla de nuevo para volver a las letras"</b></string>
-	<string name="tip_to_launch_settings"><b>"Mantén pulsada esta tecla para cambiar la configuración del teclado como, por ejemplo, la opción de autocompletar"</b>\".\"</string>
-	<string name="tip_to_start_typing"><b>"¡Pruébalo!"</b></string>
-	<string name="label_go_key">"Ir"</string>
-	<string name="label_next_key">"Sig."</string>
-	<string name="label_done_key">"Hecho"</string>
-	<string name="label_send_key">"Enviar"</string>
-	<string name="label_symbol_key">"?123"</string>
-	<string name="label_phone_key">"123"</string>
-	<string name="label_alpha_key">"ABC"</string>
-	<string name="label_alt_key">"ALT"</string>
-	<string name="open_the_keyboard"><font size="17"><b>"Abrir el teclado"\n</b></font><font size="3">\n</font>\"Pulsa cualquier campo de texto.\"</string>
-	<string name="close_the_keyboard"><font size="17"><b>"Cerrar el teclado"\n</b></font><font size="3">\n</font>\"Pulsa la tecla \"Atrás\".\"</string>
-	<string name="touch_and_hold"><font size="17"><b>"Mantén pulsada una tecla para acceder a las opciones."\n</b></font><font size="3">\n</font>\"Accede a los signos de puntuación y a los acentos.\"</string>
-	<string name="keyboard_settings"><font size="17"><b>"Configuración del teclado"\n</b></font><font size="3">\n</font>"Mantén pulsada la tecla "<b>\"?123\"</b>\".\"</string>
-    <string name="popular_domain_0" msgid="3745279225122472969">".com"</string>
-    <string name="popular_domain_1" msgid="1370572248164278467">".net"</string>
-    <string name="popular_domain_2" msgid="3036812463748402878">".org"</string>
-    <string name="popular_domain_3" msgid="8718639560809452028">".gov"</string>
-    <string name="popular_domain_4" msgid="35359437471311470">".edu"</string>
-    
-   	<!-- Tecla: IME Strings -->
-	<string name="english_ime_name">"Tecla Access"</string>
-	<string name="english_ime_settings">"Configuración de Tecla Access"</string>
-	<string name="inputMethod">Método de entrada</string>
-	<string name="pref_voice_input">Habilitar entrada de voz</string>
-	<string name="pref_voice_input_summary">Añade una tecla de acceso rápido a comandos de voz y reconocimiento de voz</string>
-	<string name="pref_variants_key">Mostrar la tecla de acentos</string>
-	<string name="pref_variants_key_summary">Añade una tecla para habilitar acentos y otros caracteres</string>
-	<string name="alternative_input_category">Configuración de entrada alternativa</string>
-	<string name="shield_connect">Conectar al Tecla Shield</string>
-	<string name="shield_connect_summary_BT_nosupport">Bluetooth no soportado</string>
-	<string name="shield_connect_summary_BT_disabled">Bluetooth desactivado</string>
-	<string name="shield_connect_summary">Seleccionar para conectar a un Tecla Shield cercano</string>
-	<string name="fullscreen_switch">Modo pantalla completa</string>
-	<string name="fullscreen_switch_summary">Utiliza la pantalla completa como un único pulsador</string>
-	<string name="persistent_keyboard">Mostrar teclado de navegación</string>
-	<string name="persistent_keyboard_summary">Muestra un pequeño teclado para navegar cuando no se introduce texto</string>
-	<string name="autohide_timeout">Tiempo de espera del teclado de navegación</string>
-	<string name="autohide_timeout_summary">Ajuste el retardo para que el teclado de navegación se oculte automáticamente</string>
-	<string name="autohide_timeout_dlg_title">Ocultar teclado de navegación</string>
-	<string name="scanning_category">Configuración de escaneo</string>
-	<string name="self_scanning">Activar auto-escaneo</string>
-	<string name="self_scanning_summary">Escanea el teclado automáticamente</string>
-	<string name="inverse_scanning">Activar escaneo inverso</string>
-	<string name="inverse_scanning_summary">Escanea al pulsar el interruptor y selecciona al soltarlo</string>
-	<string name="scan_speed">Velocidad de auto-escaneo</string>
-	<string name="scan_speed_summary">Ajusta la velocidad de escaneo</string>
-	<string name="dialog_faster">Mas rápido</string>
-	<string name="dialog_slower">Mas lento</string>
-	<string name="btn_done">"Hecho"</string>
-	<string name="connecting_tecla_shield">Conectando al Tecla Shield</string>
-	<string name="couldnt_connect_shield">No se puede conectar el Tecla Shield</string>
-	<string name="no_shields_inrange">No hay ningún Tecla Shield en el radio de alcance</string>
-	<string name="searching_for_shields">Buscando Tecla Shields. Espere por favor…</string>
-	<string name="fullscreen_enabled">Interruptor de pantalla completa activado</string>
-	<string name="fullscreen_disabled">Interruptor de pantalla completa desactivado</string>
-	<string name="tecla_notselected">¡El teclado Tecla no esta seleccionado!</string>
-	<string name="shield_connected">Tecla Shield conectado</string>
-	<string name="shield_disconnected">Tecla Shield desconectado</string>
-	<string name="no_voice_input_available">¡No hay aplicaciones de reconocimiento de voz disponibles!</string>
-	<string name="no_voice_actions_installed">¡Acciones de voz no está instalado!</string>
-	<string name="sep_label">Proveedor de eventos de interruptor</string>
-	<string name="voice_input">Entrada de voz de Tecla</string>
-	<string name="configuring_tecla">Configurando Tecla…</string>
-	<string-array name="prediction_modes">
-		<item>"Ninguno"</item>
-		<item>"Básico"</item>
-		<item>"Avanzado"</item>
-	</string-array>
-	<string-array name="prediction_modes_values">
-		<item>@string/prediction_none</item>
-		<item>@string/prediction_basic</item>
-		<item>@string/prediction_full</item>
-	</string-array>
-	<string-array name="autohide_strings">
-		<item>Inmediatamente</item>
-		<item>Después de 4 segundos</item>
-		<item>Después de 8 segundos</item>
-		<item>Después de 15 segundos</item>
-		<item>Después de 30 segundos</item>
-		<item>Después de 60 segundos</item>
-		<item>Nunca</item>
-	</string-array>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="vibrate_on_keypress">"Vibrar al pulsar tecla"</string>
+    <string name="sound_on_keypress">"Sonido al pulsar tecla"</string>
+    <string name="hit_correction">"Corregir errores de escritura"</string>
+    <string name="hit_correction_summary">"Habilitar la introducción de corrección de errores"</string>
+    <string name="hit_correction_land">"Errores de introducción de datos en vista horizontal"</string>
+    <string name="hit_correction_land_summary">"Permitir la corrección de error de entrada"</string>
+    <string name="auto_correction">"Sugerencias de palabras"</string>
+    <string name="auto_correction_summary">"Corregir automáticamente la palabra anterior"</string>
+    <string name="prediction">"Sugerencias de palabras"</string>
+    <string name="prediction_category">"Configuración de sugerencia de palabras"</string>
+    <string name="prediction_summary">"Habilitar autocompletar al escribir"</string>
+    <string name="auto_complete_dialog_title">"Autocompletar"</string>
+    <string name="prediction_landscape">"Aumentar el tamaño del campo de texto"</string>
+    <string name="prediction_landscape_summary">"Ocultar sugerencias de palabras en la vista horizontal"</string>
+    <string name="auto_cap">"Uso de mayúsculas auto."</string>
+    <string name="auto_cap_summary">"Escribir en mayúscula el principio de la frase"</string>
+    <string name="auto_punctuate">"Puntuación automática"</string>
+    <string name="quick_fixes">"Correcciones rápidas"</string>
+    <string name="quick_fixes_summary">"Corrige los errores tipográficos que se cometen con más frecuencia."</string>
+    <string name="show_suggestions">"Mostrar sugerencias"</string>
+    <string name="show_suggestions_summary">"Muestra las palabras sugeridas mientras se escribe."</string>
+    <string name="auto_complete">"Autocompletar"</string>
+    <string name="auto_complete_summary">"La barra espaciadora y los signos de puntuación insertan automáticamente la palabra resaltada."</string>
+    <string name="prediction_none">"0"</string>
+    <string name="prediction_basic">"1"</string>
+    <string name="prediction_full">"2"</string>
+    <string name="added_word">"<xliff:g id="WORD">%s</xliff:g> : Guardada"</string>
+    <string name="alternates_for_a">"á"</string>
+    <string name="alternates_for_e">"é"</string>
+    <string name="alternates_for_i">"í"</string>
+    <string name="alternates_for_o">"ó"</string>
+    <string name="alternates_for_u">"úü"</string>
+    <string name="alternates_for_s">"§ß"</string>
+    <string name="alternates_for_n">"ñ"</string>
+    <string name="alternates_for_c">"ç"</string>
+    <string name="alternates_for_y">"ýÿ"</string>
+    <string name="key_i">"i"</string>
+    <string name="tip_long_press">"Mantén pulsada una tecla para ver los caracteres acentuados (ø, ö, etc.)."</string>
+    <string name="tip_dismiss">"Pulsa la tecla \"Atrás\" ↶ para cerrar el teclado en cualquier momento."</string>
+    <string name="tip_access_symbols">"Acceso a números y símbolos"</string>
+    <string name="tip_add_to_dictionary">Mantén pulsada la palabra situada más a la izquierda para añadirla al diccionario</string>
+    <string name="touch_to_continue">"Toca esta sugerencia para continuar »"</string>
+    <string name="touch_to_finish">"Toca aquí para cerrar la sugerencia y comenzar a escribir."</string>
+    <string name="tip_to_open_keyboard"><b>"El teclado se abre cada vez que tocas un campo de texto"</b></string>
+    <string name="tip_to_view_accents"><b>Mantén pulsada una tecla para ver los caracteres acentuados\n(ø, ö, ô, ó, etc.)</b></string>
+    <string name="tip_to_open_symbols"><b>"Toca esta tecla para cambiar al teclado de números y símbolos"</b>\".\"</string>
+    <string name="tip_to_close_symbols"><b>"Toca esta tecla de nuevo para volver a las letras"</b></string>
+    <string name="tip_to_launch_settings"><b>"Mantén pulsada esta tecla para cambiar la configuración del teclado como, por ejemplo, la opción de autocompletar"</b>\".\"</string>
+    <string name="tip_to_start_typing"><b>"¡Pruébalo!"</b></string>
+    <string name="label_go_key">"Ir"</string>
+    <string name="label_next_key">"Sig."</string>
+    <string name="label_done_key">"Hecho"</string>
+    <string name="label_send_key">"Enviar"</string>
+    <string name="label_symbol_key">"?123"</string>
+    <string name="label_phone_key">"123"</string>
+    <string name="label_alpha_key">"ABC"</string>
+    <string name="label_alt_key">"ALT"</string>
+    <string name="open_the_keyboard"><font size="17"><b>"Abrir el teclado"\n</b></font><font size="3">\n</font>\"Pulsa cualquier campo de texto.\"</string>
+    <string name="close_the_keyboard"><font size="17"><b>"Cerrar el teclado"\n</b></font><font size="3">\n</font>\"Pulsa la tecla \"Atrás\".\"</string>
+    <string name="touch_and_hold"><font size="17"><b>"Mantén pulsada una tecla para acceder a las opciones."\n</b></font><font size="3">\n</font>\"Accede a los signos de puntuación y a los acentos.\"</string>
+    <string name="keyboard_settings"><font size="17"><b>"Configuración del teclado"\n</b></font><font size="3">\n</font>"Mantén pulsada la tecla "<b>\"?123\"</b>\".\"</string>
+    <string name="popular_domain_0">".com"</string>
+    <string name="popular_domain_1">".net"</string>
+    <string name="popular_domain_2">".org"</string>
+    <string name="popular_domain_3">".gov"</string>
+    <string name="popular_domain_4">".edu"</string>
+    <string name="english_ime_name">"Teclado Tecla"</string>
+    <string name="english_ime_settings">Configuración de Tecla Access</string>
+    <string name="inputMethod">Método de entrada</string>
+    <string name="pref_voice_input">Habilitar entrada de voz</string>
+    <string name="pref_voice_input_summary">Añade una tecla de acceso rápido a comandos de voz y reconocimiento de voz</string>
+    <string name="pref_variants_key">Mostrar la tecla de acentos</string>
+    <string name="pref_variants_key_summary">Agrega una tecla que permite introducir caracteres acentuados y otras variantes</string>
+    <string name="alternative_input_category">Configuración de entrada alternativa</string>
+    <string name="shield_connect">Conectar al Tecla Shield</string>
+    <string name="shield_connect_summary_BT_nosupport">Bluetooth no soportado</string>
+    <string name="shield_connect_summary_BT_disabled">Bluetooth desactivado</string>
+    <string name="shield_connect_summary">Intenta una conexión con un Tecla Shield cercano</string>
+    <string name="shield_temp_disconnect">Desconectar temporalmente el Tecla Shield</string>
+    <string name="shield_temp_disconnect_summary">Selecciona para permitir que otro dispositivo se conecte al Tecla Shield</string>
+    <string name="fullscreen_switch">Modo pantalla completa</string>
+    <string name="fullscreen_switch_summary">Utiliza la pantalla completa como un único pulsador</string>
+    <string name="speakerphone_switch">Activar siempre el altavoz</string>
+    <string name="speakerphone_switch_summary">Activa el altavoz para llamadas de voz, comandos de voz y entrada de voz.</string>
+    <string name="persistent_keyboard">Mostrar teclado de navegación</string>
+    <string name="persistent_keyboard_summary">Muestra un pequeño teclado para navegar cuando no se introduce texto</string>
+    <string name="autohide_timeout">Tiempo de espera del teclado de navegación</string>
+    <string name="autohide_timeout_summary">Ajuste el retardo para que el teclado de navegación se oculte automáticamente</string>
+    <string name="autohide_timeout_dlg_title">Ocultar teclado de navegación</string>
+    <string name="tapforsymbols">Pulsa para símbolos</string>
+    <string name="tapforlettersandnumbers">Pulsa para letras y números</string>
+    <string name="morse_input_settings">Configuración de entrada Morse</string>
+    <string name="morse_settings_summary">Ajustar las preferencias y el modo de entrada Morse</string>
+    <string name="morse_mode">Usar entrada Morse</string>
+    <string name="morse_mode_summary">Proporciona un método de entrada Morse que sustituye el teclado estándar</string>
+    <string name="morse_show_hud">Mostrar guía Morse</string>
+    <string name="morse_show_hud_summary">Muestra un conjunto de claves/valores Morse arriba del teclado</string>
+    <string name="morse_key_mode">Método de entrada Morse</string>
+    <string name="morse_time_unit_title">Unidad de tiempo Morse</string>
+    <string name="morse_time_unit_dlg_title">Seleccione su unidad de tiempo Morse</string>
+    <string name="mrepeat_frequency">Configura la frecuencia de repetición</string>
+    <string name="mrepeat_frequency_summary">Ajustar la frecuencia de repetición de un punto/raya Morse cuando se mantiene presionado un interruptor</string>
+    <string name="mrepeat_frequency_dlg_title">Configurar la frecuencia de repetición</string>
+    <string name="fullreset_timeout">Duración de pulsación larga para restablecimiento</string>
+    <string name="fullreset_timeout_summary">Ajusta la duración de la pulsación larga para regresar a la pantalla de inicio</string>
+    <string name="dialog_confirm_reset">¿Está seguro que desea restablecer las acciones predeterminadas?</string>
+    <string name="btn_yes">Sí</string>
+    <string name="btn_no">No</string>
+    <string name="dialog_faster">Mas rápido</string>
+    <string name="dialog_slower">Mas lento</string>
+    <string name="btn_done">"Hecho"</string>
+    <string name="scanning_category">Configuración de escaneo</string>
+    <string name="scanning_settings_summary">Ajustar el modo y la velocidad de escaneo</string>
+    <string name="self_scanning">Activar auto-escaneo</string>
+    <string name="self_scanning_summary">Escanea el teclado automáticamente</string>
+    <string name="inverse_scanning">Activar escaneo inverso</string>
+    <string name="inverse_scanning_summary">Escanea al pulsar el interruptor y selecciona al soltarlo</string>
+    <string name="scan_speed">Velocidad de auto-escaneo</string>
+    <string name="scan_speed_summary">Ajusta la velocidad de escaneo</string>
+    <string name="define_switch_action">Configurar acciones de interruptores</string>
+    <string name="define_switch_action_summary">Personaliza las acciones asignadas a cada interruptor de entrada</string>
+    <string name="switch_j1">ECU 1 / Adelante</string>
+    <string name="switch_j2">ECU 2 / Reversa</string>
+    <string name="switch_j3">ECU 3 / Izquierda</string>
+    <string name="switch_j4">ECU 4 / Derecha</string>
+    <string name="switch_e1">Interruptor 1</string>
+    <string name="switch_e2">Interruptor 2</string>
+    <string name="switch_j1_tecla">Acción Tecla de ECU 1 / Adelante</string>
+    <string name="switch_j2_tecla">Acción Tecla de ECU 2 / Reversa</string>
+    <string name="switch_j3_tecla">Acción Tecla de ECU 3 / Izquierda</string>
+    <string name="switch_j4_tecla">Acción Tecla de ECU 4 / Derecha</string>
+    <string name="switch_e1_tecla">Acción Tecla de Interruptor 1</string>
+    <string name="switch_e2_tecla">Acción Tecla de Interruptor 2</string>
+    <string name="switch_j1_morse">Acción Morse de ECU 1 / Adelante</string>
+    <string name="switch_j2_morse">Acción Morse de ECU 2 / Reversa</string>
+    <string name="switch_j3_morse">Acción Morse de ECU 3 / Izquierda</string>
+    <string name="switch_j4_morse">Acción Morse de ECU 4 / Derecha</string>
+    <string name="switch_e1_morse">Acción Morse de Interruptor 1</string>
+    <string name="switch_e2_morse">Acción Morse de Interruptor 2</string>
+    <string name="switch_default">Restablecer las acciones predeterminadas</string>
+    <string name="switch_default_summary">Asignar valores predeterminados a las acciones de interruptores</string>
+    <string name="user_data_category">Restablecer acciones de interruptores</string>
+    <string name="advanced_input_settings">Configuración avanzada</string>
+    <string name="connecting_tecla_shield">Conectando al Tecla Shield</string>
+    <string name="couldnt_connect_shield">No se puede conectar el Tecla Shield</string>
+    <string name="shield_connection_cancelled">Conexión al Tecla Shield cancelada</string>
+    <string name="no_shields_inrange">No hay ningún Tecla Shield en el radio de alcance</string>
+    <string name="searching_for_shields">Buscando Tecla Shields. Espere por favor…</string>
+    <string name="morse_enabled">Método de entrada Morse habilitado</string>
+    <string name="morse_disabled">Método de entrada Morse deshabilitado</string>
+    <string name="fullscreen_enabled">Interruptor de pantalla completa activado</string>
+    <string name="fullscreen_disabled">Interruptor de pantalla completa desactivado</string>
+    <string name="tecla_notselected">Por favor seleccione Tecla Access como su método de entrada por defecto antes de ajustar la configuración.</string>
+    <string name="no_voice_input_available">¡No hay aplicaciones de reconocimiento de voz disponibles!</string>
+    <string name="no_voice_actions_installed">Voice Search no está instalado!</string>
+    <string name="voice_input">Entrada de voz de Tecla</string>
+    <string name="configuring_tecla">Configurando Tecla…</string>
+    <string name="contributor_main_heading">Acerca de Tecla Access</string>
+    <string name="contributor_main_title">El equipo</string>
+    <string name="contributor_main_summary">Los que hicieron de Tecla Acces una realidad</string>
+    <string name="contributor_core">Equipo básico</string>
+    <string name="contributor_jan">Jan Richards</string>
+    <string name="contributor_jan_summary">Manager &amp; User Experience</string>
+    <string name="contributor_jorge">Jorge Silva</string>
+    <string name="contributor_jorge_summary">Programador Principal</string>
+    <string name="contributor_mauricio">Mauricio Meza</string>
+    <string name="contributor_mauricio_summary">Experiencia de usuario</string>
+    <string name="contributor_wan">Eric Wan</string>
+    <string name="contributor_wan_summary">Programador Junior</string>
+    <string name="contributor_coders">Programadores</string>
+    <string name="contributor_kelvin">Eric Ma</string>
+    <string name="contributor_kelvin_summary">Voluntario</string>
+    <string name="contributor_kelvin">Eric Ma</string>
+    <string name="contributor_kelvin_summary">Voluntario</string>
+    <string name="contributor_kelvin">Eric Ma</string>
+    <string name="contributor_kelvin_summary">Voluntario</string>
+    <string name="contributor_contributors">Mejoras</string>
+    <string name="contributor_mats">Mats Lundalv</string>
+    <string name="contributor_mats_summary">Cancelación automática de escaneo</string>
+    <string name="contributor_tanslators">Traductores</string>
+
+    <string-array name="prediction_modes">
+        <item>"Ninguno"</item>
+        <item>"Básico"</item>
+        <item>"Avanzado"</item>
+    </string-array>
+    <string-array name="prediction_modes_values">
+        <item>@string/prediction_none</item>
+        <item>@string/prediction_basic</item>
+        <item>@string/prediction_full</item>
+    </string-array>
+    <string-array name="autohide_strings">
+        <item>Inmediatamente</item>
+        <item>Después de 4 segundos</item>
+        <item>Después de 8 segundos</item>
+        <item>Después de 15 segundos</item>
+        <item>Después de 30 segundos</item>
+        <item>Después de 60 segundos</item>
+        <item>Nunca</item>
+    </string-array>
+    <string-array name="repeat_frequency_strings">
+        <item>Nunca</item>
+        <item>1000 ms</item>
+        <item>950 ms</item>
+        <item>900 ms</item>
+        <item>850 ms</item>
+        <item>800 ms</item>
+        <item>750 ms</item>
+        <item>700 ms</item>
+        <item>650 ms</item>
+        <item>600 ms</item>
+        <item>550 ms</item>
+        <item>500 ms</item>
+    </string-array>
+    <string-array name="switch_actions">
+        <item>Ninguno</item>
+        <item>Escanea siguiente</item>
+        <item>Escanea anterior</item>
+        <item>Salir, cancelar</item>
+        <item>Selecciona elemento destacado</item>
+    </string-array>
+    <string-array name="morse_actions">
+        <item>Ninguno</item>
+        <item>Punto (Morse)</item>
+        <item>Raya (Morse)</item>
+        <item>Final de caracter Morse</item>
+        <item>Retroceso (Morse)</item>
+        <item>Ocultar teclado Morse</item>
+    </string-array>
+    <string-array name="morse_key_mode_array">
+        <item>Modo de triple interruptor</item>
+        <item>Mode de doble interruptor</item>
+        <item>Modo de interruptor único</item>
+    </string-array>
+    <string-array name="fullreset_strings">
+        <item>3 segundos</item>
+        <item>6 segundos</item>
+        <item>9 segundos</item>
+        <item>12 segundos</item>
+        <item>16 segundos</item>
+        <item>20 segundos</item>
+        <item>25 segundos</item>
+        <item>32 segundos</item>
+        <item>40 segundos</item>
+    </string-array>
+
 </resources>
