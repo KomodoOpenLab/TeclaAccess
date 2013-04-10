@@ -1,265 +1,248 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-     Copyright (C) 2009 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
-    <string name="vibrate_on_keypress">Vibrer à chaque touche</string>
-    <string name="sound_on_keypress">Son à chaque touche</string>
-    <string name="hit_correction">Corriger les fautes de frappe</string>
-    <string name="hit_correction_summary">Activer la correction des fautes de frappe</string>
-    <string name="hit_correction_land">Fautes de frappe en mode paysage</string>
-    <string name="hit_correction_land_summary">Activer la correction des fautes de frappe</string>
-    <string name="auto_correction">Saisie prédictive</string>
-    <string name="auto_correction_summary">Corriger automatiquement le mot précédent</string>
-    <string name="prediction">Suggestions des mots</string>
-    <string name="prediction_category">Paramètres de la saisie prédictive</string>
-    <string name="prediction_summary">Activer la saisie semi-automatique</string>
-    <string name="auto_complete_dialog_title">Saisie semi-automatique</string>
-    <string name="prediction_landscape">Agrandir le champ de texte</string>
-    <string name="prediction_landscape_summary">Masquer la saisie prédictive en mode paysage</string>
-    <string name="auto_cap">Majuscules automatiques</string>
-    <string name="auto_cap_summary">Mettre en majuscule la première lettre de chaque phrase</string>
-    <string name="auto_punctuate">Ponctuation automatique</string>
-    <string name="quick_fixes">Corrections rapides</string>
-    <string name="quick_fixes_summary">Corrige les fautes de frappe courantes</string>
-    <string name="show_suggestions">Afficher les suggestions</string>
-    <string name="show_suggestions_summary">Afficher les suggestions de termes lors de la saisie</string>
-    <string name="auto_complete">Saisie semi-automatique</string>
-    <string name="auto_complete_summary">La barre d\'espace et la ponctuation insèrent automatiquement le mot surligné</string>
-    <string name="prediction_none">0</string>
-    <string name="prediction_basic">1</string>
-    <string name="prediction_full">2</string>
-    <string name="added_word"><xliff:g id="WORD">%s</xliff:g> : Enregistré</string>
-    <string name="alternates_for_a">àâæ</string>
-    <string name="alternates_for_e">èéêë</string>
-    <string name="alternates_for_i">îï</string>
-    <string name="alternates_for_o">ôœ</string>
-    <string name="alternates_for_u">ùûü</string>
-    <string name="alternates_for_s">§ß</string>
-    <string name="alternates_for_n">"ñ"</string>
-    <string name="alternates_for_c">ç</string>
-    <string name="alternates_for_y">"ýÿ"</string>
-    <string name="key_i">i</string>
-    <string name="tip_long_press">Maintenir une touche enfoncée pour afficher les accents (à, é, etc.)</string>
-    <string name="tip_dismiss">Appuyez sur la touche Retour ↶ pour fermer le clavier à tout moment</string>
-    <string name="tip_access_symbols">Accéder aux chiffres et aux symboles</string>
-    <string name="tip_add_to_dictionary">Appuyer et maintenir le doigt sur le mot le plus à gauche pour l\'ajouter au dictionnaire</string>
-    <string name="touch_to_continue">Touchez ce conseil pour continuer</string>
-    <string name="touch_to_finish">Touchez ici pour fermer ce conseil et commencer à saisir votre texte !</string>
-    <string name="tip_to_open_keyboard"><b>Le clavier s\'affiche à chaque fois que vous touchez une zone de texte</b></string>
-    <string name="tip_to_view_accents"><b>Maintenez &amp; une touche enfoncée pour afficher les accents\n(ø, ö, ô, ó, etc.)"</b></string>
-    <string name="tip_to_open_symbols"><b>Appuyez sur cette touche pour basculer vers les chiffres et les symboles</b></string>
-    <string name="tip_to_close_symbols"><b>Retourner aux lettres en appuyant de nouveau sur cette touche</b></string>
-    <string name="tip_to_launch_settings"><b>Maintenez cette touche enfoncée afin de modifier les paramètres du clavier, tels que la saisie semi-automatique</b></string>
-    <string name="tip_to_start_typing"><b>Essayez !</b></string>
-    <string name="label_go_key">Go</string>
-    <string name="label_next_key">Suivant</string>
-    <string name="label_done_key">Terminé</string>
-    <string name="label_send_key">Envoyer</string>
-    <string name="label_symbol_key">\?123</string>
-    <string name="label_phone_key">123</string>
-    <string name="label_alpha_key">ABC</string>
-    <string name="label_alt_key">ALT</string>
-    <string name="open_the_keyboard"><font size="17"><b>Ouvrir le clavier\n</b></font><font size="3">\n</font>Appuyez sur un champ de texte.</string>
-    <string name="close_the_keyboard"><font size="17"><b>Fermer le clavier\n</b></font><font size="3">\n</font>Appuyez sur la touche Retour.</string>
-    <string name="touch_and_hold"><font size="17"><b>Appuyer sur une touche de manière prolongée pour accéder aux options\n</b></font><font size="3">\n</font>Accédez à la ponctuation et aux accents.</string>
-    <string name="keyboard_settings"><font size="17"><b>Paramètres du clavier\n</b></font><font size="3">\n</font>Appuyez et maintenez la touche<b>\?123\</b>.</string>
-    <string name="popular_domain_0">".com"</string>
-    <string name="popular_domain_1">".net"</string>
-    <string name="popular_domain_2">".org"</string>
-    <string name="popular_domain_3">".gov"</string>
-    <string name="popular_domain_4">".edu"</string>
-    <string name="english_ime_name">Tecla Access</string>
-    <string name="english_ime_settings">Paramètres de Tecla Access</string>
-    <string name="inputMethod">Méthode d\'entrée</string>
-    <string name="pref_voice_input">Activer la reconnaissance vocale</string>
-    <string name="pref_voice_input_summary">Ajoute une touche pour un accès rapide aux commandes vocales et à la reconnaissance vocale</string>
-    <string name="pref_variants_key">Montrer les touches des accents</string>
-    <string name="pref_variants_key_summary">Ajoute une touche rémanente qui active les caractères accentués et les caractères spéciaux</string>
-    <string name="alternative_input_category">Paramètres des entrées alternatives</string>
-    <string name="shield_connect">Se connecter au Tecla Shield</string>
-    <string name="shield_connect_summary_BT_nosupport">Bluetooth n\'est pas pris en charge</string>
-    <string name="shield_connect_summary_BT_disabled">Bluetooth est désactivé</string>
-    <string name="shield_connect_summary">Tente une connexion à un Tecla Shield à proximité</string>
-    <string name="shield_temp_disconnect">Déconnecter temporairement le Tecla Shield</string>
-    <string name="shield_temp_disconnect_summary">Cocher pour permettre à un autre appareil de se connecter au Tecla Shield</string>
-    <string name="fullscreen_switch">Interrupteur en mode plein écran</string>
-    <string name="fullscreen_switch_summary">Utiliser l\'écran entier comme un seul interrupteur</string>
-    <string name="speakerphone_switch">Toujours utiliser le téléphone en mode haut-parleur</string>
-    <string name="speakerphone_switch_summary">Pour les appels vocaux, les commandes vocales et les entrées vocales, utiliser le téléphone en mode haut-parleur.</string>
-    <string name="persistent_keyboard">Montrer le clavier de navigation</string>
-    <string name="persistent_keyboard_summary">Montre un petit clavier de navigation quand aucun texte n\'est introduit</string>
-    <string name="autohide_timeout">Temps avant disparition du clavier de Navigation</string>
-    <string name="autohide_timeout_summary">Ajuste le délai avant que le clavier de navigation ne se masque automatiquement</string>
-    <string name="autohide_timeout_dlg_title">Masquer le clavier de navigation</string>
-    <string name="tapforsymbols">Enfoncer pour afficher les symboles</string>
-    <string name="tapforlettersandnumbers">Appuyer pour saisir des lettres et des chiffres</string>
-    <string name="morse_input_settings">Paramètres d\'entrée de morse</string>
-    <string name="morse_settings_summary">Régler les préférences du mode d\'entrée Morse</string>
-    <string name="morse_mode">Activer le mode d\'entrée Morse</string>
-    <string name="morse_mode_summary">Fournit un mode d\'entrée de morse qui remplace le clavier standard</string>
-    <string name="morse_show_hud">Voir le guide du mode d\'entrée Morse</string>
-    <string name="morse_show_hud_summary">Affiche un ensemble de clés/valeurs Morse au-dessus du clavier</string>
-    <string name="morse_key_mode">Mode d\'entrée Morse</string>
-    <string name="morse_time_unit_title">Unité de temps Morse</string>
-    <string name="morse_time_unit_dlg_title">Sélectionnez votre unité de temps Morse</string>
-    <string name="mrepeat_frequency">Configurer la fréquence de répétition</string>
-    <string name="mrepeat_frequency_summary">Ajuster la fréquence de répétition d\'un dit/dah lorsqu\'un commutateur est enfoncé</string>
-    <string name="mrepeat_frequency_dlg_title">Configurer la fréquence de répétition</string>
-    <string name="fullreset_timeout">Délai de réinitialisation avec pression longue</string>
-    <string name="fullreset_timeout_summary">Ajuster le délai de la pression longue avant de retourner à l\'écran d\'accueil</string>
-    <string name="dialog_confirm_reset">Êtes-vous sûr de vouloir réinitialiser les actions par défaut ?</string>
-    <string name="btn_yes">Oui</string>
-    <string name="btn_no">Non</string>
-    <string name="dialog_faster">Plus rapide</string>
-    <string name="dialog_slower">Plus lent</string>
-    <string name="btn_done">Terminé</string>
-    <string name="scanning_category">Paramètres de numérisation</string>
-    <string name="scanning_settings_summary">Régler la vitesse ainsi que le mode de balayage</string>
-    <string name="self_scanning">Activer le self-scanning</string>
-    <string name="self_scanning_summary">Scanne le clavier automatiquement</string>
-    <string name="inverse_scanning">Activer le scan inverse</string>
-    <string name="inverse_scanning_summary">Scanner lorsque l\'interrupteur est pressé et sélectionner quand il est relâché</string>
-    <string name="scan_speed">Vitesse de scan</string>
-    <string name="scan_speed_summary">Ajuste la vitesse de scan</string>
-    <string name="define_switch_action">Configurer les actions des commutateurs</string>
-    <string name="define_switch_action_summary">Personnaliser les actions assignées à chaque commutateur</string>
-    <string name="switch_j1">ECU 1 / Avant</string>
-    <string name="switch_j2">ECU 2 / Inverse</string>
-    <string name="switch_j3">ECU 3 / Gauche</string>
-    <string name="switch_j4">ECU 4 / Droite</string>
-    <string name="switch_e1">Commutateur 1</string>
-    <string name="switch_e2">Commutateur 2</string>
-    <string name="switch_j1_tecla">ECU 1 / Action de Tecla en avant</string>
-    <string name="switch_j2_tecla">ECU 2 / Action de Tecla en inverse</string>
-    <string name="switch_j3_tecla">ECU 3 / Action de Tecla à gauche</string>
-    <string name="switch_j4_tecla">ECU 4 / Action de Tecla à droite</string>
-    <string name="switch_e1_tecla">Action Tecla pour Commutateur 1</string>
-    <string name="switch_e2_tecla">Action Tecla pour Commutateur 2</string>
-    <string name="switch_j1_morse">ECU 1 / Action du morse en avant</string>
-    <string name="switch_j2_morse">ECU 2 / Action du morse en inverse</string>
-    <string name="switch_j3_morse">ECU 3 / Action du morse à gauche</string>
-    <string name="switch_j4_morse">ECU 4 / Action du morse à droite</string>
-    <string name="switch_e1_morse">Action Morse pour Commutateur 1</string>
-    <string name="switch_e2_morse">Action Morse pour Commutateur 2</string>
-    <string name="switch_default">Rétablir les actions par défaut</string>
-    <string name="switch_default_summary">Réinitialisation des actions des commutateurs aux valeurs par défaut</string>
-    <string name="user_data_category">Réinitialisation des actions des commutateurs</string>
-    <string name="advanced_input_settings">Paramètres d\'entrées avancés</string>
-    <string name="connecting_tecla_shield">Connexion au Tecla Shield</string>
-    <string name="couldnt_connect_shield">Impossible de se connecter au Tecla Shield</string>
-    <string name="shield_connection_cancelled">Connexion au Tecla Shield annulé</string>
-    <string name="no_shields_inrange">Pas de Tecla Shield à portée</string>
-    <string name="searching_for_shields">Recherche de Tecla Shields. Veuillez patienter…</string>
-    <string name="morse_enabled">Méthode d\'entrée Morse activé</string>
-    <string name="morse_disabled">Méthode d\'entrée Morse désactivé</string>
-    <string name="fullscreen_enabled">Interrupteur en mode plein écran activé</string>
-    <string name="fullscreen_disabled">Interrupteur en mode plein écran désactivé</string>
-    <string name="tecla_notselected">Sélectionnez Tecla Access comme votre mode d\'entrée par défaut avant de régler les paramètres.</string>
-    <string name="no_voice_input_available">Aucune application de reconnaissance vocale disponible !</string>
-    <string name="no_voice_actions_installed">Voice Search n\'est pas installé!</string>
-    <string name="voice_input">Entrée vocale Tecla</string>
-    <string name="configuring_tecla">Configuration de Tecla…</string>
-    <string name="contributor_main_heading">About Tecla Access</string>
-    <string name="contributor_main_title">The Team</string>
-    <string name="contributor_main_summary">Learn who made Tecla a reality</string>
-    <string name="contributor_core">Core Team</string>
-    <string name="contributor_jan">Jan Richards</string>
-    <string name="contributor_jan_summary">Manager &amp; User Experience</string>
-    <string name="contributor_jorge">Jorge Silva</string>
-    <string name="contributor_jorge_summary">Lead Developer</string>
-    <string name="contributor_mauricio">Mauricio Meza</string>
-    <string name="contributor_mauricio_summary">User Experience</string>
-    <string name="contributor_wan">Eric Wan</string>
-    <string name="contributor_wan_summary">Junior Developer</string>
-    <string name="contributor_coders">Coders</string>
-    <string name="contributor_kelvin">Eric Ma</string>
-    <string name="contributor_kelvin_summary">Volunter</string>
-    <string name="contributor_kelvin">Eric Ma</string>
-    <string name="contributor_kelvin_summary">Volunter</string>
-    <string name="contributor_kelvin">Eric Ma</string>
-    <string name="contributor_kelvin_summary">Volunter</string>
-    <string name="contributor_contributors">Enhancements</string>
-    <string name="contributor_mats">Mats Lundalv</string>
-    <string name="contributor_mats_summary">Auto-cancel scan</string>
-    <string name="contributor_tanslators">Translators</string>
-
-    <string-array name="prediction_modes">
-        <item>Aucun</item>
-        <item>Basique</item>
-        <item>Avancé</item>
-    </string-array>
-    <string-array name="prediction_modes_values">
-        <item>@string/prediction_none</item>
-        <item>@string/prediction_basic</item>
-        <item>@string/prediction_full</item>
-    </string-array>
-    <string-array name="autohide_strings">
-        <item>Immédiatement</item>
-        <item>Après 4 secondes</item>
-        <item>Après 8 secondes</item>
-        <item>Après 15 secondes</item>
-        <item>Après 30 secondes</item>
-        <item>Après 60 secondes</item>
-        <item>Jamais</item>
-    </string-array>
-    <string-array name="repeat_frequency_strings">
-        <item>Jamais</item>
-        <item>1000 ms</item>
-        <item>950 ms</item>
-        <item>900 ms</item>
-        <item>850 ms</item>
-        <item>800 ms</item>
-        <item>750 ms</item>
-        <item>700 ms</item>
-        <item>650 ms</item>
-        <item>600 ms</item>
-        <item>550 ms</item>
-        <item>500 ms</item>
-    </string-array>
-    <string-array name="switch_actions">
-        <item>Aucun</item>
-        <item>Step-scan suivant</item>
-        <item>Step-scan précédent</item>
-        <item>Annuler</item>
-        <item>Sélectionnez le surligné</item>
-    </string-array>
-    <string-array name="morse_actions">
-        <item>Aucun</item>
-        <item>Dit Morse</item>
-        <item>Dah Morse</item>
-        <item>Charactère de fin Morse</item>
-        <item>Retour arrière Morse</item>
-        <item>Cacher la vue de l\'IME Morse</item>
-    </string-array>
-    <string-array name="morse_key_mode_array">
-        <item>Mode triple-touche</item>
-        <item>Mode double-touche</item>
-        <item>Mode touche unique</item>
-    </string-array>
-    <string-array name="fullreset_strings">
-        <item>3 secondes</item>
-        <item>6 secondes</item>
-        <item>9 secondes</item>
-        <item>12 secondes</item>
-        <item>16 secondes</item>
-        <item>20 secondes</item>
-        <item>25 secondes</item>
-        <item>32 secondes</item>
-        <item>40 secondes</item>
-    </string-array>
-
+<?xml version="1.0" encoding="utf-8"?>
+<!--Generated by crowdin.net-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="vibrate_on_keypress">Vibrer à chaque touche</string>
+  <string name="sound_on_keypress">Son à chaque touche</string>
+  <string name="hit_correction">Corriger les fautes de frappe</string>
+  <string name="hit_correction_summary">"Activer la correction des erreurs de saisie"</string>
+  <string name="hit_correction_land">Fautes de frappe en mode paysage</string>
+  <string name="hit_correction_land_summary">"Activer la correction des erreurs de saisie"</string>
+  <string name="auto_correction">Saisie prédictive</string>
+  <string name="auto_correction_summary">Corriger automatiquement le mot précédent</string>
+  <string name="prediction">Suggestion de mots</string>
+  <string name="prediction_category">"Paramètres de la saisie prédictive"</string>
+  <string name="prediction_summary">Activer la saisie semi-automatique</string>
+  <string name="auto_complete_dialog_title">Saisie semi-automatique</string>
+  <string name="prediction_landscape">Agrandir le champ de texte</string>
+  <string name="prediction_landscape_summary">Masquer la saisie prédictive en mode paysage</string>
+  <string name="auto_cap">Majuscules automatiques</string>
+  <string name="auto_cap_summary">Mettre en majuscule la première lettre de chaque phrase</string>
+  <string name="auto_punctuate">Ponctuation automatique</string>
+  <string name="quick_fixes">Corrections rapides</string>
+  <string name="quick_fixes_summary">Corrige les fautes de frappe courantes</string>
+  <string name="show_suggestions">Afficher les suggestions</string>
+  <string name="show_suggestions_summary">Afficher les suggestions de termes lors de la saisie</string>
+  <string name="auto_complete">Saisie semi-automatique</string>
+  <string name="auto_complete_summary">La barre d\'espace et la ponctuation insèrent automatiquement le mot surligné</string>
+  <string name="prediction_none">0</string>
+  <string name="prediction_basic">1</string>
+  <string name="prediction_full">2</string>
+  <string name="added_word"><xliff:g id="WORD">%s</xliff:g> : Enregistré</string>
+  <string name="alternates_for_a">àâæ</string>
+  <string name="alternates_for_e">èéêë</string>
+  <string name="alternates_for_i">îï</string>
+  <string name="alternates_for_o">ôœ</string>
+  <string name="alternates_for_u">ùûü</string>
+  <string name="alternates_for_s">§ß</string>
+  <string name="alternates_for_n">"ñ"</string>
+  <string name="alternates_for_c">ç</string>
+  <string name="alternates_for_y">"ýÿ"</string>
+  <string name="key_i">i</string>
+  <string name="tip_long_press">Maintenir une touche enfoncée pour afficher les accents (à, é, etc.)</string>
+  <string name="tip_dismiss">Appuyez sur la touche Retour ↶ pour fermer le clavier à tout moment</string>
+  <string name="tip_access_symbols">Accéder aux chiffres et aux symboles</string>
+  <string name="tip_add_to_dictionary">Appuyer et maintenir le doigt sur le mot le plus à gauche pour l\'ajouter au dictionnaire</string>
+  <string name="touch_to_continue">Touchez ce conseil pour continuer</string>
+  <string name="touch_to_finish">Touchez ici pour fermer ce conseil et commencer à saisir votre texte !</string>
+  <string name="tip_to_open_keyboard"><b>Le clavier s\'affiche à chaque fois que vous touchez une zone de texte</b></string>
+  <string name="tip_to_view_accents"><b>Maintenez &amp; une touche enfoncée pour afficher les accents\n(ø, ö, ô, ó, etc.)"</b></string>
+  <string name="tip_to_open_symbols"><b>Appuyez sur cette touche pour basculer vers les chiffres et les symboles</b></string>
+  <string name="tip_to_close_symbols"><b>Retourner aux lettres en appuyant de nouveau sur cette touche</b></string>
+  <string name="tip_to_launch_settings"><b>Maintenez cette touche enfoncée afin de modifier les paramètres du clavier, tels que la saisie semi-automatique</b></string>
+  <string name="tip_to_start_typing"><b>Essayez !</b></string>
+  <string name="label_go_key">Go</string>
+  <string name="label_next_key">Suivant</string>
+  <string name="label_done_key">Terminé</string>
+  <string name="label_send_key">Envoyer</string>
+  <string name="label_symbol_key">\?123</string>
+  <string name="label_phone_key">123</string>
+  <string name="label_alpha_key">ABC</string>
+  <string name="label_alt_key">ALT</string>
+  <string name="open_the_keyboard"><font size="17"><b>Ouvrir le clavier\n</b></font><font size="3">\n</font>Appuyez sur un champ de texte.</string>
+  <string name="close_the_keyboard"><font size="17"><b>Fermer le clavier\n</b></font><font size="3">\n</font>Appuyez sur la touche Retour.</string>
+  <string name="touch_and_hold"><font size="17"><b>Appuyer sur une touche de manière prolongée pour accéder aux options\n</b></font><font size="3">\n</font>Accédez à la ponctuation et aux accents.</string>
+  <string name="keyboard_settings"><font size="17"><b>Paramètres du clavier\n</b></font><font size="3">\n</font>Appuyez et maintenez la touche<b>\?123\</b>.</string>
+  <string name="popular_domain_0">".com"</string>
+  <string name="popular_domain_1">".net"</string>
+  <string name="popular_domain_2">".org"</string>
+  <string name="popular_domain_3">".gov"</string>
+  <string name="popular_domain_4">".edu"</string>
+  <string name="english_ime_name">Tecla Access</string>
+  <string name="english_ime_settings">Paramètres de Tecla Access</string>
+  <string name="inputMethod">Méthode d\'entrée</string>
+  <string name="pref_voice_input">Activer la reconnaissance vocale</string>
+  <string name="pref_voice_input_summary">Ajoute une touche pour un accès rapide aux commandes vocales et à la reconnaissance vocale</string>
+  <string name="pref_variants_key">Montrer les touches des accents</string>
+  <string name="pref_variants_key_summary">Ajoute une touche rémanente qui active les caractères accentués et les caractères spéciaux</string>
+  <string name="alternative_input_category">Paramètres des entrées alternatives</string>
+  <string name="shield_connect">Se connecter au Tecla Shield</string>
+  <string name="shield_connect_summary_BT_nosupport">Bluetooth n\'est pas pris en charge</string>
+  <string name="shield_connect_summary_BT_disabled">Bluetooth est désactivé</string>
+  <string name="shield_connect_summary">Tente une connexion à un Tecla Shield à proximité</string>
+  <string name="shield_temp_disconnect">Déconnecter temporairement le Tecla Shield</string>
+  <string name="shield_temp_disconnect_summary">Cocher pour permettre à un autre appareil de se connecter au Tecla Shield</string>
+  <string name="fullscreen_switch">Interrupteur en mode plein écran</string>
+  <string name="fullscreen_switch_summary">Utiliser l\'écran entier comme un seul interrupteur</string>
+  <string name="speakerphone_switch">Toujours utiliser le téléphone en mode haut-parleur</string>
+  <string name="speakerphone_switch_summary">Pour les appels vocaux, les commandes vocales et les entrées vocales, utiliser le téléphone en mode haut-parleur.</string>
+  <string name="persistent_keyboard">Montrer le clavier de navigation</string>
+  <string name="persistent_keyboard_summary">Montre un petit clavier de navigation quand aucun texte n\'est introduit</string>
+  <string name="autohide_timeout">Temps avant disparition du clavier de Navigation</string>
+  <string name="autohide_timeout_summary">Ajuste le délai avant que le clavier de navigation ne se masque automatiquement</string>
+  <string name="autohide_timeout_dlg_title">Masquer le clavier de navigation</string>
+  <string name="tapforsymbols">Enfoncer pour afficher les symboles</string>
+  <string name="tapforlettersandnumbers">Appuyer pour saisir des lettres et des chiffres</string>
+  <string name="morse_input_settings">Paramètres d\'entrée de morse</string>
+  <string name="morse_settings_summary">Régler les préférences du mode d\'entrée Morse</string>
+  <string name="morse_mode">Activer le mode d\'entrée Morse</string>
+  <string name="morse_mode_summary">Fournit un mode d\'entrée de morse qui remplace le clavier standard</string>
+  <string name="morse_show_hud">Voir le guide du mode d\'entrée Morse</string>
+  <string name="morse_show_hud_summary">Affiche un ensemble de clés/valeurs Morse au-dessus du clavier</string>
+  <string name="morse_key_mode">Mode d\'entrée Morse</string>
+  <string name="morse_time_unit_title">Unité de temps Morse</string>
+  <string name="morse_time_unit_dlg_title">Sélectionnez votre unité de temps Morse</string>
+  <string name="mrepeat_frequency">Configurer la fréquence de répétition</string>
+  <string name="mrepeat_frequency_summary">Ajuster la fréquence de répétition d\'un dit/dah lorsqu\'un commutateur est enfoncé</string>
+  <string name="mrepeat_frequency_dlg_title">Configurer la fréquence de répétition</string>
+  <string name="fullreset_timeout">Délai de réinitialisation avec pression longue</string>
+  <string name="fullreset_timeout_summary">Ajuster le délai de la pression longue avant de retourner à l\'écran d\'accueil</string>
+  <string name="dialog_confirm_reset">Êtes-vous sûr de vouloir réinitialiser les actions par défaut ?</string>
+  <string name="btn_yes">Oui</string>
+  <string name="btn_no">Non</string>
+  <string name="dialog_faster">Plus rapide</string>
+  <string name="dialog_slower">Plus lent</string>
+  <string name="btn_done">Terminé</string>
+  <string name="scanning_category">Paramètres de numérisation</string>
+  <string name="scanning_settings_summary">Régler la vitesse ainsi que le mode de balayage</string>
+  <string name="self_scanning">Activer le self-scanning</string>
+  <string name="self_scanning_summary">Scanne le clavier automatiquement</string>
+  <string name="inverse_scanning">Activer le scan inverse</string>
+  <string name="inverse_scanning_summary">Scanner lorsque l\'interrupteur est pressé et sélectionner quand il est relâché</string>
+  <string name="scan_speed">Vitesse de scan</string>
+  <string name="scan_speed_summary">Ajuste la vitesse de scan</string>
+  <string name="define_switch_action">Configurer les actions des commutateurs</string>
+  <string name="define_switch_action_summary">Personnaliser les actions assignées à chaque commutateur</string>
+  <string name="switch_j1">ECU 1 / Avant</string>
+  <string name="switch_j2">ECU 2 / Inverse</string>
+  <string name="switch_j3">ECU 3 / Gauche</string>
+  <string name="switch_j4">ECU 4 / Droite</string>
+  <string name="switch_e1">Commutateur 1</string>
+  <string name="switch_e2">Commutateur 2</string>
+  <string name="switch_j1_tecla">ECU 1 / Action de Tecla en avant</string>
+  <string name="switch_j2_tecla">ECU 2 / Action de Tecla en inverse</string>
+  <string name="switch_j3_tecla">ECU 3 / Action de Tecla à gauche</string>
+  <string name="switch_j4_tecla">ECU 4 / Action de Tecla à droite</string>
+  <string name="switch_e1_tecla">Action Tecla pour Commutateur 1</string>
+  <string name="switch_e2_tecla">Action Tecla pour Commutateur 2</string>
+  <string name="switch_j1_morse">ECU 1 / Action du morse en avant</string>
+  <string name="switch_j2_morse">ECU 2 / Action du morse en inverse</string>
+  <string name="switch_j3_morse">ECU 3 / Action du morse à gauche</string>
+  <string name="switch_j4_morse">ECU 4 / Action du morse à droite</string>
+  <string name="switch_e1_morse">Action Morse pour Commutateur 1</string>
+  <string name="switch_e2_morse">Action Morse pour Commutateur 2</string>
+  <string name="switch_default">Rétablir les actions par défaut</string>
+  <string name="switch_default_summary">Réinitialisation des actions des commutateurs aux valeurs par défaut</string>
+  <string name="user_data_category">Réinitialisation des actions des commutateurs</string>
+  <string name="advanced_input_settings">Paramètres d\'entrées avancés</string>
+  <string name="connecting_tecla_shield">Connexion au Tecla Shield</string>
+  <string name="couldnt_connect_shield">Impossible de se connecter au Tecla Shield</string>
+  <string name="shield_connection_cancelled">Connexion au Tecla Shield annulé</string>
+  <string name="no_shields_inrange">Pas de Tecla Shield à portée</string>
+  <string name="searching_for_shields">Recherche de Tecla Shields. Veuillez patienter…</string>
+  <string name="morse_enabled">Méthode d\'entrée Morse activé</string>
+  <string name="morse_disabled">Méthode d\'entrée Morse désactivé</string>
+  <string name="fullscreen_enabled">Interrupteur en mode plein écran activé</string>
+  <string name="fullscreen_disabled">Interrupteur en mode plein écran désactivé</string>
+  <string name="tecla_notselected">Sélectionnez Tecla Access comme votre mode d\'entrée par défaut avant de régler les paramètres.</string>
+  <string name="no_voice_input_available">Aucune application de reconnaissance vocale disponible !</string>
+  <string name="no_voice_actions_installed">Voice Search n\'est pas installé!</string>
+  <string name="voice_input">Entrée vocale Tecla</string>
+  <string name="configuring_tecla">Configuration de Tecla…</string>
+  <string name="contributor_main_heading">À propos de Tecla Access</string>
+  <string name="contributor_main_title">L\'équipe</string>
+  <string name="contributor_main_summary">En savoir plus à propos des créateurs de Tecla</string>
+  <string name="contributor_core">L\'équipe de base</string>
+  <string name="contributor_jan">Jan Richards</string>
+  <string name="contributor_jan_summary">Manager &amp; User Experience</string>
+  <string name="contributor_jorge">Jorge Silva</string>
+  <string name="contributor_jorge_summary">Developpeur sénior</string>
+  <string name="contributor_mauricio">Mauricio Meza</string>
+  <string name="contributor_mauricio_summary">L\'expérience utilisateur</string>
+  <string name="contributor_wan">Eric Wan</string>
+  <string name="contributor_wan_summary">Développeur junior</string>
+  <string name="contributor_coders">Programmeurs</string>
+  <string name="contributor_kelvin">Eric Ma</string>
+  <string name="contributor_kelvin_summary">Bénévoles</string>
+  <string name="contributor_kelvin">Eric Ma</string>
+  <string name="contributor_kelvin_summary">Bénévoles</string>
+  <string name="contributor_kelvin">Eric Ma</string>
+  <string name="contributor_kelvin_summary">Bénévoles</string>
+  <string name="contributor_contributors">Améliorations</string>
+  <string name="contributor_mats">Mats Lundalv</string>
+  <string name="contributor_mats_summary">Auto-annuler le balayage</string>
+  <string name="contributor_tanslators">Traducteurs</string>
+  <string-array name="prediction_modes">
+    <item>Aucun</item>
+    <item>Basique</item>
+    <item>Avancé</item>
+  </string-array>
+  <string-array name="prediction_modes_values">
+    <item>@string/prediction_none</item>
+    <item>@string/prediction_basic</item>
+    <item>@string/prediction_full</item>
+  </string-array>
+  <string-array name="autohide_strings">
+    <item>Immédiatement</item>
+    <item>Après 4 secondes</item>
+    <item>Après 8 secondes</item>
+    <item>Après 15 secondes</item>
+    <item>Après 30 secondes</item>
+    <item>Après 60 secondes</item>
+    <item>Jamais</item>
+  </string-array>
+  <string-array name="repeat_frequency_strings">
+    <item>Jamais</item>
+    <item>1000 ms</item>
+    <item>950 ms</item>
+    <item>900 ms</item>
+    <item>850 ms</item>
+    <item>800 ms</item>
+    <item>750 ms</item>
+    <item>700 ms</item>
+    <item>650 ms</item>
+    <item>600 ms</item>
+    <item>550 ms</item>
+    <item>500 ms</item>
+  </string-array>
+  <string-array name="switch_actions">
+    <item>Aucun</item>
+    <item>Step-scan suivant</item>
+    <item>Step-scan précédent</item>
+    <item>Annuler</item>
+    <item>Sélectionnez le surligné</item>
+  </string-array>
+  <string-array name="morse_actions">
+    <item>Aucun</item>
+    <item>Dit Morse</item>
+    <item>Dah Morse</item>
+    <item>Charactère de fin Morse</item>
+    <item>Retour arrière Morse</item>
+    <item>Cacher la vue de l\'IME Morse</item>
+  </string-array>
+  <string-array name="morse_key_mode_array">
+    <item>Mode triple-touche</item>
+    <item>Mode double-touche</item>
+    <item>Mode touche unique</item>
+  </string-array>
+  <string-array name="fullreset_strings">
+    <item>3 secondes</item>
+    <item>6 secondes</item>
+    <item>9 secondes</item>
+    <item>12 secondes</item>
+    <item>16 secondes</item>
+    <item>20 secondes</item>
+    <item>25 secondes</item>
+    <item>32 secondes</item>
+    <item>40 secondes</item>
+  </string-array>
 </resources>
