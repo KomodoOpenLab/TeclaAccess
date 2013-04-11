@@ -5,6 +5,7 @@
 package ca.idi.tekla;
 
 import ca.idi.tecla.framework.TeclaShieldManager;
+import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tecla.sdk.SEPManager;
 import ca.idi.tekla.R;
 import android.app.Activity;
@@ -88,7 +89,7 @@ implements OnFocusChangeListener {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(TeclaApp.ACTION_IME_CREATED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Closing splash screen...");
+				TeclaStatic.logD(CLASS_TAG, "Closing splash screen...");
 				// Soft IME showing, process the rest of the preferences
 				startSEP();
 				startFullscreenSwitch();
@@ -118,7 +119,7 @@ implements OnFocusChangeListener {
 	private void startFullscreenSwitch() {
 		mStartFullscreenSwitchCalled = true;
 		if (TeclaApp.persistence.isFullscreenSwitchEnabled()) {
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Starting fullscreen switch mode");
+			TeclaStatic.logD(CLASS_TAG, "Starting fullscreen switch mode");
 			TeclaApp.getInstance().startFullScreenSwitchMode();
 		}
 	}

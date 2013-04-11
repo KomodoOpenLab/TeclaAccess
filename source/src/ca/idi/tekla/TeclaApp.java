@@ -128,12 +128,12 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 		public void onReceive(Context context, Intent intent) {
 
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen off");
+				TeclaStatic.logD(CLASS_TAG, "Screen off");
 				persistence.setScreenOff();
 				releaseKeyguardLock();
 			}
 			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Screen on");
+				TeclaStatic.logD(CLASS_TAG, "Screen on");
 				persistence.setScreenOn();
 				if (persistence.isPersistentKeyboardEnabled()) requestShowIMEView();
 			}
@@ -153,7 +153,7 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	private Runnable mRequestShowIMERunnable = new Runnable() {
 
 		public void run() {
-			if (DEBUG) Log.d(TAG, "Broadcasting show IME intent...");
+			TeclaStatic.logD(CLASS_TAG, "Broadcasting show IME intent...");
 			sendBroadcast(new Intent(ACTION_SHOW_IME));
 		}
 		
@@ -183,37 +183,37 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	};
 
 	public void enabledMorseIME() {
-		if (DEBUG) Log.d(TAG, "Broadcasting enable morse IME intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting enable morse IME intent...");
 		sendBroadcast(new Intent(ACTION_ENABLE_MORSE));
 	}
 	
 	public void disabledMorseIME() {
-		if (DEBUG) Log.d(TAG, "Broadcasting disable morse IME intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting disable morse IME intent...");
 		sendBroadcast(new Intent(ACTION_DISABLE_MORSE));
 	}
 
 	public void requestHideIMEView() {
-		if (DEBUG) Log.d(TAG, "Broadcasting hide IME intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting hide IME intent...");
 		sendBroadcast(new Intent(ACTION_HIDE_IME));
 	}
 	
 	public void startFullScreenSwitchMode() {
-		if (DEBUG) Log.d(TAG, "Broadcasting start fullscreen switch mode intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting start fullscreen switch mode intent...");
 		sendBroadcast(new Intent(ACTION_START_FS_SWITCH_MODE));
 	}
 
 	public void stopFullScreenSwitchMode() {
-		if (DEBUG) Log.d(TAG, "Broadcasting stop fullscreen switch mode intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting stop fullscreen switch mode intent...");
 		sendBroadcast(new Intent(ACTION_STOP_FS_SWITCH_MODE));
 	}
 
 	public void startScanningTeclaIME() {
-		if (DEBUG) Log.d(TAG, "Broadcasting start scanning IME intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting start scanning IME intent...");
 		sendBroadcast(new Intent(Highlighter.ACTION_START_SCANNING));
 	}
 
 	public void stopScanningTeclaIME() {
-		if (DEBUG) Log.d(TAG, "Broadcasting stop scanning IME intent...");
+		TeclaStatic.logD(CLASS_TAG, "Broadcasting stop scanning IME intent...");
 		sendBroadcast(new Intent(Highlighter.ACTION_STOP_SCANNING));
 	}
 	
@@ -262,7 +262,7 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	};
 
 	public void showSplashScreen() {
-		if (DEBUG) Log.d(TAG, "Showing splash screen...");
+		TeclaStatic.logD(CLASS_TAG, "Showing splash screen...");
 		Intent intent = new Intent(this, TeclaSplash.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
@@ -289,14 +289,14 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	}
 	
 	public void startVoiceInput(String language_model) {
-		if (DEBUG) Log.d(TAG, "Calling voice input...");
+		TeclaStatic.logD(CLASS_TAG, "Calling voice input...");
 		Intent intent = new Intent(this, TeclaVoiceInput.class);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, language_model);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
 	public void startVoiceDictation(String language_model) {
-		if (DEBUG) Log.d(TAG, "Calling voice input...");
+		TeclaStatic.logD(CLASS_TAG, "Calling voice input...");
 		Intent intent = new Intent(this, TeclaVoiceInput.class);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, language_model);
 		intent.putExtra("isDictation", 0x56);
@@ -304,7 +304,7 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 		startActivity(intent);
 	}
 	public void startVoiceActions() {
-		Log.d(TAG, "Starting voice actions...");
+		TeclaStatic.logD(CLASS_TAG, "Starting voice actions...");
 		Intent intent = new Intent();
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.setAction(Intent.ACTION_MAIN);

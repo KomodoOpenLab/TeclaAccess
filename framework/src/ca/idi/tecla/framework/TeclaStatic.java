@@ -12,7 +12,7 @@ public class TeclaStatic
 	/**
 	 * Main debug switch, turns on/off debugging for the whole framework
 	 */
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	/**
 	 * Tag used for logging in the whole framework
