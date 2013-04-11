@@ -35,6 +35,8 @@ public class Persistence extends ca.idi.tecla.framework.Persistence {
 	public static final String DEFAULT_MORSE_KEY_MODE = "0";
 	public static final int DEFAULT_MORSE_TIME_UNIT = 150;
 	public static final int DEFAULT_FULL_RESET_TIMEOUT = 3;
+	public static final int MIN_FULL_RESET_TIMEOUT = 3;
+	public static final int MAX_FULL_RESET_TIMEOUT = 40;
 	public static final int DEFAULT_SCAN_DELAY = 1000;
 	public static final int DEFAULT_REPEAT_FREQ = 750;
 	public static final int MAX_SCAN_DELAY = 3000;
