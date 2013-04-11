@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
+import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.ime.TeclaKeyboard;
 import ca.idi.tekla.ime.TeclaKeyboardView;
@@ -230,14 +231,14 @@ public class Highlighter {
 	private Runnable mScanRunnable = new Runnable() {
 		public void run() {
 			final long start = SystemClock.uptimeMillis();
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Scanning to next item");
+			TeclaStatic.logD(CLASS_TAG, "Scanning to next item");
 			move(Highlighter.HIGHLIGHT_NEXT);
 			if(mScanKeyCounter==mStartScanKeyCounter)  mInactiveScans++;
 			if(mInactiveScans==2 && getScanDepth()==Highlighter.DEPTH_KEY)
 			{
 				mInactiveScans=0;
 				stepOut();
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "No activity.Stepping out...");
+				TeclaStatic.logD(CLASS_TAG, CLASS_TAG + "No activity.Stepping out...");
 			}
 			mHandler.postAtTime(this, start + TeclaApp.persistence.getScanDelay());
 		}

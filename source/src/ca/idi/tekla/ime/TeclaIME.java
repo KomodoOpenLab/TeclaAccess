@@ -30,6 +30,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import ca.idi.tecla.framework.TeclaIMEService;
+import ca.idi.tecla.framework.TeclaStatic;
+import android.graphics.drawable.ColorDrawable;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
@@ -229,7 +231,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		instance=this;
 		// Setup Debugging
 		//if (TeclaApp.DEBUG) android.os.Debug.waitForDebugger();
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Creating IME...");
+		TeclaStatic.logD(CLASS_TAG, "Creating IME...");
 
 		//setStatusIcon(R.drawable.ime_qwerty);
 		mKeyboardSwitcher = new KeyboardSwitcher(this);
@@ -288,7 +290,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			
 			// If the fullscreen switch is enabled, change its size to match screen
 			if(isFullScreenShowing()) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, "Changing size of fullscreen overlay.");
+				TeclaStatic.logD(CLASS_TAG, "Changing size of fullscreen overlay.");
 				Display display = getDisplay();
 				mSwitchPopup.update(display.getWidth(), display.getHeight());
 			}
@@ -321,7 +323,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		else
 			mKeyboardSwitcher.setKeyboardMode(KeyboardSwitcher.MODE_NAV, 0);
 		
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME view created.");
+		TeclaStatic.logD(CLASS_TAG, "Soft IME view created.");
 		TeclaApp.highlighter.setIMEView(mIMEView);
 		return mIMEView;
 	}
@@ -668,61 +670,61 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 				// receive ringer mode changes to detect silent mode
 				updateRingerMode();
 			if (action.equals(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received switch event intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received switch event intent.");
 				handleSwitchEvent(new SwitchEvent(intent.getExtras()));
 			}
 			if (action.equals(TeclaShieldService.ACTION_SHIELD_CONNECTED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield connected intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received Shield connected intent.");
 				if (!mShieldConnected) mShieldConnected = true;
 				showIMEView();
 				evaluateStartScanning();
 			}
 			if (action.equals(TeclaShieldService.ACTION_SHIELD_DISCONNECTED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received Shield disconnected intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received Shield disconnected intent.");
 				if (mShieldConnected) mShieldConnected = false;
 				evaluateStartScanning();
 			}
 			if (action.equals(TeclaApp.ACTION_SHOW_IME)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received show IME intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received show IME intent.");
 				showIMEView();
 				evaluateStartScanning();
 				evaluateNavKbdTimeout();
 				//TODO: Assume/force persistent keyboard preference
 			}
 			if (action.equals(TeclaApp.ACTION_HIDE_IME)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received hide IME intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received hide IME intent.");
 				hideSoftIME();
 			}
 			if (action.equals(TeclaApp.ACTION_START_FS_SWITCH_MODE)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start fullscreen switch mode intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received start fullscreen switch mode intent.");
 				startFullScreenSwitchMode(500);
 			}
 			if (action.equals(TeclaApp.ACTION_STOP_FS_SWITCH_MODE)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop fullscreen switch mode intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received stop fullscreen switch mode intent.");
 				stopFullScreenSwitchMode();
 			}
 			if (action.equals(Highlighter.ACTION_START_SCANNING)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received start scanning IME intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received start scanning IME intent.");
 				evaluateStartScanning();
 			}
 			if (action.equals(Highlighter.ACTION_STOP_SCANNING)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received stop scanning IME intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received stop scanning IME intent.");
 				evaluateStartScanning();
 			}
 			if (action.equals(TeclaApp.ACTION_INPUT_STRING)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received input string intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received input string intent.");
 				String input_string = intent.getExtras().getString(TeclaApp.EXTRA_INPUT_STRING);
 				typeInputString(input_string);
 			}
 			if (action.equals(TeclaApp.ACTION_ENABLE_MORSE)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received enable morse intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received enable morse intent.");
 				if (TeclaApp.highlighter.isSoftIMEShowing()) {
 					hideSoftIME();
 				}
 				mLastFullKeyboardMode = KeyboardSwitcher.MODE_MORSE;
 			}
 			if (action.equals(TeclaApp.ACTION_DISABLE_MORSE)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Received disable morse intent.");
+				TeclaStatic.logD(CLASS_TAG, "Received disable morse intent.");
 				if (TeclaApp.highlighter.isSoftIMEShowing()) {
 					hideSoftIME();
 				}
@@ -816,10 +818,8 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 				&& primaryCode != TeclaKeyboard.KEYCODE_REPEAT_LOCK
 				&& !TeclaApp.persistence.isFullscreenSwitchEnabled()) stopRepeatingKey();
 
-		if (TeclaApp.DEBUG) {
-			if (keyCodes != null && keyCodes.length > 0) {
-				Log.d(TeclaApp.TAG, CLASS_TAG + "Keycode: " + keyCodes[0]);
-			}
+		if (keyCodes != null && keyCodes.length > 0) {
+			TeclaStatic.logD(CLASS_TAG, "Keycode: " + keyCodes[0]);
 		}
 		
 		if (primaryCode != Keyboard.KEYCODE_DELETE || 
@@ -833,7 +833,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		 */
 		if (primaryCode == TeclaKeyboardView.KEYCODE_STEPOUT) {
 			TeclaApp.highlighter.externalstepOut();
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Hidden key.Stepping out...");
+			TeclaStatic.logD(CLASS_TAG, "Hidden key.Stepping out...");
 		}/* else if (primaryCode == TeclaKeyboardView.KEYCODE_DICTATION) {
 			//TODO: Add dictation actions here
 			if(TeclaApp.desktop==null)
@@ -2034,11 +2034,11 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 				}
 			}
 			
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Switch event received: " +
+			TeclaStatic.logD(CLASS_TAG, "Switch event received: " +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchChanges()) + ":" +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()));
 			
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Byte handled: " +
+			TeclaStatic.logD(CLASS_TAG, "Byte handled: " +
 					TeclaApp.getInstance().byte2Hex(switchEvent.getSwitchStates()) + " at " + SystemClock.uptimeMillis());
 		}
 		
@@ -2070,14 +2070,14 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 	private void resetNavKbdTimeout() {
 		cancelNavKbdTimeout();
 		int navKbdTimeout = TeclaApp.persistence.getNavigationKeyboardTimeout();
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Navigation keyboard timeout in: " + navKbdTimeout + " seconds");
+		TeclaStatic.logD(CLASS_TAG, "Navigation keyboard timeout in: " + navKbdTimeout + " seconds");
 		if (navKbdTimeout != Persistence.NEVER_AUTOHIDE)
 			mTeclaHandler.postDelayed(hideNavKbdRunnable, navKbdTimeout * 1000);
 	}
 
 	private Runnable hideNavKbdRunnable = new Runnable() {
 		public void run() {
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Navigation keyboard timed out!");
+			TeclaStatic.logD(CLASS_TAG, "Navigation keyboard timed out!");
 			mIsNavKbdTimedOut = true;
 			hideSoftIME();
 		}
@@ -2255,7 +2255,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 	private void startFullScreenSwitchMode(int delay) {
 		mTeclaHandler.removeCallbacks(mCreateSwitchRunnable);
 		mTeclaHandler.postDelayed(mCreateSwitchRunnable, delay);
-		if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Sent delayed broadcast to show fullscreen switch");
+		TeclaStatic.logD(CLASS_TAG, "Sent delayed broadcast to show fullscreen switch");
 	}
 	
 	/**
@@ -2279,7 +2279,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 				mSwitchPopup.setHeight(display.getHeight());
 				mSwitchPopup.showAtLocation(mIMEView, Gravity.NO_GRAVITY, 0, 0);
 				TeclaApp.getInstance().showToast(R.string.fullscreen_enabled);
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch shown");
+				TeclaStatic.logD(CLASS_TAG, "Fullscreen switch shown");
 				evaluateStartScanning();
 			} else {
 				startFullScreenSwitchMode(1000);
@@ -2296,7 +2296,8 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			if (!TeclaApp.persistence.isInverseScanningEnabled()) {
 				launchSettings();
 				//Doing this here again because the ACTION_UP event in the onTouch listener doesn't always work.
-				mSwitch.setBackgroundResource(android.R.color.transparent);
+				mSwitch.setBackgroundResource(R.drawable.screen_switch_background_normal);
+				mSwitchPopup.setBackgroundDrawable(null);
 				return true;
 			}
 			return false;
@@ -2315,13 +2316,15 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			case MotionEvent.ACTION_DOWN:
 				states &= ~changes;
 				injectSwitchEvent(changes, states); //Primary switch pressed
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
-				mSwitch.setBackgroundResource(R.color.switch_pressed);
+				TeclaStatic.logD(CLASS_TAG, "Fullscreen switch down!");
+				mSwitchPopup.setBackgroundDrawable(new ColorDrawable(R.color.switch_pressed));
+				mSwitch.setBackgroundResource(R.drawable.screen_switch_background_pressed);
 				break;
 			case MotionEvent.ACTION_UP:
 				injectSwitchEvent(changes, states); //Primary switch released
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
-				mSwitch.setBackgroundResource(android.R.color.transparent);
+				TeclaStatic.logD(CLASS_TAG, "Fullscreen switch up!");
+				mSwitch.setBackgroundResource(R.drawable.screen_switch_background_normal);
+				mSwitchPopup.setBackgroundDrawable(null);
 				break;
 			default:
 				break;
@@ -2334,7 +2337,8 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 		
 		public void onClick(View v) {
 			//Doing this here again because the ACTION_UP event in the onTouch listener doesn't always work.
-			mSwitch.setBackgroundResource(android.R.color.transparent);
+			mSwitch.setBackgroundResource(R.drawable.screen_switch_background_normal);
+			mSwitchPopup.setBackgroundDrawable(null);
 		}
 	};
 
@@ -2376,7 +2380,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 
 	private void showIMEView() {
 		if (TeclaApp.highlighter.isSoftIMEShowing()) {
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Soft IME is already showing");
+			TeclaStatic.logD(CLASS_TAG, "Soft IME is already showing");
 		} else {
 			showWindow(true);
 			updateInputViewShown();
@@ -2411,7 +2415,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			key.label = sequence;
 			key.codes = new int[1];
 			key.codes[0] = (int) sequence.charAt(0);
-			if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Populating char: " + sequence.toString());
+			TeclaStatic.logD(CLASS_TAG, "Populating char: " + sequence.toString());
 		}
 	}
 

@@ -402,7 +402,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 					mShieldFound = true;
 					mShieldAddress = dev.getAddress();
 					mShieldName = dev.getName();
-					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Found a Tecla Access Shield candidate");
+					TeclaStatic.logD(CLASS_TAG, "Found a Tecla Access Shield candidate");
 					cancelDiscovery();
 				}
 			}
@@ -436,7 +436,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			}
 
 			if (intent.getAction().equals(TeclaShieldService.ACTION_SHIELD_CONNECTED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Successfully started SEP");
+				TeclaStatic.logD(CLASS_TAG, "Successfully started SEP");
 				dismissDialog();
 				TeclaApp.getInstance().showToast(R.string.shield_connected);
 				mPrefTempDisconnect.setEnabled(true);
@@ -445,7 +445,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			}
 
 			if (intent.getAction().equals(TeclaShieldService.ACTION_SHIELD_DISCONNECTED)) {
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "SEP broadcast stopped");
+				TeclaStatic.logD(CLASS_TAG, "SEP broadcast stopped");
 				dismissDialog();
 				mPrefTempDisconnect.setChecked(false);
 				mPrefTempDisconnect.setEnabled(false);
@@ -616,7 +616,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				Runnable mReconnect = new Runnable() {
 					
 					public void run() {
-						if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Re-enabling discovery");
+						TeclaStatic.logD(CLASS_TAG, CLASS_TAG + "Re-enabling discovery");
 						discoverShield();
 						mPrefConnectToShield.setEnabled(true);
 					}
@@ -625,11 +625,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				// See if the handler was posted
 				if(mHandler.postDelayed(mReconnect, 90000))	// 90 second delay
 				{
-					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Posted Runnable");
+					TeclaStatic.logD(CLASS_TAG, CLASS_TAG + "Posted Runnable");
 				}
 				else
 				{
-					if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Could not post Runnable");
+					TeclaStatic.logD(CLASS_TAG, "Could not post Runnable");
 				}
 				
 			}
@@ -728,7 +728,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mProgressDialog.setOnCancelListener(new OnCancelListener() {
 			public void onCancel(DialogInterface arg0) {
 				cancelDiscovery();
-				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Tecla Shield discovery cancelled");
+				TeclaStatic.logD(CLASS_TAG, CLASS_TAG + "Tecla Shield discovery cancelled");
 				TeclaApp.getInstance().showToast(R.string.shield_connection_cancelled);
 				mConnectionCancelled = true;
 				mPrefTempDisconnect.setChecked(false);
