@@ -679,9 +679,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			if (mPrefInverseScanning.isChecked()) {
 				mPrefSelfScanning.setChecked(false);
 				TeclaApp.persistence.setInverseScanningChanged();
+				TeclaApp.persistence.setFullResetTimeout(Persistence.MAX_FULL_RESET_TIMEOUT);
 			} else {
 				TeclaApp.getInstance().stopScanningTeclaIME();
 				if (!mPrefSelfScanning.isChecked()) {
+					TeclaApp.persistence.setFullResetTimeout(Persistence.MIN_FULL_RESET_TIMEOUT);
 					mPrefFullScreenSwitch.setChecked(false);
 					if (!mPrefConnectToShield.isChecked()) {
 						mPrefTempDisconnect.setChecked(false);
