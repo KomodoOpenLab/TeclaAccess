@@ -2309,14 +2309,17 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 	private View.OnTouchListener mSwitchTouchListener = new View.OnTouchListener() {
 		
 		public boolean onTouch(View v, MotionEvent event) {
+			int changes = SwitchEvent.MASK_SWITCH_E1;
+			int states = SwitchEvent.SWITCH_STATES_DEFAULT;
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				injectSwitchEvent(new SwitchEvent(SwitchEvent.MASK_SWITCH_E1)); //Primary switch pressed
+				states &= ~changes;
+				injectSwitchEvent(changes, states); //Primary switch pressed
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch down!");
 				mSwitch.setBackgroundResource(R.color.switch_pressed);
 				break;
 			case MotionEvent.ACTION_UP:
-				injectSwitchEvent(new SwitchEvent()); //Switches released
+				injectSwitchEvent(changes, states); //Primary switch released
 				if (TeclaApp.DEBUG) Log.d(TeclaApp.TAG, CLASS_TAG + "Fullscreen switch up!");
 				mSwitch.setBackgroundResource(android.R.color.transparent);
 				break;
