@@ -150,20 +150,26 @@ public class SwitchEventProvider extends Service {
 						//if enabled in prefs, activate speaker phone  whenever the phone is off the hook
 						TeclaStatic.logD(CLASS_TAG, "Phone off the hook");
 						if(TeclaApp.persistence.isSpeakerphoneEnabled()){
-							/* Turn the speaker on after a short delay,
-							 *  so that auto-turnoff-speaker is completed 
-							 *  by PhoneUtils.java (Android 4.1 onwards)
-							 *  
-							 *  Increase the delay if the problem still occurs
-							 */
-							int delay = 200;// in ms
-							new Timer().schedule(new TimerTask() {          
-							    @Override
-							    public void run() {
-									TeclaStatic.logD(CLASS_TAG, "Enabling Speaker");
-							    	TeclaApp.getInstance().useSpeakerphone();      
-							    }
-							}, delay);
+							
+              if (android.os.Build.VERSION.SDK_INT >= 16){ 
+								/* Turn the speaker on after a short delay,
+								 *  so that Jellybean's auto-turnoff-speaker is completed 
+								 *  by PhoneUtils.java (API 16 onwards)
+								 *  
+								 *  Increase the delay if the problem still occurs
+								 */
+								int delay = 200;// in ms
+								new Timer().schedule(new TimerTask() {          
+										@Override
+										public void run() {
+										TeclaStatic.logD(CLASS_TAG, "Enabling Speaker");
+											TeclaApp.getInstance().useSpeakerphone();
+										}
+								}, delay);
+              }
+              else { //no delay
+								TeclaApp.getInstance().useSpeakerphone();
+              }
 							
 						}
 						
