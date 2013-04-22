@@ -184,12 +184,6 @@
                     android:title="@string/switch_j4_morse" />
             </PreferenceScreen>
 
-            <Preference
-                android:key="full_reset_timeout"
-                android:persistent="true"
-                android:summary="@string/fullreset_timeout_summary"
-                android:title="@string/fullreset_timeout" />
-
             <PreferenceCategory
                 android:key="reset_default_settings"
                 android:title="@string/user_data_category" >
@@ -201,6 +195,12 @@
                     android:title="@string/switch_default" />
             </PreferenceCategory>
         </PreferenceScreen>
+
+        <Preference
+            android:key="full_reset_timeout"
+            android:persistent="true"
+            android:summary="@string/fullreset_timeout_summary"
+            android:title="@string/fullreset_timeout" />
 
         <CheckBoxPreference
             android:key="fullscreen_switch"
@@ -384,43 +384,46 @@
                 android:title="Set Dictation Launching Event" />
         </PreferenceScreen>
     </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:title="@string/contributor_main_heading" 
-        >
-    
-     <PreferenceScreen
-        android:title="@string/contributor_main_title" 
-        android:summary="@string/contributor_main_summary">
-            
-        <PreferenceCategory
-        		android:title="@string/contributor_core" >
-         <Preference
-                android:summary="@string/contributor_jan_summary"
-                android:title="@string/contributor_jan" />
-         <Preference
-                android:summary="@string/contributor_mauricio_summary"
-                android:title="@string/contributor_mauricio" />
-         <Preference
-                android:summary="@string/contributor_jorge_summary"
-                android:title="@string/contributor_jorge" />
-         </PreferenceCategory>
-         
-         <PreferenceCategory
-        	android:title="@string/contributor_coders" >
-         <Preference
-                android:summary="@string/contributor_wan_summary"
-                android:title="@string/contributor_wan" />
-         <Preference
-                android:summary="@string/contributor_kelvin_summary"
-                android:title="@string/contributor_kelvin" />
-         </PreferenceCategory>
-         <PreferenceCategory
-        	android:title="@string/contributor_contributors" >
-         <Preference
-                android:summary="@string/contributor_mats_summary"
-                android:title="@string/contributor_mats" />
-         </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/contributor_main_heading" >
+
+        <PreferenceScreen
+            android:summary="@string/contributor_main_summary"
+            android:title="@string/contributor_main_title" >
+
+            <PreferenceCategory android:title="@string/contributor_core" >
+
+                <Preference
+                    android:summary="@string/contributor_jan_summary"
+                    android:title="@string/contributor_jan" />
+
+                <Preference
+                    android:summary="@string/contributor_mauricio_summary"
+                    android:title="@string/contributor_mauricio" />
+
+                <Preference
+                    android:summary="@string/contributor_jorge_summary"
+                    android:title="@string/contributor_jorge" />
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/contributor_coders" >
+
+                <Preference
+                    android:summary="@string/contributor_wan_summary"
+                    android:title="@string/contributor_wan" />
+
+                <Preference
+                    android:summary="@string/contributor_kelvin_summary"
+                    android:title="@string/contributor_kelvin" />
+            </PreferenceCategory>
+
+            <PreferenceCategory android:title="@string/contributor_contributors" >
+
+                <Preference
+                    android:summary="@string/contributor_mats_summary"
+                    android:title="@string/contributor_mats" />
+            </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
+
 </PreferenceScreen>
