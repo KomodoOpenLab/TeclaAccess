@@ -1,5 +1,8 @@
 package ca.idi.tecla.framework;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,7 +39,6 @@ public class SwitchEventProvider extends Service {
 		
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED));
-		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_NEW_OUTGOING_CALL));
 		
 		mSwitchEventIntent = new Intent(SwitchEvent.ACTION_SWITCH_EVENT_RECEIVED);
 		
@@ -134,22 +136,39 @@ public class SwitchEventProvider extends Service {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 
-			//if enabled in prefs, activate speaker phone  whenever an outgoing call is placed
-			if (intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL)) {
-				TeclaStatic.logD(CLASS_TAG, "New Outgoing Call Placed");
-				
-				if(TeclaApp.persistence.isSpeakerphoneEnabled()) 
-					TeclaApp.getInstance().useSpeakerphone();
-				
-			}
-
 			if (intent.getAction().equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
 				TeclaStatic.logD(CLASS_TAG, "Phone state changed");
 				mPhoneRinging = false;
 				TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-				if (tm.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-					TeclaStatic.logD(CLASS_TAG, "Phone ringing");
-					mPhoneRinging = true;
+				int phoneState =  tm.getCallState();
+				switch(phoneState){
+					case TelephonyManager.CALL_STATE_RINGING:
+						TeclaStatic.logD(CLASS_TAG, "Phone ringing");
+						mPhoneRinging = true;
+						break;
+					case TelephonyManager.CALL_STATE_OFFHOOK:
+						//if enabled in prefs, activate speaker phone  whenever the phone is off the hook
+						TeclaStatic.logD(CLASS_TAG, "Phone off the hook");
+						if(TeclaApp.persistence.isSpeakerphoneEnabled()){
+							/* Turn the speaker on after a short delay,
+							 *  so that auto-turnoff-speaker is completed 
+							 *  by PhoneUtils.java (Android 4.1 onwards)
+							 *  
+							 *  Increase the delay if the problem still occurs
+							 */
+							int delay = 200;// in ms
+							new Timer().schedule(new TimerTask() {          
+							    @Override
+							    public void run() {
+									TeclaStatic.logD(CLASS_TAG, "Enabling Speaker");
+							    	TeclaApp.getInstance().useSpeakerphone();      
+							    }
+							}, delay);
+							
+						}
+						
+						
+						
 				}
 			}
 		}
