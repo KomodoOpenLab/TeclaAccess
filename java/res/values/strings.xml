@@ -228,10 +228,10 @@
     <string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
     <string name="shield_connect_summary">Attempts a connection to a nearby Tecla Shield</string>
 
-	<!-- Option to temporarily disconnect Tecla shield -->
-	<string name="shield_temp_disconnect">Temporarily Disconnect Tecla Shield</string>
-	<string name="shield_temp_disconnect_summary">Check to allow another device to connect to Tecla Shield</string>
-	
+    <!-- Option to temporarily disconnect Tecla shield -->
+    <string name="shield_temp_disconnect">Temporarily Disconnect Tecla Shield</string>
+    <string name="shield_temp_disconnect_summary">Check to allow another device to connect to Tecla Shield</string>
+
     <!-- Option to enable fullscreen switch mode -->
     <string name="fullscreen_switch">Fullscreen switch mode</string>
     <string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
@@ -247,8 +247,8 @@
     <!-- Option to autohide the UI navigation keyboard on the screen -->
     <string name="autohide_timeout">Navigation keyboard timeout</string>
     <string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
-    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>    
-    
+    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
+
     <string-array name="autohide_strings">
         <item>Immediately</item>
         <item>After 4 seconds</item>
@@ -258,7 +258,6 @@
         <item>After 60 seconds</item>
         <item>Never</item>
     </string-array>
-    
     <string-array name="repeat_frequency_strings">
         <item>Never</item>
         <item>1000 ms</item>
@@ -273,7 +272,6 @@
         <item>550 ms</item>
         <item>500 ms</item>
     </string-array>
-
     <string-array name="switch_actions">
         <item>None</item>
         <item>Step-scan next</item>
@@ -294,7 +292,7 @@
         <item>Double-key mode</item>
         <item>Single-key mode</item>
     </string-array>
-    
+
     <!-- Morse cheat sheet -->
     <string name="tapforsymbols">Tap for symbols</string>
     <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
@@ -302,23 +300,23 @@
     <!-- Category title for Morse settings -->
     <string name="morse_input_settings">Morse input settings</string>
     <string name="morse_settings_summary">Adjust Morse input mode and preferences</string>
-    
+
     <!-- Option to enable Morse input method -->
     <string name="morse_mode">Enable Morse input</string>
     <string name="morse_mode_summary">Provides a Morse input method that replaces the standard keyboard</string>
-    
+
     <!-- Option to enable Morse HUD display -->
     <string name="morse_show_hud">Show Morse HUD</string>
     <string name="morse_show_hud_summary">Displays a set of Morse keys/values above the keyboard</string>
-    
+
     <!-- Morse key mode strings -->
-	<string name="morse_key_mode">Morse input method</string>
-	
-	<!-- Morse speed ratio strings -->
-	<string name="morse_time_unit_title">Morse time unit</string>
-	<string name="morse_time_unit_dlg_title">Select your Morse time unit</string>
-	
-	<!-- Morse repeat delay strings -->
+    <string name="morse_key_mode">Morse input method</string>
+
+    <!-- Morse speed ratio strings -->
+    <string name="morse_time_unit_title">Morse time unit</string>
+    <string name="morse_time_unit_dlg_title">Select your Morse time unit</string>
+
+    <!-- Morse repeat delay strings -->
     <string name="mrepeat_frequency">Configure repeat frequency</string>
     <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
     <string name="mrepeat_frequency_dlg_title">Configure the repeat frequency</string>
@@ -338,7 +336,7 @@
         <item>32 seconds</item>
         <item>40 seconds</item>
     </string-array>
-    
+
     <!-- Tecla: Reset Actions Dialog -->
     <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
     <string name="btn_yes">Yes</string>
@@ -352,7 +350,7 @@
     <!-- Category title for scanning -->
     <string name="scanning_category">Scanning settings</string>
     <string name="scanning_settings_summary">Adjust the scanning mode and speed</string>
-    
+
     <!-- Option to enable self-scanning -->
     <string name="self_scanning">Enable self-scanning</string>
     <string name="self_scanning_summary">Scans the keyboard automatically</string>
@@ -391,9 +389,8 @@
     <string name="switch_default">Restore default actions</string>
     <string name="switch_default_summary">Reset switch actions to default values</string>
     <string name="user_data_category">Reset Switch Actions</string>
-
     <string name="advanced_input_settings">Advanced input settings</string>
-    
+
     <!-- Toasts and dialogs -->
     <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
     <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
@@ -411,34 +408,32 @@
     <!-- Tecla: Titles and labels -->
     <string name="voice_input">Tecla Voice Input</string>
     <string name="configuring_tecla">Configuring Tecla…</string>
-    
-    <!--  Contributions page titles and labels -->
+
+    <!-- Contributions page titles and labels -->
     <string name="contributor_main_heading">About Tecla Access</string>
     <string name="contributor_main_title">The Team</string>
     <string name="contributor_main_summary">Learn who made Tecla a reality</string>
-    
     <string name="contributor_core">Core Team</string>
-    	<string name="contributor_jan">Jan Richards</string>
-   	<string name="contributor_jan_summary">Manager &amp; User Experience</string>
-    	<string name="contributor_jorge">Jorge Silva</string>
-   	<string name="contributor_jorge_summary">Lead Developer</string>
-   		<string name="contributor_mauricio">Mauricio Meza</string>
-   	<string name="contributor_mauricio_summary">User Experience</string>
-   		   	<string name="contributor_wan">Eric Wan</string>
-   	<string name="contributor_wan_summary">Junior Developer</string>  	
-   			
+    <string name="contributor_jan">Jan Richards</string>
+    <string name="contributor_jan_summary">Manager &amp; User Experience</string>
+    <string name="contributor_jorge">Jorge Silva</string>
+    <string name="contributor_jorge_summary">Lead Developer</string>
+    <string name="contributor_mauricio">Mauricio Meza</string>
+    <string name="contributor_mauricio_summary">User Experience</string>
+    <string name="contributor_wan">Eric Wan</string>
+    <string name="contributor_wan_summary">Junior Developer</string>
     <string name="contributor_coders">Coders</string>
-   		<string name="contributor_kelvin">Eric Ma</string>
-   	<string name="contributor_kelvin_summary">Volunter</string>
-   	<string name="contributor_kelvin">Elyas Bhy</string>
-   	<string name="contributor_kelvin_summary">Summer Intern</string>
-   	   	<string name="contributor_kelvin">Rishab Garg</string>
-   	<string name="contributor_kelvin_summary">Summer Intern</string>
-   	
+    <string name="contributor_ma">Eric Ma</string>
+    <string name="contributor_ma_summary">Volunter</string>
+    <string name="contributor_bhy">Elyas Bhy</string>
+    <string name="contributor_bhy_summary">Summer Intern</string>
+    <string name="contributor_garg">Rishab Garg</string>
+    <string name="contributor_garg_summary">Summer Intern</string>
+    <string name="contributor_jeroen">Jeroen Teunissen</string>
+    <string name="contributor_jeroen_summary">Teunissen Enabling</string>
     <string name="contributor_contributors">Enhancements</string>
-   	   	<string name="contributor_mats">Mats Lundalv</string>
-   	<string name="contributor_mats_summary">Auto-cancel scan</string>
-   	
-    <string name="contributor_tanslators">Translators</string>	
+    <string name="contributor_mats">Mats Lundalv</string>
+    <string name="contributor_mats_summary">Auto-cancel scan</string>
+    <string name="contributor_tanslators">Translators</string>
 
 </resources>

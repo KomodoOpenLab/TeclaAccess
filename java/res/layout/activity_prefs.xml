@@ -413,8 +413,20 @@
                     android:title="@string/contributor_wan" />
 
                 <Preference
-                    android:summary="@string/contributor_kelvin_summary"
-                    android:title="@string/contributor_kelvin" />
+                    android:summary="@string/contributor_ma_summary"
+                    android:title="@string/contributor_ma" />
+
+                <Preference
+                    android:summary="@string/contributor_bhy_summary"
+                    android:title="@string/contributor_bhy" />
+
+                <Preference
+                    android:summary="@string/contributor_garg_summary"
+                    android:title="@string/contributor_garg" />
+
+                <Preference
+                    android:summary="@string/contributor_jeroen_summary"
+                    android:title="@string/contributor_jeroen" />
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/contributor_contributors" >
