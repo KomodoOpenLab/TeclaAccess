@@ -409,6 +409,20 @@
     <string name="voice_input">Tecla Voice Input</string>
     <string name="configuring_tecla">Configuring Tecla…</string>
 
+    <!--  Destop settings -->
+    <string name="desktop_settings_title">Not yet implemented</string>
+    
+    <!-- Emergency button actions -->
+    <string name="emergency_call_settings">Emergency call settings</string>
+    <string name="emergency_phone_number">Emergency phone #</string>
+    <string name="emergency_phone_summary">Configure emergency phone number</string>
+    <string name="emergency_SMS_number">Emergency SMS #</string>
+    <string name="emergency_SMS_summary">Configure emergency SMS number</string>
+    <string name="emergency_email_address">Emergency email address</string>
+    <string name="emergency_email_address_summary">Configure emergency email address</string>
+    <string name="emergency_GPS_setting">Enable GPS tracking</string>
+    <string name="emergency_GPS_summary">Forward GPS location in SMS and email</string>
+    
     <!-- Contributions page titles and labels -->
     <string name="contributor_main_heading">About Tecla Access</string>
     <string name="contributor_main_title">The Team</string>

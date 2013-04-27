@@ -158,11 +158,26 @@
     <string name="no_voice_input_available">Geen spraakherkenning applicaties beschikbaar!</string>
     <string name="no_voice_actions_installed">Voice Search is niet geïnstalleerd!</string>
     <string name="voice_input">Tecla Stem ingave</string>
-    <string name="configuring_tecla">Tecla instellen ...</string>
-    <string name="contributor_main_heading">About Tecla Access</string>
+    
+    <!--  Destop settings -->
+    <string name="desktop_settings_title">Nog niet geimplementeerd</string>
+    
+    <!-- Emergency button actions -->
+    <string name="emergency_call_settings">Noodnummer configuratie</string>
+    <string name="emergency_phone_number">Noodnummer: telefoon</string>
+    <string name="emergency_phone_summary">Telefoon noodnummer instellen</string>
+    <string name="emergency_SMS_number">Emergency SMS #</string>
+    <string name="emergency_SMS_summary">SMS noodnummer instellen</string>
+    <string name="emergency_email_address">email nood-adres</string>
+    <string name="emergency_email_address_summary">Noodoproep per email versturen</string>
+    <string name="emergency_GPS_setting">GPS-locatie doormelden</string>
+    <string name="emergency_GPS_summary">Geef GPS-locatie door in email of SMS</string>
+    
+    <string name="configuring_tecla">Tecla instellen &#8230;</string>
+    <string name="contributor_main_heading">Over Tecla Access</string>
     <string name="contributor_main_title">The Team</string>
-    <string name="contributor_main_summary">Learn who made Tecla a reality</string>
-    <string name="contributor_core">Core Team</string>
+    <string name="contributor_main_summary">Kijk wie Tecla mogelijk gemaakt hebben</string>
+    <string name="contributor_core">Hoofd Team</string>
     <string name="contributor_jan">Jan Richards</string>
     <string name="contributor_jan_summary">Manager &amp; User Experience</string>
     <string name="contributor_jorge">Jorge Silva</string>
@@ -171,7 +186,7 @@
     <string name="contributor_mauricio_summary">User Experience</string>
     <string name="contributor_wan">Eric Wan</string>
     <string name="contributor_wan_summary">Junior Developer</string>
-    <string name="contributor_coders">Coders</string>
+    <string name="contributor_coders">Programmeurs</string>
     <string name="contributor_ma">Eric Ma</string>
     <string name="contributor_ma_summary">Vrijwilliger</string>
     <string name="contributor_bhy">Elyas Bhy</string>
@@ -180,10 +195,10 @@
     <string name="contributor_garg_summary">Vrijwilliger</string>
     <string name="contributor_jeroen">Jeroen Teunissen</string>
     <string name="contributor_jeroen_summary">Teunissen Enabling</string>
-    <string name="contributor_contributors">Enhancements</string>
+    <string name="contributor_contributors">Uitbreidingen</string>
     <string name="contributor_mats">Mats Lundalv</string>
     <string name="contributor_mats_summary">Auto-cancel scan</string>
-    <string name="contributor_tanslators">Translators</string>
+    <string name="contributor_tanslators">Vertalers</string>
 
     <string-array name="prediction_modes">
         <item>"Geen"</item>
