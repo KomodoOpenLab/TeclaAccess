@@ -320,7 +320,7 @@
         <PreferenceScreen
             android:enabled="false"
             android:key="desktop_settings"
-            android:title="@string/desktop_settings_title" >  <!-- "Desktop Access Settings" -->
+            android:title="@string/desktop_settings_title" > <!-- "Desktop Access Settings" -->
 
             <CheckBoxPreference
                 android:defaultValue="true"
@@ -459,7 +459,9 @@
                     android:summary="@string/contributor_garg_summary"
                     android:title="@string/contributor_garg" />
 
-
+                <Preference
+                    android:summary="@string/contributor_jeroen_summary"
+                    android:title="@string/contributor_jeroen" />
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/contributor_contributors" >
@@ -467,10 +469,6 @@
                 <Preference
                     android:summary="@string/contributor_mats_summary"
                     android:title="@string/contributor_mats" />
-                
-                                <Preference
-                    android:summary="@string/contributor_jeroen_summary"
-                    android:title="@string/contributor_jeroen" />
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceCategory>
