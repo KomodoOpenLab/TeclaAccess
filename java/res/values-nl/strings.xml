@@ -239,6 +239,7 @@
         <item>Stap-scan vorige</item>
         <item>Annuleren</item>
         <item>Selecteer de gemaarkeerde</item>
+        <item>Noodnummer bellen &amp; bericht versturen</item>
     </string-array>
     <string-array name="morse_actions">
         <item>"Geen"</item>

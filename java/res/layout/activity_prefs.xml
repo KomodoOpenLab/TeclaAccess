@@ -395,6 +395,14 @@
         android:key="emergency_settings"
         android:title="@string/emergency_call_settings" >
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="emergency_GPS_setting"
+            android:persistent="true"
+            android:summary="@string/emergency_GPS_summary"
+            android:title="@string/emergency_GPS_setting" >
+        </CheckBoxPreference>
+
         <PreferenceScreen
             android:key="emergency_phone_number"
             android:summary="@string/emergency_phone_summary"
@@ -411,12 +419,6 @@
             android:key="emergency_email_address"
             android:summary="@string/emergency_email_address_summary"
             android:title="@string/emergency_email_address" >
-        </PreferenceScreen>
-
-        <PreferenceScreen
-            android:key="emergency_GPS_setting"
-            android:summary="@string/emergency_GPS_summary"
-            android:title="@string/emergency_GPS_setting" >
         </PreferenceScreen>
     </PreferenceCategory>
 

@@ -278,6 +278,7 @@
         <item>Step-scan previous</item>
         <item>Step out, cancel</item>
         <item>Select highlighted</item>
+        <item>Call emergency nr &amp; send message</item>
     </string-array>
     <string-array name="morse_actions">
         <item>None</item>
