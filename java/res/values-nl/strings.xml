@@ -158,22 +158,31 @@
     <string name="no_voice_input_available">Geen spraakherkenning applicaties beschikbaar!</string>
     <string name="no_voice_actions_installed">Voice Search is niet geïnstalleerd!</string>
     <string name="voice_input">Tecla Stem ingave</string>
-    
-    <!--  Destop settings -->
+
+    <!-- Destop settings -->
     <string name="desktop_settings_title">Nog niet geimplementeerd</string>
-    
+
     <!-- Emergency button actions -->
-    <string name="emergency_call_settings">Noodnummer configuratie</string>
-    <string name="emergency_phone_number">Noodnummer: telefoon</string>
+    <string name="emergency_call_settings">Noodoproep configuratie</string>
+    <string name="emergency_phone_title">Telefonisch noodnummer</string>
     <string name="emergency_phone_summary">Telefoon noodnummer instellen</string>
-    <string name="emergency_SMS_number">Emergency SMS #</string>
+    <string name="emergency_phone_dialogMesssage">Geef telefoonnummer voor noodgevallen&#58;</string>
+    <string name="emergency_phone_dialogTitle">Telefoon noodnummer</string>
+    <string name="emergency_SMS_title">SMS Noodnummer</string>
     <string name="emergency_SMS_summary">SMS noodnummer instellen</string>
-    <string name="emergency_email_address">email nood-adres</string>
-    <string name="emergency_email_address_summary">Noodoproep per email versturen</string>
+    <string name="emergency_SMS_dialogMesssage">Geef SMS-nummer voor noodgevallen&#58;</string>
+    <string name="emergency_SMS_dialogTitle">SMS Noodnummer</string>
+    <string name="emergency_email_title">email nood-adres</string>
+    <string name="emergency_email_summary">Noodoproep per email versturen</string>
+    <string name="emergency_email_dialogMesssage">Geef email-adres voor noodgevallen&#58;</string>
+    <string name="emergency_email_dialogTitle">Nood email-adres</string>
     <string name="emergency_GPS_setting">GPS-locatie doormelden</string>
     <string name="emergency_GPS_summary">Geef GPS-locatie door in email of SMS</string>
-    
+
+    <!-- Tecla: titles and labels -->
     <string name="configuring_tecla">Tecla instellen &#8230;</string>
+
+    <!-- About.... -->
     <string name="contributor_main_heading">Over Tecla Access</string>
     <string name="contributor_main_title">The Team</string>
     <string name="contributor_main_summary">Kijk wie Tecla mogelijk gemaakt hebben</string>

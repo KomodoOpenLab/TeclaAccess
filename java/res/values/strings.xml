@@ -278,7 +278,7 @@
         <item>Step-scan previous</item>
         <item>Step out, cancel</item>
         <item>Select highlighted</item>
-        <item>Call emergency nr &amp; send message</item>
+        <item>Emergency callout</item>
     </string-array>
     <string-array name="morse_actions">
         <item>None</item>
@@ -415,12 +415,18 @@
     
     <!-- Emergency button actions -->
     <string name="emergency_call_settings">Emergency call settings</string>
-    <string name="emergency_phone_number">Emergency phone #</string>
+    <string name="emergency_phone_title">Emergency phone #</string>
     <string name="emergency_phone_summary">Configure emergency phone number</string>
-    <string name="emergency_SMS_number">Emergency SMS #</string>
+    <string name="emergency_phone_dialogMesssage">Emergency telephone number</string>
+    <string name="emergency_phone_dialogTitle">Enter emergency telephone number</string>
+    <string name="emergency_SMS_title">Emergency SMS #</string>
     <string name="emergency_SMS_summary">Configure emergency SMS number</string>
-    <string name="emergency_email_address">Emergency email address</string>
-    <string name="emergency_email_address_summary">Configure emergency email address</string>
+    <string name="emergency_SMS_dialogMesssage">Emergency SMS number</string>
+    <string name="emergency_SMS_dialogTitle">Enter emergency SMS number</string>
+    <string name="emergency_email_title">Emergency email address</string>
+    <string name="emergency_email_summary">Configure emergency email address</string>
+    <string name="emergency_email_dialogMesssage">Emergency email address</string>
+    <string name="emergency_email_dialogTitle">Enter emergency email address</string>
     <string name="emergency_GPS_setting">Enable GPS tracking</string>
     <string name="emergency_GPS_summary">Forward GPS location in SMS and email</string>
     
