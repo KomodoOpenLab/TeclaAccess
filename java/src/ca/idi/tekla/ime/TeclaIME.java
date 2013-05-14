@@ -68,6 +68,7 @@ import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
 import ca.idi.tecla.framework.TeclaShieldService;
+import ca.idi.tekla.util.EmergencyCallout;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 
@@ -540,12 +541,12 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 
 	@Override
 	public void onDisplayCompletions(CompletionInfo[] completions) {
-		if (false) {
-			Log.i("foo", "Received completions:");
-			for (int i=0; i<(completions != null ? completions.length : 0); i++) {
-				Log.i("foo", "  #" + i + ": " + completions[i]);
-			}
-		}
+//		if (false) {
+//			Log.i("foo", "Received completions:");
+//			for (int i=0; i<(completions != null ? completions.length : 0); i++) {
+//				Log.i("foo", "  #" + i + ": " + completions[i]);
+//			}
+//		}
 		if (mCompletionOn) {
 			mCompletions = completions;
 			if (completions == null) {
@@ -587,7 +588,6 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
 			// FIXME: Tecla - Prevent soft input method from consuming the back key
@@ -1963,7 +1963,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 	 * @param switchEvent
 	 */
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
-
+		
 		if (switchEvent.isAnyPressed()) {
 			if (TeclaApp.persistence.isRepeatingKey()) stopRepeatingKey();
 		}
@@ -1991,6 +1991,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 			
 			else {
 				String action_tecla = switchActions[0];
+				TeclaStatic.logI(TeclaApp.TAG, CLASS_TAG + "action_tecla: "+action_tecla.toString());
 				switch(Integer.parseInt(action_tecla)) {
 
 				case SwitchEvent.ACTION_NEXT:
@@ -2028,7 +2029,11 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 						}
 					}
 					break;
-
+					
+				case SwitchEvent.ACTION_EMERGENCY:
+					TeclaApp.emergencyCallout.Callout(); 
+					break;
+					
 				default:
 					break;
 				}

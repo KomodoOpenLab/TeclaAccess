@@ -41,7 +41,6 @@ import ca.idi.tekla.util.TeclaDesktopClient;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.R.bool;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -57,7 +56,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
@@ -70,8 +68,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 
