@@ -92,7 +92,6 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 		persistence.unsetInverseScanningChanged();
 		persistence.setScreenOn();
 		
-		emergencyCallout.test(); 
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));

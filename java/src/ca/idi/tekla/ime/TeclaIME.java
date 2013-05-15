@@ -2031,7 +2031,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService
 					break;
 					
 				case SwitchEvent.ACTION_EMERGENCY:
-					TeclaApp.emergencyCallout.Callout(); 
+					TeclaApp.emergencyCallout.Callout(this); 
 					break;
 					
 				default:
