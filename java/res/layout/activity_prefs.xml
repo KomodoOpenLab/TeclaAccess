@@ -317,29 +317,35 @@
         android:key="prediction_settings"
         android:title="@string/prediction_category" >
 
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="quick_fixes"
-            android:persistent="true"
-            android:summary="@string/quick_fixes_summary"
-            android:title="@string/quick_fixes" />
-
-        <CheckBoxPreference
-            android:defaultValue="@bool/show_suggestions"
+        <PreferenceScreen
             android:enabled="false"
-            android:key="show_suggestions"
-            android:persistent="true"
-            android:summary="@string/show_suggestions_summary"
-            android:title="@string/show_suggestions" />
+            android:key="desktop_settings"
+            android:title="@string/desktop_settings_title" > <!-- "Desktop Access Settings" -->
 
-        <CheckBoxPreference
-            android:defaultValue="@bool/enable_autocorrect"
-            android:dependency="show_suggestions"
-            android:enabled="false"
-            android:key="auto_complete"
-            android:persistent="true"
-            android:summary="@string/auto_complete_summary"
-            android:title="@string/auto_complete" />
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="quick_fixes"
+                android:persistent="true"
+                android:summary="@string/quick_fixes_summary"
+                android:title="@string/quick_fixes" />
+
+            <CheckBoxPreference
+                android:defaultValue="@bool/show_suggestions"
+                android:enabled="false"
+                android:key="show_suggestions"
+                android:persistent="true"
+                android:summary="@string/show_suggestions_summary"
+                android:title="@string/show_suggestions" />
+
+            <CheckBoxPreference
+                android:defaultValue="@bool/enable_autocorrect"
+                android:dependency="show_suggestions"
+                android:enabled="false"
+                android:key="auto_complete"
+                android:persistent="true"
+                android:summary="@string/auto_complete_summary"
+                android:title="@string/auto_complete" />
+        </PreferenceScreen>
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -385,6 +391,49 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="emergency_settings"
+        android:title="@string/emergency_call_settings" >
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="emergency_GPS_setting"
+            android:persistent="true"
+            android:summary="@string/emergency_GPS_summary"
+            android:title="@string/emergency_GPS_setting" >
+        </CheckBoxPreference>
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:dialogMessage="@string/emergency_phone_dialogMesssage"
+            android:dialogTitle="@string/emergency_phone_dialogTitle"
+            android:key="emergency_phone_number"
+            android:persistent="true"
+            android:summary="@string/emergency_phone_summary"
+            android:title="@string/emergency_phone_title" >
+        </EditTextPreference>
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:dialogMessage="@string/emergency_SMS_dialogMesssage"
+            android:dialogTitle="@string/emergency_SMS_dialogTitle"
+            android:key="emergency_SMS_number"
+            android:persistent="true"
+            android:summary="@string/emergency_SMS_summary"
+            android:title="@string/emergency_SMS_title" >
+        </EditTextPreference>
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:dialogMessage="@string/emergency_email_dialogMesssage"
+            android:dialogTitle="@string/emergency_email_dialogTitle"
+            android:key="emergency_email_address"
+            android:persistent="true"
+            android:summary="@string/emergency_email_summary"
+            android:title="@string/emergency_email_title" >
+        </EditTextPreference>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/contributor_main_heading" >
 
         <PreferenceScreen
@@ -413,8 +462,20 @@
                     android:title="@string/contributor_wan" />
 
                 <Preference
-                    android:summary="@string/contributor_kelvin_summary"
-                    android:title="@string/contributor_kelvin" />
+                    android:summary="@string/contributor_ma_summary"
+                    android:title="@string/contributor_ma" />
+
+                <Preference
+                    android:summary="@string/contributor_bhy_summary"
+                    android:title="@string/contributor_bhy" />
+
+                <Preference
+                    android:summary="@string/contributor_garg_summary"
+                    android:title="@string/contributor_garg" />
+
+                <Preference
+                    android:summary="@string/contributor_jeroen_summary"
+                    android:title="@string/contributor_jeroen" />
             </PreferenceCategory>
 
             <PreferenceCategory android:title="@string/contributor_contributors" >
