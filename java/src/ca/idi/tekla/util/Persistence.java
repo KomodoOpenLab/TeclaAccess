@@ -32,7 +32,7 @@ public class Persistence extends ca.idi.tecla.framework.Persistence {
 	public static final String PREF_INVERSE_SCANNING = "inverse_scanning";
 	public static final String PREF_SCAN_DELAY_INT = "scan_delay_int";
 
-	public static final String PREF_EMERGENCY_GPS_SETTING = "emergency_gps_setting";
+	public static final String PREF_EMERGENCY_GPS_SETTING = "emergency_GPS_setting";
 	public static final String PREF_EMERGENCY_PHONE_NUMBER = "emergency_phone_number";
 	public static final String PREF_EMERGENCY_SMS_NUMBER = "emergency_SMS_number";
 	public static final String PREF_EMERGENCY_EMAIL_ADDRESS = "emergency_email_address";
