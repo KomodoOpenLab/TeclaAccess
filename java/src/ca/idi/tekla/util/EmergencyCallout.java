@@ -20,6 +20,9 @@ public class EmergencyCallout extends ca.idi.tekla.ime.TeclaIME {
 				+ emergency_SMS_number());
 		TeclaStatic.logD(TeclaApp.CLASS_TAG, " Emergency proc Email address: "
 				+ emergency_email_address());
+		/* Following asynchroneous tasks are completely self-sufficient so they can take care (or not) on their own without depending on anything.
+		 * Some parts will be executed twice or even more but the advantage is that they will not interfere or wait on eachother.
+		 */
 		if (emergency_phone_number().length() > 0)
 			makePhoneCall(context);
 		if (emergency_SMS_number().length() > 0)

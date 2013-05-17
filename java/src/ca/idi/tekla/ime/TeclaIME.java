@@ -68,7 +68,6 @@ import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.TeclaPrefs;
 import ca.idi.tecla.framework.TeclaShieldService;
-import ca.idi.tekla.util.EmergencyCallout;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 
@@ -2060,6 +2059,7 @@ public class TeclaIME extends ca.idi.tecla.framework.TeclaIMEService implements
 	 * 
 	 * @param switchEvent
 	 */
+	@SuppressWarnings("static-access")
 	private void handleSwitchEvent(SwitchEvent switchEvent) {
 
 		if (switchEvent.isAnyPressed()) {
