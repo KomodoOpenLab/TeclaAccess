@@ -20,7 +20,7 @@ import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import ca.idi.tecla.framework.TeclaStatic;
-import ca.idi.tekla.util.EmergencyCallout;
+import ca.idi.tekla.ime.EmergencyCallout;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;

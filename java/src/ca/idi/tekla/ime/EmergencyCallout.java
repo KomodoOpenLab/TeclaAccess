@@ -1,4 +1,4 @@
-package ca.idi.tekla.util;
+package ca.idi.tekla.ime;
 
 import java.util.concurrent.ExecutionException;
 
@@ -6,27 +6,11 @@ import android.content.Context;
 import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.TeclaApp;
 
-public class EmergencyCallout extends ca.idi.tekla.ime.TeclaIME {
+public class EmergencyCallout extends TeclaIME {
 
 	public void Callout(Context context) {
 
 		Boolean didAnything = false;
-
-		TeclaStatic.logD(TeclaApp.CLASS_TAG, "Emergency proc context: "
-				+ context.toString());
-		TeclaStatic.logD(TeclaApp.CLASS_TAG, "Emergency proc GPS Setting: "
-				+ emergency_GPS_setting());
-		TeclaStatic.logD(TeclaApp.CLASS_TAG, "Emergency proc Phone number: "
-				+ emergency_phone_number());
-		TeclaStatic.logD(TeclaApp.CLASS_TAG, "Emergency proc SMS number: "
-				+ emergency_SMS_number());
-		/*
-		 * Following asynchroneous tasks are completely self-sufficient so they
-		 * can take care (or not) on their own without depending on anything.
-		 * Some parts will be executed twice or even more but the advantage is
-		 * that they will not interfere or wait on eachother.
-		 */
-
 		if (emergency_phone_number().length() > 0)
 			if (makePhoneCall(context))
 				didAnything = true;
@@ -37,16 +21,16 @@ public class EmergencyCallout extends ca.idi.tekla.ime.TeclaIME {
 		if (didAnything) {
 			// TODO make happy sound
 			TeclaStatic.logD(TeclaApp.CLASS_TAG,
-					"Yes at least we did something");
+					"Yes, at least we did something.");
 		} else {
 			// TODO make unhappy sound
-			TeclaStatic.logD(TeclaApp.CLASS_TAG, "No we did");
+			TeclaStatic.logD(TeclaApp.CLASS_TAG, "No we didn't call anything.");
 		}
 	}
 
 	public Boolean makePhoneCall(Context context) {
 		try {
-			if (new EmergencyPoneCall().execute(context).get())
+			if (new EmergencyPhoneCall().execute(context).get())
 				TeclaStatic.logD(TeclaApp.CLASS_TAG,
 						"Phone call succesfully initiated");
 			else
@@ -72,10 +56,6 @@ public class EmergencyCallout extends ca.idi.tekla.ime.TeclaIME {
 			TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS error: " + e);
 		}
 		return true;
-	}
-
-	public boolean emergency_GPS_setting() {
-		return TeclaApp.persistence.getEmergencyGPSSetting();
 	}
 
 	public String emergency_phone_number() {

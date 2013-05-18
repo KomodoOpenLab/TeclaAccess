@@ -1,4 +1,4 @@
-package ca.idi.tekla.util;
+package ca.idi.tekla.ime;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,14 +9,12 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
-class EmergencySMS extends AsyncTask<Context, Void, Boolean> {
+public class EmergencySMS extends AsyncTask<Context, Void, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(Context... params) {
 		String message = "";
-		Boolean succes = false;
 		Context context = params[0];
-
 		// with or without emergency GPS setting?
 		if (emergency_GPS_setting()) {
 			String location[] = getLocation(params[0]);
@@ -38,19 +36,18 @@ class EmergencySMS extends AsyncTask<Context, Void, Boolean> {
 		smsManager.sendTextMessage(emergency_SMS_number(), null, message, null,
 				null);
 		// not crashed? we did our job.
-		succes = true;
-		return succes;
+		return true;
 	}
 
-	public String emergency_SMS_number() {
+	private String emergency_SMS_number() {
 		return TeclaApp.persistence.getEmergencySMSNumber().toString();
 	}
 
-	public boolean emergency_GPS_setting() {
+	private boolean emergency_GPS_setting() {
 		return TeclaApp.persistence.getEmergencyGPSSetting();
 	}
 
-	public String[] getLocation(Context context) {
+	private String[] getLocation(Context context) {
 		/* array location:
 		 * [0] Longitude
 		 * [1] Latitude

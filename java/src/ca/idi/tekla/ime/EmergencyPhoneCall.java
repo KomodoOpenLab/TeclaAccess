@@ -1,4 +1,4 @@
-package ca.idi.tekla.util;
+package ca.idi.tekla.ime;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,7 @@ import android.os.AsyncTask;
 import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.TeclaApp;
 
-class EmergencyPoneCall extends AsyncTask<Context, Void, Boolean> {
+public class EmergencyPhoneCall extends AsyncTask<Context, Void, Boolean> {
 
 	@Override
 	protected Boolean doInBackground(Context... params) {
