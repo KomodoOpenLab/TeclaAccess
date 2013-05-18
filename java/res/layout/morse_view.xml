@@ -1,6 +1,0 @@
-<ca.idi.tekla.ime.TeclaKeyboardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/morse_keyboard_view"
-        android:layout_alignParentBottom="true"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
