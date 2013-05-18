@@ -1,0 +1,77 @@
+CONTENTS
+========
+1. Copyright
+2. Licensing of code
+   2.1 MIT License
+   2.2 GNU General Public License
+3. Licensing of designs, documents, images, diagrams and schematics
+   3.1 Creative Commons Attribution ShareAlike License
+
+1. COPYRIGHT
+============
+Unless otherwise noted, the copyrights of all content in this repository belong to the Inclusive Design Research Centre, OCAD University.
+
+The following copyright notice should appear in, or accompany, all substantial parts of the code, designs, documents, images, diagrams and schematics.
+Copyright (C) <year>, Inclusive Design Research Centre
+
+2. LICENSING OF CODE
+====================
+Unless otherwise noted, you may use all or part of the code herein under the terms of either the MIT License or the GNU General Public License.
+
+You don’t have to do anything special to choose one license or the other and you don’t have to notify anyone which license you are using. You are free to use all or part of the code herein in commercial projects as long as the copyright notice is left intact.
+
+2.1 MIT LICENSE
+===============
+<Project Name>, <Project Summary>
+Copyright (c) <year>, Inclusive Design Research Centre
+jsilva@ocad.ca
+http://scyp.idrc.ocad.ca/
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+2.2 GNU GENERAL PUBLIC LICENSE
+==============================
+<Project Name>, <Project Summary>
+Copyright (c) <year>, Inclusive Design Research Centre
+jsilva@ocad.ca
+http://scyp.idrc.ocad.ca/
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program, see enclosed file GPL.txt or browse to
+<http://www.gnu.org/licenses/gpl.txt>
+
+3. LICENSING OF DESIGNS, DOCUMENTS, DRAWINGS, IMAGES, DIAGRAMS AND SCHEMATICS
+=============================================================================
+You may use all or part of any designs, documents, drawings images, diagrams and schematics herein under the terms of the Creative Commons Attribution-ShareAlike License.
+
+You don’t have to do anything special to use this license and you don’t have to notify anyone that you are using it. You are free to use all or part of any designs, documents, drawings images, diagrams and schematics herein in commercial projects as long as you attribute the original work to the Inclusive Design Research Centre.
+
+3.1 CREATIVE COMMONS ATTRIBUTION SHAREALIKE LICENSE
+===================================================
+This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/ or send a letter to Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
