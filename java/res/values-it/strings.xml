@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2009 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+	<string name="vibrate_on_keypress">"Vibra se premi un tasto"</string>
+	<string name="sound_on_keypress">"Suona se premi un tasto"</string>
+	<string name="hit_correction">"Correggi errori di digitazione"</string>
+	<string name="hit_correction_summary">"Attiva la correzione degli errori di inserimento"</string>
+	<string name="hit_correction_land">"Errori di inserimento in visualizzazione orizzontale"</string>
+	<string name="hit_correction_land_summary">"Attiva la correzione degli errori di inserimento"</string>
+	<string name="auto_correction">"Suggerimenti parola"</string>
+	<string name="auto_correction_summary">"Correggi automaticamente la parola precedente"</string>
+	<string name="prediction">"Suggerimenti parola"</string>
+	<string name="prediction_category">"Impostazioni suggerimento parole"</string>
+	<string name="prediction_summary">"Attiva il completamento automatico durante la digitazione"</string>
+	<string name="auto_complete_dialog_title">"Completamento automatico"</string>
+	<string name="prediction_landscape">"Aumenta dimensioni campo di testo"</string>
+	<string name="prediction_landscape_summary">"Nascondi i suggerimenti delle parole in visualizzazione orizzontale"</string>
+	<string name="auto_cap">"Maiuscole automatiche"</string>
+	<string name="auto_cap_summary">"Rendi maiuscole le iniziali delle frasi"</string>
+	<string name="auto_punctuate">"Punteggiatura automat."</string>
+	<string name="quick_fixes">"Correzioni veloci"</string>
+	<string name="quick_fixes_summary">"Corregge gli errori di digitazione più comuni"</string>
+	<string name="show_suggestions">"Mostra suggerimenti"</string>
+	<string name="show_suggestions_summary">"Visualizza le parole suggerite durante la digitazione"</string>
+	<string name="auto_complete">"Completamento autom."</string>
+	<string name="auto_complete_summary">"Barra spaziatrice e punteggiatura inseriscono la parola evidenziata"</string>
+    <string name="prediction_none" msgid="2472795101338047944">"0"</string>
+    <string name="prediction_basic" msgid="8407291081834155558">"1"</string>
+    <string name="prediction_full" msgid="3765102052052510268">"2"</string>
+	<string name="added_word">"<xliff:g id="WORD">%s</xliff:g> : parola salvata"</string>
+	<string name="alternates_for_a">"àá"</string>
+	<string name="alternates_for_e">"èé"</string>
+	<string name="alternates_for_i">"ìíîï"</string>
+	<string name="alternates_for_o">"òó"</string>
+	<string name="alternates_for_u">"ùúûü"</string>
+	<string name="alternates_for_s">"§"</string>
+	<string name="alternates_for_n">"ñ"</string>
+	<string name="alternates_for_c">"ç"</string>
+	<string name="alternates_for_y">"ýÿ"</string>
+    <string name="key_i" msgid="6483655742552255124">"i"</string>
+	<string name="tip_long_press">"Tieni premuto un tasto per vedere le lettere con segni diacritici (ø, ö etc.)"</string>
+	<string name="tip_dismiss">"Premi il tasto Indietro ↶ per chiudere la tastiera"</string>
+	<string name="tip_access_symbols">"Accedi a numeri e simboli"</string>
+	<string name="tip_add_to_dictionary">"Tieni premuto sulla parola all\'estrema sinistra per aggiungerla al dizionario"</string>
+	<string name="touch_to_continue">"Tocca questo suggerimento per continuare »"</string>
+	<string name="touch_to_finish">"Tocca qui per chiudere questo suggerimento e iniziare a digitare."</string>
+	<string name="tip_to_open_keyboard"><b>"La tastiera si apre ogni volta che tocchi un campo di testo"</b></string>
+	<string name="tip_to_view_accents"><b>"Tocca e tieni premuto un tasto per visualizzare le lettere con segni diacritici"\n"(ø, ö, ô, ó e così via)"</b></string>
+	<string name="tip_to_open_symbols"><b>"Passa a numeri e simboli toccando questo tasto"</b></string>
+	<string name="tip_to_close_symbols"><b>"Torna all\'alfabeto toccando di nuovo questo tasto"</b></string>
+	<string name="tip_to_launch_settings"><b>"Tocca e tieni premuto questo tasto per modificare le impostazioni della tastiera, come il completamento automatico"</b></string>
+	<string name="tip_to_start_typing"><b>"Prova."</b></string>
+	<string name="label_go_key">"Vai"</string>
+	<string name="label_next_key">"Avanti"</string>
+	<string name="label_done_key">"Fine"</string>
+	<string name="label_send_key">"Invia"</string>
+	<string name="label_symbol_key">"?123"</string>
+	<string name="label_phone_key">"123"</string>
+	<string name="label_alpha_key">"ABC"</string>
+	<string name="label_alt_key">"ALT"</string>
+	<string name="open_the_keyboard"><font size="17"><b>"Apertura tastiera"\n</b></font><font size="3">\n</font>\"Tocca qualsiasi campo di testo.\"</string>
+	<string name="close_the_keyboard"><font size="17"><b>"Chiusura tastiera"\n</b></font><font size="3">\n</font>\"Premi il tasto Indietro.\"</string>
+	<string name="touch_and_hold"><font size="17"><b>"Tocca e tieni premuto un tasto per le opzioni"\n</b></font><font size="3">\n</font>\"Accesso a punteggiatura e accenti.\"</string>
+	<string name="keyboard_settings"><font size="17"><b>"Impostazioni tastiera"\n</b></font><font size="3">\n</font>"Tocca e tieni premuto il tasto "<b>\"?123\"</b>\".\"</string>
+    <string name="popular_domain_0" msgid="3745279225122472969">".com"</string>
+    <string name="popular_domain_1" msgid="1370572248164278467">".net"</string>
+    <string name="popular_domain_2" msgid="3036812463748402878">".org"</string>
+    <string name="popular_domain_3" msgid="8718639560809452028">".gov"</string>
+    <string name="popular_domain_4" msgid="35359437471311470">".edu"</string>
+    
+   	<!-- Tecla: IME Strings -->
+	<string name="english_ime_name">"Tecla Access"</string>
+	<string name="english_ime_settings">"Impostazioni Tecla Access"</string>
+	<string name="inputMethod">Modalità di inserimento</string>
+	<string name="pref_voice_input">Attivare comando vocale</string>
+	<string name="pref_voice_input_summary">Aggiungi un tasto rapido per il comando vocale</string>
+	<string name="pref_variants_key">Mostra i tasti degli accenti</string>
+	<string name="pref_variants_key_summary">Aggiungi un tasto per attivare gli accenti e altro</string>
+	<string name="alternative_input_category">Impostazioni modalità di inserimento alternative</string>
+	<string name="shield_connect">Connetti a Tecla Shield</string>
+	<string name="shield_connect_summary_BT_nosupport">Bluetooth non supportato</string>
+	<string name="shield_connect_summary_BT_disabled">Bluetooth disabilitato</string>
+	<string name="shield_connect_summary">Connettere a Tecla Shield più vicino</string>
+	<string name="fullscreen_switch">Modalità schermo intero</string>
+	<string name="fullscreen_switch_summary">Usa l’intero schermo come unico sensore</string>
+	<string name="persistent_keyboard">Mostra sempre la tastiera</string>
+	<string name="persistent_keyboard_summary">Mostra una piccola tastiera di navigazione quando non scrivi</string>
+	<string name="autohide_timeout">Tempo i interruzione dei tasti di navigazione</string>
+	<string name="autohide_timeout_summary">Regola il ritardo prima che i tasti di navigazione si nascondano automaticamente</string>
+	<string name="autohide_timeout_dlg_title">Nascondi i tasti di navigazione</string>
+	<string name="scanning_category">Impostazioni di scansione</string>
+	<string name="self_scanning">Abilita scansione automatica</string>
+	<string name="self_scanning_summary">Scansione automatica della tastiera</string>
+	<string name="inverse_scanning">Abilita la scansione inversa</string>
+	<string name="inverse_scanning_summary">Inizia la scansione alla pressione del sensore e seleziona al rilascio</string>
+	<string name="scan_speed">Velocità di scansione</string>
+	<string name="scan_speed_summary">Regola la velocità di scansione</string>
+	<string name="dialog_faster">Più veloce</string>
+	<string name="dialog_slower">Più piano</string>
+	<string name="btn_done">"Fine"</string>
+	<string name="connecting_tecla_shield">Connessione a Tecla Shield</string>
+	<string name="couldnt_connect_shield">Impossibile connettersi a Tecla Shield</string>
+	<string name="no_shields_inrange">Nessun Tecla Shield nelle vicinanze</string>
+	<string name="searching_for_shields">Ricerca del Tecla Shield. Attendere prego…</string>
+	<string name="fullscreen_enabled">Sensore a schermo intero abilitato</string>
+	<string name="fullscreen_disabled">Sensore a schermo intero disabilitato</string>
+	<string name="tecla_notselected">Tastiera Tecla non selezionata!</string>
+	<string name="shield_connected">Tecla Shield connesso</string>
+	<string name="shield_disconnected">Tecla Shield sconnesso</string>
+	<string name="no_voice_input_available">Nessuna applicazione di riconoscimento vocale disponibile!</string>
+	<string name="no_voice_actions_installed">Voice Actions non è installato!</string>
+	<string name="sep_label">Provider di eventi di interruttore</string>
+	<string name="voice_input">Controllo vocale Tecla</string>
+	<string name="configuring_tecla">Configurazione di Tecla…</string>
+	<string-array name="prediction_modes">
+		<item>"Nessuna"</item>
+		<item>"Base"</item>
+		<item>"Avanzate"</item>
+	</string-array>
+	<string-array name="prediction_modes_values">
+		<item>@string/prediction_none</item>
+		<item>@string/prediction_basic</item>
+		<item>@string/prediction_full</item>
+	</string-array>
+	<string-array name="autohide_strings">
+		<item>Immediatamente</item>
+		<item>Dopo 4 secondi</item>
+		<item>Dopo 8 secondi</item>
+		<item>Dopo 15 secondi</item>
+		<item>Dopo 30 secondi</item>
+		<item>Dopo 60 secondi</item>
+		<item>Mai</item>
+	</string-array>
+
+</resources>

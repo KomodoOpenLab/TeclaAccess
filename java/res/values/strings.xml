@@ -1,7 +1,458 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<!--
+/*
+**
+** Copyright 2008, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="hello">Hello World!</string>
-    <string name="app_name">AccessViews</string>
+    <!-- Option to provide vibrate/haptic feedback on keypress -->
+    <string name="vibrate_on_keypress">Vibrate on keypress</string>
+    <!-- Option to play back sound on keypress in soft keyboard -->
+    <string name="sound_on_keypress">Sound on keypress</string>
+
+    <!-- Option to enable using nearby keys when correcting/predicting -->
+    <string name="hit_correction">Correct typing errors</string>
+
+    <!-- Description for hit_correction -->
+    <string name="hit_correction_summary">Enable input error correction</string>
+
+    <!-- Option to enable using nearby keys when correcting/predicting in landscape -->
+    <string name="hit_correction_land">Landscape input errors</string>
+
+    <!-- Description for hit_correction in landscape -->
+    <string name="hit_correction_land_summary">Enable input error correction</string>
+
+    <!-- Option to automatically correct word on hitting space -->
+    <string name="auto_correction">Word suggestions</string>
+
+    <!-- Description for auto_correction -->
+    <string name="auto_correction_summary">Automatically correct the previous word</string>
+
+    <!-- Option to enable text prediction -->
+    <string name="prediction">Word suggestions</string>
+    <!-- Category title for text prediction -->
+    <string name="prediction_category">Word suggestion settings</string>
+    <!-- Description for text prediction -->
+    <string name="prediction_summary">Enable auto completion while typing</string>
+
+    <!-- Dialog title for auto complete choices -->
+    <string name="auto_complete_dialog_title">Auto completion</string>
+
+    <!-- Option to enable text prediction in landscape -->
+    <string name="prediction_landscape">Increase text field size</string>
+    <!-- Description for text prediction -->
+    <string name="prediction_landscape_summary">Hide word suggestions in landscape view</string>
+
+    <!-- Option to enable auto capitalization of sentences -->
+    <string name="auto_cap">Auto-capitalization</string>
+    <!-- Description for auto cap -->
+    <string name="auto_cap_summary">Capitalize the start of a sentence</string>
+    <!-- Option to enable auto punctuate -->
+    <string name="auto_punctuate">Auto-punctuate</string>
+
+    <!-- Option to enable quick fixes -->
+    <string name="quick_fixes">Quick fixes</string>
+    <!-- Description for quick fixes -->
+    <string name="quick_fixes_summary">Corrects commonly typed mistakes</string>
+
+    <!-- Option to enable showing suggestions -->
+    <string name="show_suggestions">Show suggestions</string>
+    <!-- Description for show suggestions -->
+    <string name="show_suggestions_summary">Display suggested words while typing</string>
+
+    <!-- Option to enable auto completion -->
+    <string name="auto_complete">Auto-complete</string>
+    <!-- Description for auto completion -->
+    <string name="auto_complete_summary">Spacebar and punctuation automatically insert highlighted word</string>
+
+    <!-- Array of prediction modes -->
+    <string-array name="prediction_modes">
+        <item>None</item>
+        <item>Basic</item>
+        <item>Advanced</item>
+    </string-array>
+
+    <!-- Don't translate -->
+    <string name="prediction_none">0</string>
+    <!-- Don't translate -->
+    <string name="prediction_basic">1</string>
+    <!-- Don't translate -->
+    <string name="prediction_full">2</string>
+
+    <string-array name="prediction_modes_values">
+        <item>@string/prediction_none</item>
+        <item>@string/prediction_basic</item>
+        <item>@string/prediction_full</item>
+    </string-array>
+
+    <!-- Indicates that a word has been added to the dictionary -->
+    <string name="added_word"><xliff:g id="word">%s</xliff:g> : Saved</string>
+    <!-- Accented forms of "a" -->
+    <string name="alternates_for_a">àáâãäåæ</string>
+    <!-- Accented forms of "e" -->
+    <string name="alternates_for_e">èéêë</string>
+    <!-- Accented forms of "i" -->
+    <string name="alternates_for_i">ìíîï</string>
+    <!-- Accented forms of "o" -->
+    <string name="alternates_for_o">òóôõöœø</string>
+    <!-- Accented forms of "u" -->
+    <string name="alternates_for_u">ùúûü</string>
+    <!-- Letters associated with "s" -->
+    <string name="alternates_for_s">§ß</string>
+    <!-- Accented forms of "n" -->
+    <string name="alternates_for_n">ñ</string>
+    <!-- Accented forms of "c" -->
+    <string name="alternates_for_c">ç</string>
+    <!-- Accented forms of "y" -->
+    <string name="alternates_for_y">ýÿ</string>
+
+    <!--
+         Label to display on the lower "i" key.
+         Usually you don't need to modify this value, but if your locale requires some variant
+         for this character (e.g. \\u131 "Latin Small Letter Dotoless i"), please modify this
+         value.
+    -->
+    <string name="key_i">i</string>
+
+    <!-- Tip to long press on keys -->
+    <string name="tip_long_press">Hold a key down to see accents (ø, ö, etc.)</string>
+    <!-- Tip to dismiss keyboard -->
+    <string name="tip_dismiss">Press the back key \u21B6 to close the keyboard at any point</string>
+    <!-- Tip to press ?123 to access numbers and symbols -->
+    <string name="tip_access_symbols">Access numbers and symbols</string>
+    <!-- Tip to long press on typed word to add to dictionary -->
+    <string name="tip_add_to_dictionary">Press and hold the left-most word to add it to the dictionary</string>
+
+    <!-- Instruction to touch the bubble to continue -->
+    <string name="touch_to_continue">Touch this hint to continue »</string>
+
+    <!-- Instruction to touch the bubble to start typing -->
+    <string name="touch_to_finish">Touch here to close this hint and start typing!</string>
+
+    <!-- Tutorial tip 1 - The keyboard opens any time you touch a text field -->
+    <string name="tip_to_open_keyboard"><b>The keyboard opens any time you touch a text field</b></string>
+
+    <!-- Tutorial tip 2 - Touch and hold a key to view accents (examples) -->
+    <string name="tip_to_view_accents"><b>Touch &amp; hold a key to view accents\n(ø, ö, ô, ó, and so on)</b></string>
+
+    <!-- Tutorial tip 3 - How to switch to number/symbol keyboard -->
+    <string name="tip_to_open_symbols"><b>Switch to numbers and symbols by touching this key</b></string>
+
+    <!-- Tutorial tip 4 - How to switch back to alphabet keyboard -->
+    <string name="tip_to_close_symbols"><b>Go back to letters by touching this key again</b></string>
+
+    <!-- Tutorial tip 5 - How to launch keyboard settings -->
+    <string name="tip_to_launch_settings"><b>Touch &amp; hold this key to change keyboard settings, like auto complete</b></string>
+
+    <!-- Tutorial tip 6 - Done with the tutorial -->
+    <string name="tip_to_start_typing"><b>Try it!</b></string>
+
+    <!-- Label for soft enter key when it performs GO action.  Must be short to fit on key! -->
+    <string name="label_go_key">Go</string>
+    <!-- Label for soft enter key when it performs NEXT action.  Must be short to fit on key! -->
+    <string name="label_next_key">Next</string>
+    <!-- Label for soft enter key when it performs DONE action.  Must be short to fit on key! -->
+    <string name="label_done_key">Done</string>
+    <!-- Label for soft enter key when it performs SEND action.  Must be short to fit on key! -->
+    <string name="label_send_key">Send</string>
+    <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
+    <string name="label_symbol_key">\?123</string>
+    <!-- Label for "switch to numeric" key.  Must be short to fit on key! -->
+    <string name="label_phone_key">123</string>
+    <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
+    <string name="label_alpha_key">ABC</string>
+    <!-- Label for ALT modifier key.  Must be short to fit on key! -->
+    <string name="label_alt_key">ALT</string>
+
+    <!-- IME Tutorial screen (ROMAN) -->
+    <skip />
+    <!-- appears above image showing the user to click on a TextView to show the IME -->
+    <string name="open_the_keyboard"><font size="17"><b>Open the keyboard\n</b></font><font size="3">\n</font>Touch any text field.</string>
+
+    <!-- appears above the image showing the back button used to close the keyboard -->
+    <string name="close_the_keyboard"><font size="17"><b>Close the keyboard\n</b></font><font size="3">\n</font>Press the Back key.</string>
+
+    <!-- appears above image showing how to use touch and hold -->
+    <string name="touch_and_hold"><font size="17"><b>Touch \u0026 hold a key for options\n</b></font><font size="3">\n</font>Access punctuation and accents.</string>
+
+    <!-- appears above image showing how to access keyboard settings -->
+    <string name="keyboard_settings"><font size="17"><b>Keyboard settings\n</b></font><font size="3">\n</font>Touch \u0026 hold the <b>\?123\</b> key.</string>
+
+    <!-- popular web domains for the locale - most popular, displayed on the keyboard -->
+    <string name="popular_domain_0">".com"</string>
+    <!-- popular web domains for the locale - item 1, displayed in the popup -->
+    <string name="popular_domain_1">".net"</string>
+    <!-- popular web domains for the locale - item 2, displayed in the popup -->
+    <string name="popular_domain_2">".org"</string>
+    <!-- popular web domains for the locale - item 3, displayed in the popup -->
+    <string name="popular_domain_3">".gov"</string>
+    <!-- popular web domains for the locale - item 4, displayed in the popup -->
+    <string name="popular_domain_4">".edu"</string>
+
+    <!-- Tecla: IME Strings -->
+    <!-- Title for Latin keyboard -->
+    <string name="english_ime_name">Tecla Access</string>
+    <!-- Title for Latin keyboard settings activity / dialog -->
+    <string name="english_ime_settings">Tecla Access settings</string>
+    <string name="inputMethod">Input method</string>
+
+    <!-- Option to enable speech input -->
+    <string name="pref_voice_input">Enable voice input</string>
+    <string name="pref_voice_input_summary">Adds a key for quick access to voice commands and speech recognition</string>
+
+    <!-- Option to enable accented characters -->
+    <string name="pref_variants_key">Show accents key</string>
+    <string name="pref_variants_key_summary">Adds a sticky key that enables accented characters and other variants</string>
+
+    <!-- Tecla: IME Preferences Strings -->
+    <!-- Category title for tecla shield -->
+    <string name="alternative_input_category">Alternative input settings</string>
+
+    <!-- Option to scan and connect to Tecla shields -->
+    <string name="shield_connect">Connect to Tecla Shield</string>
+    <string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
+    <string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
+    <string name="shield_connect_summary">Attempts a connection to a nearby Tecla Shield</string>
+
+    <!-- Option to temporarily disconnect Tecla shield -->
+    <string name="shield_temp_disconnect">Temporarily Disconnect Tecla Shield</string>
+    <string name="shield_temp_disconnect_summary">Check to allow another device to connect to Tecla Shield</string>
+
+    <!-- Option to enable fullscreen switch mode -->
+    <string name="fullscreen_switch">Fullscreen switch mode</string>
+    <string name="fullscreen_switch_summary">Uses the entire screen as a single switch</string>
+
+    <!-- Option to enable speakerphone switch mode -->
+    <string name="speakerphone_switch">Always use speakerphone</string>
+    <string name="speakerphone_switch_summary">Turn on speakerphone for voice calls, voice commands and voice input.</string>
+
+    <!-- Option to show the UI navigation keyboard on the screen -->
+    <string name="persistent_keyboard">Show navigation keyboard</string>
+    <string name="persistent_keyboard_summary">Shows a small navigation keyboard when not entering text</string>
+
+    <!-- Option to autohide the UI navigation keyboard on the screen -->
+    <string name="autohide_timeout">Navigation keyboard timeout</string>
+    <string name="autohide_timeout_summary">Adjust the delay before the navigation keyboard automatically hides</string>
+    <string name="autohide_timeout_dlg_title">Hide navigation keyboard</string>
+
+    <string-array name="autohide_strings">
+        <item>Immediately</item>
+        <item>After 4 seconds</item>
+        <item>After 8 seconds</item>
+        <item>After 15 seconds</item>
+        <item>After 30 seconds</item>
+        <item>After 60 seconds</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="repeat_frequency_strings">
+        <item>Never</item>
+        <item>1000 ms</item>
+        <item>950 ms</item>
+        <item>900 ms</item>
+        <item>850 ms</item>
+        <item>800 ms</item>
+        <item>750 ms</item>
+        <item>700 ms</item>
+        <item>650 ms</item>
+        <item>600 ms</item>
+        <item>550 ms</item>
+        <item>500 ms</item>
+    </string-array>
+    <string-array name="switch_actions">
+        <item>None</item>
+        <item>Step-scan next</item>
+        <item>Step-scan previous</item>
+        <item>Step out, cancel</item>
+        <item>Select highlighted</item>
+        <item>Emergency callout</item>
+    </string-array>
+    <string-array name="morse_actions">
+        <item>None</item>
+        <item>Morse dit</item>
+        <item>Morse dah</item>
+        <item>Morse end of char</item>
+        <item>Morse backspace</item>
+        <item>Hide Morse IME view</item>
+    </string-array>
+    <string-array name="morse_key_mode_array">
+        <item>Triple-key mode</item>
+        <item>Double-key mode</item>
+        <item>Single-key mode</item>
+    </string-array>
+
+    <!-- Morse cheat sheet -->
+    <string name="tapforsymbols">Tap for symbols</string>
+    <string name="tapforlettersandnumbers">Tap for letters &amp; numbers</string>
+
+    <!-- Category title for Morse settings -->
+    <string name="morse_input_settings">Morse input settings</string>
+    <string name="morse_settings_summary">Adjust Morse input mode and preferences</string>
+
+    <!-- Option to enable Morse input method -->
+    <string name="morse_mode">Enable Morse input</string>
+    <string name="morse_mode_summary">Provides a Morse input method that replaces the standard keyboard</string>
+
+    <!-- Option to enable Morse HUD display -->
+    <string name="morse_show_hud">Show Morse HUD</string>
+    <string name="morse_show_hud_summary">Displays a set of Morse keys/values above the keyboard</string>
+
+    <!-- Morse key mode strings -->
+    <string name="morse_key_mode">Morse input method</string>
+
+    <!-- Morse speed ratio strings -->
+    <string name="morse_time_unit_title">Morse time unit</string>
+    <string name="morse_time_unit_dlg_title">Select your Morse time unit</string>
+
+    <!-- Morse repeat delay strings -->
+    <string name="mrepeat_frequency">Configure repeat frequency</string>
+    <string name="mrepeat_frequency_summary">Adjust the repeat frequency of a dit/dah when holding down a switch</string>
+    <string name="mrepeat_frequency_dlg_title">Configure the repeat frequency</string>
+
+    <!-- Options to set full reset timeout -->
+    <string name="fullreset_timeout">Long press reset delay</string>
+    <string name="fullreset_timeout_summary">Adjust the long press delay before returning to Home</string>
+
+    <string-array name="fullreset_strings">
+        <item>3 seconds</item>
+        <item>6 seconds</item>
+        <item>9 seconds</item>
+        <item>12 seconds</item>
+        <item>16 seconds</item>
+        <item>20 seconds</item>
+        <item>25 seconds</item>
+        <item>32 seconds</item>
+        <item>40 seconds</item>
+    </string-array>
+
+    <!-- Tecla: Reset Actions Dialog -->
+    <string name="dialog_confirm_reset">Are you sure you want to reset to default actions?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+
+    <!-- Tecla: Scan Speed Dialog -->
+    <string name="dialog_faster">Faster</string>
+    <string name="dialog_slower">Slower</string>
+    <string name="btn_done">Done</string>
+
+    <!-- Category title for scanning -->
+    <string name="scanning_category">Scanning settings</string>
+    <string name="scanning_settings_summary">Adjust the scanning mode and speed</string>
+
+    <!-- Option to enable self-scanning -->
+    <string name="self_scanning">Enable self-scanning</string>
+    <string name="self_scanning_summary">Scans the keyboard automatically</string>
+
+    <!-- Option to enable self-scanning -->
+    <string name="inverse_scanning">Enable inverse scanning</string>
+    <string name="inverse_scanning_summary">Scan on switch press and select on release</string>
+
+    <!-- Self-scanning delay strings -->
+    <string name="scan_speed">Scanning speed</string>
+    <string name="scan_speed_summary">Adjust the scanning speed</string>
+
+    <!-- Switch configuration strings -->
+    <string name="define_switch_action">Configure switch actions</string>
+    <string name="define_switch_action_summary">Customize the actions assigned to each switch input</string>
+    <string name="switch_j1">ECU 1 / Forward</string>
+    <string name="switch_j2">ECU 2 / Reverse</string>
+    <string name="switch_j3">ECU 3 / Left</string>
+    <string name="switch_j4">ECU 4 / Right</string>
+    <string name="switch_e1">Switch 1</string>
+    <string name="switch_e2">Switch 2</string>
+    <string name="switch_j1_tecla">ECU 1 / Forward Tecla action</string>
+    <string name="switch_j2_tecla">ECU 2 / Reverse Tecla action</string>
+    <string name="switch_j3_tecla">ECU 3 / Left Tecla action</string>
+    <string name="switch_j4_tecla">ECU 4 / Right Tecla action</string>
+    <string name="switch_e1_tecla">Switch 1 Tecla action</string>
+    <string name="switch_e2_tecla">Switch 2 Tecla action</string>
+    <string name="switch_j1_morse">ECU 1 / Forward Morse action</string>
+    <string name="switch_j2_morse">ECU 2 / Reverse Morse action</string>
+    <string name="switch_j3_morse">ECU 3 / Left Morse action</string>
+    <string name="switch_j4_morse">ECU 4 / Right Morse action</string>
+    <string name="switch_e1_morse">Switch 1 Morse action</string>
+    <string name="switch_e2_morse">Switch 2 Morse action</string>
+
+    <!-- Reset switch actions strings -->
+    <string name="switch_default">Restore default actions</string>
+    <string name="switch_default_summary">Reset switch actions to default values</string>
+    <string name="user_data_category">Reset Switch Actions</string>
+    <string name="advanced_input_settings">Advanced input settings</string>
+
+    <!-- Toasts and dialogs -->
+    <string name="connecting_tecla_shield">Connecting to Tecla Shield</string>
+    <string name="couldnt_connect_shield">Could not connect to Tecla Shield</string>
+    <string name="shield_connection_cancelled">Connection to Tecla Shield cancelled</string>
+    <string name="no_shields_inrange">No Tecla Shields in range</string>
+    <string name="searching_for_shields">Searching for Tecla Shields. Please wait…</string>
+    <string name="morse_enabled">Morse input method enabled</string>
+    <string name="morse_disabled">Morse input method disabled</string>
+    <string name="fullscreen_enabled">Fullscreen switch mode enabled</string>
+    <string name="fullscreen_disabled">Fullscreen switch mode disabled</string>
+    <string name="tecla_notselected">Please select Tecla Access as your default input method before adjusting settings.</string>
+    <string name="no_voice_input_available">No speech recognition applications available!</string>
+    <string name="no_voice_actions_installed">Voice Search is not installed!</string>
+
+    <!-- Tecla: Titles and labels -->
+    <string name="voice_input">Tecla Voice Input</string>
+    <string name="configuring_tecla">Configuring Tecla…</string>
+
+    <!--  Destop settings -->
+    <string name="desktop_settings_title">Not yet implemented</string>
+    
+    <!-- Emergency button actions -->
+    <string name="emergency_call_settings">Emergency call settings</string>
+    <string name="emergency_phone_title">Emergency phone #</string>
+    <string name="emergency_phone_summary">Configure emergency phone number</string>
+    <string name="emergency_phone_dialogMesssage">Emergency telephone number</string>
+    <string name="emergency_phone_dialogTitle">Enter emergency telephone number</string>
+    <string name="emergency_SMS_title">Emergency SMS #</string>
+    <string name="emergency_SMS_summary">Configure emergency SMS number</string>
+    <string name="emergency_SMS_dialogMesssage">Emergency SMS number</string>
+    <string name="emergency_SMS_dialogTitle">Enter emergency SMS number</string>
+    <string name="emergency_SMS_text_withLoc">Emergency call! Please come to me, click for map:</string>
+    <string name="emergency_SMS_text_withoutLoc">Emergency call! Please come to me, no locator data supplied.</string>
+    <string name="emergency_GPS_setting">Enable GPS tracking</string>
+    <string name="emergency_GPS_summary">Forward GPS location in SMS</string>
+    
+    <!-- Contributions page titles and labels -->
+    <string name="contributor_main_heading">About Tecla Access</string>
+    <string name="contributor_main_title">The Team</string>
+    <string name="contributor_main_summary">Learn who made Tecla a reality</string>
+    <string name="contributor_core">Core Team</string>
+    <string name="contributor_jan">Jan Richards</string>
+    <string name="contributor_jan_summary">Manager &amp; User Experience</string>
+    <string name="contributor_jorge">Jorge Silva</string>
+    <string name="contributor_jorge_summary">Lead Developer</string>
+    <string name="contributor_mauricio">Mauricio Meza</string>
+    <string name="contributor_mauricio_summary">User Experience</string>
+    <string name="contributor_wan">Eric Wan</string>
+    <string name="contributor_wan_summary">Junior Developer</string>
+    <string name="contributor_coders">Coders</string>
+    <string name="contributor_ma">Eric Ma</string>
+    <string name="contributor_ma_summary">Volunter</string>
+    <string name="contributor_bhy">Elyas Bhy</string>
+    <string name="contributor_bhy_summary">Summer Intern</string>
+    <string name="contributor_garg">Rishab Garg</string>
+    <string name="contributor_garg_summary">Summer Intern</string>
+    <string name="contributor_jeroen">Jeroen Teunissen</string>
+    <string name="contributor_jeroen_summary">Teunissen Enabling</string>
+    <string name="contributor_contributors">Enhancements</string>
+    <string name="contributor_mats">Mats Lundalv</string>
+    <string name="contributor_mats_summary">Auto-cancel scan</string>
+    <string name="contributor_tanslators">Translators</string>
 
 </resources>

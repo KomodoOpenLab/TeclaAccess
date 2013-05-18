@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    >
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="horizontal"
+		android:id="@+id/linearLayout1">
+        <TextView
+        	android:layout_height="wrap_content"
+        	android:layout_width="fill_parent"
+        	android:text="@string/dialog_slower"
+        	android:gravity="left"
+        	android:id="@+id/text" android:layout_weight="1"/>
+        <TextView
+        	android:layout_height="wrap_content"
+        	android:layout_width="fill_parent"
+        	android:text="@string/dialog_faster"
+        	android:gravity="right"
+        	android:id="@+id/textView1" android:layout_weight="1"/>
+    </LinearLayout>
+    <SeekBar
+    	android:layout_height="wrap_content"
+    	android:layout_width="fill_parent"
+    	android:id="@+id/seekBar1"
+    	/>
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:orientation="horizontal"
+		android:id="@+id/linearLayout2" android:layout_marginTop="8sp">
+		<Button
+			android:id="@+id/speed_dlg_btn_done"
+			android:text="@string/btn_done"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:layout_width="0dp"/>
+    </LinearLayout>
+</LinearLayout>
