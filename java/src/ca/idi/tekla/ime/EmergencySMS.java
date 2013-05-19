@@ -9,15 +9,16 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 
-public class EmergencySMS extends AsyncTask<Context, Void, Boolean> {
+public class EmergencySMS extends AsyncTask<Object, Void, Boolean> {
 
 	@Override
-	protected Boolean doInBackground(Context... params) {
+	protected Boolean doInBackground(Object... params) {
 		String message = "";
-		Context context = params[0];
+		Context context = (Context) params[0];
+		String smsNumber = (String) params[1];
 		// with or without emergency GPS setting?
 		if (emergency_GPS_setting()) {
-			String location[] = getLocation(params[0]);
+			String location[] = getLocation(context);
 			if (location[0].length() == 0 || location[1].length() == 0) {
 				message = context.getString(ca.idi.tekla.R.string.emergency_SMS_text_withoutLoc);
 				TeclaStatic.logD(TeclaApp.CLASS_TAG, "No location available!");
@@ -33,14 +34,10 @@ public class EmergencySMS extends AsyncTask<Context, Void, Boolean> {
 			message = context.getString(ca.idi.tekla.R.string.emergency_SMS_text_withoutLoc);
 		}
 		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendTextMessage(emergency_SMS_number(), null, message, null,
+		smsManager.sendTextMessage(smsNumber, null, message, null,
 				null);
 		// not crashed? we did our job.
 		return true;
-	}
-
-	private String emergency_SMS_number() {
-		return TeclaApp.persistence.getEmergencySMSNumber().toString();
 	}
 
 	private boolean emergency_GPS_setting() {

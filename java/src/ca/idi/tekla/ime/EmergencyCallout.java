@@ -3,6 +3,7 @@ package ca.idi.tekla.ime;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.TeclaApp;
 
@@ -10,59 +11,61 @@ public class EmergencyCallout extends TeclaIME {
 
 	public void Callout(Context context) {
 
-		Boolean didAnything = false;
-		if (emergency_phone_number().length() > 0)
-			if (makePhoneCall(context))
-				didAnything = true;
-		if (emergency_SMS_number().length() > 0)
-			if (makeSMS(context))
-				didAnything = true;
+		Boolean didPhoneCall = false;
+		String phoneNumber = emergency_phone_number();
+		String smsNumber = emergency_SMS_number();
 
-		if (didAnything) {
-			// TODO make happy sound
-			TeclaStatic.logD(TeclaApp.CLASS_TAG,
-					"Yes, at least we did something.");
-		} else {
-			// TODO make unhappy sound
-			TeclaStatic.logD(TeclaApp.CLASS_TAG, "No we didn't call anything.");
+		if (phoneNumber.length() > 0) {
+			try {
+				if (new EmergencyPhoneCall().execute(context,
+						phoneNumber).get()) {
+					TeclaStatic.logD(TeclaApp.CLASS_TAG,
+							"Phone call succesfully initiated");
+					didPhoneCall = true;
+				} else {
+					TeclaStatic.logD(TeclaApp.CLASS_TAG,
+							"Phonecall not initiatd?");
+				}
+			} catch (InterruptedException e) {
+				TeclaStatic.logD(TeclaApp.CLASS_TAG, "Phone call error: " + e);
+			} catch (ExecutionException e) {
+				TeclaStatic.logD(TeclaApp.CLASS_TAG, "Phone call error: " + e);
+			}
+		}
+
+		if (smsNumber.length() > 0) {
+			try {
+				if (new EmergencySMS().execute(context, smsNumber).get()) {
+					TeclaStatic.logD(TeclaApp.CLASS_TAG,
+							"SMS msg succesfully initiated");
+					/* sound to ack something happened when no phonecall is made, otherwise 
+					 * user does not get any signal anything happened.
+					 */
+					if(!didPhoneCall) {
+						MediaPlayer mPlay = MediaPlayer.create(context,
+								ca.idi.tekla.R.raw.emergency_succes);
+						mPlay.start();
+						Thread.sleep(500);
+						mPlay.stop();
+						mPlay.reset();
+						mPlay.release();
+						mPlay = null ;					}
+				} else {
+					TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS not send?");
+				}
+			} catch (InterruptedException e) {
+				TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS error: " + e);
+			} catch (ExecutionException e) {
+				TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS error: " + e);
+			}
 		}
 	}
 
-	public Boolean makePhoneCall(Context context) {
-		try {
-			if (new EmergencyPhoneCall().execute(context).get())
-				TeclaStatic.logD(TeclaApp.CLASS_TAG,
-						"Phone call succesfully initiated");
-			else
-				TeclaStatic.logD(TeclaApp.CLASS_TAG, "Phonecall not initiatd?");
-		} catch (InterruptedException e) {
-			TeclaStatic.logD(TeclaApp.CLASS_TAG, "Phone call error: " + e);
-		} catch (ExecutionException e) {
-			TeclaStatic.logD(TeclaApp.CLASS_TAG, "Phone call error: " + e);
-		}
-		return true;
-	}
-
-	public Boolean makeSMS(Context context) {
-		try {
-			if (new EmergencySMS().execute(context).get())
-				TeclaStatic.logD(TeclaApp.CLASS_TAG,
-						"SMS msg succesfully initiated");
-			else
-				TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS not send?");
-		} catch (InterruptedException e) {
-			TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS error: " + e);
-		} catch (ExecutionException e) {
-			TeclaStatic.logD(TeclaApp.CLASS_TAG, "SMS error: " + e);
-		}
-		return true;
-	}
-
-	public String emergency_phone_number() {
+	private String emergency_phone_number() {
 		return TeclaApp.persistence.getEmergencyPhoneNumber().toString();
 	}
 
-	public String emergency_SMS_number() {
+	private String emergency_SMS_number() {
 		return TeclaApp.persistence.getEmergencySMSNumber().toString();
 	}
 

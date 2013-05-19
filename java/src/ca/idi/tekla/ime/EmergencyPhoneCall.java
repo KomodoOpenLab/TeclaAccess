@@ -7,14 +7,15 @@ import android.os.AsyncTask;
 import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.TeclaApp;
 
-public class EmergencyPhoneCall extends AsyncTask<Context, Void, Boolean> {
+public class EmergencyPhoneCall extends AsyncTask<Object, Void, Boolean> {
 
 	@Override
-	protected Boolean doInBackground(Context... params) {
-		Context context = params[0];
+	protected Boolean doInBackground(Object... params) {
+		Context context = (Context) params[0];
+		String phoneNumber = (String) params[1];
 		Boolean succes = false;
 		try {
-			Intent intent = new Intent(Intent.ACTION_CALL,Uri.parse("tel:"+emergency_phone_number()));
+			Intent intent = new Intent(Intent.ACTION_CALL,Uri.parse("tel:" + phoneNumber));
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(intent);
 			succes = true;
@@ -22,10 +23,6 @@ public class EmergencyPhoneCall extends AsyncTask<Context, Void, Boolean> {
 			TeclaStatic.logD(TeclaApp.CLASS_TAG, " doInBackground error: " + e);
 		}
 		return succes;
-	}
-
-	public String emergency_phone_number() {
-		return TeclaApp.persistence.getEmergencyPhoneNumber().toString();
 	}
 
 }
