@@ -173,9 +173,9 @@
     <string name="emergency_SMS_dialogMesssage">Geef SMS-nummer voor noodgevallen&#58;</string>
     <string name="emergency_SMS_dialogTitle">SMS Noodnummer</string>
     <string name="emergency_SMS_text_withLoc">Noodoproep! Klik hier voor kaart:</string>
-    <string name="emergency_SMS_text_withoutLoc">Emergency call! Gaarne meteen aktie ondernemen, geen kaart beschikbaar.</string>
+    <string name="emergency_SMS_text_withoutLoc">Noodoproep! Gaarne meteen aktie ondernemen, geen kaart beschikbaar.</string>
     <string name="emergency_GPS_setting">GPS-locatie doormelden</string>
-    <string name="emergency_GPS_summary">Geef GPS-locatie door in SMS</string>
+    <string name="emergency_GPS_summary">Geef GPS-locatie door in SMS (GPS moet hiervoor altijd AAN staan!)</string>
 
     <!-- Tecla: titles and labels -->
     <string name="configuring_tecla">Tecla instellen &#8230;</string>

@@ -33,7 +33,7 @@ public class EmergencySMS extends AsyncTask<Object, Void, Boolean> {
 		Context context = (Context) params[0];
 		String smsNumber = (String) params[1];
 		// with or without emergency GPS setting?
-		if (emergency_GPS_setting()) {
+		if (emergency_GPS_setting(context)) {
 			String location[] = getLocation(context);
 			if (location[0].length() == 0 || location[1].length() == 0) {
 				message = context.getString(ca.idi.tekla.R.string.emergency_SMS_text_withoutLoc);
@@ -56,8 +56,16 @@ public class EmergencySMS extends AsyncTask<Object, Void, Boolean> {
 		return true;
 	}
 
-	private boolean emergency_GPS_setting() {
-		return TeclaApp.persistence.getEmergencyGPSSetting();
+	private boolean emergency_GPS_setting(Context context) {
+		Boolean gpsActive = false;
+		if(TeclaApp.persistence.getEmergencyGPSSetting()) {
+			LocationManager locMan = (LocationManager) context
+					.getSystemService(Context.LOCATION_SERVICE);
+			// check wether any useable location service is turned on
+			if(locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) gpsActive = true;
+			if(locMan.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) gpsActive = true;
+		}
+		return gpsActive;
 	}
 
 	private String[] getLocation(Context context) {

@@ -423,10 +423,10 @@
     <string name="emergency_SMS_summary">Configure emergency SMS number</string>
     <string name="emergency_SMS_dialogMesssage">Emergency SMS number</string>
     <string name="emergency_SMS_dialogTitle">Enter emergency SMS number</string>
-    <string name="emergency_SMS_text_withLoc">Emergency call! Please come to me, click for map:</string>
-    <string name="emergency_SMS_text_withoutLoc">Emergency call! Please come to me, no locator data supplied.</string>
+    <string name="emergency_SMS_text_withLoc">Emergency call! Please help me, click for map:</string>
+    <string name="emergency_SMS_text_withoutLoc">Emergency call! Please help me, no locator data supplied.</string>
     <string name="emergency_GPS_setting">Enable GPS tracking</string>
-    <string name="emergency_GPS_summary">Forward GPS location in SMS</string>
+    <string name="emergency_GPS_summary">Forward GPS location in SMS (GPS should always be turned ON for this feature!)</string>
     
     <!-- Contributions page titles and labels -->
     <string name="contributor_main_heading">About Tecla Access</string>
