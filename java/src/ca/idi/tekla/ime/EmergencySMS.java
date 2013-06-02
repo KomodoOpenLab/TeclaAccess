@@ -19,53 +19,67 @@ package ca.idi.tekla.ime;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Looper;
+import ca.idi.tecla.framework.TeclaStatic;
+import ca.idi.tekla.R;
 import ca.idi.tekla.TeclaApp;
 import ca.idi.tekla.ime.EmergencyLocation.LocationResult;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.location.Location;
 import android.location.LocationManager;
 
 public class EmergencySMS extends AsyncTask<Object, Void, Boolean> {
+	public static final String TAG = "EmergencySMS";
 
 	@Override
 	protected Boolean doInBackground(Object... params) {
 		final Context context = (Context) params[0];
 		final String smsNumber = (String) params[1];
-		final String currentLocation[] = new String[4];
 
 		Looper.prepare();
-		Looper.getMainLooper();	
+		Looper.getMainLooper();
 
-		LocationResult locationResult = new LocationResult(){
-		    @Override
-		    public void gotLocation(Location location){
-		        //Got the location!
-				Log.d("GPS", "JA! location:" + location);
-				currentLocation[0] = String.valueOf(location.getLatitude());
-				currentLocation[1] = String.valueOf(location.getLongitude());
-				currentLocation[2] = String.valueOf(location.getLatitude()) + "+"
-						+ String.valueOf(location.getLongitude());
-				currentLocation[3] = location.getProvider();
-
+		LocationResult locationResult = new LocationResult() {
+			@Override
+			public void gotLocation(Location location) {
+				// Got the location!
 				// start SMS messaging!
 				String message = null;
 				if (emergency_GPS_setting(context)) {
-						message = context.getString(ca.idi.tekla.R.string.emergency_SMS_text_withLoc) + " http://maps.google.com/maps?&z=17&t=h&q=loc:"
-								+ currentLocation[2]
-								+ " Provider: "
-								+ currentLocation[3];
+					message = context
+							.getString(ca.idi.tekla.R.string.emergency_SMS_text_withLoc)
+							+ " http://maps.google.com/maps?&z=17&t=h&q=loc:"
+							+ String.valueOf(location.getLatitude())
+							+ "+"
+							+ String.valueOf(location.getLongitude())
+							+ " "
+							+ context
+									.getString(R.string.emergency_location_provider)
+							+ " "
+							+ location.getProvider()
+							+ ". "
+							+ context
+									.getString(R.string.emergency_location_age)
+							+ " "
+							+ String.valueOf((System.currentTimeMillis() - location
+									.getTime()) / 60000)
+							+ " "
+							+ context
+									.getString(R.string.emergency_location_age_unit)
+							+ ".";
 				} else {
-					message = context.getString(ca.idi.tekla.R.string.emergency_SMS_text_withoutLoc);
+					message = context
+							.getString(ca.idi.tekla.R.string.emergency_SMS_text_withoutLoc);
 				}
 				SmsManager smsManager = SmsManager.getDefault();
-				smsManager.sendTextMessage(smsNumber, null, message, null, null);
-		    }
+				smsManager
+						.sendTextMessage(smsNumber, null, message, null, null);
+				TeclaStatic.logD(TAG, message);
+			}
 		};
-		
+
 		EmergencyLocation myLocation = new EmergencyLocation();
-		myLocation.getLocation(context, locationResult); //this
-		
+		myLocation.getLocation(context, locationResult); // this
+
 		// not crashed? we did our job.
 		return true;
 	}

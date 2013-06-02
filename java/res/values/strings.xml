@@ -427,6 +427,9 @@
     <string name="emergency_SMS_text_withoutLoc">Emergency call! Please help me, no locator data supplied.</string>
     <string name="emergency_GPS_setting">Enable GPS tracking</string>
     <string name="emergency_GPS_summary">Forward GPS location in SMS (GPS should always be turned ON for this feature!)</string>
+	<string name="emergency_location_provider">Provider of localization:</string>
+    <string name="emergency_location_age">age of localization:</string>
+    <string name="emergency_location_age_unit">seconds</string>
     
     <!-- Contributions page titles and labels -->
     <string name="contributor_main_heading">About Tecla Access</string>
