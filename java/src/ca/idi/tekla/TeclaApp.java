@@ -14,13 +14,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import ca.idi.tecla.framework.TeclaStatic;
+import ca.idi.tekla.ime.EmergencyCallout;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
 import ca.idi.tekla.util.TeclaDesktopClient;
@@ -57,11 +57,12 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	private static TeclaApp instance;
 	public static Persistence persistence;
 	public static Highlighter highlighter;
+	public static EmergencyCallout emergencyCallout;
 	
 	public static String password="Tecla123";
 	public static boolean sendflag=false,connect_to_desktop=false;
 	
-	public static TeclaDesktopClient desktop;
+	public static TeclaDesktopClient desktop; 
 	public static Object dictation_lock=new Object();
 	public static boolean dict_lock=false,mSendToPC;
 	
@@ -79,11 +80,10 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 	}
 	
 	private void init() {
-
 		instance = this;
 		persistence = new Persistence(this);
 		highlighter = new Highlighter(this);
-		
+		emergencyCallout = new EmergencyCallout();
 		mPackageManager = getPackageManager();
 		
 		mHandler = new Handler();
