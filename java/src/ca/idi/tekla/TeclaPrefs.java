@@ -449,6 +449,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		 
 						// show it
 						alertDialog.show();
+						InputAccess.showBelowIME(alertDialog);
 					} else {
 						// Shield found, try to connect
 						mShieldConnectingProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
