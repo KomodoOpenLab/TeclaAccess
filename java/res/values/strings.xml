@@ -227,6 +227,7 @@
     <string name="shield_connect_summary_BT_nosupport">Bluetooth is not supported</string>
     <string name="shield_connect_summary_BT_disabled">Bluetooth is disabled</string>
     <string name="shield_connect_summary">Attempts a connection to a nearby Tecla Shield</string>
+    <string name="shield_must_pair_first">The Tecla Shield must be paired before attempting a connection. Would you like to pair the Tecla Shield now?</string>
 
 	<!-- Option to temporarily disconnect Tecla shield -->
 	<string name="shield_temp_disconnect">Temporarily Disconnect Tecla Shield</string>
