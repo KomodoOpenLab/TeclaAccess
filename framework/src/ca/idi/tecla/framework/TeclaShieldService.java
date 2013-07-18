@@ -24,6 +24,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 
 public class TeclaShieldService extends Service implements Runnable {
