@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.idi.tekla"
-    android:versionCode="39"
-    android:versionName="1.0.7" >
+    android:versionCode="40"
+    android:versionName="1.0.8" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
