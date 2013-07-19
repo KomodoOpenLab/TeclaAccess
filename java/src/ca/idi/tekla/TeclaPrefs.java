@@ -120,6 +120,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private FullResetTimeoutDialog mFullResetTimeoutDialog;
+	private AlertDialog mShieldMustPairDialog;
 	private PreferenceScreen mConfigureInputScreen;
 	private BaseAdapter mConfigureInputAdapter;
 	
@@ -192,6 +193,22 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		};
 		mShieldConnectingProgressDialog = new ProgressDialog(this);
 		mShieldConnectingProgressDialog.setOnCancelListener(mShieldConnectionCancelledListener);
+		
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TeclaPrefs.this);
+		alertDialogBuilder.setMessage(R.string.shield_must_pair_first);
+		alertDialogBuilder.setOnCancelListener(mShieldConnectionCancelledListener);
+		alertDialogBuilder.setNegativeButton(android.R.string.cancel, null);
+		alertDialogBuilder.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));								
+			}
+			
+		});
+		// create alert dialog
+		mShieldMustPairDialog = alertDialogBuilder.create();
+
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
 		
@@ -374,6 +391,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	@Override
 	protected void onPause() {
 		super.onPause();
+		mShieldMustPairDialog.cancel();
 		cancelShieldConnectingDialog();
 		// FIXME: Supposed to force a refresh of preference states, but too aggressive?
 		//finish(); 
@@ -432,24 +450,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 					if (BluetoothAdapter.getDefaultAdapter().getRemoteDevice(mShieldAddress).getBondState() != BluetoothDevice.BOND_BONDED) {
 						//Only pair if not paired
 						cancelShieldConnection(false);								
-						AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TeclaPrefs.this);
-						alertDialogBuilder.setMessage(R.string.shield_must_pair_first);
-						alertDialogBuilder.setOnCancelListener(mShieldConnectionCancelledListener);
-						alertDialogBuilder.setNegativeButton(android.R.string.cancel, null);
-						alertDialogBuilder.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));								
-							}
-							
-						});
-						// create alert dialog
-						AlertDialog alertDialog = alertDialogBuilder.create();
-		 
 						// show it
-						alertDialog.show();
-						InputAccess.showBelowIME(alertDialog);
+						mShieldMustPairDialog.show();
+						InputAccess.showBelowIME(mShieldMustPairDialog);
 					} else {
 						// Shield found, try to connect
 						mShieldConnectingProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
