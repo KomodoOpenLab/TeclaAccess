@@ -91,14 +91,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
 	private CheckBoxPreference mPrefVariantsKey;
-	
+
 	//Morse preferences
 	private CheckBoxPreference mPrefMorse;
 	private CheckBoxPreference mPrefMorseHUD;
 	private ListPreference mPrefMorseKeyMode;
 	private Preference mPrefMorseTimeUnit;
 	private Preference mPrefMorseRepeat;
-	
+
 	private CheckBoxPreference mPrefPersistentKeyboard;
 	private Preference mPrefAutohideTimeout;
 	private CheckBoxPreference mPrefConnectToShield;
@@ -114,22 +114,23 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	private boolean mShieldFound, mConnectionCancelled;
 	private String mShieldAddress, mShieldName;
 	private OnCancelListener mShieldConnectionCancelledListener;
-	
+
 	private ScanSpeedDialog mScanSpeedDialog;
 	private MorseTimeUnitDialog mMorseTimeUnitDialog;
 	private RepeatFrequencyDialog mRepeatFrequencyDialog;
 	private NavKbdTimeoutDialog mAutohideTimeoutDialog;
 	private FullResetTimeoutDialog mFullResetTimeoutDialog;
+	private AlertDialog mShieldMustPairDialog;
 	private PreferenceScreen mConfigureInputScreen;
 	private BaseAdapter mConfigureInputAdapter;
-	
+
 	private static SwitchPreference mSwitchJ1;
 	private static SwitchPreference mSwitchJ2;
 	private static SwitchPreference mSwitchJ3;
 	private static SwitchPreference mSwitchJ4;
 	private static SwitchPreference mSwitchE1;
 	private static SwitchPreference mSwitchE2;
-	
+
 	private static CheckBoxPreference mConnectToPC;
 	private static CheckBoxPreference mShieldRelay;
 	private static Preference setPasswordLaunch;
@@ -138,7 +139,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 
 	private DefaultActionsDialog mDefaultActionsDialog;
 	private static HashMap<String, String[]> mSwitchMap;
-		
+
 	@Override
 	protected void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -150,9 +151,9 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mPredictionPreferences.removePreference(findPreference("auto_complete"));
 		mPreferenceScreen = (PreferenceScreen) findPreference("english_ime_settings");
 		mPreferenceScreen.removePreference(findPreference("alternative_output_settings"));
-		
+
 	}
-	
+
 	private void init() {
 
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -192,23 +193,39 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		};
 		mShieldConnectingProgressDialog = new ProgressDialog(this);
 		mShieldConnectingProgressDialog.setOnCancelListener(mShieldConnectionCancelledListener);
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TeclaPrefs.this);
+		alertDialogBuilder.setMessage(R.string.shield_must_pair_first);
+		alertDialogBuilder.setOnCancelListener(mShieldConnectionCancelledListener);
+		alertDialogBuilder.setNegativeButton(android.R.string.cancel, null);
+		alertDialogBuilder.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));								
+			}
+
+		});
+		// create alert dialog
+		mShieldMustPairDialog = alertDialogBuilder.create();
+
 		mConfigureInputScreen = (PreferenceScreen) findPreference(Persistence.PREF_CONFIGURE_INPUT);
 		mConfigureInputAdapter= (BaseAdapter) mConfigureInputScreen.getRootAdapter();
-		
+
 		//Desktop 
 		final TeclaPrefs mTeclaPrefs=this;
 		mConnectToPC=(CheckBoxPreference)findPreference(Persistence.CONNECT_TO_PC);
-		
+
 		mShieldRelay=(CheckBoxPreference)findPreference(Persistence.SEND_SHIELD_EVENTS);
-		
+
 		TeclaApp.sendflag=mShieldRelay.isChecked();
 		TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
 		setDisconnectEvent=(Preference) findPreference ("set_disconnect_event");
 		setDictationEvent=(Preference) findPreference("set_dictation_event");
-		
+
 		TeclaApp.dictation_event=setDictationEvent.getSharedPreferences().getInt("set_dictation_event", 55);
 
-		
+
 		setDictationEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
 			public boolean onPreferenceClick(Preference arg0) {
@@ -216,7 +233,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				showEventSelectionDialog(1);
 				return true;
 			}});
-		
+
 		setDisconnectEvent.setOnPreferenceClickListener(new OnPreferenceClickListener(){
 
 			public boolean onPreferenceClick(Preference arg0) {
@@ -224,12 +241,12 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				showEventSelectionDialog(0);
 				return true;
 			}});
-		
+
 		TeclaApp.disconnect_event=setDisconnectEvent.getSharedPreferences().getInt("set_disconnect_event", 65);
-		
-		
+
+
 		setPasswordLaunch=(Preference)findPreference(Persistence.SET_PASSWORD);
-		
+
 		setPasswordLaunch.setDefaultValue("Tecla123");
 		TeclaApp.password=setPasswordLaunch.getSharedPreferences().getString(Persistence.SET_PASSWORD, "Tecla123");
 		Log.v("set password",""+setPasswordLaunch);
@@ -240,7 +257,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				TeclaPrefs.createPreferenceDialog(mTeclaPrefs);
 				return true;
 			}
-	
+
 		});
 		//
 		TeclaApp.desktop=new TeclaDesktopClient(TeclaApp.getInstance());
@@ -250,32 +267,32 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			setDictationEvent.setEnabled(false);
 			mShieldRelay.setEnabled(false);
 		}
-		
-		
+
+
 		mSwitchJ1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J1), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J1_MORSE));
-		
+
 		mSwitchJ2 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J2), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J2_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J2_MORSE));
-		
+
 		mSwitchJ3 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J3), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J3_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J3_MORSE));
-		
+
 		mSwitchJ4 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_J4), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J4_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_J4_MORSE));
-		
+
 		mSwitchE1 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_E1), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_E1_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_E1_MORSE));
-		
+
 		mSwitchE2 = new SwitchPreference((PreferenceScreen) findPreference(Persistence.PREF_SWITCH_E2), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_TECLA), 
 				(ListPreference) findPreference(Persistence.PREF_SWITCH_E2_MORSE));
-		
+
 		mDefaultActionsDialog = new DefaultActionsDialog(this);
 		mDefaultActionsDialog.setContentView(R.layout.reset_default);
 
@@ -285,7 +302,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			mPrefVoiceInput.setEnabled(false);
 			mPrefVoiceInput.setSummary(R.string.no_voice_input_available);
 		}
-		
+
 		// If no alternative input selected, disable scanning
 		if (!mPrefConnectToShield.isChecked() && !mPrefFullScreenSwitch.isChecked()) {
 			mPrefTempDisconnect.setChecked(false);
@@ -293,11 +310,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			mPrefSelfScanning.setChecked(false);
 			mPrefInverseScanning.setChecked(false);
 		}
-		
+
 		mPrefMorseKeyMode.setSummary(mPrefMorseKeyMode.getEntry());
 		mPrefMorseTimeUnit.setSummary(TeclaApp.persistence.getMorseTimeUnit() + " ms");
 		refreshSwitchesSummary();
-		
+
 		//If Morse mode is disabled, also disable all of the other prefs in the same category
 		if (!mPrefMorse.isEnabled() || (mPrefMorse.isEnabled() && !mPrefMorse.isChecked())) {
 			mPrefMorseHUD.setEnabled(false);
@@ -305,7 +322,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			mPrefMorseTimeUnit.setEnabled(false);
 			mPrefMorseRepeat.setEnabled(false);
 		}
-		
+
 		if (mPrefMorse.isEnabled() && mPrefMorse.isChecked()) {
 			enableKeyModePrefs();
 		}
@@ -318,7 +335,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_DISCONNECTED));
 
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(TeclaPrefs.this);
-		
+
 		// DETERMINE WHICH PREFERENCES SHOULD BE ENABLED
 		// If Tecla Access IME is not selected disable all alternative input preferences
 		if (!TeclaStatic.isDefaultIME(getApplicationContext())) {
@@ -337,7 +354,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 					dialog.dismiss();
 					TeclaPrefs.this.finish();
 				}
-				
+
 			});
 			builder.setCancelable(false);
 			AlertDialog alert = builder.create();
@@ -357,7 +374,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		//(triggers onSharedPreferenceChanged)
 		mPrefConnectToShield.setChecked(false);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -367,13 +384,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			.removePreference(mQuickFixes);
 		} else {
 			//FIXME: Enable when adding suggestions
-//			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
+			//			mShowSuggestions.setDependency(QUICK_FIXES_KEY);
 		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		mShieldMustPairDialog.hide();
 		cancelShieldConnectingDialog();
 		// FIXME: Supposed to force a refresh of preference states, but too aggressive?
 		//finish(); 
@@ -394,7 +412,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mBluetoothAdapter.startDiscovery();
 		showDiscoveryDialog();
 	}
-	
+
 	BroadcastReceiver btReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -407,14 +425,16 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		}
 	};
 
-	
+
 	// All intents will be processed here
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
 
-			if (intent.getAction().equals(BluetoothDevice.ACTION_FOUND) && !mShieldFound) {
+			if (intent.getAction().equals(BluetoothDevice.ACTION_FOUND)
+					&& !mShieldFound
+					&& TeclaApp.persistence.shouldConnectToShield()) {
 				BluetoothDevice dev = intent.getExtras().getParcelable(BluetoothDevice.EXTRA_DEVICE);
 				if ((dev.getName() != null) && (
 						dev.getName().startsWith(TeclaShieldService.SHIELD_PREFIX_2) ||
@@ -427,29 +447,15 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				}
 			}
 
-			if (intent.getAction().equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)) {
+			if (intent.getAction().equals(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+					&& TeclaApp.persistence.shouldConnectToShield()) {
 				if (mShieldFound) {
 					if (BluetoothAdapter.getDefaultAdapter().getRemoteDevice(mShieldAddress).getBondState() != BluetoothDevice.BOND_BONDED) {
 						//Only pair if not paired
 						cancelShieldConnection(false);								
-						AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TeclaPrefs.this);
-						alertDialogBuilder.setMessage(R.string.shield_must_pair_first);
-						alertDialogBuilder.setOnCancelListener(mShieldConnectionCancelledListener);
-						alertDialogBuilder.setNegativeButton(android.R.string.cancel, null);
-						alertDialogBuilder.setPositiveButton(android.R.string.ok, new AlertDialog.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));								
-							}
-							
-						});
-						// create alert dialog
-						AlertDialog alertDialog = alertDialogBuilder.create();
-		 
 						// show it
-						alertDialog.show();
-						InputAccess.showBelowIME(alertDialog);
+						mShieldMustPairDialog.show();
+						InputAccess.showBelowIME(mShieldMustPairDialog);
 					} else {
 						// Shield found, try to connect
 						mShieldConnectingProgressDialog.setMessage(getString(R.string.connecting_tecla_shield) +
@@ -550,7 +556,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				mPrefMorseTimeUnit.setEnabled(false);
 				mPrefMorseRepeat.setEnabled(false);
 			}
-			
+
 		}
 		if (key.equals(Persistence.PREF_MORSE_SHOW_HUD)) {
 			//Reset IME
@@ -567,7 +573,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		if (key.equals(Persistence.PREF_PERSISTENT_KEYBOARD)) {
 			if (mPrefPersistentKeyboard.isChecked()) {
 				mPrefAutohideTimeout.setEnabled(true);
-				
+
 				// Show keyboard immediately
 				TeclaApp.getInstance().requestShowIMEView();
 			} else {
@@ -649,14 +655,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				stopShieldService();
 				Handler mHandler = new Handler();
 				Runnable mReconnect = new Runnable() {
-					
+
 					public void run() {
 						TeclaStatic.logD(CLASS_TAG, CLASS_TAG + "Re-enabling discovery");
 						discoverShield();
 						mPrefConnectToShield.setEnabled(true);
 					}
 				};
-				
+
 				// See if the handler was posted
 				if(mHandler.postDelayed(mReconnect, 90000))	// 90 second delay
 				{
@@ -666,10 +672,10 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				{
 					TeclaStatic.logD(CLASS_TAG, "Could not post Runnable");
 				}
-				
+
 			}
 			else {
-				
+
 			}
 		}
 		if (key.equals(Persistence.PREF_FULLSCREEN_SWITCH)) {
@@ -694,7 +700,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				TeclaApp.getInstance().stopFullScreenSwitchMode();
 			}
 		}
-		
+
 		if (key.equals(Persistence.PREF_SELF_SCANNING)) {
 			if (mPrefSelfScanning.isChecked()) {
 				mPrefInverseScanning.setChecked(false);
@@ -735,7 +741,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SEND_TO_PC,null);
 				//update the send to pc button lock
 				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_SHOW_SECNAV_VOICE, null);
-//				TeclaKeyboardView.getInstance().disableSendToPCKey();
+				//				TeclaKeyboardView.getInstance().disableSendToPCKey();
 				TeclaIME.getInstance().onKey(TeclaKeyboardView.KEYCODE_HIDE_SECNAV_VOICE, null);
 			}
 			TeclaApp.connect_to_desktop=mConnectToPC.isChecked();
@@ -751,7 +757,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 				setDictationEvent.setEnabled(true);
 				mShieldRelay.setEnabled(true);
 				if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
-				TeclaApp.desktop.disconnect();
+					TeclaApp.desktop.disconnect();
 			}
 		}
 		//FIXME: Tecla Access - Solve backup elsewhere
@@ -762,7 +768,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mShieldConnectingProgressDialog.setMessage(getString(R.string.searching_for_shields));
 		mShieldConnectingProgressDialog.show();
 	}
-	
+
 	/*
 	 * Enables / disables prefs based on current Morse mode
 	 */
@@ -803,14 +809,14 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			TeclaShieldManager.disconnect(getApplicationContext());
 		}
 	}
-	
+
 	private void cancelDiscovery() {
 		if (mBluetoothAdapter != null && mBluetoothAdapter.isDiscovering()) {
 			// Triggers ACTION_DISCOVERY_FINISHED on mReceiver.onReceive
 			mBluetoothAdapter.cancelDiscovery();
 		}
 	}
-	
+
 	/*
 	 * Updates display of preference summaries
 	 */
@@ -822,7 +828,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mSwitchE1.refreshSummaries();
 		mSwitchE2.refreshSummaries();
 	}
-	
+
 	/*
 	 * Resets switch actions to default values
 	 */
@@ -835,18 +841,18 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		mSwitchE1.setValues(4, 0);
 		mSwitchE2.setValues(3, 0);
 	}
-	
+
 	public static void createPreferenceDialog(Context context){
 		final Dialog passworddialog=new Dialog(context);
 		passworddialog.setContentView(R.layout.passworddialog);
 		final EditText psswdtext=(EditText)passworddialog.findViewById(R.id.passwordtext);
 		Button save=(Button)passworddialog.findViewById(R.id.savebutton);
 		Button cancel=(Button)passworddialog.findViewById(R.id.cancelbutton);
-		
+
 		psswdtext.setText(setPasswordLaunch.getSharedPreferences().getString(Persistence.SET_PASSWORD, "Tecla123"));
-		
+
 		save.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				TeclaApp.password=psswdtext.getText().toString();
@@ -855,7 +861,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			}
 		});
 		cancel.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				passworddialog.dismiss();
@@ -863,7 +869,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		});
 		passworddialog.show();
 	}
-	
+
 	public void showEventSelectionDialog(final int event){
 		final Dialog d=new Dialog(TeclaPrefs.this);
 		d.setContentView(R.layout.eventselectdialog);
@@ -871,64 +877,64 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		final Spinner eventchoice= (Spinner)d.findViewById(R.id.spinnerevent);
 		Button save=(Button)d.findViewById(R.id.save_button);
 		Button cancel=(Button)d.findViewById(R.id.cancel_button);
-		
-		
+
+
 		String[] switcharray={"switch j1/Up","switch j2/Down","Switch J3/Left","Switch J4,Right",
 				"Switch E1","Switch E2"};
 		ArrayList<String> switchlist=new ArrayList<String>();
 		for(int i=0;i<switcharray.length;i++)
 			switchlist.add(switcharray[i]);
 		ArrayAdapter<String> spin1adapter=new ArrayAdapter<String>(TeclaPrefs.this,
-									android.R.layout.simple_spinner_item,switchlist);
+				android.R.layout.simple_spinner_item,switchlist);
 		switchchoice.setAdapter(spin1adapter);
-		
+
 		String[] eventarray={"onPress","onRelease","onClick","onDoubleClick","onLongPress"};
 		ArrayList<String> eventlist=new ArrayList<String>();
 		for(int i=0;i<eventarray.length;i++)
 			eventlist.add(eventarray[i]);
 		ArrayAdapter<String> spin2adapter=new ArrayAdapter<String>(TeclaPrefs.this,
-									android.R.layout.simple_spinner_item,eventlist);
+				android.R.layout.simple_spinner_item,eventlist);
 		eventchoice.setAdapter(spin2adapter);
 		if(event==0){
-		eventchoice.setSelection(TeclaApp.disconnect_event%10-1);
-		switchchoice.setSelection(TeclaApp.disconnect_event/10-1);
+			eventchoice.setSelection(TeclaApp.disconnect_event%10-1);
+			switchchoice.setSelection(TeclaApp.disconnect_event/10-1);
 		}
 		else if(event==1){
 			eventchoice.setSelection(TeclaApp.dictation_event%10-1);
 			switchchoice.setSelection(TeclaApp.dictation_event/10-1);
-			}
+		}
 		spin1adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spin2adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		cancel.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				d.dismiss();
 			}
 		});
 		save.setOnClickListener(new View.OnClickListener() {
-			
+
 			public void onClick(View v) {
 				int x,y;
 				x=eventchoice.getSelectedItemPosition()+1;
 				y=switchchoice.getSelectedItemPosition()+1;
 				if(event==0 ){
 					if(y*10+x != TeclaApp.dictation_event){
-					TeclaApp.disconnect_event=y*10+x;
-					setDisconnectEvent.getEditor().putInt("set_disconnect_event",TeclaApp.disconnect_event).commit();
-					if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
-						TeclaApp.desktop.send("disevent:"+TeclaApp.disconnect_event);
+						TeclaApp.disconnect_event=y*10+x;
+						setDisconnectEvent.getEditor().putInt("set_disconnect_event",TeclaApp.disconnect_event).commit();
+						if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected())
+							TeclaApp.desktop.send("disevent:"+TeclaApp.disconnect_event);
 					}
 					else
 						eventchoice.setSelection(TeclaApp.dictation_event%10-1);
 				}
 				else if(event==1 ){
 					if(y*10+x != TeclaApp.disconnect_event){
-					TeclaApp.dictation_event=y*10+x;
-					setDictationEvent.getEditor().putInt("set_dictation_event",TeclaApp.dictation_event).commit();
-					if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected()){
-						TeclaApp.desktop.send("dictevent:"+TeclaApp.dictation_event);
-						Log.v("voice","Entering sending preference");
+						TeclaApp.dictation_event=y*10+x;
+						setDictationEvent.getEditor().putInt("set_dictation_event",TeclaApp.dictation_event).commit();
+						if(TeclaApp.desktop!=null && TeclaApp.desktop.isConnected()){
+							TeclaApp.desktop.send("dictevent:"+TeclaApp.dictation_event);
+							Log.v("voice","Entering sending preference");
 						}
 					}
 					else{
@@ -941,7 +947,7 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 		});
 		d.show();
 	}
-	
+
 	public void showAlert(int resid) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(resid);
@@ -950,11 +956,11 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
-			
+
 		});
 		AlertDialog alert = builder.create();
 		alert.show();
-        InputAccess.showBelowIME(alert);
+		InputAccess.showBelowIME(alert);
 	}
-	
+
 }
