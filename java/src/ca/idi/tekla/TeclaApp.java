@@ -6,6 +6,8 @@ package ca.idi.tekla;
 
 import java.util.ArrayList;
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -20,6 +22,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import ca.idi.tecla.framework.TeclaShieldService;
 import ca.idi.tecla.framework.TeclaStatic;
 import ca.idi.tekla.util.Highlighter;
 import ca.idi.tekla.util.Persistence;
@@ -95,6 +98,8 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 		//Intents & Intent Filters
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 		registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_CONNECTED));
+		registerReceiver(mReceiver, new IntentFilter(TeclaShieldService.ACTION_SHIELD_DISCONNECTED));
 		
 		SharedPreferences prefs=PreferenceManager.getDefaultSharedPreferences(this);
 		connect_to_desktop=prefs.getBoolean(Persistence.CONNECT_TO_PC, false);
@@ -126,16 +131,23 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-
-			if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+			String action = intent.getAction();
+			
+			if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				TeclaStatic.logD(CLASS_TAG, "Screen off");
 				persistence.setScreenOff();
 				releaseKeyguardLock();
 			}
-			if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+			if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				TeclaStatic.logD(CLASS_TAG, "Screen on");
 				persistence.setScreenOn();
 				if (persistence.isPersistentKeyboardEnabled()) requestShowIMEView();
+			}
+			if (action.equals(TeclaShieldService.ACTION_SHIELD_CONNECTED)) {
+				showNotification();
+			}
+			if (action.equals(TeclaShieldService.ACTION_SHIELD_DISCONNECTED)) {
+				cancelNotification();
 			}
 		}
 
@@ -321,7 +333,7 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 				startActivity(intent);
 			} catch (ActivityNotFoundException e2) {
 				Log.e(TeclaApp.TAG, "Quick Search Box not available");
-				TeclaApp.getInstance().showToast(R.string.no_voice_actions_installed);
+				getInstance().showToast(R.string.no_voice_actions_installed);
 			}
 		}
 	}
@@ -343,4 +355,37 @@ public class TeclaApp extends ca.idi.tecla.framework.TeclaApp {
 		return mIMECreated;
 	}
 
+	private void showNotification() {
+		// In this sample, we'll use the same text for the ticker and the expanded notification
+		CharSequence text = getText(R.string.shield_connected);
+
+		// Set the icon, scrolling text and timestamp
+		Notification notification = new Notification(R.drawable.tecla_status, text,
+				System.currentTimeMillis());
+
+		// The PendingIntent to launch our activity if the user selects this notification
+		notification.contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, TeclaPrefs.class), 0);
+
+		// Set the info for the views that show in the notification panel.
+		//		notification.setLatestEventInfo(this, getText(R.string.sep_label),
+		//				text, contentIntent);
+		//TODO: Find a way to define the target class on notification click
+		notification.setLatestEventInfo(this, getText(R.string.sep_label),
+				text,null);
+
+		// Add sound and type.
+		notification.defaults |= Notification.DEFAULT_SOUND;
+		notification.flags |= Notification.FLAG_ONGOING_EVENT;
+		notification.flags |= Notification.FLAG_NO_CLEAR;
+
+		// Send the notification.
+		// We use a layout id because it is a unique number.  We use it later to cancel.
+		notification_manager.notify(R.string.shield_connected, notification);
+	}
+	
+	private void cancelNotification() {
+		// Cancel the persistent notification.
+		notification_manager.cancel(R.string.shield_connected);
+	}
+	
 }

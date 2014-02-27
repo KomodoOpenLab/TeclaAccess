@@ -224,7 +224,6 @@ public class TeclaShieldService extends Service implements Runnable {
 
 				if (gotStreams) {
 					TeclaApp.getInstance().wakeUnlockScreen();
-					showNotification();
 
 					mPingCounter = 0;
 					pingShield(500);
@@ -253,7 +252,6 @@ public class TeclaShieldService extends Service implements Runnable {
 						}
 					}
 					broadcastShieldDisconnected();
-					cancelNotification();
 					TeclaStatic.logW(CLASS_TAG, "Disconnected from Tecla Shield");
 					TeclaApp.getInstance().wakeUnlockScreen();
 					//Need to toast on a separate thread!
@@ -447,38 +445,6 @@ public class TeclaShieldService extends Service implements Runnable {
 		}
 	}
 
-	/**
-	 * Show a notification while this service is running.
-	 */
-	private void showNotification() {
-		// In this sample, we'll use the same text for the ticker and the expanded notification
-		CharSequence text = getText(R.string.shield_connected);
-
-		// Set the icon, scrolling text and timestamp
-		Notification notification = new Notification(R.drawable.tecla_status, text,
-				System.currentTimeMillis());
-
-		// The PendingIntent to launch our activity if the user selects this notification
-		//		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-		//				new Intent(this, TeclaPrefs.class), 0);
-
-		// Set the info for the views that show in the notification panel.
-		//		notification.setLatestEventInfo(this, getText(R.string.sep_label),
-		//				text, contentIntent);
-		//TODO: Find a way to define the target class on notification click
-		notification.setLatestEventInfo(this, getText(R.string.sep_label),
-				text,null);
-
-		// Add sound and type.
-		notification.defaults |= Notification.DEFAULT_SOUND;
-		notification.flags |= Notification.FLAG_ONGOING_EVENT;
-		notification.flags |= Notification.FLAG_NO_CLEAR;
-
-		// Send the notification.
-		// We use a layout id because it is a unique number.  We use it later to cancel.
-		TeclaApp.notification_manager.notify(R.string.shield_connected, notification);
-	}
-
 	private void broadcastShieldConnected() {
 		TeclaStatic.logD(CLASS_TAG, "Broadcasting Shield connected intent...");
 		sendBroadcast(new Intent(ACTION_SHIELD_CONNECTED));
@@ -489,11 +455,6 @@ public class TeclaShieldService extends Service implements Runnable {
 		sendBroadcast(new Intent(ACTION_SHIELD_DISCONNECTED));
 	}
 
-	private void cancelNotification() {
-		// Cancel the persistent notification.
-		TeclaApp.notification_manager.cancel(R.string.shield_connected);
-	}
-	
 	SwitchEventProvider switch_event_provider;
 	boolean mBound = false;
 
