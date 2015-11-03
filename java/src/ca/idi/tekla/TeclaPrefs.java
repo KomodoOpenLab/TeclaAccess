@@ -53,6 +53,8 @@ import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
@@ -87,6 +89,8 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 	private static final String SHOW_SUGGESTIONS_KEY = "show_suggestions";
 	private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
 
+	public static final String TECLA_NEXT_PACKAGE_NAME = "com.gettecla.next";
+	
 	private CheckBoxPreference mQuickFixes;
 	private CheckBoxPreference mShowSuggestions;
 	private CheckBoxPreference mPrefVoiceInput;
@@ -360,7 +364,30 @@ implements SharedPreferences.OnSharedPreferenceChangeListener{
 			AlertDialog alert = builder.create();
 			alert.show();
 			InputAccess.showBelowIME(alert);
-		}		
+		}
+		
+		if (Build.VERSION.SDK_INT >= 18 && Build.VERSION.SDK_INT <= 22) {
+			AlertDialog.Builder b = new AlertDialog.Builder(this);
+			b.setMessage(R.string.tecla_next_available);
+			b.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					Intent goToMarket = new Intent(Intent.ACTION_VIEW)
+							.setData(Uri.parse("market://details?id=" + TECLA_NEXT_PACKAGE_NAME));
+					startActivity(goToMarket);				}
+			});
+			b.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+			b.setCancelable(false);
+			AlertDialog a = b.create();
+			a.show();
+			InputAccess.showBelowIME(a);
+		}
+		
 	}
 
 	private void cancelShieldConnection(boolean show_toast) {
