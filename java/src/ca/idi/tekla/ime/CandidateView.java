@@ -26,6 +26,7 @@ import ca.idi.tekla.R.drawable;
 import ca.idi.tekla.R.layout;
 import ca.idi.tekla.R.string;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -289,6 +290,7 @@ public class CandidateView extends View {
         invalidate();
     }
     
+    @SuppressLint("WrongCall")
     public void setSuggestions(List<CharSequence> suggestions, boolean completions,
             boolean typedWordValid, boolean haveMinimalSuggestion) {
         clear();
@@ -419,6 +421,7 @@ public class CandidateView extends View {
      * gesture.
      * @param x
      */
+    @SuppressLint("WrongCall")
     public void takeSuggestionAt(float x) {
         mTouchX = (int) x;
         // To detect candidate
